@@ -1,0 +1,9 @@
+BioAssayTemplate
+
+An editor for specifying how the BioAssay Ontology, and other related vocabularies, are to be used to describe bioassays.
+
+Primary author: Dr. Alex M. Clark (alex@collaborativedrug.com)
+
+Based on Java 8 using Eclipse, JavaFX and Apache Jena.
+
+12/Nov/2015: preliminary skeleton project, with minimal datastructure read/write and editor shell.
