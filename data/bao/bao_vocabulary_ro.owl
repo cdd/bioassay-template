@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_ro.owl#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_ro.owl">
+    <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_ro.owl">
+        <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
+	<dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/IAO_0000115 -->
+
+    
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/source -->
+
+    
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090000 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090000">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:label xml:lang="en">phenotype of</rdfs:label>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090003"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090001 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090001">
+        <rdfs:label xml:lang="en">has function in</rdfs:label>
+        <obo:IAO_0000115>c stands in this relationship to p if and only if there exists some p' such that c is capable_of p', and p' is part_of p.</obo:IAO_0000115>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090002 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090002">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:label xml:lang="en">part of</rdfs:label>
+        <dc:source>http://www.obofoundry.org/ro/#OBO_REL:part_of</dc:source>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090004"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090003 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090003">
+        <rdfs:label xml:lang="en">has phenotype</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090004 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090004">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:label xml:lang="en">has part</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090005 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090005">
+        <rdfs:label xml:lang="en">derives into</rdfs:label>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090006"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090006 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090006">
+        <rdfs:label xml:lang="en">derives from</rdfs:label>
+        <rdfs:comment xml:lang="en">See also BFO_0001009</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090007 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090007">
+        <rdfs:label xml:lang="en">occurs in</rdfs:label>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090010"/>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.bioassayontology.org/bao#BA0_0090002"/>
+            <rdf:Description rdf:about="http://www.bioassayontology.org/bao#BA0_0090007"/>
+        </owl:propertyChainAxiom>
+        <owl:propertyChainAxiom rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.bioassayontology.org/bao#BA0_0090007"/>
+            <rdf:Description rdf:about="http://www.bioassayontology.org/bao#BA0_0090002"/>
+        </owl:propertyChainAxiom>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090008 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090008">
+        <rdfs:label xml:lang="en">bearer of</rdfs:label>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090009"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090009 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090009">
+        <rdfs:label xml:lang="en">inheres in</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090010 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090010">
+        <rdfs:label xml:lang="en">contains process</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090011 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090011">
+        <rdfs:label xml:lang="en">connected to</rdfs:label>
+        <obo:IAO_0000115 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X connected_to Y if and only if X and Y share a fiat boundary.</obo:IAO_0000115>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090012 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090012">
+        <rdfs:label xml:lang="en">has participant</rdfs:label>
+        <dc:source>http://www.obofoundry.org/ro/#OBO_REL:has_participant</dc:source>
+        <owl:inverseOf rdf:resource="http://www.bioassayontology.org/bao#BA0_0090013"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BA0_0090013 -->
+
+    <owl:ObjectProperty rdf:about="http://www.bioassayontology.org/bao#BA0_0090013">
+        <rdfs:label xml:lang="en">participates in</rdfs:label>
+    </owl:ObjectProperty>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.4) http://owlapi.sourceforge.net -->
+

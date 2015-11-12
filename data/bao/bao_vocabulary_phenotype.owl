@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY obo "http://purl.obolibrary.org/obo/" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_phenotype.owl#"
+     xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_phenotype.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_phenotype.owl">
+        <rdfs:label>bioassay ontology</rdfs:label>
+        <owl:versionInfo>2.1</owl:versionInfo>
+        <dc:date>05/20/2013</dc:date>
+        <rdfs:comment xml:lang="en">There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
+
+contact: Stephan Schurer: sschurer</rdfs:comment>
+        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
+        <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
+	<dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#topObjectProperty -->
+
+    <owl:ObjectProperty rdf:about="&owl;topObjectProperty"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#topDataProperty -->
+
+    <owl:DatatypeProperty rdf:about="&owl;topDataProperty"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0002542 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002542">
+        <rdfs:label>cell phenotype</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0170001 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0170001">
+        <rdfs:label xml:lang="en">molecular phenotype</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002542"/>
+        <obo:IAO_0000115>The molecular characteristics of a cell of tissue including expressed coding and non-coding RNAs, proteins and their post-translational modifications, lipids, carbohydrates and small molecules that characterize the state in a cell or tissue and that result from the interaction of its genotype and the environment.</obo:IAO_0000115>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0170002 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0170002">
+        <rdfs:label xml:lang="en">morphological phenotype</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002542"/>
+        <obo:IAO_0000115>The form and structure of an organism and its parts, including cells, that result from the interaction of its genotype and the environment.</obo:IAO_0000115>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0170003 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0170003">
+        <rdfs:label xml:lang="en">biochemical phenotype</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0170001"/>
+        <obo:IAO_0000115>The proteins and their post-translational modifications, lipids, carbohydrates and small molecules that characterize the state in a cell or tissue and that result from the interaction of its genotype and the environment.</obo:IAO_0000115>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0170004 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0170004">
+        <rdfs:label xml:lang="en">transcriptional phenotype</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0170001"/>
+        <obo:IAO_0000115>The coding and non-coding RNAs expressed in a cell or tissue that result from the interaction of its genotype and the environment.</obo:IAO_0000115>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.3.1957) http://owlapi.sourceforge.net -->
+
