@@ -20,7 +20,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.shape.Line;
+import javafx.scene.text.*;
 import javafx.beans.value.*;
 import javafx.util.*;
 
@@ -38,13 +39,18 @@ public class DetailPane extends ScrollPane
 	private final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
-	private TextField fieldName = null, fieldDescr = null, fieldURI = null;
+	private TextField fieldName = null;
+	private TextArea fieldDescr = null;
+	private TextField fieldURI = null;
 	
 	private final class ValueWidgets
 	{
-		TextField fieldURI;
+		Lineup line;
+		TextField fieldURI, fieldName, fieldDescr;
 	}
 	private List<ValueWidgets> valueList = new ArrayList<>();
+	
+	private int focusIndex = -1; // which "group of widgets" has the focus
 
 	// ------------ public methods ------------	
 
@@ -53,9 +59,10 @@ public class DetailPane extends ScrollPane
 		setHbarPolicy(ScrollBarPolicy.NEVER);
 		setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		
+		setFitToWidth(true);
 		vbox.setPadding(new Insets(4));
 		setContent(vbox);
-		//vbox.setPrefWidth(Double.MAX_VALUE);
+		vbox.setPrefWidth(Double.MAX_VALUE);
  	}
 
 	public void clearContent()
@@ -68,7 +75,7 @@ public class DetailPane extends ScrollPane
 	{
 		this.group = group;
 		assignment = null;
-		recreateCategory();
+		recreateGroup();
 	}
 	public void setAssignment(Schema.Assignment assignment)
 	{
@@ -79,8 +86,10 @@ public class DetailPane extends ScrollPane
 
 	// ------------ private methods ------------	
 
-	private void recreateCategory()
+	private void recreateGroup()
 	{
+		focusIndex = -1;
+	
 		vbox.getChildren().clear();
 		
 		Label heading = new Label("Category");
@@ -92,10 +101,13 @@ public class DetailPane extends ScrollPane
 		
 		fieldName = new TextField(group.groupName);
 		fieldName.setPrefWidth(300);
+		observeFocus(fieldName, -1);
 		line.add(fieldName, "Name:", 1, 0);
 		
-		fieldDescr = new TextField(group.groupDescr);
+		fieldDescr = new TextArea(group.groupDescr);
+		fieldDescr.setPrefRowCount(5);
 		fieldDescr.setPrefWidth(300);
+		observeFocus(fieldDescr, -1);
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -103,7 +115,11 @@ public class DetailPane extends ScrollPane
 	
 	private void recreateAssignment()
 	{
+		focusIndex = -1;
+	
 		vbox.getChildren().clear();
+		vbox.setFillWidth(true);
+		vbox.setMaxWidth(Double.MAX_VALUE);
 
 		Label heading = new Label("Assignment");
 		heading.setTextAlignment(TextAlignment.CENTER);
@@ -114,14 +130,18 @@ public class DetailPane extends ScrollPane
 		
 		fieldName = new TextField(assignment.assnName);
 		fieldName.setPrefWidth(300);
+		observeFocus(fieldName, -1);
 		line.add(fieldName, "Name:", 1, 0);
 		
-		fieldDescr = new TextField(assignment.assnDescr);
+		fieldDescr = new TextArea(assignment.assnDescr);
 		fieldDescr.setPrefWidth(300);
+		fieldDescr.setPrefRowCount(5);
+		observeFocus(fieldDescr, -1);
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		fieldURI = new TextField(assignment.propURI);
 		fieldURI.setPrefWidth(350);
+		observeFocus(fieldURI, -1);
 		line.add(fieldURI, "URI:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -144,24 +164,54 @@ public class DetailPane extends ScrollPane
 			ValueWidgets vw = new ValueWidgets();
 			valueList.add(vw);
 			
+			vw.line = new Lineup(PADDING);
+			
 			vw.fieldURI = new TextField(val.uri == null ? "" : val.uri);
 			vw.fieldURI.setPrefWidth(350);
+			observeFocus(vw.fieldURI, n);
+			vw.line.add(vw.fieldURI, "URI:", 1, 0);
 			
-			Label label = new Label(val.name);
-			// (doesn't work) label.setStyle("-fx-font-style: italic;");
-
-			FlowPane flow = new FlowPane(Orientation.HORIZONTAL);
-			flow.getChildren().addAll
-			(
-				new Label("URI: "),
-				vw.fieldURI,
-				label
-			);
-			vbox.getChildren().add(flow);
+			vw.fieldName = new TextField(val.name);
+			vw.fieldName.setPrefWidth(350);
+			observeFocus(vw.fieldName, n);
+			vw.line.add(vw.fieldName, "Name:", 1, 0);
 			
-			// !! DESCRIPTION
-			// !! LINEUP
+			vw.fieldDescr = new TextField(val.descr);
+			vw.fieldDescr.setPrefWidth(350);
+			observeFocus(vw.fieldDescr, n);
+			vw.line.add(vw.fieldDescr, "Description:", 1, 0);
+			
+			vbox.getChildren().add(vw.line);
+			
+			if (n < assignment.values.size() - 1)
+			{
+    			Line hr = new Line(0, 0, 300, 0);
+    			hr.setStroke(Color.rgb(0, 0, 0, 0.1));
+    			vbox.getChildren().add(hr);
+			}
 		}
+	}
+
+	private void observeFocus(TextInputControl field, final int idx)
+	{
+		field.focusedProperty().addListener(new ChangeListener<Boolean>()
+		{
+            public void changed(ObservableValue<? extends Boolean> val, Boolean oldValue, Boolean newValue)
+            {
+                if (newValue)
+                {
+                	if (focusIndex >= 0)
+                	{
+                		valueList.get(focusIndex).line.setBackground(null);
+                	}
+                	focusIndex = idx;
+                	if (focusIndex >= 0)
+                	{
+                		valueList.get(focusIndex).line.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.05), CornerRadii.EMPTY, new Insets(-4, -4, -4, -4))));
+                	}
+                }
+            }		
+		});
 	}
 }
 

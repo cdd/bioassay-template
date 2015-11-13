@@ -51,6 +51,7 @@ public class Lineup extends Pane
 	{
 		this.padding = padding;
 		this.margin = margin;
+		//setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	// for cleaning house
