@@ -44,7 +44,6 @@ public class Schema
 	public static final String HAS_PROPERTY = "hasProperty"; // maps to predicate (one per assignment)
 	public static final String HAS_VALUE = "hasValue"; // contains a value option (many per assignment)	
 	public static final String MAPS_TO = "mapsTo";
-	
 
 	// ------------ private data ------------	
 
@@ -61,6 +60,16 @@ public class Schema
 			this.uri = uri;
 			this.name = name;
 		}
+		public Value clone()
+		{
+			Value dup = new Value(uri, name);
+			dup.descr = descr;
+			return dup;
+		}
+		public boolean equals(Value other)
+		{
+			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr);
+		}
 	}
 
 	public static final class Assignment
@@ -75,6 +84,20 @@ public class Schema
 			this.assnName = assnName;
 			this.propURI = propURI; 
 		}
+		public Assignment clone()
+		{
+			Assignment dup = new Assignment(assnName, propURI);
+			dup.assnDescr = assnDescr;
+			for (Value val : values) dup.values.add(val.clone());
+			return dup;
+		}
+		public boolean equals(Assignment other)
+		{
+			if (!assnName.equals(other.assnName) || !assnDescr.equals(other.assnDescr) || !propURI.equals(other.propURI)) return false;
+			if (values.size() != other.values.size()) return false;
+			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
+			return true;
+		}
 		
 		private void outputAsString(StringBuffer buff, int indent)
 		{
@@ -87,7 +110,6 @@ public class Schema
 			}
 		}
 	};
-	private List<Assignment> rootAssignments = new ArrayList<Assignment>();
 
 	public static final class Group
 	{
@@ -98,6 +120,22 @@ public class Schema
 		public Group(String groupName) 
 		{
 			this.groupName = groupName;
+		}
+		public Group clone()
+		{
+			Group dup = new Group(groupName);
+			dup.groupDescr = groupDescr;
+			for (Assignment assn : assignments) dup.assignments.add(assn.clone());
+			for (Group grp : subGroups) dup.subGroups.add(grp.clone());
+			return dup;
+		}
+		public boolean equals(Group other)
+		{
+			if (!groupName.equals(other.groupName) || !groupDescr.equals(other.groupDescr)) return false;
+			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
+			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
+			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
+			return true;
 		}
 		
 		private void outputAsString(StringBuffer buff, int indent)
@@ -126,6 +164,14 @@ public class Schema
 	public Schema(Vocabulary vocab)
 	{
 		this.vocab = vocab;
+	}
+	
+	// makes a deep copy of the schema content
+	public Schema clone()
+	{
+		Schema dup = new Schema(vocab);
+		dup.root = root.clone();
+		return dup;
 	}
 	
 	// returns the top level category: all of the assignments and subcategories are considered to be

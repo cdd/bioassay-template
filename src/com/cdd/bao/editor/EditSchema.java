@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.util.*;
 
@@ -32,7 +33,7 @@ public class EditSchema
 	// ------------ private data ------------	
 
 	private File schemaFile = null;
-	private Schema schema = new Schema(null);
+	private StackSchema stack = new StackSchema();
 
     private Stage stage;
     private BorderPane root;
@@ -42,7 +43,7 @@ public class EditSchema
     private DetailPane detail;
     
     private MenuBar menuBar;
-    private Menu menuFile, menuEdit, menuWindow;
+    private Menu menuFile, menuEdit, menuValue;
     private MenuItem miFileNew;
     
     private final class SchemaBranch extends TreeItem<String>
@@ -77,7 +78,9 @@ public class EditSchema
 		menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
 		menuBar.getMenus().add(menuFile = new Menu("_File"));
-		menuBar.getMenus().add(menuWindow = new Menu("_Window"));
+		menuBar.getMenus().add(menuEdit = new Menu("_Edit"));
+		menuBar.getMenus().add(menuValue = new Menu("_Value"));
+		//menuBar.getMenus().add(menuWindow = new Menu("_Window"));
 		createMenuItems();
 
 		treeroot = new SchemaBranch("Assay");
@@ -131,6 +134,8 @@ public class EditSchema
 		
 		rebuildTree();
 		
+		stage.setOnCloseRequest(event -> actionFileClose());
+		
 		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
 		new Thread(new Runnable()
 		{
@@ -142,7 +147,8 @@ public class EditSchema
 	{
 		try
 		{
-			schema = Schema.deserialise(f);
+			Schema schema = Schema.deserialise(f);
+			stack.setSchema(schema);
 			
 			//Util.writeln("SCHEMA:\n" + schema.toString());
 		}
@@ -159,19 +165,41 @@ public class EditSchema
 
 	private void createMenuItems()
     {
-		menuFile.getItems().add(miFileNew=new MenuItem("_New"));
-		miFileNew.setMnemonicParsing(true);
-		miFileNew.setAccelerator(new KeyCharacterCombination("N", KeyCombination.SHORTCUT_DOWN));
-		miFileNew.setOnAction(new EventHandler<ActionEvent>()
-    	{
-            public void handle(ActionEvent ev)
-            {
-                Util.writeln("NEW!");
-            }
-    	});
+    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN;
     
-    	//miWindowHub=new MenuItem("_Hub");
-        //menuWindow.getItems().add(miWindowHub);
+    	addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
+    	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
+    	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
+    	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+		menuFile.getItems().add(new SeparatorMenuItem());
+    	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
+    	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
+    	
+		addMenu(menuEdit, "Add _Group", null).setOnAction(event -> actionGroupAdd());
+		addMenu(menuEdit, "Add _Assignment", null).setOnAction(event -> actionAssignmentEdit());
+		menuEdit.getItems().add(new SeparatorMenuItem());
+    	addMenu(menuEdit, "_Delete", null).setOnAction(event -> actionEditDelete());
+    	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
+    	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditRedo());
+		menuEdit.getItems().add(new SeparatorMenuItem());
+		addMenu(menuEdit, "Move _Up", null).setOnAction(event -> actionEditMove(-1));
+		addMenu(menuEdit, "Move _Down", null).setOnAction(event -> actionEditMove(1));
+
+		addMenu(menuValue, "_Add Value", null).setOnAction(event -> actionValueAdd());
+		addMenu(menuValue, "_Delete Value", null).setOnAction(event -> actionValueDelete());
+		addMenu(menuValue, "Move _Up", null).setOnAction(event -> actionValueMove(-1));
+		addMenu(menuValue, "Move _Down", null).setOnAction(event -> actionValueMove(1));
+		menuValue.getItems().add(new SeparatorMenuItem());
+		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> actionValueLookupURI());
+		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> actionValueLookupName());
+    }
+    
+    private MenuItem addMenu(Menu parent, String title, KeyCharacterCombination accel)
+    {
+    	MenuItem item = new MenuItem(title);
+    	parent.getItems().add(item);
+    	if (accel != null) item.setAccelerator(accel);
+    	return item;
     }
 
 	private void rebuildTree()
@@ -179,7 +207,7 @@ public class EditSchema
 		treeroot.getChildren().clear();
 		treeroot.setExpanded(true);
 		
-		Schema.Group root = schema.getRoot();
+		Schema.Group root = stack.getSchema().getRoot();
 		
 		treeroot.setValue(root.groupName);
 		treeroot.group = root;
@@ -208,7 +236,6 @@ public class EditSchema
 		else detail.clearContent();
 	}
 
-
 	/*private void treeDoubleClick(MouseEvent event)
 	{
         TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
@@ -231,115 +258,72 @@ public class EditSchema
 		Util.writeln("RIGHT CLICK");
 	}*/
 	
-	// ------------ widget implementations ------------
-	
-	// !! useful for edit-in-place
-	private final class AssayHierarchyTreeCell extends TreeCell<String>
+	private void actionFileNew()
 	{
-        private TextField textField;
- 
-        public AssayHierarchyTreeCell()
-        {
-        }
- 
-        /*public void startEdit() 
-        {
-        	Util.writeln("EDIT START!");
-            super.startEdit();
-            if (textField == null) createTextField();
-            setText(null);
-            setGraphic(textField);
-            textField.selectAll();
-        }
- 
-        public void cancelEdit()
-        {
-        	Util.writeln("EDIT STOP!");
-            super.cancelEdit();
-            setText((String) getItem());
-            setGraphic(getTreeItem().getGraphic());
-        }*/
- 
-        public void updateItem(String text, boolean empty)
-        {
-            super.updateItem(text, empty);
- 
-            if (empty)
-            {
-                setText(null);
-                setGraphic(null);
-            }
-            else 
-            {
-                if (isEditing()) 
-                {
-                    if (textField != null) textField.setText(getString());
-                    setText(null);
-                    setGraphic(textField);
-                }
-                else
-                {
-                    setText(getString());
-                    setGraphic(getTreeItem().getGraphic());
-                    openContextMenu();
-                    
-                    
-/*
-		TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-            MenuItem addMenuItem = new MenuItem("Fnord!");
-            ContextMenu ctx = new ContextMenu();
-            ctx.getItems().add(addMenuItem);
-            addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-            {
-                public void handle(ActionEvent t)
-                {
-                	Util.writeln("--> FNORD!");
-                }
-            });
-            
-            setContextMenu(ctx);
-*/
-                }
-            }
-        }
-        
-        private void openContextMenu()
-        {
- 			TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-            MenuItem addMenuItem = new MenuItem("Fnord!");
-            ContextMenu ctx = new ContextMenu();
-            ctx.getItems().add(addMenuItem);
-            addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-            {
-                public void handle(ActionEvent t)
-                {
-                	Util.writeln("--> FNORD!");
-                }
-            });
-            
-            setContextMenu(ctx);
-        }
-        
-        /*private void createTextField() 
-        {
-            textField = new TextField(getString());
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>()
-            {
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode() == KeyCode.ENTER) {
-                        commitEdit(textField.getText());
-                    } else if (t.getCode() == KeyCode.ESCAPE) {
-                        cancelEdit();
-                    }
-                }
-            });  
-        }*/
- 
-        private String getString() 
-        {
-            return getItem() == null ? "" : getItem().toString();
-        }
+		Util.writeln("new!");
+	}
+	private void actionFileSave(boolean promptNew)
+	{
+		Util.writeln("save:"+promptNew);
+	}
+	private void actionFileOpen()
+	{
+		Util.writeln("open!");
+	}
+	private void actionFileClose()
+	{
+		// !! prompt if dirty...
+		Util.writeln("CLOSE!");
+		stage.close();
+	}
+	private void actionFileQuit()
+	{
+		// !! prompt if any windows are dirty...
+		Platform.exit();
+	}
+    private void actionGroupAdd()
+    {
+    	Util.writeln("addgroup!");
+    }
+    private void actionAssignmentEdit()
+    {
+    	Util.writeln("addassignment!");
+    }
+    private void actionEditDelete()
+    {
+    	Util.writeln("delete!");
+    }
+    private void actionEditUndo()
+    {
+    	Util.writeln("undo!");
+    }
+    private void actionEditRedo()
+    {
+    	Util.writeln("redo!");
+    }
+    private void actionEditMove(int dir)
+    {
+    	Util.writeln("move:"+dir);
+    }
+    private void actionValueAdd()
+    {
+    	Util.writeln("addvalue!");
+    }
+    private void actionValueDelete()
+    {
+    	Util.writeln("deletevalue!");
+    }
+    private void actionValueMove(int dir)
+    {
+    	Util.writeln("movevalue:"+dir);
+    }
+    private void actionValueLookupURI()
+    {
+    	Util.writeln("lookupURI!");
+    }
+    private void actionValueLookupName()
+    {
+    	Util.writeln("lookupname!");
     }
 }
 

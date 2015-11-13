@@ -65,12 +65,15 @@ public class DetailPane extends ScrollPane
 		vbox.setPrefWidth(Double.MAX_VALUE);
  	}
 
+	// clears out the contents of the pane; does so without regard for saving the content
 	public void clearContent()
 	{
 		group = null;
 		assignment = null;
 		vbox.getChildren().clear();
 	}
+	
+	// replaces the content with either type; any modifications to existing widgets will be zapped
 	public void setGroup(Schema.Group group)
 	{
 		this.group = group;
@@ -83,6 +86,29 @@ public class DetailPane extends ScrollPane
 		group = null;
 		recreateAssignment();
 	}
+	
+	// inquiries as to what kind of content is currently being represented
+	public boolean isGroup() {return group != null;}
+	public boolean isAssignment() {return assignment != null;}
+	
+	// extracts a representation of the content from the current widgets; note that these return null if nothing has changed (or if it's not that content type)
+	public Schema.Group extractGroup()
+	{
+		if (group == null) return null;
+	
+		// !! pre-check for differences is the easiest way
+		// !! clone the group (so the sub-stuff is the same); then replace name, etc.
+		return null;
+	}
+	public Schema.Assignment extractAssignment()
+	{
+		if (assignment == null) return null;
+		
+		// !! pull it all out in detail
+		// !! use built-in comparison
+		return null; 
+	}
+	
 
 	// ------------ private methods ------------	
 
