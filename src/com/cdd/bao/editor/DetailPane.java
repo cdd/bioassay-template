@@ -108,6 +108,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr.setPrefRowCount(5);
 		fieldDescr.setPrefWidth(300);
 		observeFocus(fieldDescr, -1);
+		passthroughTab(fieldDescr);
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -137,6 +138,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr.setPrefWidth(300);
 		fieldDescr.setPrefRowCount(5);
 		observeFocus(fieldDescr, -1);
+		passthroughTab(fieldDescr);
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		fieldURI = new TextField(assignment.propURI);
@@ -192,6 +194,7 @@ public class DetailPane extends ScrollPane
 		}
 	}
 
+	// respond to focus so that one of the blocks gets a highlight
 	private void observeFocus(TextInputControl field, final int idx)
 	{
 		field.focusedProperty().addListener(new ChangeListener<Boolean>()
@@ -212,6 +215,46 @@ public class DetailPane extends ScrollPane
                 }
             }		
 		});
+	}
+	
+	// modify a TextArea so that it doesn't steal the Tab key; pretty ugly for a feature that should be just a switch, but it is what it is
+	private void passthroughTab(final TextArea area)
+	{
+        area.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> 
+        {
+            if (event.getCode() == KeyCode.TAB) 
+            {
+            	if (event.isControlDown()) area.replaceSelection("\t");
+            	else
+            	{
+            		List<Control> list = new ArrayList<>();
+            		recursiveControls(list, vbox);
+            		int idx = list.indexOf(area);
+            		if (idx >= 0)
+            		{
+            			if (event.isShiftDown()) idx--; else idx++;
+            			if (idx < 0) idx = list.size() + idx;
+            			if (idx >= list.size()) idx -= list.size();
+            			list.get(idx).requestFocus();
+            		}
+                }
+                event.consume();
+            }  
+        });  	
+	}
+	
+	// returns a flattened list of all child nodes in the tree that are traversible
+	private void recursiveControls(List<Control> list, Pane parent)
+	{
+		for (Node child : parent.getChildrenUnmodifiable())
+		{
+			if (child instanceof Control)
+			{
+				Control control = (Control)child;
+				if (control.isFocusTraversable()) list.add(control);
+			}
+			if (child instanceof Pane) recursiveControls(list, (Pane)child);
+		}
 	}
 }
 
