@@ -280,6 +280,16 @@ public class Schema
 	// for a given category node, pulls out and parses all of its assignments and subcategories
 	private void parseGroup(Model model, Resource objParent, Group group) throws IOException
 	{
+		final Map<Object, Integer> order = new HashMap<>();
+		Comparator<Object> comparator = new Comparator<Object>()
+		{
+    		public int compare(Object r1, Object r2)
+    		{
+    			int v1 = order.get(r1), v2 = order.get(r2);
+    			return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+    		}
+		};
+	
 		// look for assignments
 		for (StmtIterator it = model.listStatements(objParent, hasAssignment, (RDFNode)null); it.hasNext();)
 		{
@@ -289,12 +299,13 @@ public class Schema
 			//Util.writeln("Cat:"+category.categoryName+ " prop:"+clsProp.toString());
 			
 			Assignment assn = parseAssignment(model, objAssn);
-			// !! order
 			group.assignments.add(assn);
+			order.put(assn, findInteger(model, objAssn, inOrder));
 		}
+		group.assignments.sort(comparator);
 		
 		// look for subcategories
-		//List<Integer> sgOrder = new ArrayList<>(); hash?? dump assn and group...
+		order.clear();
 		for (StmtIterator it = model.listStatements(objParent, hasGroup, (RDFNode)null); it.hasNext();)
 		{
 			Statement st = it.next();
@@ -303,11 +314,12 @@ public class Schema
     		Group subgrp = new Group(findString(model, objGroup, rdfLabel));
     		subgrp.groupDescr = findString(model, objGroup, hasDescription);
     		
-    		// !! order
     		group.subGroups.add(subgrp);
+    		order.put(subgrp, findInteger(model, objGroup, inOrder));
     		
     		parseGroup(model, objGroup, subgrp);
 		}
+		group.subGroups.sort(comparator);
 	}
 	
 	private Assignment parseAssignment(Model model, Resource objAssn) throws IOException
