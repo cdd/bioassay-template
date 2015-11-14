@@ -38,33 +38,28 @@ public class EditSchema
     private Stage stage;
     private BorderPane root;
     private SplitPane splitter;
-    private TreeView<String> treeview;
-    private SchemaBranch treeroot;
+    private TreeView<Branch> treeview;
+    private TreeItem<Branch> treeroot;
     private DetailPane detail;
     
     private MenuBar menuBar;
     private Menu menuFile, menuEdit, menuValue;
     private MenuItem miFileNew;
     
-    private final class SchemaBranch extends TreeItem<String>
+    public static final class Branch
     {
     	Schema.Group group = null;
     	Schema.Assignment assignment = null;
     	String locatorID = null;
 
-		SchemaBranch(String label)
-		{
-			super(label);
-		}    	
-    	SchemaBranch(Schema.Group category, String locatorID)
+		Branch() {}
+    	Branch(Schema.Group category, String locatorID)
     	{
-    		super(category.groupName);
     		this.group = category;
     		this.locatorID = locatorID;
     	}
-    	SchemaBranch(Schema.Assignment assignment, String locatorID)
+    	Branch(Schema.Assignment assignment, String locatorID)
     	{
-    		super(assignment.assnName);
     		this.assignment = assignment;
     		this.locatorID = locatorID;
     	}
@@ -86,12 +81,12 @@ public class EditSchema
 		//menuBar.getMenus().add(menuWindow = new Menu("_Window"));
 		createMenuItems();
 
-		treeroot = new SchemaBranch("Assay"); // !! THIS SHOULD show the root...
-		treeview = new TreeView<String>(treeroot);
+		treeroot = new TreeItem<Branch>(new Branch());
+		treeview = new TreeView<Branch>(treeroot);
 		treeview.setEditable(true);
-		treeview.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>()
+		treeview.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
-            public TreeCell<String> call(TreeView<String> p) {return new AssayHierarchyTreeCell();}
+            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
         });
         /*treeview.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
@@ -107,14 +102,14 @@ public class EditSchema
 				if (event.getButton().equals(MouseButton.SECONDARY) || event.isControlDown()) treeRightClick(event);
 			}
 		});*/
-		treeview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>()
+		treeview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
 		{
-	        public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldVal, TreeItem<String> newVal) 
+	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
 	        {
-	        	pullDetail((SchemaBranch)oldVal);
-	        	pushDetail((SchemaBranch)newVal);
+	        	if (oldVal != null) pullDetail(oldVal.getValue());
+	        	if (newVal != null) pushDetail(newVal.getValue());
             }
-		});		
+		});	
 
 		detail = new DetailPane();
 
@@ -131,7 +126,7 @@ public class EditSchema
 		root.setTop(menuBar);
 		root.setCenter(splitter);
 
-		Scene scene = new Scene(root, 800, 600, Color.WHITE);
+		Scene scene = new Scene(root, 900, 800, Color.WHITE);
 
 		stage.setScene(scene);
 		
@@ -214,29 +209,53 @@ public class EditSchema
 		Schema schema = stack.getSchema();
 		Schema.Group root = schema.getRoot();
 		
-		treeroot.setValue(root.groupName);
-		treeroot.group = root;
-		treeroot.locatorID = schema.locatorID(root);
+		treeroot.setValue(new Branch(root, schema.locatorID(root)));
 		fillTreeGroup(schema, root, treeroot);
 	}
 	
-	private void fillTreeGroup(Schema schema, Schema.Group category, TreeItem<String> parent)
+	private void fillTreeGroup(Schema schema, Schema.Group group, TreeItem<Branch> parent)
 	{
-		for (Schema.Assignment assn : category.assignments)
+		for (Schema.Assignment assn : group.assignments)
 		{
-			SchemaBranch item = new SchemaBranch(assn, schema.locatorID(assn));
+			TreeItem<Branch> item = new TreeItem<>(new Branch(assn, schema.locatorID(assn)));
 			parent.getChildren().add(item);
 		}
-		for (Schema.Group subgrp : category.subGroups)
-		{		
-			SchemaBranch item = new SchemaBranch(subgrp, schema.locatorID(subgrp));
+		for (Schema.Group subgrp : group.subGroups)
+		{
+			TreeItem<Branch> item = new TreeItem<>(new Branch(subgrp, schema.locatorID(subgrp)));
 			parent.getChildren().add(item);
+			fillTreeGroup(schema, subgrp, item);
 		}
 	}
 
+	// convenience for tree selection
+	public TreeItem<Branch> currentBranch() {return treeview.getSelectionModel().getSelectedItem();}
+	public void setCurrentBranch(TreeItem<Branch> branch) 
+	{
+		treeview.getSelectionModel().select(branch);
+		treeview.scrollTo(treeview.getRow(branch));
+	}
+	public String currentLocatorID()
+	{
+		TreeItem<Branch> branch = currentBranch();
+		return branch == null ? null : branch.getValue().locatorID;
+	}
+	public TreeItem<Branch> locateBranch(String locatorID)
+	{
+		List<TreeItem<Branch>> stack = new ArrayList<>();
+		stack.add(treeroot);
+		while (stack.size() > 0)
+		{
+			TreeItem<Branch> branch = stack.remove(0);
+			if (branch.getValue().locatorID.equals(locatorID)) return branch;
+			for (TreeItem<Branch> item : branch.getChildren()) stack.add(item);
+		}
+		return null;
+	}
+
 	// for the given branch, pulls out the content: if any changes have been made, pushes the modified schema onto the stack
-	private void pullDetail() {pullDetail((SchemaBranch)treeview.getSelectionModel().getSelectedItem());}
-	private void pullDetail(SchemaBranch branch)
+	private void pullDetail() {pullDetail(currentBranch().getValue());}
+	private void pullDetail(Branch branch)
 	{
 		if (branch == null) return;
 		if (branch.group != null)
@@ -277,7 +296,7 @@ public class EditSchema
 	}
 
 	// recreates all the widgets in the detail view, given that the indicated branch has been selected
-	private void pushDetail(SchemaBranch branch)
+	private void pushDetail(Branch branch)
 	{
 		if (branch.group != null) detail.setGroup(branch.group);
 		else if (branch.assignment != null) detail.setAssignment(branch.assignment);
@@ -306,6 +325,25 @@ public class EditSchema
 		Util.writeln("RIGHT CLICK");
 	}*/
 	
+	private void informMessage(String title, String msg)
+	{
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+	}
+	private void informWarning(String title, String msg)
+	{
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+	}
+
+	// ------------ action responses ------------	
+	
 	private void actionFileNew()
 	{
 		Util.writeln("new!");
@@ -325,11 +363,7 @@ public class EditSchema
 		if (schemaFile == null) return;
 		if (!schemaFile.canWrite())
 		{
-			Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Cannot Save");
-            alert.setHeaderText(null);
-            alert.setContentText("Not able to write to file: " + schemaFile.getAbsolutePath());
-            alert.showAndWait();
+			informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
             return;
 		}
 	
@@ -362,7 +396,17 @@ public class EditSchema
 	}
     private void actionGroupAdd()
     {
-    	Util.writeln("addgroup!");
+    	TreeItem<Branch> item = currentBranch();
+    	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
+    	{
+    		informMessage("Add Group", "Select a group to add to.");
+    		return;
+    	}
+    	Schema schema = stack.getSchema();
+    	Schema.Group newGroup = schema.appendGroup(schema.obtainGroup(item.getValue().locatorID), new Schema.Group(null, "NEW"));
+    	stack.changeSchema(schema);
+    	rebuildTree();
+    	setCurrentBranch(locateBranch(schema.locatorID(newGroup)));
     }
     private void actionAssignmentEdit()
     {

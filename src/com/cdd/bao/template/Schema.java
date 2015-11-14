@@ -240,6 +240,7 @@ public class Schema
 		while (group.parent != null)
 		{
 			seq.add(group.parent.subGroups.indexOf(group));
+			group = group.parent;
 		}
 		
 		StringBuffer buff = new StringBuffer();
@@ -256,12 +257,14 @@ public class Schema
 	{
 		Group group = root;
 		String[] bits = locatorID.split(":");
-		for (int n = 0; n < bits.length - 1; n++)
+		for (int n = 0; n < bits.length; n++)
 		{
+			if (bits[n].length() == 0) break; // this is OK for assignment-types
 			int idx = Integer.parseInt(bits[n]);
 			if (idx < 0 || idx >= group.subGroups.size()) return null;
 			group = group.subGroups.get(idx);
 		}
+		
 		return group;
 	}
 	public Assignment obtainAssignment(String locatorID)
@@ -271,52 +274,21 @@ public class Schema
 		int idx = Integer.parseInt(locatorID.substring(locatorID.lastIndexOf(':') + 1));
 		if (idx < 0 || idx >= group.assignments.size()) return null;
 		return group.assignments.get(idx);
-		
 	}
 	
-	
-	/*
-	// methods for scanning the hierarchy and fishing out the group/assignment corresponding to the given ID; or null if not found
-	public Group findGroupByID(int editableID)
+	// adding of content
+	public Group appendGroup(Group parent, Group group)
 	{
-		List<Group> stack = new ArrayList<>();
-		stack.add(root);
-		while (stack.size() > 0)
-		{
-			Group group = stack.remove(0);
-			if (group.editableID == editableID) return group;
-			for (Group g : group.subGroups) stack.add(g);
-		}
-		return null;
+		group.parent = parent;
+		parent.subGroups.add(group);
+		return group;
 	}
-	public Assignment findAssignmentByID(int editableID)
+	public Assignment appendAssignment(Group parent, Assignment assn)
 	{
-		List<Group> stack = new ArrayList<>();
-		stack.add(root);
-		while (stack.size() > 0)
-		{
-			Group group = stack.remove(0);
-			for (Assignment  a : group.assignments) if (a.editableID == editableID) return a;
-			for (Group g : group.subGroups) stack.add(g);
-		}
-		return null;
+		assn.parent = parent;
+		parent.assignments.add(assn);
+		return assn;
 	}
-	
-	// takes a group/assignment instance and finds its editable position in the tree, and replaces it
-	public void replaceGroup(Group repl)
-	{
-		List<Group> stack = new ArrayList<>();
-		stack.add(root);
-		while (stack.size() > 0)
-		{
-			Group group = stack.remove(0);
-			if (group.editableID == editableID) return group;
-			
-			for (Group g : group.subGroups) stack.add(g);
-		}
-		return null;
-	}
-*/
 
 	// ------------ private methods ------------	
 

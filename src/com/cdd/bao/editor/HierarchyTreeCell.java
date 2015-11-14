@@ -28,13 +28,13 @@ import javafx.util.*;
 	Display functionality for the schema tree shown on the left hand side.
 */
 
-public final class AssayHierarchyTreeCell extends TreeCell<String>
+public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 {
     private TextField textField;
  
 	// ------------ private data ------------	
 
-    public AssayHierarchyTreeCell()
+    public HierarchyTreeCell()
     {
     }
  
@@ -56,9 +56,9 @@ public final class AssayHierarchyTreeCell extends TreeCell<String>
         setGraphic(getTreeItem().getGraphic());
     }*/
  
-    public void updateItem(String text, boolean empty)
+    public void updateItem(EditSchema.Branch branch, boolean empty)
     {
-        super.updateItem(text, empty);
+        super.updateItem(branch, empty);
  
         if (empty)
         {
@@ -75,9 +75,14 @@ public final class AssayHierarchyTreeCell extends TreeCell<String>
             }
             else
             {
-                setText(getString());
+            	String label = branch.group != null ? branch.group.groupName : branch.assignment != null ? branch.assignment.assnName : "?";
+
+    			if (branch.group != null) setStyle("-fx-font-weight: bold;");
+    			else if (branch.assignment != null) setStyle("-fx-font-weight: normal;");
+				
+                setText(label);
                 setGraphic(getTreeItem().getGraphic());
-                openContextMenu();
+                setupContextMenu();
 /*
 		TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
             MenuItem addMenuItem = new MenuItem("Fnord!");
@@ -97,9 +102,9 @@ public final class AssayHierarchyTreeCell extends TreeCell<String>
 	    }
     }
 
-    private void openContextMenu()
+    private void setupContextMenu()
     {
-    	TreeItem<String> item = getTreeView().getSelectionModel().getSelectedItem();
+    	TreeItem<EditSchema.Branch> item = getTreeView().getSelectionModel().getSelectedItem();
         MenuItem addMenuItem = new MenuItem("Fnord!");
         ContextMenu ctx = new ContextMenu();
         ctx.getItems().add(addMenuItem);
