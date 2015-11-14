@@ -47,7 +47,8 @@ public class Schema
 
 	// ------------ private data ------------	
 
-	private Vocabulary vocab;
+	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
+	private int watermark = 1; // autogenned next editable identifier
 
 	public static final class Value
 	{
@@ -74,19 +75,21 @@ public class Schema
 
 	public static final class Assignment
 	{
+		public Group parent;
 		public String assnName, assnDescr = "";
 		public String propURI;
 		// !! exclusivity
 		public List<Value> values = new ArrayList<>();
 		
-		public Assignment(String assnName, String propURI) 
+		public Assignment(Group parent, String assnName, String propURI) 
 		{
+			this.parent = parent;
 			this.assnName = assnName;
 			this.propURI = propURI; 
 		}
-		public Assignment clone()
+		public Assignment clone(Group parent)
 		{
-			Assignment dup = new Assignment(assnName, propURI);
+			Assignment dup = new Assignment(parent, assnName, propURI);
 			dup.assnDescr = assnDescr;
 			for (Value val : values) dup.values.add(val.clone());
 			return dup;
@@ -102,31 +105,34 @@ public class Schema
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("<" + assnName + "> " + propURI + "\n");
+			buff.append("<" + assnName + "> " + propURI + " (" + assnDescr + ")\n");
 			for (Value val : values)
 			{
 				for (int n = 0; n <= indent; n++) buff.append("  ");
 				buff.append(val.uri + " : " + val.name + " (" + val.descr + "\n");
 			}
 		}
-	};
+	}
 
 	public static final class Group
 	{
+		public Group parent;
 		public String groupName, groupDescr = "";
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
+		public int editableID; // editable identifier; not serialised
 		
-		public Group(String groupName) 
+		public Group(Group parent, String groupName) 
 		{
+			this.parent = parent;
 			this.groupName = groupName;
 		}
-		public Group clone()
+		public Group clone(Group parent)
 		{
-			Group dup = new Group(groupName);
+			Group dup = new Group(parent, groupName);
 			dup.groupDescr = groupDescr;
-			for (Assignment assn : assignments) dup.assignments.add(assn.clone());
-			for (Group grp : subGroups) dup.subGroups.add(grp.clone());
+			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
+			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
 		public boolean equals(Group other)
@@ -141,12 +147,12 @@ public class Schema
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("[" + groupName + "]\n");
+			buff.append("[" + groupName + "] (" + groupDescr + ")\n");
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
 	};
-	private Group root = new Group("common assay template");
+	private Group root = new Group(null, "common assay template");
 
 	// defined during [de]serialisation
 	private Property rdfLabel, rdfType;
@@ -170,14 +176,15 @@ public class Schema
 	public Schema clone()
 	{
 		Schema dup = new Schema(vocab);
-		dup.root = root.clone();
+		dup.root = root.clone(null);
 		return dup;
 	}
 	
-	// returns the top level category: all of the assignments and subcategories are considered to be
+	// returns the top level group: all of the assignments and subgroups are considered to be
 	// connected to the primary assay description, and the root's category name is a description of this
 	// particular assay schema template
 	public Group getRoot() {return root;}
+	public void setRoot(Group root) {this.root = root;}
 	
 	public String toString()
 	{
@@ -224,6 +231,92 @@ public class Schema
 		
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
+	
+	// returns a string that identifies the object's position in the hierarchy; this can be used to apply between two schema instances with
+	// the same layout (e.g. one that has been cloned)
+	public String locatorID(Group group)
+	{
+		List<Integer> seq = new ArrayList<>();
+		while (group.parent != null)
+		{
+			seq.add(group.parent.subGroups.indexOf(group));
+		}
+		
+		StringBuffer buff = new StringBuffer();
+		for (int n = 0; n < seq.size(); n++) buff.append(seq.get(n) + ":");
+		return buff.toString();
+	}
+	public String locatorID(Assignment assn)
+	{
+		return locatorID(assn.parent) + assn.parent.assignments.indexOf(assn);
+	}
+	
+	// uses a locatorID to pull out the object from the schema hierarchy; returns null if couldn't find it for any reason
+	public Group obtainGroup(String locatorID)
+	{
+		Group group = root;
+		String[] bits = locatorID.split(":");
+		for (int n = 0; n < bits.length - 1; n++)
+		{
+			int idx = Integer.parseInt(bits[n]);
+			if (idx < 0 || idx >= group.subGroups.size()) return null;
+			group = group.subGroups.get(idx);
+		}
+		return group;
+	}
+	public Assignment obtainAssignment(String locatorID)
+	{
+		Group group = obtainGroup(locatorID);
+		if (group == null) return null;
+		int idx = Integer.parseInt(locatorID.substring(locatorID.lastIndexOf(':')));
+		if (idx < 0 || idx >= group.assignments.size()) return null;
+		return group.assignments.get(idx);
+		
+	}
+	
+	
+	/*
+	// methods for scanning the hierarchy and fishing out the group/assignment corresponding to the given ID; or null if not found
+	public Group findGroupByID(int editableID)
+	{
+		List<Group> stack = new ArrayList<>();
+		stack.add(root);
+		while (stack.size() > 0)
+		{
+			Group group = stack.remove(0);
+			if (group.editableID == editableID) return group;
+			for (Group g : group.subGroups) stack.add(g);
+		}
+		return null;
+	}
+	public Assignment findAssignmentByID(int editableID)
+	{
+		List<Group> stack = new ArrayList<>();
+		stack.add(root);
+		while (stack.size() > 0)
+		{
+			Group group = stack.remove(0);
+			for (Assignment  a : group.assignments) if (a.editableID == editableID) return a;
+			for (Group g : group.subGroups) stack.add(g);
+		}
+		return null;
+	}
+	
+	// takes a group/assignment instance and finds its editable position in the tree, and replaces it
+	public void replaceGroup(Group repl)
+	{
+		List<Group> stack = new ArrayList<>();
+		stack.add(root);
+		while (stack.size() > 0)
+		{
+			Group group = stack.remove(0);
+			if (group.editableID == editableID) return group;
+			
+			for (Group g : group.subGroups) stack.add(g);
+		}
+		return null;
+	}
+*/
 
 	// ------------ private methods ------------	
 
@@ -317,7 +410,7 @@ public class Schema
 		}
 		if (objRoot == null) throw new IOException("No template root found: this is probably not a bioassay template file.");
 
-		root = new Group(findString(model, objRoot, rdfLabel));
+		root = new Group(null, findString(model, objRoot, rdfLabel));
 		root.groupDescr = findString(model, objRoot, hasDescription);
 		
 		parseGroup(model, objRoot, root);
@@ -344,7 +437,7 @@ public class Schema
 			
 			//Util.writeln("Cat:"+category.categoryName+ " prop:"+clsProp.toString());
 			
-			Assignment assn = parseAssignment(model, objAssn);
+			Assignment assn = parseAssignment(model, group, objAssn);
 			group.assignments.add(assn);
 			order.put(assn, findInteger(model, objAssn, inOrder));
 		}
@@ -357,7 +450,7 @@ public class Schema
 			Statement st = it.next();
 			Resource objGroup = (Resource)st.getObject();
 			
-    		Group subgrp = new Group(findString(model, objGroup, rdfLabel));
+    		Group subgrp = new Group(group, findString(model, objGroup, rdfLabel));
     		subgrp.groupDescr = findString(model, objGroup, hasDescription);
     		
     		group.subGroups.add(subgrp);
@@ -368,9 +461,9 @@ public class Schema
 		group.subGroups.sort(comparator);
 	}
 	
-	private Assignment parseAssignment(Model model, Resource objAssn) throws IOException
+	private Assignment parseAssignment(Model model, Group group, Resource objAssn) throws IOException
 	{
-		Assignment assn = new Assignment(findString(model, objAssn, rdfLabel), findAsString(model, objAssn, hasProperty));
+		Assignment assn = new Assignment(group, findString(model, objAssn, rdfLabel), findAsString(model, objAssn, hasProperty));
 		assn.assnDescr = findString(model, objAssn, hasDescription);
 		
 		for (StmtIterator it = model.listStatements(objAssn, hasValue, (RDFNode)null); it.hasNext();)

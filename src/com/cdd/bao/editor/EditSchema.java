@@ -50,20 +50,23 @@ public class EditSchema
     {
     	Schema.Group group = null;
     	Schema.Assignment assignment = null;
+    	String locatorID = null;
 
 		SchemaBranch(String label)
 		{
 			super(label);
 		}    	
-    	SchemaBranch(Schema.Group category)
+    	SchemaBranch(Schema.Group category, String locatorID)
     	{
     		super(category.groupName);
     		this.group = category;
+    		this.locatorID = locatorID;
     	}
-    	SchemaBranch(Schema.Assignment assignment)
+    	SchemaBranch(Schema.Assignment assignment, String locatorID)
     	{
     		super(assignment.assnName);
     		this.assignment = assignment;
+    		this.locatorID = locatorID;
     	}
     }
 
@@ -83,7 +86,7 @@ public class EditSchema
 		//menuBar.getMenus().add(menuWindow = new Menu("_Window"));
 		createMenuItems();
 
-		treeroot = new SchemaBranch("Assay");
+		treeroot = new SchemaBranch("Assay"); // !! THIS SHOULD show the root...
 		treeview = new TreeView<String>(treeroot);
 		treeview.setEditable(true);
 		treeview.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>()
@@ -108,8 +111,8 @@ public class EditSchema
 		{
 	        public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldVal, TreeItem<String> newVal) 
 	        {
-	        	SchemaBranch branch = (SchemaBranch)newVal;
-	        	updateDetail(branch);
+	        	pullDetail((SchemaBranch)oldVal);
+	        	pushDetail((SchemaBranch)newVal);
             }
 		});		
 
@@ -147,6 +150,7 @@ public class EditSchema
 	{
 		try
 		{
+			schemaFile = f;
 			Schema schema = Schema.deserialise(f);
 			stack.setSchema(schema);
 			
@@ -207,29 +211,66 @@ public class EditSchema
 		treeroot.getChildren().clear();
 		treeroot.setExpanded(true);
 		
-		Schema.Group root = stack.getSchema().getRoot();
+		Schema schema = stack.getSchema();
+		Schema.Group root = schema.getRoot();
 		
 		treeroot.setValue(root.groupName);
 		treeroot.group = root;
-		fillTreeGroup(root, treeroot);
+		treeroot.locatorID = schema.locatorID(root);
+		fillTreeGroup(schema, root, treeroot);
 	}
 	
-	private void fillTreeGroup(Schema.Group category, TreeItem<String> parent)
+	private void fillTreeGroup(Schema schema, Schema.Group category, TreeItem<String> parent)
 	{
 		for (Schema.Assignment assn : category.assignments)
 		{
-			SchemaBranch item = new SchemaBranch(assn);
+			SchemaBranch item = new SchemaBranch(assn, schema.locatorID(assn));
 			parent.getChildren().add(item);
 		}
-		for (Schema.Group subcat : category.subGroups)
-		{
-			SchemaBranch item = new SchemaBranch(subcat);
+		for (Schema.Group subgrp : category.subGroups)
+		{		
+			SchemaBranch item = new SchemaBranch(subgrp, schema.locatorID(subgrp));
 			parent.getChildren().add(item);
 		}
 	}
 
+	// for the given branch, pulls out the content: if any changes have been made, pushes the modified schema onto the stack
+	private void pullDetail() {pullDetail((SchemaBranch)treeview.getSelectionModel().getSelectedItem());}
+	private void pullDetail(SchemaBranch branch)
+	{
+		if (branch == null) return;
+		if (branch.group != null)
+		{
+			Schema.Group modGroup = detail.extractGroup();
+			if (modGroup == null) return;
+
+			Schema schema = stack.getSchema();
+			if (branch.group.parent != null)
+			{
+				// reparent the modified group, then swap it out in the parent's child list
+				Schema.Group replGroup = schema.obtainGroup(branch.locatorID);
+				modGroup.parent = replGroup.parent;
+				int idx = replGroup.parent.subGroups.indexOf(replGroup);
+				replGroup.parent.subGroups.set(idx, modGroup);
+			}
+			else schema.setRoot(modGroup);
+			
+			branch.group = modGroup;
+			stack.changeSchema(schema, true);
+		}
+		/*if (branch.assignment != null)
+		{
+			TODO
+			Schema.Assignment modAssn = detail.extractAssignment();
+			if (modAssn == null) return;
+			Schema schema = stack.getSchema();
+			schema.replaceAssignment(modAssn);
+			stack.changeSchema(schema, true);
+		}*/
+	}
+
 	// recreates all the widgets in the detail view, given that the indicated branch has been selected
-	private void updateDetail(SchemaBranch branch)
+	private void pushDetail(SchemaBranch branch)
 	{
 		if (branch.group != null) detail.setGroup(branch.group);
 		else if (branch.assignment != null) detail.setAssignment(branch.assignment);
@@ -264,7 +305,38 @@ public class EditSchema
 	}
 	private void actionFileSave(boolean promptNew)
 	{
-		Util.writeln("save:"+promptNew);
+		pullDetail();
+	
+		// dialog in case filename is missing or requested as save-to-other
+		if (promptNew || schemaFile == null)
+		{
+			// do stuff...
+			Util.writeln("save:prompt...");
+		}
+		
+		// validity checking
+		if (schemaFile == null) return;
+		if (!schemaFile.canWrite())
+		{
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cannot Save");
+            alert.setHeaderText(null);
+            alert.setContentText("Not able to write to file: " + schemaFile.getAbsolutePath());
+            alert.showAndWait();
+            return;
+		}
+	
+		// serialise-to-file
+		Schema schema = stack.peekSchema();
+		try 
+		{
+			//schema.serialise(System.out);
+			
+			OutputStream ostr = new FileOutputStream(schemaFile);
+			schema.serialise(ostr);
+			ostr.close();
+		}
+		catch (Exception ex) {ex.printStackTrace();}
 	}
 	private void actionFileOpen()
 	{
@@ -326,4 +398,3 @@ public class EditSchema
     	Util.writeln("lookupname!");
     }
 }
-

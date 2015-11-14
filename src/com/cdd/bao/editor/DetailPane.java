@@ -96,9 +96,12 @@ public class DetailPane extends ScrollPane
 	{
 		if (group == null) return null;
 	
-		// !! pre-check for differences is the easiest way
-		// !! clone the group (so the sub-stuff is the same); then replace name, etc.
-		return null;
+		if (group.groupName.equals(fieldName.getText()) && group.groupDescr.equals(fieldDescr.getText())) return null;
+		
+		Schema.Group ret = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
+		ret.groupName = fieldName.getText();
+		ret.groupDescr = fieldDescr.getText();	
+		return ret;
 	}
 	public Schema.Assignment extractAssignment()
 	{
@@ -108,7 +111,6 @@ public class DetailPane extends ScrollPane
 		// !! use built-in comparison
 		return null; 
 	}
-	
 
 	// ------------ private methods ------------	
 
@@ -133,6 +135,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr = new TextArea(group.groupDescr);
 		fieldDescr.setPrefRowCount(5);
 		fieldDescr.setPrefWidth(300);
+		fieldDescr.setWrapText(true);
 		observeFocus(fieldDescr, -1);
 		passthroughTab(fieldDescr);
 		line.add(fieldDescr, "Description:", 1, 0);
@@ -163,6 +166,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr = new TextArea(assignment.assnDescr);
 		fieldDescr.setPrefWidth(300);
 		fieldDescr.setPrefRowCount(5);
+		fieldDescr.setWrapText(true);
 		observeFocus(fieldDescr, -1);
 		passthroughTab(fieldDescr);
 		line.add(fieldDescr, "Description:", 1, 0);

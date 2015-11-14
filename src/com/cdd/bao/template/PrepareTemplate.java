@@ -263,7 +263,7 @@ public class PrepareTemplate
 		{
 			String label = vocab.getLabel(propURI);
 			//String propName = turnLabelIntoName(label);
-			Schema.Assignment assn = new Schema.Assignment(label, propURI);
+			Schema.Assignment assn = new Schema.Assignment(root, label, propURI);
 			
 			for (String valueURI : categories.get(propURI))
 			{

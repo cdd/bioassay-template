@@ -53,11 +53,13 @@ public class StackSchema
 		return current.schema.clone();	
 	}
 	
-	// replace the current schema due to a modification: updates the undo stack accordingly, and notes it as being dirty
-	public void changeSchema(Schema schema)
+	// replace the current schema due to a modification: updates the undo stack accordingly, and notes it as being dirty; note that the default
+	// syntax compares to ensure that the replacement is different to the current instance, but this can be bypassed
+	public void changeSchema(Schema schema) {changeSchema(schema, false);}
+	public void changeSchema(Schema schema, boolean knownDifferent)
 	{
-		// !! TODO: nop if no change...
-	
+		if (!knownDifferent && schema.equals(current.schema)) return;
+
 		redoStack.clear();
 		undoStack.add(current);
 		while (undoStack.size() > STACK_SIZE) undoStack.remove(0);
