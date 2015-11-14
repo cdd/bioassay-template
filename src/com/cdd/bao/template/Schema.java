@@ -268,7 +268,7 @@ public class Schema
 	{
 		Group group = obtainGroup(locatorID);
 		if (group == null) return null;
-		int idx = Integer.parseInt(locatorID.substring(locatorID.lastIndexOf(':')));
+		int idx = Integer.parseInt(locatorID.substring(locatorID.lastIndexOf(':') + 1));
 		if (idx < 0 || idx >= group.assignments.size()) return null;
 		return group.assignments.get(idx);
 		

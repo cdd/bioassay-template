@@ -258,15 +258,22 @@ public class EditSchema
 			branch.group = modGroup;
 			stack.changeSchema(schema, true);
 		}
-		/*if (branch.assignment != null)
+		if (branch.assignment != null)
 		{
-			TODO
 			Schema.Assignment modAssn = detail.extractAssignment();
 			if (modAssn == null) return;
+			
 			Schema schema = stack.getSchema();
-			schema.replaceAssignment(modAssn);
+			
+			// reparent the modified assignment, then swap it out in the parent's child list
+			Schema.Assignment replAssn = schema.obtainAssignment(branch.locatorID);
+			modAssn.parent = replAssn.parent;
+			int idx = replAssn.parent.assignments.indexOf(replAssn);
+			replAssn.parent.assignments.set(idx, modAssn);
+			
+			branch.assignment = modAssn;
 			stack.changeSchema(schema, true);
-		}*/
+		}
 	}
 
 	// recreates all the widgets in the detail view, given that the indicated branch has been selected

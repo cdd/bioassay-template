@@ -8,6 +8,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.template.Schema.Assignment;
 
 import java.io.*;
 import java.util.*;
@@ -98,18 +99,27 @@ public class DetailPane extends ScrollPane
 	
 		if (group.groupName.equals(fieldName.getText()) && group.groupDescr.equals(fieldDescr.getText())) return null;
 		
-		Schema.Group ret = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
-		ret.groupName = fieldName.getText();
-		ret.groupDescr = fieldDescr.getText();	
-		return ret;
+		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
+		mod.groupName = fieldName.getText();
+		mod.groupDescr = fieldDescr.getText();
+		return mod;
 	}
 	public Schema.Assignment extractAssignment()
 	{
 		if (assignment == null) return null;
 		
-		// !! pull it all out in detail
-		// !! use built-in comparison
-		return null; 
+		Schema.Assignment mod = new Assignment(null, fieldName.getText(), fieldURI.getText());
+		mod.assnDescr = fieldDescr.getText();
+		
+		for (ValueWidgets vw : valueList)
+		{
+			Schema.Value val = new Schema.Value(vw.fieldURI.getText(), vw.fieldName.getText());
+			val.descr = vw.fieldDescr.getText();
+			mod.values.add(val);
+		}
+		
+		if (assignment.equals(mod)) return null;
+		return mod;
 	}
 
 	// ------------ private methods ------------	
