@@ -179,23 +179,27 @@ public class EditSchema
 		addMenu(menuEdit, "Add _Group", new KeyCharacterCombination("G", cmd, shift)).setOnAction(event -> actionGroupAdd());
 		addMenu(menuEdit, "Add _Assignment", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionAssignmentAdd());
 		menuEdit.getItems().add(new SeparatorMenuItem());
-    	addMenu(menuEdit, "_Delete", null).setOnAction(event -> actionEditDelete());
+		addMenu(menuEdit, "Cu_t", new KeyCharacterCombination("X", cmd)).setOnAction(event -> actionEditCopy(true));
+		addMenu(menuEdit, "_Copy", new KeyCharacterCombination("C", cmd)).setOnAction(event -> actionEditCopy(false));
+		addMenu(menuEdit, "_Paste", new KeyCharacterCombination("V", cmd)).setOnAction(event -> actionEditPaste());
+		menuEdit.getItems().add(new SeparatorMenuItem());
+    	addMenu(menuEdit, "_Delete", new KeyCodeCombination(KeyCode.DELETE, cmd, shift)).setOnAction(event -> actionEditDelete());
     	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
     	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditRedo());
 		menuEdit.getItems().add(new SeparatorMenuItem());
-		addMenu(menuEdit, "Move _Up", null).setOnAction(event -> actionEditMove(-1));
-		addMenu(menuEdit, "Move _Down", null).setOnAction(event -> actionEditMove(1));
+		addMenu(menuEdit, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd, shift)).setOnAction(event -> actionEditMove(-1));
+		addMenu(menuEdit, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd, shift)).setOnAction(event -> actionEditMove(1));
 
 		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> actionValueAdd());
-		addMenu(menuValue, "_Delete Value", null).setOnAction(event -> actionValueDelete());
-		addMenu(menuValue, "Move _Up", null).setOnAction(event -> actionValueMove(-1));
-		addMenu(menuValue, "Move _Down", null).setOnAction(event -> actionValueMove(1));
+		addMenu(menuValue, "_Delete Value", new KeyCodeCombination(KeyCode.DELETE, cmd)).setOnAction(event -> actionValueDelete());
+		addMenu(menuValue, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd)).setOnAction(event -> actionValueMove(-1));
+		addMenu(menuValue, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd)).setOnAction(event -> actionValueMove(1));
 		menuValue.getItems().add(new SeparatorMenuItem());
 		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> actionValueLookupURI());
 		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> actionValueLookupName());
     }
     
-    private MenuItem addMenu(Menu parent, String title, KeyCharacterCombination accel)
+    private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
     {
     	MenuItem item = new MenuItem(title);
     	parent.getItems().add(item);
@@ -452,9 +456,50 @@ public class EditSchema
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));
     }
+	private void actionEditCopy(boolean andCut)
+	{
+		if (!treeview.isFocused()) return; // punt to default action
+		Util.writeln("copy:"+andCut);
+	}
+	private void actionEditPaste()
+	{
+		if (!treeview.isFocused()) return; // punt to default action
+		Util.writeln("paste");
+	}
     private void actionEditDelete()
     {
-    	Util.writeln("delete!");
+    	TreeItem<Branch> item = currentBranch();
+    	Branch branch = item == null ? null : item.getValue();
+    	if (branch == null || (branch.group == null && branch.assignment == null))
+    	{
+    		informMessage("Delete Branch", "Select a group or assignment to delete.");
+    		return;
+    	}
+    	if (item == treeroot)
+    	{
+    		informMessage("Delete Branch", "Can't delete the root branch.");
+    		return;
+    	}
+    	
+    	pullDetail();
+    	
+    	Schema schema = stack.getSchema();
+    	Schema.Group parent = null;
+    	if (branch.group != null)
+    	{
+    		Schema.Group group = schema.obtainGroup(branch.locatorID);
+    		parent = group.parent;
+    		schema.deleteGroup(group);
+    	}
+    	if (branch.assignment != null)
+    	{
+    		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+    		parent = assn.parent;
+    		schema.deleteAssignment(assn);
+    	}
+    	stack.changeSchema(schema);
+    	rebuildTree();
+    	setCurrentBranch(locateBranch(schema.locatorID(parent)));
     }
     private void actionEditUndo()
     {

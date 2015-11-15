@@ -291,6 +291,16 @@ public class Schema
 		parent.assignments.add(assn);
 		return assn;
 	}
+	
+	// removes the given items from the list
+	public void deleteGroup(Group group)
+	{
+		group.parent.subGroups.remove(group);
+	}
+	public void deleteAssignment(Assignment assn)
+	{
+		assn.parent.assignments.remove(assn);
+	}
 
 	// ------------ private methods ------------	
 
