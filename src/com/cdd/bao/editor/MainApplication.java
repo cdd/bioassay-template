@@ -52,10 +52,7 @@ public class MainApplication extends Application
 		}
 		
 		final Stage stage = primaryStage;
-		Platform.runLater(new Runnable() {public void run() 
-        {
-            stage.show();
-        }});		
+        Platform.runLater(() -> stage.show());
 	}
 
 	// ------------ private methods ------------	

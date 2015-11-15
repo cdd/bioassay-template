@@ -59,7 +59,6 @@ public class StackSchema
 	public void changeSchema(Schema schema, boolean knownDifferent)
 	{
 		if (!knownDifferent && schema.equals(current.schema)) return;
-
 		redoStack.clear();
 		undoStack.add(current);
 		while (undoStack.size() > STACK_SIZE) undoStack.remove(0);

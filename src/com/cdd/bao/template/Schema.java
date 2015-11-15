@@ -87,6 +87,7 @@ public class Schema
 			this.assnName = assnName;
 			this.propURI = propURI; 
 		}
+		public Assignment clone() {return clone(parent);}
 		public Assignment clone(Group parent)
 		{
 			Assignment dup = new Assignment(parent, assnName, propURI);
@@ -127,6 +128,7 @@ public class Schema
 			this.parent = parent;
 			this.groupName = groupName;
 		}
+		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
 			Group dup = new Group(parent, groupName);
@@ -148,7 +150,8 @@ public class Schema
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
 			buff.append("[" + groupName + "] (" + groupDescr + ")\n");
-			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
+			// !! TMP REMOVED
+			//for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
 	};
@@ -257,14 +260,13 @@ public class Schema
 	{
 		Group group = root;
 		String[] bits = locatorID.split(":");
-		for (int n = 0; n < bits.length; n++)
+		int len = bits.length - (locatorID.endsWith(":") ? 0 : 1);
+		for (int n = 0; n < len; n++)
 		{
-			if (bits[n].length() == 0) break; // this is OK for assignment-types
 			int idx = Integer.parseInt(bits[n]);
 			if (idx < 0 || idx >= group.subGroups.size()) return null;
 			group = group.subGroups.get(idx);
 		}
-		
 		return group;
 	}
 	public Assignment obtainAssignment(String locatorID)

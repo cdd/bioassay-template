@@ -46,6 +46,8 @@ public class EditSchema
     private Menu menuFile, menuEdit, menuValue;
     private MenuItem miFileNew;
     
+    private boolean currentlyRebuilding = false;
+    
     public static final class Branch
     {
     	Schema.Group group = null;
@@ -53,14 +55,14 @@ public class EditSchema
     	String locatorID = null;
 
 		Branch() {}
-    	Branch(Schema.Group category, String locatorID)
+    	Branch(Schema.Group group, String locatorID)
     	{
-    		this.group = category;
+    		this.group = group.clone();
     		this.locatorID = locatorID;
     	}
     	Branch(Schema.Assignment assignment, String locatorID)
     	{
-    		this.assignment = assignment;
+    		this.assignment = assignment.clone();
     		this.locatorID = locatorID;
     	}
     }
@@ -106,8 +108,8 @@ public class EditSchema
 		{
 	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
 	        {
-	        	if (oldVal != null) pullDetail(oldVal.getValue());
-	        	if (newVal != null) pushDetail(newVal.getValue());
+	        	if (oldVal != null) pullDetail(oldVal);
+	        	if (newVal != null) pushDetail(newVal);
             }
 		});	
 
@@ -174,8 +176,8 @@ public class EditSchema
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
     	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
     	
-		addMenu(menuEdit, "Add _Group", null).setOnAction(event -> actionGroupAdd());
-		addMenu(menuEdit, "Add _Assignment", null).setOnAction(event -> actionAssignmentEdit());
+		addMenu(menuEdit, "Add _Group", new KeyCharacterCombination("G", cmd, shift)).setOnAction(event -> actionGroupAdd());
+		addMenu(menuEdit, "Add _Assignment", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionAssignmentAdd());
 		menuEdit.getItems().add(new SeparatorMenuItem());
     	addMenu(menuEdit, "_Delete", null).setOnAction(event -> actionEditDelete());
     	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
@@ -184,7 +186,7 @@ public class EditSchema
 		addMenu(menuEdit, "Move _Up", null).setOnAction(event -> actionEditMove(-1));
 		addMenu(menuEdit, "Move _Down", null).setOnAction(event -> actionEditMove(1));
 
-		addMenu(menuValue, "_Add Value", null).setOnAction(event -> actionValueAdd());
+		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> actionValueAdd());
 		addMenu(menuValue, "_Delete Value", null).setOnAction(event -> actionValueDelete());
 		addMenu(menuValue, "Move _Up", null).setOnAction(event -> actionValueMove(-1));
 		addMenu(menuValue, "Move _Down", null).setOnAction(event -> actionValueMove(1));
@@ -203,14 +205,19 @@ public class EditSchema
 
 	private void rebuildTree()
 	{
+		currentlyRebuilding = true;
+	
 		treeroot.getChildren().clear();
 		treeroot.setExpanded(true);
+		
 		
 		Schema schema = stack.getSchema();
 		Schema.Group root = schema.getRoot();
 		
 		treeroot.setValue(new Branch(root, schema.locatorID(root)));
 		fillTreeGroup(schema, root, treeroot);
+		
+		currentlyRebuilding = false;
 	}
 	
 	private void fillTreeGroup(Schema schema, Schema.Group group, TreeItem<Branch> parent)
@@ -223,6 +230,7 @@ public class EditSchema
 		for (Schema.Group subgrp : group.subGroups)
 		{
 			TreeItem<Branch> item = new TreeItem<>(new Branch(subgrp, schema.locatorID(subgrp)));
+			item.setExpanded(true);
 			parent.getChildren().add(item);
 			fillTreeGroup(schema, subgrp, item);
 		}
@@ -252,12 +260,19 @@ public class EditSchema
 		}
 		return null;
 	}
+	public void clearSelection()
+	{
+		detail.clearContent();
+		treeview.getSelectionModel().clearSelection();
+	}
 
 	// for the given branch, pulls out the content: if any changes have been made, pushes the modified schema onto the stack
-	private void pullDetail() {pullDetail(currentBranch().getValue());}
-	private void pullDetail(Branch branch)
+	private void pullDetail() {pullDetail(currentBranch());}
+	private void pullDetail(TreeItem<Branch> item)
 	{
-		if (branch == null) return;
+		if (currentlyRebuilding || item == null) return;
+		Branch branch = item.getValue();
+
 		if (branch.group != null)
 		{
 			Schema.Group modGroup = detail.extractGroup();
@@ -276,6 +291,9 @@ public class EditSchema
 			
 			branch.group = modGroup;
 			stack.changeSchema(schema, true);
+			
+			item.setValue(new Branch());
+			item.setValue(branch); // triggers redraw
 		}
 		if (branch.assignment != null)
 		{
@@ -292,12 +310,18 @@ public class EditSchema
 			
 			branch.assignment = modAssn;
 			stack.changeSchema(schema, true);
+			
+			item.setValue(new Branch());
+			item.setValue(branch); // triggers redraw
 		}
 	}
 
 	// recreates all the widgets in the detail view, given that the indicated branch has been selected
-	private void pushDetail(Branch branch)
+	private void pushDetail(TreeItem<Branch> item)
 	{
+		if (currentlyRebuilding || item == null) return;
+		Branch branch = item.getValue();
+
 		if (branch.group != null) detail.setGroup(branch.group);
 		else if (branch.assignment != null) detail.setAssignment(branch.assignment);
 		else detail.clearContent();
@@ -402,15 +426,31 @@ public class EditSchema
     		informMessage("Add Group", "Select a group to add to.");
     		return;
     	}
+
+    	pullDetail();
+
     	Schema schema = stack.getSchema();
     	Schema.Group newGroup = schema.appendGroup(schema.obtainGroup(item.getValue().locatorID), new Schema.Group(null, "NEW"));
     	stack.changeSchema(schema);
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newGroup)));
     }
-    private void actionAssignmentEdit()
+    private void actionAssignmentAdd()
     {
-    	Util.writeln("addassignment!");
+    	TreeItem<Branch> item = currentBranch();
+    	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
+    	{
+    		informMessage("Add Assignment", "Select a group to add to.");
+    		return;
+    	}
+
+    	pullDetail();
+
+    	Schema schema = stack.getSchema();
+    	Schema.Assignment newAssn = schema.appendAssignment(schema.obtainGroup(item.getValue().locatorID), new Schema.Assignment(null, "NEW", ""));
+    	stack.changeSchema(schema);
+    	rebuildTree();
+    	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));
     }
     private void actionEditDelete()
     {
@@ -418,11 +458,25 @@ public class EditSchema
     }
     private void actionEditUndo()
     {
-    	Util.writeln("undo!");
+    	if (!stack.canUndo())
+    	{
+    		informMessage("Undo", "Nothing to undo.");
+    		return;
+    	}
+    	stack.performUndo();
+    	rebuildTree();
+    	clearSelection();
     }
     private void actionEditRedo()
     {
-    	Util.writeln("redo!");
+    	if (!stack.canRedo())
+    	{
+    		informMessage("Redo", "Nothing to redo.");
+    		return;
+    	}
+    	stack.performRedo();
+    	rebuildTree();
+    	clearSelection();
     }
     private void actionEditMove(int dir)
     {
