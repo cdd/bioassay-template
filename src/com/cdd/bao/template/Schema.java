@@ -110,7 +110,7 @@ public class Schema
 			for (Value val : values)
 			{
 				for (int n = 0; n <= indent; n++) buff.append("  ");
-				buff.append(val.uri + " : " + val.name + " (" + val.descr + "\n");
+				buff.append(val.uri + " : " + val.name + " (" + val.descr + ")\n");
 			}
 		}
 	}
@@ -150,8 +150,7 @@ public class Schema
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
 			buff.append("[" + groupName + "] (" + groupDescr + ")\n");
-			// !! TMP REMOVED
-			//for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
+			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
 	};
@@ -302,6 +301,47 @@ public class Schema
 		assn.parent.assignments.remove(assn);
 	}
 
+	// shuffles the object up or down the parents' hierarchy
+	public void moveGroup(Group group, int dir)
+	{
+		if (group.parent == null) return;
+		List<Group> list = group.parent.subGroups;
+		int idx = list.indexOf(group);
+		if (dir < 0)
+		{
+			if (idx == 0) return;
+			Group g1 = list.get(idx), g2 = list.get(idx - 1);
+			list.set(idx, g2);
+			list.set(idx - 1, g1);
+		}
+		else if (dir > 0)
+		{
+			if (idx >= list.size() - 1) return;
+			Group g1 = list.get(idx), g2 = list.get(idx + 1);
+			list.set(idx, g2);
+			list.set(idx + 1, g1);
+		}
+	}
+	public void moveAssignment(Assignment assn, int dir)
+	{
+		List<Assignment> list = assn.parent.assignments;
+		int idx = list.indexOf(assn);
+		if (dir < 0)
+		{
+			if (idx == 0) return;
+			Assignment a1 = list.get(idx), a2 = list.get(idx - 1);
+			list.set(idx, a2);
+			list.set(idx - 1, a1);
+		}
+		else if (dir > 0)
+		{
+			if (idx >= list.size() - 1) return;
+			Assignment a1 = list.get(idx), a2 = list.get(idx + 1);
+			list.set(idx, a2);
+			list.set(idx + 1, a1);
+		}
+	}
+	
 	// ------------ private methods ------------	
 
 	private void setupResources(Model model)

@@ -122,6 +122,58 @@ public class DetailPane extends ScrollPane
 		return mod;
 	}
 
+	// menu-driven action events
+    public void actionValueAdd()
+    {
+    	if (assignment == null) return;	
+    	
+    	Schema.Assignment modified = extractAssignment();
+    	if (modified != null) assignment = modified;
+
+    	assignment.values.add(new Schema.Value("", ""));
+    	recreateAssignment();
+    }
+    public void actionValueDelete()
+    {
+    	if (assignment == null || focusIndex < 0) return;	
+
+    	Schema.Assignment modified = extractAssignment();
+    	if (modified != null) assignment = modified;
+
+		int idx = focusIndex;
+    	assignment.values.remove(focusIndex);
+    	recreateAssignment();
+    	
+    	if (valueList.size() > 0)
+    		valueList.get(Math.min(idx, valueList.size() - 1)).fieldURI.requestFocus();
+    	else
+    		fieldName.requestFocus();
+    }
+    public void actionValueMove(int dir)
+    {
+    	if (assignment == null || focusIndex < 0) return;	
+
+    	Schema.Assignment modified = extractAssignment();
+    	if (modified != null) assignment = modified;
+    	if (focusIndex + dir < 0 || focusIndex + dir >= assignment.values.size()) return;
+
+		int newIndex = focusIndex + dir;
+		Schema.Value v1 = assignment.values.get(focusIndex), v2 = assignment.values.get(newIndex);
+		assignment.values.set(focusIndex, v2);
+		assignment.values.set(newIndex, v1);
+    	recreateAssignment();
+    	
+   		valueList.get(newIndex).fieldURI.requestFocus();
+    }
+    public void actionLookupURI()
+    {
+    	Util.writeln("lookupURI!");
+    }
+    public void actionLookupName()
+    {
+    	Util.writeln("lookupname!");
+    }
+
 	// ------------ private methods ------------	
 
 	private void recreateGroup()

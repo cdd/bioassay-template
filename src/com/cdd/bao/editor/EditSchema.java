@@ -187,16 +187,16 @@ public class EditSchema
     	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
     	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditRedo());
 		menuEdit.getItems().add(new SeparatorMenuItem());
-		addMenu(menuEdit, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd, shift)).setOnAction(event -> actionEditMove(-1));
-		addMenu(menuEdit, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd, shift)).setOnAction(event -> actionEditMove(1));
+		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
+		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));
 
-		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> actionValueAdd());
-		addMenu(menuValue, "_Delete Value", new KeyCodeCombination(KeyCode.DELETE, cmd)).setOnAction(event -> actionValueDelete());
-		addMenu(menuValue, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd)).setOnAction(event -> actionValueMove(-1));
-		addMenu(menuValue, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd)).setOnAction(event -> actionValueMove(1));
+		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> detail.actionValueAdd());
+		addMenu(menuValue, "_Delete Value", new KeyCodeCombination(KeyCode.DELETE, cmd)).setOnAction(event -> detail.actionValueDelete());
+		addMenu(menuValue, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd)).setOnAction(event -> detail.actionValueMove(-1));
+		addMenu(menuValue, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd)).setOnAction(event -> detail.actionValueMove(1));
 		menuValue.getItems().add(new SeparatorMenuItem());
-		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> actionValueLookupURI());
-		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> actionValueLookupName());
+		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> detail.actionLookupURI());
+		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> detail.actionLookupName());
     }
     
     private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
@@ -525,26 +525,27 @@ public class EditSchema
     }
     private void actionEditMove(int dir)
     {
-    	Util.writeln("move:"+dir);
-    }
-    private void actionValueAdd()
-    {
-    	Util.writeln("addvalue!");
-    }
-    private void actionValueDelete()
-    {
-    	Util.writeln("deletevalue!");
-    }
-    private void actionValueMove(int dir)
-    {
-    	Util.writeln("movevalue:"+dir);
-    }
-    private void actionValueLookupURI()
-    {
-    	Util.writeln("lookupURI!");
-    }
-    private void actionValueLookupName()
-    {
-    	Util.writeln("lookupname!");
+    	TreeItem<Branch> item = currentBranch();
+    	Branch branch = item == null ? null : item.getValue();
+    	if (item == treeroot || branch == null || (branch.group == null && branch.assignment == null)) return;
+    	
+    	pullDetail();
+    	Schema schema = stack.getSchema();
+    	String newLocator = "";
+    	if (branch.group != null)
+    	{
+    		Schema.Group group = schema.obtainGroup(branch.locatorID);
+    		schema.moveGroup(group, dir);
+    		newLocator = schema.locatorID(group);
+    	}
+    	if (branch.assignment != null)
+    	{
+    		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+    		schema.moveAssignment(assn, dir);
+    		newLocator = schema.locatorID(assn);
+    	}
+    	stack.changeSchema(schema);
+    	rebuildTree();
+    	setCurrentBranch(locateBranch(newLocator));
     }
 }
