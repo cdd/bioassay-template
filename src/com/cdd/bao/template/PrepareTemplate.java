@@ -273,7 +273,11 @@ public class PrepareTemplate
 				}
 				else
 				{
-					assn.values.add(new Schema.Value(valueURI, vocab.getLabel(valueURI)));
+					Schema.Value val = new Schema.Value(valueURI, vocab.getLabel(valueURI));
+					val.descr = vocab.getDescr(valueURI);
+					if (val.name == null) val.name = "";
+					if (val.descr == null) val.descr = "";
+					assn.values.add(val);
 				}
 			}
 

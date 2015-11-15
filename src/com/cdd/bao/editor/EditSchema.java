@@ -113,7 +113,7 @@ public class EditSchema
             }
 		});	
 
-		detail = new DetailPane();
+		detail = new DetailPane(this);
 
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
 		sp1.getChildren().add(treeview);
@@ -142,6 +142,9 @@ public class EditSchema
 			public void run() {try {Vocabulary.globalInstance();} catch (IOException ex) {}}
 		}).start();
  	}
+
+	public TreeView<Branch> getTreeView() {return treeview;}
+	public DetailPane getDetailView() {return detail;}
 
 	public void loadFile(File f)
 	{

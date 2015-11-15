@@ -13,6 +13,7 @@ import com.cdd.bao.template.Schema.Assignment;
 import java.io.*;
 import java.util.*;
 
+import javafx.application.*;
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.stage.*;
@@ -34,6 +35,8 @@ public class DetailPane extends ScrollPane
 {
 	// ------------ private data ------------	
 
+	private EditSchema main;
+
 	private Schema.Group group = null;
 	private Schema.Assignment assignment = null;
 
@@ -47,7 +50,8 @@ public class DetailPane extends ScrollPane
 	private final class ValueWidgets
 	{
 		Lineup line;
-		TextField fieldURI, fieldName, fieldDescr;
+		TextField fieldURI, fieldName;
+		TextArea fieldDescr;
 	}
 	private List<ValueWidgets> valueList = new ArrayList<>();
 	
@@ -55,8 +59,12 @@ public class DetailPane extends ScrollPane
 
 	// ------------ public methods ------------	
 
-	public DetailPane()
+	public DetailPane(EditSchema main)
 	{
+		super();
+		
+		this.main = main;
+		
 		setHbarPolicy(ScrollBarPolicy.NEVER);
 		setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		
@@ -132,6 +140,12 @@ public class DetailPane extends ScrollPane
 
     	assignment.values.add(new Schema.Value("", ""));
     	recreateAssignment();
+
+    	valueList.get(valueList.size() - 1).fieldURI.requestFocus();
+    	
+        Platform.runLater(() -> setVvalue(getVmax()));
+    	
+		//setVvalue(getVmax()); // scroll to end
     }
     public void actionValueDelete()
     {
@@ -270,9 +284,12 @@ public class DetailPane extends ScrollPane
 			observeFocus(vw.fieldName, n);
 			vw.line.add(vw.fieldName, "Name:", 1, 0);
 			
-			vw.fieldDescr = new TextField(val.descr);
+			vw.fieldDescr = new TextArea(val.descr);
+			vw.fieldDescr.setPrefRowCount(5);
 			vw.fieldDescr.setPrefWidth(350);
+			vw.fieldDescr.setWrapText(true);
 			observeFocus(vw.fieldDescr, n);
+			passthroughTab(vw.fieldDescr);
 			vw.line.add(vw.fieldDescr, "Description:", 1, 0);
 			
 			vbox.getChildren().add(vw.line);
@@ -320,6 +337,7 @@ public class DetailPane extends ScrollPane
             	else
             	{
             		List<Control> list = new ArrayList<>();
+            		list.add(main.getTreeView());
             		recursiveControls(list, vbox);
             		int idx = list.indexOf(area);
             		if (idx >= 0)
