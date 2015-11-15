@@ -50,6 +50,7 @@ public class DetailPane extends ScrollPane
 	private final class ValueWidgets
 	{
 		Lineup line;
+		Schema.Value sourceVal;
 		TextField fieldURI, fieldName;
 		TextArea fieldDescr;
 	}
@@ -182,10 +183,29 @@ public class DetailPane extends ScrollPane
     public void actionLookupURI()
     {
     	Util.writeln("lookupURI!");
+    	// !! if URI can be found in vocab, fill in the rest; if not, bring up the lookup dialog (as below)
     }
     public void actionLookupName()
     {
-    	Util.writeln("lookupname!");
+    	if (focusIndex >= 0)
+    	{
+    		ValueWidgets vw = valueList.get(focusIndex);
+    		LookupPanel lookup = new LookupPanel(vw.sourceVal);
+    		Optional<Schema.Value> result = lookup.showAndWait();
+    		if (result.isPresent())
+    		{
+    			Schema.Value val = result.get();
+    			Util.writeln("RESULT:"+val.name+"/"+val.uri+"/"+val.descr);
+    		}
+			/*lookup.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> 
+		    {
+		    	Util.writeln("?"+response);
+		    });*/
+    	}
+    	else
+    	{
+    		// (anything to do, if it's for the assignment/group overall?)
+    	}
     }
 
 	// ------------ private methods ------------	
@@ -270,6 +290,7 @@ public class DetailPane extends ScrollPane
 		
 			//final int idx = n;
 			ValueWidgets vw = new ValueWidgets();
+			vw.sourceVal = val;
 			valueList.add(vw);
 			
 			vw.line = new Lineup(PADDING);

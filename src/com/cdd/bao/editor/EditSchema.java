@@ -137,10 +137,7 @@ public class EditSchema
 		stage.setOnCloseRequest(event -> actionFileClose());
 		
 		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
-		new Thread(new Runnable()
-		{
-			public void run() {try {Vocabulary.globalInstance();} catch (IOException ex) {}}
-		}).start();
+		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();
  	}
 
 	public TreeView<Branch> getTreeView() {return treeview;}
