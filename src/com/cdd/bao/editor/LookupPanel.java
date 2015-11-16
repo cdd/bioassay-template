@@ -56,7 +56,7 @@ public class LookupPanel extends Dialog<Schema.Value>
 
 	// ------------ public methods ------------
 
-	public LookupPanel(Schema.Value value)
+	public LookupPanel(String searchText)
 	{
 		super();
 		
@@ -74,7 +74,7 @@ public class LookupPanel extends Dialog<Schema.Value>
         table.setEditable(false);
  
         TableColumn<Resource, String> colURI = new TableColumn<>("URI");
-		colURI.setMinWidth(200);
+		colURI.setMinWidth(150);
         colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(substitutePrefix(resource.getValue().uri));});
          
         TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
@@ -82,13 +82,13 @@ public class LookupPanel extends Dialog<Schema.Value>
         colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().label);});
         
         TableColumn<Resource, String> colDescr = new TableColumn<>("Description");
-		colDescr.setMinWidth(300);
+		colDescr.setMinWidth(400);
         colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
 
 		table.setMinHeight(450);        
         table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         table.getColumns().addAll(colURI, colLabel, colDescr);
-        table.setItems(FXCollections.observableArrayList(resources));
+        table.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
  
         BorderPane pane = new BorderPane();
         pane.setPrefSize(800, 500);
@@ -119,13 +119,14 @@ public class LookupPanel extends Dialog<Schema.Value>
 			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
 		});
 		
-		
-		if (value.name.length() > 0) search.setText(value.name);
-		else if (value.uri.length() > 0) search.setText(value.uri);
-		
+		search.setText(searchText);
+		search.textProperty().addListener((observable, oldValue, newValue) -> 
+		{
+			table.setItems(FXCollections.observableArrayList(searchedSubset(newValue)));
+		});
+
         Platform.runLater(() -> search.requestFocus());
 	}
-
 	
 	// ------------ private methods ------------
 
@@ -151,6 +152,21 @@ public class LookupPanel extends Dialog<Schema.Value>
 		Schema.Value val = new Schema.Value(res.uri, res.label);
 		val.descr = res.descr;
 		return val;
+	}
+	
+	// returns a subset of the resources which matches the search text (or all if blank)
+	private List<Resource> searchedSubset(String searchText)
+	{
+		if (searchText.length() == 0) return resources;
+		
+		String searchLC = searchText.toLowerCase();
+		
+		List<Resource> subset = new ArrayList<>();
+		for (Resource res : resources)
+		{
+			if (res.label.toLowerCase().indexOf(searchLC) >= 0 || res.uri.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
+		}
+		return subset;
 	}
 	
 	// switches shorter prefixes for display convenience

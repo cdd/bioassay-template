@@ -181,15 +181,27 @@ public class DetailPane extends ScrollPane
     }
     public void actionLookupURI()
     {
-    	Util.writeln("lookupURI!");
-    	// !! if URI can be found in vocab, fill in the rest; if not, bring up the lookup dialog (as below)
+    	if (focusIndex < 0) return;
+    	ValueWidgets vw = valueList.get(focusIndex);
+    	String uri = vw.fieldURI.getText();
+    	if (uri.length() == 0) {actionLookupName(); return;}
+    
+		Vocabulary vocab = null;
+		try {vocab = Vocabulary.globalInstance();}
+		catch (IOException ex) {ex.printStackTrace(); return;}
+		
+		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
+		if (label == null) {actionLookupName(); return;}
+		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(label);
+		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(descr);
     }
     public void actionLookupName()
     {
     	if (focusIndex >= 0)
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
-    		LookupPanel lookup = new LookupPanel(vw.sourceVal);
+    		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
+    		LookupPanel lookup = new LookupPanel(searchText);
     		Optional<Schema.Value> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -279,10 +291,6 @@ public class DetailPane extends ScrollPane
 		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFC0; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);		
 
-		/*Vocabulary vocab = null;
-		try {vocab = Vocabulary.globalInstance();}
-		catch (IOException ex) {ex.printStackTrace(); return;}*/
-		
 		valueList.clear();
 		for (int n = 0; n < assignment.values.size(); n++)
 		{
