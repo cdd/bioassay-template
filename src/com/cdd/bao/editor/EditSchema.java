@@ -422,13 +422,21 @@ public class EditSchema
 		// dialog in case filename is missing or requested as save-to-other
 		if (promptNew || schemaFile == null)
 		{
-			// do stuff...
-			Util.writeln("save:prompt...");
+            FileChooser chooser = new FileChooser();
+        	chooser.setTitle("Save Schema Template");
+        	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
+        	
+        	File file = chooser.showSaveDialog(stage);
+    		if (file == null) return;
+    		
+    		if (!file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
+
+			schemaFile = file;
 		}
 		
 		// validity checking
 		if (schemaFile == null) return;
-		if (!schemaFile.canWrite())
+		if (!schemaFile.getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
 			informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
             return;
