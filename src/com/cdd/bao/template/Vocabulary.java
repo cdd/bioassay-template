@@ -64,6 +64,9 @@ public class Vocabulary
 		return list[0];
 	}
 	
+	// grab all of the URIs
+	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
+	
 	// ------------ private methods ------------
 
 	private void loadLabels(File baseDir)
