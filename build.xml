@@ -1,0 +1,48 @@
+<!--
+	BioAssay Template: Ant Build Script
+    
+    (c) 2015 Collaborative Drug Discovery Inc.
+
+    All rights reserved
+    
+    http://collaborativedrug.com
+-->
+
+<project name="BioAssayTemplate" default="pkg" basedir=".">
+
+    <description>Collaborative Drug Discovery</description>
+
+    <property name="pkg" location="pkg"/>
+
+    <path id="project.class.path">
+		<pathelement location="lib/*.jar"/>
+    </path>
+
+    <target name="init">
+		<tstamp/>
+    	<mkdir dir="bin"/>
+		<mkdir dir="pkg"/>
+    </target>
+    
+    <target name="build" depends="init" description="build the source">
+		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="1.8" target="1.8">
+		    <classpath refid="project.class.path"/>
+		</javac>
+    </target>
+
+    <target name="pkg" depends="build" description="generate the packages">
+    	<jar jarfile="pkg/BioAssayTemplate.jar" basedir="bin">
+    	    <manifest>
+    	    	<attribute name="Main-Class" value="com.cdd.bao.Main"/>
+    	    </manifest>
+			<fileset dir="." includes="data/bao/**"/>
+			<zipgroupfileset dir="lib" includes="*.jar"/>
+		</jar>
+    </target>
+
+    <target name="clean" description="clean up">
+    	<delete dir="bin"/>
+    	<delete dir="pkg"/>
+    </target>
+
+</project>

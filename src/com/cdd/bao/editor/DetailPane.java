@@ -335,23 +335,20 @@ public class DetailPane extends ScrollPane
 	// respond to focus so that one of the blocks gets a highlight
 	private void observeFocus(TextInputControl field, final int idx)
 	{
-		field.focusedProperty().addListener(new ChangeListener<Boolean>()
+		field.focusedProperty().addListener((val, oldValue, newValue) -> 
 		{
-            public void changed(ObservableValue<? extends Boolean> val, Boolean oldValue, Boolean newValue)
+            if (newValue)
             {
-                if (newValue)
-                {
-                	if (focusIndex >= 0)
-                	{
-                		valueList.get(focusIndex).line.setBackground(null);
-                	}
-                	focusIndex = idx;
-                	if (focusIndex >= 0)
-                	{
-                		valueList.get(focusIndex).line.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.05), CornerRadii.EMPTY, new Insets(-4, -4, -4, -4))));
-                	}
-                }
-            }		
+            	if (focusIndex >= 0)
+            	{
+            		valueList.get(focusIndex).line.setBackground(null);
+            	}
+            	focusIndex = idx;
+            	if (focusIndex >= 0)
+            	{
+            		valueList.get(focusIndex).line.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.05), CornerRadii.EMPTY, new Insets(-4, -4, -4, -4))));
+            	}
+            }
 		});
 	}
 	

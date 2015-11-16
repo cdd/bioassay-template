@@ -73,8 +73,6 @@ public class EditSchema
 	{
 		this.stage = stage;
 
-        stage.setTitle("BioAssay Schema Editor");        
-
 		menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
 		menuBar.getMenus().add(menuFile = new Menu("_File"));
@@ -112,6 +110,7 @@ public class EditSchema
 	        	if (newVal != null) pushDetail(newVal);
             }
 		});	
+		treeview.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
 
 		detail = new DetailPane(this);
 
@@ -136,6 +135,8 @@ public class EditSchema
 		
 		stage.setOnCloseRequest(event -> actionFileClose());
 		
+		updateTitle();
+		
 		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
 		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();
  	}
@@ -143,26 +144,38 @@ public class EditSchema
 	public TreeView<Branch> getTreeView() {return treeview;}
 	public DetailPane getDetailView() {return detail;}
 
-	public void loadFile(File f)
+	// loads a file and parses the schema
+	public void loadFile(File file)
 	{
 		try
 		{
-			schemaFile = f;
-			Schema schema = Schema.deserialise(f);
-			stack.setSchema(schema);
-			
-			//Util.writeln("SCHEMA:\n" + schema.toString());
+			Schema schema = Schema.deserialise(file);
+			loadFile(file, schema);
 		}
 		catch (Exception ex) 
 		{
 			ex.printStackTrace();
 			return;
 		}
-		
+	}
+	
+	// loads a file with an already-parsed schema
+	public void loadFile(File file, Schema schema)
+	{
+		schemaFile = file;
+		stack.setSchema(schema);
+		updateTitle();
 		rebuildTree();
 	}
 
 	// ------------ private methods ------------	
+
+	private void updateTitle()
+	{
+		String title = "BioAssay Schema Editor";
+		if (schemaFile != null) title += " - " + schemaFile.getName();
+        stage.setTitle(title);
+	}
 
 	private void createMenuItems()
     {
@@ -331,6 +344,12 @@ public class EditSchema
 		else detail.clearContent();
 	}
 
+	// in case the detail has changed, update the main part of the tree
+	private void maybeUpdateTree()
+	{
+		pullDetail();
+	}
+
 	/*private void treeDoubleClick(MouseEvent event)
 	{
         TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
@@ -374,7 +393,9 @@ public class EditSchema
 	
 	private void actionFileNew()
 	{
-		Util.writeln("new!");
+		Stage stage = new Stage();
+		EditSchema edit = new EditSchema(stage);
+		stage.show();
 	}
 	private void actionFileSave(boolean promptNew)
 	{
@@ -409,7 +430,27 @@ public class EditSchema
 	}
 	private void actionFileOpen()
 	{
-		Util.writeln("open!");
+        FileChooser chooser = new FileChooser();
+    	chooser.setTitle("Open Schema Template");
+    	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
+    	
+    	File file = chooser.showOpenDialog(stage);
+		if (file == null) return;
+		
+		try
+		{
+			Schema schema = Schema.deserialise(file);
+
+    		Stage stage = new Stage();
+    		EditSchema edit = new EditSchema(stage);
+			edit.loadFile(file, schema);
+    		stage.show();
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+			informWarning("Open", "Failed to parse file: is it a valid schema?");
+		}
 	}
 	private void actionFileClose()
 	{

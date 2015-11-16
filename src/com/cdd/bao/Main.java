@@ -21,13 +21,14 @@ public class Main
 {
 	public static void main(String[] argv)
 	{
-		Util.writeln("BioAssay Ontology Annotator Tools");
+		if (argv.length > 0 && (argv[0].equals("-h") || argv[0].equals("--help")))
+		{
+			printHelp();
+			return;
+		}
 		
-		//Log.setLog4j("jena-log4j.properties");
-		
-		if (argv.length == 0) {printHelp(); return;}
-		
-		if (argv[0].equals("prepare")) new PrepareTemplate().exec();
+		if (argv.length == 0) new MainApplication().exec(new String[0]);
+		else if (argv[0].equals("prepare")) new PrepareTemplate().exec();
 		else if (argv[0].equals("edit")) 
 		{
 			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
@@ -36,13 +37,15 @@ public class Main
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
+			printHelp();
 		}
 	}
 	
 	public static void printHelp()
 	{
+		Util.writeln("BioAssay Ontology Annotator Tools");
 		Util.writeln("Options:");
 		Util.writeln("    prepare");
-		Util.writeln("    edit");
+		Util.writeln("    edit {files...}");
 	}
 }

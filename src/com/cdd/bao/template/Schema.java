@@ -421,7 +421,10 @@ public class Schema
 	private void parseFromStream(InputStream istr) throws IOException
 	{
 		Model model = ModelFactory.createDefaultModel();
-		RDFDataMgr.read(model, istr, Lang.TTL);
+
+		try {RDFDataMgr.read(model, istr, Lang.TTL);}
+		//catch (IOException ex) {throw ex;}
+		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
 	
 		setupResources(model);	
 
