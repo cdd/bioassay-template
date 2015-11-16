@@ -62,7 +62,7 @@ public class StackSchema
 		redoStack.clear();
 		undoStack.add(current);
 		while (undoStack.size() > STACK_SIZE) undoStack.remove(0);
-		current = new State(schema, false);
+		current = new State(schema, true);
 	}
 	
 	// replaces the current schema, and flushes the undo/redo; typically in response to an initialize/open operation; is presumed to be not-dirty

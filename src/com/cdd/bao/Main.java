@@ -14,7 +14,7 @@ import com.cdd.bao.template.*;
 import com.cdd.bao.editor.*;
 
 /*
- * Entrypoint for all command line functionality: delegates to the appropriate corner.
+	Entrypoint for all command line functionality: delegates to the appropriate corner.
 */
 
 public class Main

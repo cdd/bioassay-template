@@ -133,7 +133,10 @@ public class EditSchema
 		
 		rebuildTree();
 		
-		stage.setOnCloseRequest(event -> actionFileClose());
+		stage.setOnCloseRequest(event -> 
+		{
+			if (!confirmClose()) event.consume();
+		});
 		
 		updateTitle();
 		
@@ -226,7 +229,6 @@ public class EditSchema
 	
 		treeroot.getChildren().clear();
 		treeroot.setExpanded(true);
-		
 		
 		Schema schema = stack.getSchema();
 		Schema.Group root = schema.getRoot();
@@ -350,6 +352,22 @@ public class EditSchema
 		pullDetail();
 	}
 
+	// returns true if the data is already saved, or the user agrees to abandon it
+	private boolean confirmClose()
+	{
+		pullDetail();
+	
+		if (!stack.isDirty()) return true;
+		
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Close Window");
+        alert.setHeaderText("Abandon changes");
+        alert.setContentText("Closing this window will cause modifications to be lost.");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.OK;
+	}
+
 	/*private void treeDoubleClick(MouseEvent event)
 	{
         TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
@@ -454,8 +472,7 @@ public class EditSchema
 	}
 	private void actionFileClose()
 	{
-		// !! prompt if dirty...
-		Util.writeln("CLOSE!");
+		if (!confirmClose()) return;
 		stage.close();
 	}
 	private void actionFileQuit()
