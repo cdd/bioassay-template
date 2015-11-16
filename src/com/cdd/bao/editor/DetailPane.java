@@ -143,10 +143,9 @@ public class DetailPane extends ScrollPane
     	recreateAssignment();
 
     	valueList.get(valueList.size() - 1).fieldURI.requestFocus();
-    	
+
+		// scroll to end; have to pause first, though    	
         Platform.runLater(() -> setVvalue(getVmax()));
-    	
-		//setVvalue(getVmax()); // scroll to end
     }
     public void actionValueDelete()
     {
@@ -195,12 +194,13 @@ public class DetailPane extends ScrollPane
     		if (result.isPresent())
     		{
     			Schema.Value val = result.get();
-    			Util.writeln("RESULT:"+val.name+"/"+val.uri+"/"+val.descr);
+    			if (val != null && focusIndex >= 0)
+    			{
+    				vw.fieldURI.setText(val.uri);
+    				vw.fieldName.setText(val.name);
+    				vw.fieldDescr.setText(val.descr);
+				}
     		}
-			/*lookup.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> 
-		    {
-		    	Util.writeln("?"+response);
-		    });*/
     	}
     	else
     	{

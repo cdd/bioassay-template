@@ -22,6 +22,7 @@ import javafx.application.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.*;
+import javafx.event.ActionEvent;
 import javafx.geometry.*;
 import javafx.util.*;
 
@@ -73,7 +74,7 @@ public class LookupPanel extends Dialog<Schema.Value>
         table.setEditable(false);
  
         TableColumn<Resource, String> colURI = new TableColumn<>("URI");
-		colURI.setMinWidth(300);
+		colURI.setMinWidth(200);
         colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(substitutePrefix(resource.getValue().uri));});
          
         TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
@@ -101,19 +102,23 @@ public class LookupPanel extends Dialog<Schema.Value>
 
 		getDialogPane().getButtonTypes().add(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
 		
-		ButtonType btnUse = new ButtonType("Use", ButtonBar.ButtonData.OK_DONE);
-		getDialogPane().getButtonTypes().add(btnUse);
+		ButtonType btnTypeUse = new ButtonType("Use", ButtonBar.ButtonData.OK_DONE);
+		getDialogPane().getButtonTypes().add(btnTypeUse);
 		setResultConverter(buttonType ->
 		{
-			if (buttonType == btnUse)
-			{
-    			//Util.writeln("B!"+b);
-    			Schema.Value val = new Schema.Value("foo", "bar");
-    			//descr
-    			return val;
-			}
+			if (buttonType == btnTypeUse) return composeCurrentValue();
 			return null;
 		});
+		Button btnUse = (Button)getDialogPane().lookupButton(btnTypeUse);
+		btnUse.addEventFilter(ActionEvent.ACTION, event ->
+		{
+			if (table.getSelectionModel().getSelectedIndex() < 0) event.consume();
+		});
+		table.setOnMousePressed(event ->
+		{
+			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
+		});
+		
 		
 		if (value.name.length() > 0) search.setText(value.name);
 		else if (value.uri.length() > 0) search.setText(value.uri);
@@ -135,7 +140,18 @@ public class LookupPanel extends Dialog<Schema.Value>
 			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
 			resources.add(res);
 		}
-	}	
+	}
+
+	// manufactures a value from the selected item
+	private Schema.Value composeCurrentValue()
+	{
+		Resource res = table.getSelectionModel().getSelectedItem();
+		if (res == null) return null;
+	
+		Schema.Value val = new Schema.Value(res.uri, res.label);
+		val.descr = res.descr;
+		return val;
+	}
 	
 	// switches shorter prefixes for display convenience
 	private final String[] SUBST = 
