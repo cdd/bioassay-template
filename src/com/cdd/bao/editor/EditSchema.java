@@ -24,6 +24,8 @@ import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.util.*;
 
+import org.json.*;
+
 /*
 	Edit Schema: the primary window for BAO schema editing, which is responsible for taking care of a data instance.
 */
@@ -485,7 +487,7 @@ public class EditSchema
 	}
 	private void actionFileQuit()
 	{
-		// !! prompt if any windows are dirty...
+		if (!confirmClose()) return;
 		Platform.exit();
 	}
     private void actionGroupAdd()
@@ -525,12 +527,87 @@ public class EditSchema
 	private void actionEditCopy(boolean andCut)
 	{
 		if (!treeview.isFocused()) return; // punt to default action
-		Util.writeln("copy:"+andCut);
+		
+		TreeItem<Branch> item = currentBranch();
+		if (item == null) return;
+		Branch branch = item.getValue();
+		
+		JSONObject json = null;
+		if (branch.group != null) json = ClipboardSchema.composeGroup(branch.group);
+		else if (branch.assignment != null) json = ClipboardSchema.composeAssignment(branch.assignment);
+		
+		String serial = null;
+		try {serial = json.toString(2);}
+		catch (JSONException ex) {return;}
+		
+		ClipboardContent content = new ClipboardContent();
+		content.putString(serial);
+		if (!Clipboard.getSystemClipboard().setContent(content))
+		{
+			informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			return;
+		}
+		
+		if (andCut) actionEditDelete();
 	}
 	private void actionEditPaste()
 	{
 		if (!treeview.isFocused()) return; // punt to default action
-		Util.writeln("paste");
+		
+		TreeItem<Branch> item = currentBranch();
+		if (item == null)
+		{
+			informMessage("Clipboard Paste", "Select a group to paste into.");
+			return;
+		}
+		Branch branch = item.getValue();
+		
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		String serial = clipboard.getString();
+		if (serial == null)
+		{
+			informWarning("Clipboard Paste", "Content is not parseable.");
+			return;
+		}
+		
+		JSONObject json = null;
+		try {json = new JSONObject(new JSONTokener(serial));}
+		catch (JSONException ex)
+		{
+			informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
+			return;
+		}
+		
+		Schema.Group group = ClipboardSchema.unpackGroup(json);
+		Schema.Assignment assn = ClipboardSchema.unpackAssignment(json);
+		if (group == null && assn == null)
+		{
+			informWarning("Clipboard Paste", "Content does not represent a group or assignment: cannot paste.");
+			return;
+		}
+		
+		pullDetail();
+		Schema schema = stack.getSchema();
+		
+		if (group != null)
+		{
+			//Util.writeln("PASTEGROUP:"+group.name);
+			//Util.writeln(ClipboardSchema.composeGroup(group).toString());
+			schema.appendGroup(schema.obtainGroup(branch.locatorID), group);
+		}
+		else if (assn != null)
+		{
+			//Util.writeln("PASTEASSN:"+assn.name);
+			//Util.writeln(ClipboardSchema.composeAssignment(assn).toString());
+			schema.appendAssignment(schema.obtainGroup(branch.locatorID), assn);
+		}
+		
+    	stack.changeSchema(schema);
+    	rebuildTree();
+
+		if (group != null) setCurrentBranch(locateBranch(schema.locatorID(group)));
+		else if (assn != null) setCurrentBranch(locateBranch(schema.locatorID(assn)));
+    	
 	}
     private void actionEditDelete()
     {

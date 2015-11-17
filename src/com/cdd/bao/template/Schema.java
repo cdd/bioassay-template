@@ -58,8 +58,8 @@ public class Schema
 		
 		public Value(String uri, String name)
 		{
-			this.uri = uri;
-			this.name = name;
+			this.uri = uri == null ? "" : uri;
+			this.name = name == null ? "" : name;
 		}
 		public Value clone()
 		{
@@ -76,28 +76,28 @@ public class Schema
 	public static final class Assignment
 	{
 		public Group parent;
-		public String assnName, assnDescr = "";
+		public String name, descr = "";
 		public String propURI;
 		// !! exclusivity
 		public List<Value> values = new ArrayList<>();
 		
-		public Assignment(Group parent, String assnName, String propURI) 
+		public Assignment(Group parent, String name, String propURI) 
 		{
 			this.parent = parent;
-			this.assnName = assnName;
-			this.propURI = propURI; 
+			this.name = name == null ? "" : name;
+			this.propURI = propURI == null ? "" : propURI; 
 		}
 		public Assignment clone() {return clone(parent);}
 		public Assignment clone(Group parent)
 		{
-			Assignment dup = new Assignment(parent, assnName, propURI);
-			dup.assnDescr = assnDescr;
+			Assignment dup = new Assignment(parent, name, propURI);
+			dup.descr = descr;
 			for (Value val : values) dup.values.add(val.clone());
 			return dup;
 		}
 		public boolean equals(Assignment other)
 		{
-			if (!assnName.equals(other.assnName) || !assnDescr.equals(other.assnDescr) || !propURI.equals(other.propURI)) return false;
+			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
 			if (values.size() != other.values.size()) return false;
 			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
 			return true;
@@ -106,7 +106,7 @@ public class Schema
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("<" + assnName + "> " + propURI + " (" + assnDescr + ")\n");
+			buff.append("<" + name + "> " + propURI + " (" + descr + ")\n");
 			for (Value val : values)
 			{
 				for (int n = 0; n <= indent; n++) buff.append("  ");
@@ -118,28 +118,27 @@ public class Schema
 	public static final class Group
 	{
 		public Group parent;
-		public String groupName, groupDescr = "";
+		public String name, descr = "";
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
-		public int editableID; // editable identifier; not serialised
 		
-		public Group(Group parent, String groupName) 
+		public Group(Group parent, String name) 
 		{
 			this.parent = parent;
-			this.groupName = groupName;
+			this.name = name == null ? "" : name;
 		}
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
-			Group dup = new Group(parent, groupName);
-			dup.groupDescr = groupDescr;
+			Group dup = new Group(parent, name);
+			dup.descr = descr;
 			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
 		public boolean equals(Group other)
 		{
-			if (!groupName.equals(other.groupName) || !groupDescr.equals(other.groupDescr)) return false;
+			if (!name.equals(other.name) || !descr.equals(other.descr)) return false;
 			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
 			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
 			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
@@ -149,7 +148,7 @@ public class Schema
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("[" + groupName + "] (" + groupDescr + ")\n");
+			buff.append("[" + name + "] (" + descr + ")\n");
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
@@ -223,11 +222,11 @@ public class Schema
 				
 		setupResources(model);
 		
-		Resource objRoot = model.createResource(PFX_BAT + turnLabelIntoName(root.groupName));
+		Resource objRoot = model.createResource(PFX_BAT + turnLabelIntoName(root.name));
 		model.add(objRoot, rdfType, batRoot);
 		model.add(objRoot, rdfType, batGroup);
-		model.add(objRoot, rdfLabel, root.groupName);
-		if (root.groupDescr.length() > 0) model.add(objRoot, hasDescription, root.groupDescr);
+		model.add(objRoot, rdfLabel, root.name);
+		if (root.descr.length() > 0) model.add(objRoot, hasDescription, root.descr);
 		
 		formulateGroup(model, objRoot, root);
 		
@@ -376,13 +375,13 @@ public class Schema
 		
  		for (Assignment assn : group.assignments)
 		{
-			String name = turnLabelIntoName(assn.assnName);
+			String name = turnLabelIntoName(assn.name);
 						
 			Resource objAssn = model.createResource(PFX_BAT + name);
 			model.add(objParent, hasAssignment, objAssn);
 			model.add(objAssn, rdfType, batAssignment);
-			model.add(objAssn, rdfLabel, assn.assnName);
-			if (assn.assnDescr.length() > 0) model.add(objAssn, hasDescription, assn.assnDescr);
+			model.add(objAssn, rdfLabel, assn.name);
+			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
 			model.add(objAssn, hasProperty, model.createResource(assn.propURI));
 			
@@ -403,14 +402,14 @@ public class Schema
 		}
 		
 		// recursively emit any subcategories
-		String parentName = turnLabelIntoName(group.groupName);
+		String parentName = turnLabelIntoName(group.name);
 		for (Group subgrp : group.subGroups)
 		{
-    		Resource objGroup = model.createResource(PFX_BAT + turnLabelIntoName(subgrp.groupName));
+    		Resource objGroup = model.createResource(PFX_BAT + turnLabelIntoName(subgrp.name));
     		model.add(objParent, hasGroup, objGroup);
     		model.add(objGroup, rdfType, batGroup);
-    		model.add(objGroup, rdfLabel, subgrp.groupName);
-    		if (subgrp.groupDescr.length() > 0) model.add(objGroup, hasDescription, subgrp.groupDescr);
+    		model.add(objGroup, rdfLabel, subgrp.name);
+    		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
     		
     		formulateGroup(model, objGroup, subgrp);
@@ -438,7 +437,7 @@ public class Schema
 		if (objRoot == null) throw new IOException("No template root found: this is probably not a bioassay template file.");
 
 		root = new Group(null, findString(model, objRoot, rdfLabel));
-		root.groupDescr = findString(model, objRoot, hasDescription);
+		root.descr = findString(model, objRoot, hasDescription);
 		
 		parseGroup(model, objRoot, root);
 	}
@@ -478,7 +477,7 @@ public class Schema
 			Resource objGroup = (Resource)st.getObject();
 			
     		Group subgrp = new Group(group, findString(model, objGroup, rdfLabel));
-    		subgrp.groupDescr = findString(model, objGroup, hasDescription);
+    		subgrp.descr = findString(model, objGroup, hasDescription);
     		
     		group.subGroups.add(subgrp);
     		order.put(subgrp, findInteger(model, objGroup, inOrder));
@@ -491,7 +490,7 @@ public class Schema
 	private Assignment parseAssignment(Model model, Group group, Resource objAssn) throws IOException
 	{
 		Assignment assn = new Assignment(group, findString(model, objAssn, rdfLabel), findAsString(model, objAssn, hasProperty));
-		assn.assnDescr = findString(model, objAssn, hasDescription);
+		assn.descr = findString(model, objAssn, hasDescription);
 		
 		for (StmtIterator it = model.listStatements(objAssn, hasValue, (RDFNode)null); it.hasNext();)
 		{

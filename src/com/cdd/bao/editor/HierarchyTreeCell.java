@@ -75,7 +75,7 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             }
             else
             {
-            	String label = branch.group != null ? branch.group.groupName : branch.assignment != null ? branch.assignment.assnName : "?";
+            	String label = branch.group != null ? branch.group.name : branch.assignment != null ? branch.assignment.name : "?";
 
     			if (branch.group != null) setStyle("-fx-font-weight: bold;");
     			else if (branch.assignment != null) setStyle("-fx-font-weight: normal;");

@@ -106,11 +106,11 @@ public class DetailPane extends ScrollPane
 	{
 		if (group == null) return null;
 	
-		if (group.groupName.equals(fieldName.getText()) && group.groupDescr.equals(fieldDescr.getText())) return null;
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText())) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
-		mod.groupName = fieldName.getText();
-		mod.groupDescr = fieldDescr.getText();
+		mod.name = fieldName.getText();
+		mod.descr = fieldDescr.getText();
 		return mod;
 	}
 	public Schema.Assignment extractAssignment()
@@ -118,7 +118,7 @@ public class DetailPane extends ScrollPane
 		if (assignment == null) return null;
 		
 		Schema.Assignment mod = new Assignment(null, fieldName.getText(), fieldURI.getText());
-		mod.assnDescr = fieldDescr.getText();
+		mod.descr = fieldDescr.getText();
 		
 		for (ValueWidgets vw : valueList)
 		{
@@ -235,12 +235,12 @@ public class DetailPane extends ScrollPane
 		
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(group.groupName);
+		fieldName = new TextField(group.name);
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		line.add(fieldName, "Name:", 1, 0);
 		
-		fieldDescr = new TextArea(group.groupDescr);
+		fieldDescr = new TextArea(group.descr);
 		fieldDescr.setPrefRowCount(5);
 		fieldDescr.setPrefWidth(300);
 		fieldDescr.setWrapText(true);
@@ -266,12 +266,12 @@ public class DetailPane extends ScrollPane
 
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(assignment.assnName);
+		fieldName = new TextField(assignment.name);
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		line.add(fieldName, "Name:", 1, 0);
 		
-		fieldDescr = new TextArea(assignment.assnDescr);
+		fieldDescr = new TextArea(assignment.descr);
 		fieldDescr.setPrefWidth(300);
 		fieldDescr.setPrefRowCount(5);
 		fieldDescr.setWrapText(true);
