@@ -15,7 +15,9 @@
     <property name="pkg" location="pkg"/>
 
     <path id="project.class.path">
-		<pathelement location="lib/*.jar"/>
+    	<fileset dir="lib"> 
+	    	<include name="*.jar"/> 
+    	</fileset> 
     </path>
 
     <target name="init">

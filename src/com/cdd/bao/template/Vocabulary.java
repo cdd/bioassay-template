@@ -9,8 +9,13 @@ package com.cdd.bao.template;
 import com.cdd.bao.*;
 
 import java.io.*;
+import java.net.*;
+import java.security.*;
 import java.util.*;
+import java.util.zip.*;
 
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
@@ -44,7 +49,7 @@ public class Vocabulary
 	// this object any more often than necessary
 	public Vocabulary() throws IOException
 	{
-		// (this needs to be parametrised and/or smarter)
+		// TODO: the "./bao" directory needs to be configurable, perhaps as a command line option
 		String cwd = System.getProperty("user.dir");
 		try {loadLabels(new File(cwd + "/bao"));}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
@@ -71,13 +76,42 @@ public class Vocabulary
 
 	private void loadLabels(File baseDir)
 	{
-		// load all the BAO files into the model
 		Model model = ModelFactory.createDefaultModel();
-		for (File f : baseDir.listFiles())
+
+		// first step: load files from the packaged JAR-file, if there is one
+		CodeSource jarsrc = getClass().getProtectionDomain().getCodeSource();
+		if (jarsrc != null)
+		{
+            URL jar = jarsrc.getLocation();
+            try
+            {
+            	ZipInputStream zip = new ZipInputStream(jar.openStream());
+                ZipEntry ze = null;
+            
+                while ((ze = zip.getNextEntry()) != null) 
+                {
+                    String path = ze.getName();
+                    if (path.startsWith("data/bao/") && path.endsWith(".owl"))
+                    {
+                    	Util.writeln(path);
+                    	InputStream res = getClass().getResourceAsStream("/" + path);
+                    	RDFDataMgr.read(model, res, Lang.RDFXML);
+                    	res.close();
+                    }
+                }
+                
+                zip.close();
+            }
+            catch (IOException ex) {ex.printStackTrace();}
+    	}
+
+		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
+		// provide content that extends-or-overwrites the default
+		if (baseDir != null && baseDir.isDirectory()) for (File f : baseDir.listFiles())
 		{
 			if (!f.getName().endsWith(".owl")) continue;
 			//Util.writeln("Loading: " + f.getPath());
-			RDFDataMgr.read(model, f.getPath());
+			RDFDataMgr.read(model, f.getPath(), Lang.RDFXML);
 		}
 		
 		// iterate over the list looking for label definitions

@@ -453,6 +453,8 @@ public class EditSchema
 			OutputStream ostr = new FileOutputStream(schemaFile);
 			schema.serialise(ostr);
 			ostr.close();
+			
+			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
