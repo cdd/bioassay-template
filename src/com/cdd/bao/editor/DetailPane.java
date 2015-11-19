@@ -39,6 +39,7 @@ public class DetailPane extends ScrollPane
 
 	private Schema.Group group = null;
 	private Schema.Assignment assignment = null;
+	private Schema.Assay assay = null;
 
 	private final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
@@ -80,6 +81,7 @@ public class DetailPane extends ScrollPane
 	{
 		group = null;
 		assignment = null;
+		assay = null;
 		vbox.getChildren().clear();
 	}
 	
@@ -88,13 +90,22 @@ public class DetailPane extends ScrollPane
 	{
 		this.group = group;
 		assignment = null;
+		assay = null;
 		recreateGroup();
 	}
 	public void setAssignment(Schema.Assignment assignment)
 	{
 		this.assignment = assignment;
 		group = null;
+		assay = null;
 		recreateAssignment();
+	}
+	public void setAssay(Schema.Assay assay)
+	{
+		this.assay = assay;
+		assignment = null;
+		group = null;
+		recreateAssay();
 	}
 	
 	// inquiries as to what kind of content is currently being represented
@@ -241,7 +252,7 @@ public class DetailPane extends ScrollPane
 		
 		Label heading = new Label("Group");
 		heading.setTextAlignment(TextAlignment.CENTER);
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFC0; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0A0FF; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);
 		
 		Lineup line = new Lineup(PADDING);
@@ -341,6 +352,22 @@ public class DetailPane extends ScrollPane
     			vbox.getChildren().add(hr);
 			}
 		}
+	}
+
+	private void recreateAssay()
+	{
+		focusIndex = -1;
+	
+		vbox.getChildren().clear();
+		vbox.setFillWidth(true);
+		vbox.setMaxWidth(Double.MAX_VALUE);
+		
+		Label heading = new Label("Assay");
+		heading.setTextAlignment(TextAlignment.CENTER);
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFFF; -fx-padding: 0.1em;");
+		vbox.getChildren().add(heading);
+
+		// ... and the good stuff...		
 	}
 
 	// respond to focus so that one of the blocks gets a highlight

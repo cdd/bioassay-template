@@ -77,7 +77,10 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             {
 				String style = "";
 
-            	String label = branch.group != null ? branch.group.name : branch.assignment != null ? branch.assignment.name : "?";
+            	String label = branch.heading != null ? branch.heading : 
+            				   branch.group != null ? branch.group.name : 
+            				   branch.assignment != null ? branch.assignment.name : 
+            				   branch.assay != null ? branch.assay.name : "?";
 
 				//style += setStyle(label.length() == 0 ? "-fx-text-fill: red;" : "-fx-text-fill: black");
             	if (label.length() == 0)
@@ -89,10 +92,10 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             	else
             	{
             		//style += "-fx-font-style: normal;";
-            		style += "-fx-text-fill: #404040;";
+            		//style += "-fx-text-fill: #404040;";
             	}
 
-    			if (branch.group != null) style += "-fx-font-weight: bold;";
+    			if (branch.heading != null || branch.group != null) style += "-fx-font-weight: bold;";
     			else if (branch.assignment != null) style += "-fx-font-weight: normal;";
 				
 				setStyle(style);

@@ -70,29 +70,29 @@ bat:UnitOfMeasurement
         a                bat:Assignment ;
         rdfs:label       "unit of measurement" ;
         bat:hasProperty  bao:BAO_0000077 ;
-        bat:hasValue     [ rdfs:label   "hour" ;
-                           bat:inOrder  "3"^^xsd:int ;
-                           bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000032>
+        bat:hasValue     [ rdfs:label   "percent" ;
+                           bat:inOrder  "1"^^xsd:int ;
+                           bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000187>
                          ] ;
         bat:hasValue     [ rdfs:label   "degree Celsius" ;
                            bat:inOrder  "6"^^xsd:int ;
                            bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000027>
                          ] ;
-        bat:hasValue     [ rdfs:label   "counts per second" ;
-                           bat:inOrder  "5"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002658
-                         ] ;
         bat:hasValue     [ rdfs:label   "micromolar" ;
-                           bat:inOrder  "2"^^xsd:int ;
+                           bat:inOrder  "4"^^xsd:int ;
                            bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000064>
                          ] ;
-        bat:hasValue     [ rdfs:label   "percent" ;
-                           bat:inOrder  "1"^^xsd:int ;
-                           bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000187>
-                         ] ;
         bat:hasValue     [ rdfs:label   "ratio" ;
-                           bat:inOrder  "4"^^xsd:int ;
+                           bat:inOrder  "5"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0190001
+                         ] ;
+        bat:hasValue     [ rdfs:label   "counts per second" ;
+                           bat:inOrder  "2"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002658
+                         ] ;
+        bat:hasValue     [ rdfs:label   "hour" ;
+                           bat:inOrder  "3"^^xsd:int ;
+                           bat:mapsTo   <http://purl.org/obo/owl/UO#UO_0000032>
                          ] ;
         bat:inOrder      "9"^^xsd:int .
 
@@ -129,35 +129,35 @@ bat:AssayFootprint  a    bat:Assignment ;
 bat:ModeOfAction  a      bat:Assignment ;
         rdfs:label       "mode of action" ;
         bat:hasProperty  bao:BAO_0000074 ;
-        bat:hasValue     [ rdfs:label          "saturation binding" ;
-                           bat:hasDescription  "These experiments measure specific radioligand binding at equilibrium at various concentrations of the radioligand." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000579
+        bat:hasValue     [ rdfs:label          "competitive binding" ;
+                           bat:hasDescription  "An assay based on the competition between a labeled and an unlabeled ligand in the reaction with a receptor binding agent (e.g. antibody, receptor, transport protein)." ;
+                           bat:inOrder         "6"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000441
                          ] ;
         bat:hasValue     [ rdfs:label          "growth inhibition" ;
                            bat:hasDescription  "Growth reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay. \nAs a measure of viable or proliferating cells, different researchers measure different parameters, namely, protein content (by sulforhodamine B staining followed by absorbance measurement), mitochondrial dehydrogenase activity (by 3-(4,5-dimethylthiazol-2-yl)-2,5-diphenyl tetrasodium bromide, known as MTT staining followed by absorbance measurement), expression of proliferation associated antigens (by immunostaining for Ki-67), and ATP content (by using CellTiter-Glo reagent (Promega) followed by luminescence measurement." ;
-                           bat:inOrder         "5"^^xsd:int ;
+                           bat:inOrder         "4"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000094
+                         ] ;
+        bat:hasValue     [ rdfs:label          "activation" ;
+                           bat:hasDescription  "Increase of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
+                           bat:inOrder         "2"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000087
+                         ] ;
+        bat:hasValue     [ rdfs:label          "saturation binding" ;
+                           bat:hasDescription  "These experiments measure specific radioligand binding at equilibrium at various concentrations of the radioligand." ;
+                           bat:inOrder         "5"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000579
                          ] ;
         bat:hasValue     [ rdfs:label          "inhibition" ;
                            bat:hasDescription  "Reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
                            bat:inOrder         "3"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000091
                          ] ;
-        bat:hasValue     [ rdfs:label          "competitive binding" ;
-                           bat:hasDescription  "An assay based on the competition between a labeled and an unlabeled ligand in the reaction with a receptor binding agent (e.g. antibody, receptor, transport protein)." ;
-                           bat:inOrder         "1"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000441
-                         ] ;
         bat:hasValue     [ rdfs:label          "cytotoxicity" ;
                            bat:hasDescription  "It is the toxic or cell-death inducing property of a perturbagen. Known cytotoxic agents mediate cell death commonly by necrosis, apoptosis, or autophagy. Cytotoxicity can be detected by measuring various aspects of the death process: e.g. membrane permeability, ATP concentration, DNA fragmentation, etc." ;
-                           bat:inOrder         "6"^^xsd:int ;
+                           bat:inOrder         "1"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000090
-                         ] ;
-        bat:hasValue     [ rdfs:label          "activation" ;
-                           bat:hasDescription  "Increase of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000087
                          ] ;
         bat:inOrder      "8"^^xsd:int .
 
@@ -165,141 +165,141 @@ bat:DetectionInstrument
         a                bat:Assignment ;
         rdfs:label       "detection instrument" ;
         bat:hasProperty  bao:BAO_0000697 ;
-        bat:hasValue     [ rdfs:label   "EnVision Multilabel Reader" ;
-                           bat:inOrder  "9"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000701
+        bat:hasValue     [ rdfs:label   "VP-ITC Isothermal Titration Calorimeter" ;
+                           bat:inOrder  "4"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000708
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Infinite PF200" ;
+                           bat:inOrder  "8"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000727
+                         ] ;
+        bat:hasValue     [ rdfs:label   "TopCount NXT Microplate Scintillation Luminescence Counter" ;
+                           bat:inOrder  "1"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0001036
+                         ] ;
+        bat:hasValue     [ rdfs:label   "HPLC System" ;
+                           bat:inOrder  "15"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002733
                          ] ;
         bat:hasValue     [ rdfs:label   "Monolight 2010 Luminometer" ;
-                           bat:inOrder  "7"^^xsd:int ;
+                           bat:inOrder  "28"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000728
                          ] ;
-        bat:hasValue     [ rdfs:label   "FLIPR TETRA" ;
-                           bat:inOrder  "28"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000906
+        bat:hasValue     [ rdfs:label   "FLx800 Fluorescence Microplate Reader" ;
+                           bat:inOrder  "20"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000702
+                         ] ;
+        bat:hasValue     [ rdfs:label   "CyAn Flow Cytometer" ;
+                           bat:inOrder  "2"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002722
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Wallac MicroBeta Liquid Scintillation Counter" ;
+                           bat:inOrder  "25"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0001048
+                         ] ;
+        bat:hasValue     [ rdfs:label   "SpectraMax 190 Microplate Reader" ;
+                           bat:inOrder  "17"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0001019
+                         ] ;
+        bat:hasValue     [ rdfs:label   "PHERAstar Plus" ;
+                           bat:inOrder  "5"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000705
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Odyssey Infrared Imager" ;
+                           bat:inOrder  "6"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000981
+                         ] ;
+        bat:hasValue     [ rdfs:label   "VICTOR X2 Multilabel Plate Reader" ;
+                           bat:inOrder  "13"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000707
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Packard Fusion Microplate Reader" ;
+                           bat:inOrder  "23"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000726
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Analyst HT" ;
+                           bat:inOrder  "14"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000699
+                         ] ;
+        bat:hasValue     [ rdfs:label   "ViewLux ultraHTS Microplate Imager" ;
+                           bat:inOrder  "11"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000691
+                         ] ;
+        bat:hasValue     [ rdfs:label   "FlexStation II Microplate Reader" ;
+                           bat:inOrder  "26"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000905
+                         ] ;
+        bat:hasValue     [ rdfs:label   "FDSS7000" ;
+                           bat:inOrder  "18"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000904
                          ] ;
         bat:hasValue     [ rdfs:label   "HyperCyt High Throughput Flow Cytometry System" ;
-                           bat:inOrder  "20"^^xsd:int ;
+                           bat:inOrder  "12"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000943
                          ] ;
+        bat:hasValue     [ rdfs:label   "8453 UV-Visible Spectrophotometer" ;
+                           bat:inOrder  "31"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000698
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Avance III" ;
+                           bat:inOrder  "9"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002719
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Opera QEHS" ;
+                           bat:inOrder  "24"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000982
+                         ] ;
         bat:hasValue     [ rdfs:label   "AMINCO-Bowman Series 2 Luminescence Spectrometer" ;
-                           bat:inOrder  "2"^^xsd:int ;
+                           bat:inOrder  "16"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002724
                          ] ;
-        bat:hasValue     [ rdfs:label   "AxioVert 200M Fluorescence Light Microscope" ;
+        bat:hasValue     [ rdfs:label   "HTFC Screening System" ;
                            bat:inOrder  "33"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000857
+                           bat:mapsTo   bao:BAO_0000703
                          ] ;
-        bat:hasValue     [ rdfs:label   "API 4000 LC/MS/MS System" ;
-                           bat:inOrder  "4"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000850
-                         ] ;
-        bat:hasValue     [ rdfs:label   "VICTOR X3 Multilabel Plate Reader" ;
+        bat:hasValue     [ rdfs:label   "FDSS6000" ;
                            bat:inOrder  "29"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0001045
+                           bat:mapsTo   bao:BAO_0000903
                          ] ;
         bat:hasValue     [ rdfs:label   "CDD Luminometer" ;
                            bat:inOrder  "21"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000878
                          ] ;
-        bat:hasValue     [ rdfs:label   "SpectraMax 190 Microplate Reader" ;
-                           bat:inOrder  "14"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0001019
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Packard Fusion Microplate Reader" ;
-                           bat:inOrder  "26"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000726
-                         ] ;
-        bat:hasValue     [ rdfs:label   "MSD SECTOR instrument" ;
-                           bat:inOrder  "18"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002723
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Odyssey Infrared Imager" ;
-                           bat:inOrder  "3"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000981
-                         ] ;
-        bat:hasValue     [ rdfs:label   "FDSS6000" ;
-                           bat:inOrder  "30"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000903
-                         ] ;
-        bat:hasValue     [ rdfs:label   "CyAn Flow Cytometer" ;
-                           bat:inOrder  "27"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002722
-                         ] ;
-        bat:hasValue     [ rdfs:label   "HTFC Screening System" ;
-                           bat:inOrder  "24"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000703
-                         ] ;
-        bat:hasValue     [ rdfs:label   "ViewLux CCD Imager" ;
-                           bat:inOrder  "19"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0001046
-                         ] ;
-        bat:hasValue     [ rdfs:label   "VP-ITC Isothermal Titration Calorimeter" ;
-                           bat:inOrder  "5"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000708
-                         ] ;
-        bat:hasValue     [ rdfs:label   "VICTOR X2 Multilabel Plate Reader" ;
-                           bat:inOrder  "16"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000707
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Wallac MicroBeta Liquid Scintillation Counter" ;
-                           bat:inOrder  "12"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0001048
+        bat:hasValue     [ rdfs:label   "AxioVert 200M Fluorescence Light Microscope" ;
+                           bat:inOrder  "10"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000857
                          ] ;
         bat:hasValue     [ rdfs:label   "SpectraMax M5 Multi-Mode Microplate Reader" ;
-                           bat:inOrder  "15"^^xsd:int ;
+                           bat:inOrder  "22"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000706
                          ] ;
-        bat:hasValue     [ rdfs:label   "Avance III" ;
-                           bat:inOrder  "25"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002719
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Opera QEHS" ;
-                           bat:inOrder  "10"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000982
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Infinite PF200" ;
-                           bat:inOrder  "31"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000727
-                         ] ;
-        bat:hasValue     [ rdfs:label   "8453 UV-Visible Spectrophotometer" ;
-                           bat:inOrder  "17"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000698
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Analyst HT" ;
-                           bat:inOrder  "1"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000699
-                         ] ;
-        bat:hasValue     [ rdfs:label   "HPLC System" ;
-                           bat:inOrder  "22"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002733
-                         ] ;
-        bat:hasValue     [ rdfs:label   "PHERAstar Plus" ;
-                           bat:inOrder  "34"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000705
-                         ] ;
-        bat:hasValue     [ rdfs:label   "ViewLux ultraHTS Microplate Imager" ;
-                           bat:inOrder  "13"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000691
-                         ] ;
-        bat:hasValue     [ rdfs:label   "TopCount NXT Microplate Scintillation Luminescence Counter" ;
-                           bat:inOrder  "23"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0001036
-                         ] ;
-        bat:hasValue     [ rdfs:label   "FDSS7000" ;
-                           bat:inOrder  "8"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000904
-                         ] ;
-        bat:hasValue     [ rdfs:label   "FlexStation II Microplate Reader" ;
-                           bat:inOrder  "11"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000905
-                         ] ;
-        bat:hasValue     [ rdfs:label   "FLx800 Fluorescence Microplate Reader" ;
-                           bat:inOrder  "6"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000702
-                         ] ;
         bat:hasValue     [ rdfs:label   "ELx808 Absorbance Microplate Reader" ;
-                           bat:inOrder  "32"^^xsd:int ;
+                           bat:inOrder  "34"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000700
+                         ] ;
+        bat:hasValue     [ rdfs:label   "MSD SECTOR instrument" ;
+                           bat:inOrder  "3"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002723
+                         ] ;
+        bat:hasValue     [ rdfs:label   "ViewLux CCD Imager" ;
+                           bat:inOrder  "32"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0001046
+                         ] ;
+        bat:hasValue     [ rdfs:label   "API 4000 LC/MS/MS System" ;
+                           bat:inOrder  "27"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000850
+                         ] ;
+        bat:hasValue     [ rdfs:label   "EnVision Multilabel Reader" ;
+                           bat:inOrder  "7"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000701
+                         ] ;
+        bat:hasValue     [ rdfs:label   "FLIPR TETRA" ;
+                           bat:inOrder  "19"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000906
+                         ] ;
+        bat:hasValue     [ rdfs:label   "VICTOR X3 Multilabel Plate Reader" ;
+                           bat:inOrder  "30"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0001045
                          ] ;
         bat:inOrder      "20"^^xsd:int .
 
@@ -316,44 +316,44 @@ bat:SecondaryAssay  a    bat:Assignment ;
                            bat:inOrder         "5"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000684
                          ] ;
-        bat:hasValue     [ rdfs:label          "alternate assay conditions" ;
-                           bat:hasDescription  "This assay is different from the primary or confirmatory assays with respect to the use of reagents / buffer, in order to narrow the mechanism of action of a perturbagen." ;
+        bat:hasValue     [ rdfs:label          "variant construct assay" ;
+                           bat:hasDescription  "This assay is performed with a different DNA construct than that was used in primary or confirmatory assays to modify a cell line." ;
                            bat:inOrder         "8"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0001098
+                           bat:mapsTo          bao:BAO_0000807
+                         ] ;
+        bat:hasValue     [ rdfs:label          "alternate cell line assay" ;
+                           bat:hasDescription  "This assay is performed with a different cell line than that was tested in primary or confirmatory assays." ;
+                           bat:inOrder         "10"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0001065
+                         ] ;
+        bat:hasValue     [ rdfs:label          "orthogonal assay technology" ;
+                           bat:hasDescription  "This assay is performed using a different assay design or detection technology, e.g., a beta-lactamase assay performed using FRET technology instead of absorbance for measurement." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0001096
                          ] ;
         bat:hasValue     [ rdfs:label   "orthogonal assay design" ;
-                           bat:inOrder  "1"^^xsd:int ;
+                           bat:inOrder  "4"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000543
                          ] ;
         bat:hasValue     [ rdfs:label          "alternate confirmatory assay" ;
                            bat:hasDescription  "An assay using orthogonal assay design / technology run to confirm the identified hits from the primary and confirmatory assay stages." ;
-                           bat:inOrder         "7"^^xsd:int ;
+                           bat:inOrder         "1"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000806
                          ] ;
         bat:hasValue     [ rdfs:label          "alternate target assay" ;
                            bat:hasDescription  "This assay is performed with a different but a related target (usually from the same protein family) than that was tested in primary or confirmatory assays, e.g., SIP1 instead of SIP3." ;
-                           bat:inOrder         "10"^^xsd:int ;
+                           bat:inOrder         "6"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0001064
                          ] ;
-        bat:hasValue     [ rdfs:label          "alternate cell line assay" ;
-                           bat:hasDescription  "This assay is performed with a different cell line than that was tested in primary or confirmatory assays." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0001065
+        bat:hasValue     [ rdfs:label          "alternate assay conditions" ;
+                           bat:hasDescription  "This assay is different from the primary or confirmatory assays with respect to the use of reagents / buffer, in order to narrow the mechanism of action of a perturbagen." ;
+                           bat:inOrder         "3"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0001098
                          ] ;
         bat:hasValue     [ rdfs:label          "compound toxicity assay" ;
                            bat:hasDescription  "This assay is performed to identify compounds that have an ability to kill the cells (cytotoxic)." ;
-                           bat:inOrder         "6"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000623
-                         ] ;
-        bat:hasValue     [ rdfs:label          "orthogonal assay technology" ;
-                           bat:hasDescription  "This assay is performed using a different assay design or detection technology, e.g., a beta-lactamase assay performed using FRET technology instead of absorbance for measurement." ;
-                           bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0001096
-                         ] ;
-        bat:hasValue     [ rdfs:label          "variant construct assay" ;
-                           bat:hasDescription  "This assay is performed with a different DNA construct than that was used in primary or confirmatory assays to modify a cell line." ;
                            bat:inOrder         "9"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000807
+                           bat:mapsTo          bao:BAO_0000623
                          ] ;
         bat:inOrder      "6"^^xsd:int .
 
@@ -402,98 +402,98 @@ bat:Result  a            bat:Assignment ;
         bat:hasProperty  bao:BAO_0000179 ;
         bat:hasValue     [ rdfs:label          "fold inhibition" ;
                            bat:hasDescription  "The ratio of biological activity in the absence of an exogenous substance to that in its presence. This result type is used exclusively with single point (screening concentration) assays." ;
-                           bat:inOrder         "18"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000376
-                         ] ;
-        bat:hasValue     [ rdfs:label          "Kd" ;
-                           bat:hasDescription  "Kd – is the equilibrium dissociation constant for a drug.  It describes the affinity between a ligand (L) (such as a drug) and a protein (P). Ligand-protein affinities are influenced by non-covalent intermolecular interactions between the two molecules such as hydrogen bonding, electrostatic interactions, hydrophobic and Van der Waals forces. \nKd = ([P] [L]) / [PL]\nThe dissociation constant has molar units (M), which corresponds to the concentration of ligand [L] at which the binding site on a particular protein is half occupied, i.e. the concentration of ligand, at which the concentration of protein with ligand bound [PL], equals the concentration of protein with no ligand bound [P]. The smaller the dissociation constant, the more tightly bound the ligand is, or the higher the affinity between ligand and protein. http://www.graphpad.com/curvefit/law_of_mass_action.htm" ;
-                           bat:inOrder         "17"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000034
-                         ] ;
-        bat:hasValue     [ rdfs:label          "Tm" ;
-                           bat:hasDescription  "Tm is defined as the midpoint temperatuere of the protein unfolding transition. It is determined by generating a thermal denaturation curve for the target molecule and taking the midpoint temperature between folding and unfolding state of the protein.\nIn nucleic acid thermodynamics, it is the temperature at which 50% of the DNA strands and its perfect complement are in duplex." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000581
-                         ] ;
-        bat:hasValue     [ rdfs:label          "percent inhibition" ;
-                           bat:hasDescription  "Percent decrease of a measureable response as a consequence of compound treatment.  Unit of Measure is always % when normalized to the dynamic range of the assay. Percent inhibition is expressed relative to a positive control (which results in total inhibition)." ;
-                           bat:inOrder         "14"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000201
-                         ] ;
-        bat:hasValue     [ rdfs:label          "maximal activation" ;
-                           bat:hasDescription  "The maximum percent activation of an agonist" ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000805
-                         ] ;
-        bat:hasValue     [ rdfs:label          "response endpoint" ;
-                           bat:hasDescription  "Reporting the extent / magnitude of the perturbation (induced by the perturbagen) such as percent inhibition. Response-type endpoints would typically be obtained from a single concentration perturbagen measurement." ;
-                           bat:inOrder         "1"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000181
-                         ] ;
-        bat:hasValue     [ rdfs:label          "fold activation" ;
-                           bat:hasDescription  "The ratio of biological activity in the presence of an exogenous substance to that in its absence. This result type is used exclusively with single point (screening concentration) assays." ;
-                           bat:inOrder         "16"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000375
-                         ] ;
-        bat:hasValue     [ rdfs:label          "Bmax" ;
-                           bat:hasDescription  "It is the amount of drug required to saturate a population of receptors and a measure of the number of receptors present in the sample. It is derived from Scatchard plot of binding data. It is analogous to Vmax in enzyme kinetics.  The units of Bmax include cpm, sites/cell or fmol/mg. http://graphpad.com/curvefit/fitting_specific_binding_.htm" ;
-                           bat:inOrder         "13"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000033
-                         ] ;
-        bat:hasValue     [ rdfs:label          "efficacy" ;
-                           bat:hasDescription  "The maximum response that can be achieved with the perturbagen as percentage of the positive control." ;
                            bat:inOrder         "11"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000656
-                         ] ;
-        bat:hasValue     [ rdfs:label          "Ki" ;
-                           bat:hasDescription  "Ki is the equilibrium inhibitor dissociation constant, the concentration of the competing inhibitor that results in binding to half the enzymes sites at equilibrium in the absence of substrate or other competitors.\nThe Cheng and Prusoff equation: Ki - (IC50) / ( 1+ ([L]/Kd)) relates IC50 to Ki under conditions of competitive binding; Kd equilibrium dissociation constant of the (labeled) ligand, [L] ligand concentration.\nThe Cheng and Prusoff equation: Ki - (IC50) / ( 1+ ([S]/Km)) relates IC50 to Ki under conditions of competitive inhibition; Ki equilibrium enzyme inhibitor dissociation constant; Km Michaelis-Menton constant, [S] substrate concentration." ;
-                           bat:inOrder         "19"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000192
-                         ] ;
-        bat:hasValue     [ rdfs:label          "CC50" ;
-                           bat:hasDescription  "The effective concentration of a cytotoxic compound, which produces 50% of the maximum possible cell death for that compound.  Although the cytotoxic compound induces cell death, we define CC50 as subclass of IC50, because critical cellular processes are inhibited and CC50 is often used as a more specific description of IC50 for cell toxicity assays.\nCompound cytotoxicity is an important parameter to measure when developing potential human therapeutics. Cytotoxicity can be determined for example as a measure of radioisotope (3H thymidine or 51Cr) release, lactate dehydrogenase release from damaged cells, tetrazolium salt and alamar blue reduction, fluorescent dyes that selectively stain live or dead cells,  or decrease in ATP content. ATP levels are detected using a luminescence based assay kit such as CellTiter-Glo (Promega). ATP values higher than controls (untreated cells) indicate proliferation and cultures with ATP concentrations lower than controls indicate cytotoxicity.\n" ;
-                           bat:inOrder         "6"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000187
-                         ] ;
-        bat:hasValue     [ rdfs:label          "AC50" ;
-                           bat:hasDescription  "The effective concentration of a perturbagen, which produces 50% of the maximal possible response, which could mean either activation (EC50) or inhibition (IC50) for that perturbagen." ;
-                           bat:inOrder         "5"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000186
-                         ] ;
-        bat:hasValue     [ rdfs:label          "MIC" ;
-                           bat:hasDescription  "The lowest concentration of an inhibitor (antimicrobial agent) required to inhibit the growth of a microorganism." ;
-                           bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0002146
-                         ] ;
-        bat:hasValue     [ rdfs:label          "percent activation" ;
-                           bat:hasDescription  "Percent increase of a measureable response relative to some baseline. Unit of Measure is always % when normalized to the dynamic range of the assay.\nPercent activity measures the increased activity vs. an unperturbed state, i.e. percent activation := percent activity - 100; e.g. an agonist that results in twice the activity would have percent activity = 200 and percent activation = 100.\n" ;
-                           bat:inOrder         "8"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000200
-                         ] ;
-        bat:hasValue     [ rdfs:label          "IC50" ;
-                           bat:hasDescription  "The effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor." ;
-                           bat:inOrder         "15"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000190
-                         ] ;
-        bat:hasValue     [ rdfs:label          "percent growth inhibition" ;
-                           bat:hasDescription  "% growth reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
-                           bat:inOrder         "10"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000096
+                           bat:mapsTo          bao:BAO_0000376
                          ] ;
         bat:hasValue     [ rdfs:label          "EC50" ;
                            bat:hasDescription  "The effective concentration of an agonist, which produces 50% of the maximum possible response for that agonist." ;
-                           bat:inOrder         "12"^^xsd:int ;
+                           bat:inOrder         "1"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000188
+                         ] ;
+        bat:hasValue     [ rdfs:label          "IC50" ;
+                           bat:hasDescription  "The effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor." ;
+                           bat:inOrder         "13"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000190
+                         ] ;
+        bat:hasValue     [ rdfs:label          "maximal activation" ;
+                           bat:hasDescription  "The maximum percent activation of an agonist" ;
+                           bat:inOrder         "10"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000805
+                         ] ;
+        bat:hasValue     [ rdfs:label          "AC50" ;
+                           bat:hasDescription  "The effective concentration of a perturbagen, which produces 50% of the maximal possible response, which could mean either activation (EC50) or inhibition (IC50) for that perturbagen." ;
+                           bat:inOrder         "19"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000186
+                         ] ;
+        bat:hasValue     [ rdfs:label          "efficacy" ;
+                           bat:hasDescription  "The maximum response that can be achieved with the perturbagen as percentage of the positive control." ;
+                           bat:inOrder         "12"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000656
                          ] ;
         bat:hasValue     [ rdfs:label          "raw activity" ;
                            bat:hasDescription  "Raw or qualitative data are reported as endpoints in an assay, e.g., luminescence counts, fluorescence intensity, etc." ;
-                           bat:inOrder         "9"^^xsd:int ;
+                           bat:inOrder         "6"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000583
+                         ] ;
+        bat:hasValue     [ rdfs:label          "CC50" ;
+                           bat:hasDescription  "The effective concentration of a cytotoxic compound, which produces 50% of the maximum possible cell death for that compound.  Although the cytotoxic compound induces cell death, we define CC50 as subclass of IC50, because critical cellular processes are inhibited and CC50 is often used as a more specific description of IC50 for cell toxicity assays.\nCompound cytotoxicity is an important parameter to measure when developing potential human therapeutics. Cytotoxicity can be determined for example as a measure of radioisotope (3H thymidine or 51Cr) release, lactate dehydrogenase release from damaged cells, tetrazolium salt and alamar blue reduction, fluorescent dyes that selectively stain live or dead cells,  or decrease in ATP content. ATP levels are detected using a luminescence based assay kit such as CellTiter-Glo (Promega). ATP values higher than controls (untreated cells) indicate proliferation and cultures with ATP concentrations lower than controls indicate cytotoxicity.\n" ;
+                           bat:inOrder         "3"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000187
+                         ] ;
+        bat:hasValue     [ rdfs:label          "Ki" ;
+                           bat:hasDescription  "Ki is the equilibrium inhibitor dissociation constant, the concentration of the competing inhibitor that results in binding to half the enzymes sites at equilibrium in the absence of substrate or other competitors.\nThe Cheng and Prusoff equation: Ki - (IC50) / ( 1+ ([L]/Kd)) relates IC50 to Ki under conditions of competitive binding; Kd equilibrium dissociation constant of the (labeled) ligand, [L] ligand concentration.\nThe Cheng and Prusoff equation: Ki - (IC50) / ( 1+ ([S]/Km)) relates IC50 to Ki under conditions of competitive inhibition; Ki equilibrium enzyme inhibitor dissociation constant; Km Michaelis-Menton constant, [S] substrate concentration." ;
+                           bat:inOrder         "15"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000192
                          ] ;
         bat:hasValue     [ rdfs:label          "percent response" ;
                            bat:hasDescription  "Percent increase or decrease of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
-                           bat:inOrder         "7"^^xsd:int ;
+                           bat:inOrder         "5"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000082
+                         ] ;
+        bat:hasValue     [ rdfs:label          "Kd" ;
+                           bat:hasDescription  "Kd – is the equilibrium dissociation constant for a drug.  It describes the affinity between a ligand (L) (such as a drug) and a protein (P). Ligand-protein affinities are influenced by non-covalent intermolecular interactions between the two molecules such as hydrogen bonding, electrostatic interactions, hydrophobic and Van der Waals forces. \nKd = ([P] [L]) / [PL]\nThe dissociation constant has molar units (M), which corresponds to the concentration of ligand [L] at which the binding site on a particular protein is half occupied, i.e. the concentration of ligand, at which the concentration of protein with ligand bound [PL], equals the concentration of protein with no ligand bound [P]. The smaller the dissociation constant, the more tightly bound the ligand is, or the higher the affinity between ligand and protein. http://www.graphpad.com/curvefit/law_of_mass_action.htm" ;
+                           bat:inOrder         "14"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000034
+                         ] ;
+        bat:hasValue     [ rdfs:label          "percent growth inhibition" ;
+                           bat:hasDescription  "% growth reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay." ;
+                           bat:inOrder         "16"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000096
+                         ] ;
+        bat:hasValue     [ rdfs:label          "MIC" ;
+                           bat:hasDescription  "The lowest concentration of an inhibitor (antimicrobial agent) required to inhibit the growth of a microorganism." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0002146
+                         ] ;
+        bat:hasValue     [ rdfs:label          "Tm" ;
+                           bat:hasDescription  "Tm is defined as the midpoint temperatuere of the protein unfolding transition. It is determined by generating a thermal denaturation curve for the target molecule and taking the midpoint temperature between folding and unfolding state of the protein.\nIn nucleic acid thermodynamics, it is the temperature at which 50% of the DNA strands and its perfect complement are in duplex." ;
+                           bat:inOrder         "18"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000581
+                         ] ;
+        bat:hasValue     [ rdfs:label          "percent activation" ;
+                           bat:hasDescription  "Percent increase of a measureable response relative to some baseline. Unit of Measure is always % when normalized to the dynamic range of the assay.\nPercent activity measures the increased activity vs. an unperturbed state, i.e. percent activation := percent activity - 100; e.g. an agonist that results in twice the activity would have percent activity = 200 and percent activation = 100.\n" ;
+                           bat:inOrder         "9"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000200
+                         ] ;
+        bat:hasValue     [ rdfs:label          "Bmax" ;
+                           bat:hasDescription  "It is the amount of drug required to saturate a population of receptors and a measure of the number of receptors present in the sample. It is derived from Scatchard plot of binding data. It is analogous to Vmax in enzyme kinetics.  The units of Bmax include cpm, sites/cell or fmol/mg. http://graphpad.com/curvefit/fitting_specific_binding_.htm" ;
+                           bat:inOrder         "17"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000033
+                         ] ;
+        bat:hasValue     [ rdfs:label          "fold activation" ;
+                           bat:hasDescription  "The ratio of biological activity in the presence of an exogenous substance to that in its absence. This result type is used exclusively with single point (screening concentration) assays." ;
+                           bat:inOrder         "8"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000375
+                         ] ;
+        bat:hasValue     [ rdfs:label          "response endpoint" ;
+                           bat:hasDescription  "Reporting the extent / magnitude of the perturbation (induced by the perturbagen) such as percent inhibition. Response-type endpoints would typically be obtained from a single concentration perturbagen measurement." ;
+                           bat:inOrder         "4"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000181
+                         ] ;
+        bat:hasValue     [ rdfs:label          "percent inhibition" ;
+                           bat:hasDescription  "Percent decrease of a measureable response as a consequence of compound treatment.  Unit of Measure is always % when normalized to the dynamic range of the assay. Percent inhibition is expressed relative to a positive control (which results in total inhibition)." ;
+                           bat:inOrder         "2"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000201
                          ] ;
         bat:inOrder      "11"^^xsd:int .
 
@@ -526,95 +526,95 @@ bat:PhysicalDetectionMethod
         a                bat:Assignment ;
         rdfs:label       "physical detection method" ;
         bat:hasProperty  bao:BAO_0000035 ;
-        bat:hasValue     [ rdfs:label          "chemiluminescence" ;
-                           bat:hasDescription  "Chemiluminescence is the generation of light as a result of a chemical reaction using synthetic compounds and usually involving a highly oxidized species such as peroxide." ;
-                           bat:inOrder         "11"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000051
+        bat:hasValue     [ rdfs:label          "alphascreen" ;
+                           bat:hasDescription  "This technology measures the interaction of two molecules bioconjugated to donor and acceptor beads. Laser excitation leads to light emission which is directly proportional to the amount of binding, provided molecules are in proximity to cause a chemical reaction (interact). Users have modified this and coupled it to chemiluminescence emission. This technology has been adapted to study protein-protein, protein-DNA and receptor-ligand, immunoassay, phosphorylation and protease reactions." ;
+                           bat:inOrder         "18"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000130
                          ] ;
-        bat:hasValue     [ rdfs:label          "spectrophotometry method" ;
-                           bat:hasDescription  "Spectrophotometry involves the use of a spectrophotometer to measure the amount of light that a sample absorbs. The instrument operates by passing a beam of light through a sample and measuring the intensity of light reaching a detector." ;
-                           bat:inOrder         "15"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000049
+        bat:hasValue     [ rdfs:label          "fluorescence intensity" ;
+                           bat:hasDescription  "Fluorescence intensity is the measure of fluorescence from a sample." ;
+                           bat:inOrder         "17"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000363
                          ] ;
-        bat:hasValue     [ rdfs:label          "absorbance" ;
-                           bat:hasDescription  "The absorbance of a beam of collimated monochromatic radiation in a homogeneous isotropic medium is proportional to the absorption path length and to the concentration of the absorbing species. Absorbance is a logarithmic measure of the amount of light (at a specific wavelength) that is absorbed when passing through a sample.  A= -log10(I/I0), where A is absorbance, I is the intensity of incident light and I0 is the intensity of light transmitted after passing through the sample." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000070
+        bat:hasValue     [ rdfs:label          "transmission electron microscopy" ;
+                           bat:hasDescription  "Transmission electron microscopy (TEM) is quite similar to the compound light microscope, by sending an electron beam through a very thin slice of the specimen. The resolution limit in 2005 was approximately 0.05 nanometer and has not increased appreciably since that time." ;
+                           bat:inOrder         "16"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000455
+                         ] ;
+        bat:hasValue     [ rdfs:label          "luminescence method" ;
+                           bat:hasDescription  "The emission of light from a substance that occurs from an electronically excited state which is reached either by a physical, mechanical, or chemical mechanism." ;
+                           bat:inOrder         "13"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000045
                          ] ;
         bat:hasValue     [ rdfs:label          "flow cytometry" ;
                            bat:hasDescription  "Flow cytometry uses the principles of light scattering and fluorescence from fluorochrome molecules to generate specific multi-parameter data from particles and cells in the size range of 0.5um to 40um diameter.\n" ;
-                           bat:inOrder         "14"^^xsd:int ;
+                           bat:inOrder         "12"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000005
                          ] ;
         bat:hasValue     [ rdfs:label          "filter assay" ;
                            bat:hasDescription  "This assay is performed to study interaction between a radio-labeled ligand and the receptor. The reaction mixture containing the receptor and radioligand is transferred to a filter plate, washed to remove the unbound radioligand. The bound complex remains on the filter, which can be eluted into the scintillation fluid and the radioactivity measured. Filter assays differ from SPA because a separation of free radioligand and radioligand bound to the receptor is required for measurement." ;
-                           bat:inOrder         "12"^^xsd:int ;
+                           bat:inOrder         "3"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000401
-                         ] ;
-        bat:hasValue     [ rdfs:label          "isothermal titration calorimetry" ;
-                           bat:hasDescription  "ITC is a thermodynamic technique that can directly measure the heat released or absorbed during a biomolecular binding event. It can measure the binding affinity (Ka), reaction stoichiometry (n), enthalpy (∆H) and entropy (ΔS) of the interaction between two or more molecules in solution." ;
-                           bat:inOrder         "16"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000428
                          ] ;
         bat:hasValue     [ rdfs:label          "nuclear magnetic resonance" ;
                            bat:hasDescription  "Nuclear magnetic resonance (NMR) is used to analyze protein-small molecule interactions. This binding interaction is commonly monitored by the chemical shift of the compound.  With this technique, both the binding interaction and bound compounds can be detected, which allows pools of 5-100 compounds to be tested for binding." ;
-                           bat:inOrder         "5"^^xsd:int ;
+                           bat:inOrder         "2"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000160
-                         ] ;
-        bat:hasValue     [ rdfs:label          "homogeneous time resolved fluorescence" ;
-                           bat:hasDescription  "Homogenous time resolved fluorescence (HTRF) is a technology which combines standard FRET technology with the time-resolved measurement of fluorescence. Through this, HTRF eliminates the short-lived background fluorescence. Introducing a time delay (50-150 micro seconds) between the system excitation and fluorescence measurement, which allows the signal to be cleared of all non-specific short lived emissions." ;
-                           bat:inOrder         "9"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000002
-                         ] ;
-        bat:hasValue     [ rdfs:label          "fluorescence resonance energy transfer" ;
-                           bat:hasDescription  "Fluorescence resonance energy transfer (FRET) is based on the transfer of energy between two fluorophores, a donor and an acceptor, when in close proximity. The energy transfer is directed from higher-energy donor fluorophore to lower-energy acceptor fluorophore of labeled protein pairs. Target protein pairs are likely to exhibit FRET if they are no more than 10 nm apart." ;
-                           bat:inOrder         "1"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000001
-                         ] ;
-        bat:hasValue     [ rdfs:label          "lysate based" ;
-                           bat:hasDescription  "This assay is performed to study interaction between a radio-labeled ligand and the receptor in presence of cold ligand. The cells exposed to the radioligand and cold ligand are washed to remove the unbound ligands. They are then lysed and the bound radioactivity is counted in a liquid scintillation counter." ;
-                           bat:inOrder         "10"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000408
-                         ] ;
-        bat:hasValue     [ rdfs:label          "time resolved fluorescence resonance energy transfer" ;
-                           bat:hasDescription  "Time resolved-fluorescence resonance energy transfer (TR-FRET) unites TRF (Time-Resolved Fluorescence) and FRET (Fluorescence Resonance Energy Transfer) principles. This combination brings together the low background benefits of TRF with the homogeneous assay format of FRET. Introducing a time delay (50-150 micro seconds) between the system excitation and fluorescence measurement allows the signal to be cleared of all non-specific short lived emissions. TR-FRET uses lanthanide donors which are fluorophores with long emission half-lives.\n    \n" ;
-                           bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000004
-                         ] ;
-        bat:hasValue     [ rdfs:label          "luminescence method" ;
-                           bat:hasDescription  "The emission of light from a substance that occurs from an electronically excited state which is reached either by a physical, mechanical, or chemical mechanism." ;
-                           bat:inOrder         "6"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000045
-                         ] ;
-        bat:hasValue     [ rdfs:label          "fluorescence intensity" ;
-                           bat:hasDescription  "Fluorescence intensity is the measure of fluorescence from a sample." ;
-                           bat:inOrder         "18"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000363
-                         ] ;
-        bat:hasValue     [ rdfs:label          "mass spectrometry" ;
-                           bat:hasDescription  "This method is used to detect compounds that are bound to the protein targets. The unbound compounds are separated by affinity based, size exclusion, or ultrafiltration methods. The bound compounds are eluted from the protein and detected by mass spectrometry. Based on the separation method, the throughput varies: between 200-2700 compounds can be loaded in each run for separation.\nMass spectrometry is used to determine the chemical structure of molecules. The samples are vaporized, followed by ionization and then the mass to charge ratio of the particles is analyzed." ;
-                           bat:inOrder         "13"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000055
                          ] ;
         bat:hasValue     [ rdfs:label          "thermal shift" ;
                            bat:hasDescription  "Upon heating, a protein unfolds and loses the native conformation. Binding of a small molecule can often stabilize the protein conformation, resulting in a higher unfolding temperature. The temperature shift in unfolding can be detected using a fluorescent dye, which is sensitive to the protein environment." ;
-                           bat:inOrder         "17"^^xsd:int ;
+                           bat:inOrder         "15"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000058
                          ] ;
-        bat:hasValue     [ rdfs:label          "alphascreen" ;
-                           bat:hasDescription  "This technology measures the interaction of two molecules bioconjugated to donor and acceptor beads. Laser excitation leads to light emission which is directly proportional to the amount of binding, provided molecules are in proximity to cause a chemical reaction (interact). Users have modified this and coupled it to chemiluminescence emission. This technology has been adapted to study protein-protein, protein-DNA and receptor-ligand, immunoassay, phosphorylation and protease reactions." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000130
+        bat:hasValue     [ rdfs:label          "time resolved fluorescence resonance energy transfer" ;
+                           bat:hasDescription  "Time resolved-fluorescence resonance energy transfer (TR-FRET) unites TRF (Time-Resolved Fluorescence) and FRET (Fluorescence Resonance Energy Transfer) principles. This combination brings together the low background benefits of TRF with the homogeneous assay format of FRET. Introducing a time delay (50-150 micro seconds) between the system excitation and fluorescence measurement allows the signal to be cleared of all non-specific short lived emissions. TR-FRET uses lanthanide donors which are fluorophores with long emission half-lives.\n    \n" ;
+                           bat:inOrder         "11"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000004
+                         ] ;
+        bat:hasValue     [ rdfs:label          "lysate based" ;
+                           bat:hasDescription  "This assay is performed to study interaction between a radio-labeled ligand and the receptor in presence of cold ligand. The cells exposed to the radioligand and cold ligand are washed to remove the unbound ligands. They are then lysed and the bound radioactivity is counted in a liquid scintillation counter." ;
+                           bat:inOrder         "6"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000408
+                         ] ;
+        bat:hasValue     [ rdfs:label          "mass spectrometry" ;
+                           bat:hasDescription  "This method is used to detect compounds that are bound to the protein targets. The unbound compounds are separated by affinity based, size exclusion, or ultrafiltration methods. The bound compounds are eluted from the protein and detected by mass spectrometry. Based on the separation method, the throughput varies: between 200-2700 compounds can be loaded in each run for separation.\nMass spectrometry is used to determine the chemical structure of molecules. The samples are vaporized, followed by ionization and then the mass to charge ratio of the particles is analyzed." ;
+                           bat:inOrder         "10"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000055
+                         ] ;
+        bat:hasValue     [ rdfs:label          "absorbance" ;
+                           bat:hasDescription  "The absorbance of a beam of collimated monochromatic radiation in a homogeneous isotropic medium is proportional to the absorption path length and to the concentration of the absorbing species. Absorbance is a logarithmic measure of the amount of light (at a specific wavelength) that is absorbed when passing through a sample.  A= -log10(I/I0), where A is absorbance, I is the intensity of incident light and I0 is the intensity of light transmitted after passing through the sample." ;
+                           bat:inOrder         "1"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000070
                          ] ;
         bat:hasValue     [ rdfs:label          "fluorescence polarization" ;
                            bat:hasDescription  "Fluorescence polarization (FP) measurements are based on the assessment of the rotational motions of species. It is used to measure binding interactions. When linear polarized light is used to excite fluorophores, only those aligned with the plane of polarization will be excited. For fluorophores attached to small, rapidly rotating molecules, the initially photoselected orientational distribution becomes randomized prior to emission, resulting in low fluorescence polarization. But binding of the low molecular weight tracer to a large, slowly rotating molecule results in high fluorescence polarization." ;
-                           bat:inOrder         "7"^^xsd:int ;
+                           bat:inOrder         "14"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000003
                          ] ;
-        bat:hasValue     [ rdfs:label          "transmission electron microscopy" ;
-                           bat:hasDescription  "Transmission electron microscopy (TEM) is quite similar to the compound light microscope, by sending an electron beam through a very thin slice of the specimen. The resolution limit in 2005 was approximately 0.05 nanometer and has not increased appreciably since that time." ;
+        bat:hasValue     [ rdfs:label          "fluorescence resonance energy transfer" ;
+                           bat:hasDescription  "Fluorescence resonance energy transfer (FRET) is based on the transfer of energy between two fluorophores, a donor and an acceptor, when in close proximity. The energy transfer is directed from higher-energy donor fluorophore to lower-energy acceptor fluorophore of labeled protein pairs. Target protein pairs are likely to exhibit FRET if they are no more than 10 nm apart." ;
+                           bat:inOrder         "5"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000001
+                         ] ;
+        bat:hasValue     [ rdfs:label          "homogeneous time resolved fluorescence" ;
+                           bat:hasDescription  "Homogenous time resolved fluorescence (HTRF) is a technology which combines standard FRET technology with the time-resolved measurement of fluorescence. Through this, HTRF eliminates the short-lived background fluorescence. Introducing a time delay (50-150 micro seconds) between the system excitation and fluorescence measurement, which allows the signal to be cleared of all non-specific short lived emissions." ;
+                           bat:inOrder         "4"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000002
+                         ] ;
+        bat:hasValue     [ rdfs:label          "chemiluminescence" ;
+                           bat:hasDescription  "Chemiluminescence is the generation of light as a result of a chemical reaction using synthetic compounds and usually involving a highly oxidized species such as peroxide." ;
+                           bat:inOrder         "9"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000051
+                         ] ;
+        bat:hasValue     [ rdfs:label          "isothermal titration calorimetry" ;
+                           bat:hasDescription  "ITC is a thermodynamic technique that can directly measure the heat released or absorbed during a biomolecular binding event. It can measure the binding affinity (Ka), reaction stoichiometry (n), enthalpy (∆H) and entropy (ΔS) of the interaction between two or more molecules in solution." ;
                            bat:inOrder         "8"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000455
+                           bat:mapsTo          bao:BAO_0000428
+                         ] ;
+        bat:hasValue     [ rdfs:label          "spectrophotometry method" ;
+                           bat:hasDescription  "Spectrophotometry involves the use of a spectrophotometer to measure the amount of light that a sample absorbs. The instrument operates by passing a beam of light through a sample and measuring the intensity of light reaching a detector." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000049
                          ] ;
         bat:inOrder      "7"^^xsd:int .
 
@@ -637,198 +637,188 @@ bat:ConcentrationThroughput
 bat:Bioassay  a          bat:Assignment ;
         rdfs:label       "bioassay" ;
         bat:hasProperty  bao:BAO_0000015 ;
-        bat:hasValue     [ rdfs:label          "transporter assay" ;
-                           bat:hasDescription  "This assay quantifies the activity of a transporter that carries proteins, cofactors, ions, drugs, etc. across the cell membranes. Fluorescence-conjugated dyes or radiolabeled ligands are used to quantitate the various molecular entities that are being transported." ;
-                           bat:inOrder         "16"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0003008
-                         ] ;
-        bat:hasValue     [ rdfs:label   "chaperone activity assay" ;
-                           bat:inOrder  "35"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002761
-                         ] ;
-        bat:hasValue     [ rdfs:label   "protease activity assay" ;
-                           bat:inOrder  "34"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002764
-                         ] ;
-        bat:hasValue     [ rdfs:label   "luciferase enzyme activity assay" ;
-                           bat:inOrder  "3"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002735
-                         ] ;
-        bat:hasValue     [ rdfs:label          "signal transduction assay" ;
-                           bat:hasDescription  "This assay measures one of the series of events that are downstream to the receipt of a chemical signal at the cell’s surface, namely, formation of cyclic AMP, activation of kinase/ transcription factor, cytokine secretion, etc., which will result in a specific cellular activity, such as cell division, cell elongation, etc." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0003002
-                         ] ;
-        bat:hasValue     [ rdfs:label   "protein unfolding assay" ;
-                           bat:inOrder  "20"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002779
-                         ] ;
-        bat:hasValue     [ rdfs:label   "cytotoxicity assay" ;
-                           bat:inOrder  "39"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002993
-                         ] ;
-        bat:hasValue     [ rdfs:label   "radioligand binding assay" ;
-                           bat:inOrder  "38"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002776
-                         ] ;
-        bat:hasValue     [ rdfs:label   "plasma membrane potential assay" ;
-                           bat:inOrder  "7"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002194
-                         ] ;
-        bat:hasValue     [ rdfs:label   "apoptosis assay" ;
-                           bat:inOrder  "6"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002043
-                         ] ;
         bat:hasValue     [ rdfs:label   "luciferase reporter gene assay" ;
-                           bat:inOrder  "26"^^xsd:int ;
+                           bat:inOrder  "34"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002661
                          ] ;
-        bat:hasValue     [ rdfs:label   "beta galactosidase reporter gene assay" ;
-                           bat:inOrder  "25"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0003013
-                         ] ;
-        bat:hasValue     [ rdfs:label   "isomerase activity assay" ;
-                           bat:inOrder  "36"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002794
-                         ] ;
-        bat:hasValue     [ rdfs:label          "protein-DNA interaction assay" ;
-                           bat:hasDescription  "Protein-DNA interaction" ;
-                           bat:inOrder         "12"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000591
-                         ] ;
-        bat:hasValue     [ rdfs:label   "IP1 redistribution assay" ;
-                           bat:inOrder  "31"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002780
-                         ] ;
-        bat:hasValue     [ rdfs:label          "phosphorylation assay" ;
-                           bat:hasDescription  "This assay quantifies the phosphorylation levels of a protein. The phosphorylation status is detected by one of several methods: using phosphorylation specific antibodies followed by western blotting or imaging, mass spectrometry, etc." ;
-                           bat:inOrder         "30"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0003005
-                         ] ;
-        bat:hasValue     [ rdfs:label          "ion channel assay" ;
-                           bat:hasDescription  "Ion channel assays are performed in electrically active cells: neurons, muscle, and endocrine cells." ;
-                           bat:inOrder         "18"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0002997
+        bat:hasValue     [ rdfs:label   "oxidoreductase activity assay" ;
+                           bat:inOrder  "2"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002792
                          ] ;
         bat:hasValue     [ rdfs:label   "cell growth assay" ;
-                           bat:inOrder  "17"^^xsd:int ;
+                           bat:inOrder  "11"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002100
                          ] ;
-        bat:hasValue     [ rdfs:label   "cell permeability assay" ;
-                           bat:inOrder  "22"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002778
-                         ] ;
-        bat:hasValue     [ rdfs:label          "cell morphology assay" ;
-                           bat:hasDescription  "It reports the size and shape of cells and organelles (phenotype). These are detected by microscopy." ;
-                           bat:inOrder         "21"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0002991
-                         ] ;
-        bat:hasValue     [ rdfs:label   "kinase activity assay" ;
-                           bat:inOrder  "13"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002005
-                         ] ;
         bat:hasValue     [ rdfs:label   "lyase activity assay" ;
-                           bat:inOrder  "40"^^xsd:int ;
+                           bat:inOrder  "22"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002793
-                         ] ;
-        bat:hasValue     [ rdfs:label   "cytochrome P450 enzyme activity assay" ;
-                           bat:inOrder  "8"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002736
-                         ] ;
-        bat:hasValue     [ rdfs:label   "localization assay" ;
-                           bat:inOrder  "14"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002196
-                         ] ;
-        bat:hasValue     [ rdfs:label   "phosphatase activity assay" ;
-                           bat:inOrder  "33"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002762
-                         ] ;
-        bat:hasValue     [ rdfs:label   "protein stability assay" ;
-                           bat:inOrder  "32"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002804
-                         ] ;
-        bat:hasValue     [ rdfs:label          "cAMP redistribution assay" ;
-                           bat:hasDescription  "Cyclic AMP (cAMP) functions as second messenger in cell signaling." ;
-                           bat:inOrder         "1"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000650
                          ] ;
         bat:hasValue     [ rdfs:label          "protein-turnover assay" ;
                            bat:hasDescription  "This assay quantifies the protein turnover, which is a natural phenomenon in healthy cells, but becomes aberrant in diseased cells. The protein that is needed to be degraded first undergoes ubiquitinated. Ubiquitinated proteins are degraded in the proteasome complex. The protein degradation is quantitated by using reporters, such as green fluorescent protein as proteasome substrates.  " ;
-                           bat:inOrder         "9"^^xsd:int ;
+                           bat:inOrder         "21"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0003010
                          ] ;
-        bat:hasValue     [ rdfs:label   "oxidoreductase activity assay" ;
-                           bat:inOrder  "19"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002792
+        bat:hasValue     [ rdfs:label          "transporter assay" ;
+                           bat:hasDescription  "This assay quantifies the activity of a transporter that carries proteins, cofactors, ions, drugs, etc. across the cell membranes. Fluorescence-conjugated dyes or radiolabeled ligands are used to quantitate the various molecular entities that are being transported." ;
+                           bat:inOrder         "29"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0003008
                          ] ;
-        bat:hasValue     [ rdfs:label          "protein-protein interaction assay" ;
-                           bat:hasDescription  "It is performed to quantify the interactions between two protein molecules, using methods such as protein fragment complementation assay, immunoassay, radioligand binding, etc." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0002990
+        bat:hasValue     [ rdfs:label   "organism behavior assay" ;
+                           bat:inOrder  "40"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002765
+                         ] ;
+        bat:hasValue     [ rdfs:label          "cAMP redistribution assay" ;
+                           bat:hasDescription  "Cyclic AMP (cAMP) functions as second messenger in cell signaling." ;
+                           bat:inOrder         "35"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000650
                          ] ;
         bat:hasValue     [ rdfs:label   "hydrolase activity assay" ;
-                           bat:inOrder  "28"^^xsd:int ;
+                           bat:inOrder  "3"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002790
                          ] ;
-        bat:hasValue     [ rdfs:label   "fluorescent protein reporter gene assay" ;
-                           bat:inOrder  "27"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0003012
+        bat:hasValue     [ rdfs:label          "protein-DNA interaction assay" ;
+                           bat:hasDescription  "Protein-DNA interaction" ;
+                           bat:inOrder         "30"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000591
                          ] ;
-        bat:hasValue     [ rdfs:label          "protein redistribution assay" ;
-                           bat:hasDescription  "Cellular signaling can bring about the movement of proteins in cells. Upon receiving a cue, proteins undergo posttranslational modifications, e.g. phosphorylation, dephosphorylation, etc, which results in their activation and migration to different compartments, often to the nucleus, where they regulate gene expression." ;
-                           bat:inOrder         "37"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000378
-                         ] ;
-        bat:hasValue     [ rdfs:label          "calcium redistribution assay" ;
-                           bat:hasDescription  "Calcium functions as second messenger in cell signaling." ;
-                           bat:inOrder         "5"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000649
+        bat:hasValue     [ rdfs:label   "luciferase enzyme activity assay" ;
+                           bat:inOrder  "7"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002735
                          ] ;
         bat:hasValue     [ rdfs:label          "protein-small molecule interaction assay" ;
                            bat:hasDescription  "It is an interaction between a protein (e.g., receptor, transcription factor) and small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))." ;
-                           bat:inOrder         "15"^^xsd:int ;
+                           bat:inOrder         "6"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000110
+                         ] ;
+        bat:hasValue     [ rdfs:label   "cell permeability assay" ;
+                           bat:inOrder  "26"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002778
+                         ] ;
+        bat:hasValue     [ rdfs:label   "protein stability assay" ;
+                           bat:inOrder  "25"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002804
+                         ] ;
+        bat:hasValue     [ rdfs:label   "fluorescent protein reporter gene assay" ;
+                           bat:inOrder  "37"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0003012
+                         ] ;
+        bat:hasValue     [ rdfs:label   "kinase activity assay" ;
+                           bat:inOrder  "5"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002005
+                         ] ;
+        bat:hasValue     [ rdfs:label          "calcium redistribution assay" ;
+                           bat:hasDescription  "Calcium functions as second messenger in cell signaling." ;
+                           bat:inOrder         "36"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000649
+                         ] ;
+        bat:hasValue     [ rdfs:label   "platelet activation assay" ;
+                           bat:inOrder  "4"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002763
+                         ] ;
+        bat:hasValue     [ rdfs:label          "phosphorylation assay" ;
+                           bat:hasDescription  "This assay quantifies the phosphorylation levels of a protein. The phosphorylation status is detected by one of several methods: using phosphorylation specific antibodies followed by western blotting or imaging, mass spectrometry, etc." ;
+                           bat:inOrder         "13"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0003005
+                         ] ;
+        bat:hasValue     [ rdfs:label   "plasma membrane potential assay" ;
+                           bat:inOrder  "12"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002194
+                         ] ;
+        bat:hasValue     [ rdfs:label   "radioligand binding assay" ;
+                           bat:inOrder  "24"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002776
+                         ] ;
+        bat:hasValue     [ rdfs:label          "signal transduction assay" ;
+                           bat:hasDescription  "This assay measures one of the series of events that are downstream to the receipt of a chemical signal at the cell’s surface, namely, formation of cyclic AMP, activation of kinase/ transcription factor, cytokine secretion, etc., which will result in a specific cellular activity, such as cell division, cell elongation, etc." ;
+                           bat:inOrder         "23"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0003002
+                         ] ;
+        bat:hasValue     [ rdfs:label   "transferase activity assay" ;
+                           bat:inOrder  "31"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002795
+                         ] ;
+        bat:hasValue     [ rdfs:label   "apoptosis assay" ;
+                           bat:inOrder  "18"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002043
+                         ] ;
+        bat:hasValue     [ rdfs:label          "protein redistribution assay" ;
+                           bat:hasDescription  "Cellular signaling can bring about the movement of proteins in cells. Upon receiving a cue, proteins undergo posttranslational modifications, e.g. phosphorylation, dephosphorylation, etc, which results in their activation and migration to different compartments, often to the nucleus, where they regulate gene expression." ;
+                           bat:inOrder         "17"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000378
+                         ] ;
+        bat:hasValue     [ rdfs:label   "cytotoxicity assay" ;
+                           bat:inOrder  "9"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002993
+                         ] ;
+        bat:hasValue     [ rdfs:label   "protein unfolding assay" ;
+                           bat:inOrder  "8"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002779
+                         ] ;
+        bat:hasValue     [ rdfs:label   "beta lactamase reporter gene assay" ;
+                           bat:inOrder  "28"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0003014
+                         ] ;
+        bat:hasValue     [ rdfs:label          "cell morphology assay" ;
+                           bat:hasDescription  "It reports the size and shape of cells and organelles (phenotype). These are detected by microscopy." ;
+                           bat:inOrder         "27"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0002991
+                         ] ;
+        bat:hasValue     [ rdfs:label          "protein-protein interaction assay" ;
+                           bat:hasDescription  "It is performed to quantify the interactions between two protein molecules, using methods such as protein fragment complementation assay, immunoassay, radioligand binding, etc." ;
+                           bat:inOrder         "14"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0002990
+                         ] ;
+        bat:hasValue     [ rdfs:label   "IP1 redistribution assay" ;
+                           bat:inOrder  "33"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002780
+                         ] ;
+        bat:hasValue     [ rdfs:label          "ion channel assay" ;
+                           bat:hasDescription  "Ion channel assays are performed in electrically active cells: neurons, muscle, and endocrine cells." ;
+                           bat:inOrder         "32"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0002997
+                         ] ;
+        bat:hasValue     [ rdfs:label   "isomerase activity assay" ;
+                           bat:inOrder  "1"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002794
+                         ] ;
+        bat:hasValue     [ rdfs:label   "localization assay" ;
+                           bat:inOrder  "19"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002196
+                         ] ;
+        bat:hasValue     [ rdfs:label   "phosphatase activity assay" ;
+                           bat:inOrder  "20"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002762
+                         ] ;
+        bat:hasValue     [ rdfs:label   "protease activity assay" ;
+                           bat:inOrder  "39"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002764
+                         ] ;
+        bat:hasValue     [ rdfs:label   "cytochrome P450 enzyme activity assay" ;
+                           bat:inOrder  "38"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002736
+                         ] ;
+        bat:hasValue     [ rdfs:label   "beta galactosidase reporter gene assay" ;
+                           bat:inOrder  "10"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0003013
                          ] ;
         bat:hasValue     [ rdfs:label          "dye redistribution assay" ;
                            bat:hasDescription  "Dye redistribution is used to study flux of molecules across membranes, e.g. calcein AM, ethidium homodimer-1, etc." ;
-                           bat:inOrder         "24"^^xsd:int ;
+                           bat:inOrder         "16"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000653
                          ] ;
-        bat:hasValue     [ rdfs:label   "organism behavior assay" ;
-                           bat:inOrder  "23"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002765
-                         ] ;
-        bat:hasValue     [ rdfs:label   "transferase activity assay" ;
-                           bat:inOrder  "11"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002795
-                         ] ;
-        bat:hasValue     [ rdfs:label   "beta lactamase reporter gene assay" ;
-                           bat:inOrder  "10"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0003014
-                         ] ;
-        bat:hasValue     [ rdfs:label   "platelet activation assay" ;
-                           bat:inOrder  "29"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002763
+        bat:hasValue     [ rdfs:label   "chaperone activity assay" ;
+                           bat:inOrder  "15"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002761
                          ] ;
         bat:inOrder      "3"^^xsd:int .
 
 bat:AssayMethod  a       bat:Assignment ;
         rdfs:label       "assay method" ;
         bat:hasProperty  bao:BAO_0003028 ;
-        bat:hasValue     [ rdfs:label          "molecular redistribution determination method" ;
-                           bat:hasDescription  "The technologies used to measure the distribution of organelles and molecules within the cell (proteins, second messengers, metal ions, dyes, etc). This is generally visualized by microscopy." ;
-                           bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000126
-                         ] ;
-        bat:hasValue     [ rdfs:label          "binding assessment method" ;
-                           bat:hasDescription  "Binding reporter technology is used to quantitate the interactions between two molecules, e.g. perturbagen-protein, protein-protein, protein-DNA, etc.\nThe technologies used are radioligand binding, resonance energy transfer, fluorescence polarization, protein fragment complementation assay, and several label-free methods, including surface plasmon resonance, impedance, nuclear magnetic resonance, X-ray diffraction, isothermal titration calorimetry, mass spectrometry, etc.\n" ;
-                           bat:inOrder         "5"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000123
-                         ] ;
-        bat:hasValue     [ rdfs:label          "enzyme activity measurement method" ;
-                           bat:hasDescription  "It describes the different methods by which an enzyme activity can be measured and the ways it is expressed. This can be measured either directly or coupled to a secondary signal." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000124
+        bat:hasValue     [ rdfs:label          "membrane potential measurement method" ;
+                           bat:hasDescription  "All living cells maintain a resting membrane potential, which is the difference in voltage between the interior and exterior of the cell. Electrically active cells, such as neurons, muscle and endocrine cells undergo changes in membrane potential due to depolarization and hyperpolarization as a result of opening and closing of ion channels. Action potentials are large and rapid changes in membrane potential which are generated as a result of a large depolarization event. In neurons, action potentials are used to transmit signals across neurons, while in muscle and endocrine cells, they lead to intracellular events, such as muscle contraction and hormone release, respectively.\nIn addition, mitochondria possess a trans-membrane potential as a result of their respiratory function.\nMembrane potential can be measured either by using electrophysiological techniques or by staining with dyes whose binding is dependent on the membrane potential." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000377
                          ] ;
         bat:hasValue     [ rdfs:label          "reporter gene method" ;
                            bat:hasDescription  "Inducible reporter technologies involve the use of a reporter gene to study the effect of perturbagens on gene expression. Some reporter genes can be easily detected, e.g. green fluorescence protein, and others function as selectable markers, e.g. antibiotic resistance." ;
@@ -837,23 +827,33 @@ bat:AssayMethod  a       bat:Assignment ;
                          ] ;
         bat:hasValue     [ rdfs:label          "beta lactamase induction" ;
                            bat:hasDescription  "Beta lactamase gene is attached to the regulatory sequence of a gene of interest. The effect of a perturbagen on the expression of the gene of interest could be easily monitored by the detection of the product of beta lactamase enzyme." ;
-                           bat:inOrder         "4"^^xsd:int ;
+                           bat:inOrder         "6"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000151
                          ] ;
-        bat:hasValue     [ rdfs:label          "membrane potential measurement method" ;
-                           bat:hasDescription  "All living cells maintain a resting membrane potential, which is the difference in voltage between the interior and exterior of the cell. Electrically active cells, such as neurons, muscle and endocrine cells undergo changes in membrane potential due to depolarization and hyperpolarization as a result of opening and closing of ion channels. Action potentials are large and rapid changes in membrane potential which are generated as a result of a large depolarization event. In neurons, action potentials are used to transmit signals across neurons, while in muscle and endocrine cells, they lead to intracellular events, such as muscle contraction and hormone release, respectively.\nIn addition, mitochondria possess a trans-membrane potential as a result of their respiratory function.\nMembrane potential can be measured either by using electrophysiological techniques or by staining with dyes whose binding is dependent on the membrane potential." ;
-                           bat:inOrder         "7"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000377
+        bat:hasValue     [ rdfs:label          "binding assessment method" ;
+                           bat:hasDescription  "Binding reporter technology is used to quantitate the interactions between two molecules, e.g. perturbagen-protein, protein-protein, protein-DNA, etc.\nThe technologies used are radioligand binding, resonance energy transfer, fluorescence polarization, protein fragment complementation assay, and several label-free methods, including surface plasmon resonance, impedance, nuclear magnetic resonance, X-ray diffraction, isothermal titration calorimetry, mass spectrometry, etc.\n" ;
+                           bat:inOrder         "1"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000123
                          ] ;
         bat:hasValue     [ rdfs:label          "conformation determination method" ;
                            bat:hasDescription  "This technology relates to measurement of protein and nucleic acid conformational properties. Proteins undergo changes to their tertiary structure upon heating, binding to perturbagens, other proteins and substrates. Nucleic acids have characteristic secondary structures, which include the B-family of structures, A-form, Z-form, guanine quadruplexes, cytosine quadruplexes, triplexes, etc. Information about conformational properties of protein and nucleic acids can be obtained by circular dichroism spectroscopy, thermal shift, fluorescence resonance energy transfer (FRET), nuclear magnetic resonance (NMR), X-ray crystallography, etc." ;
-                           bat:inOrder         "6"^^xsd:int ;
+                           bat:inOrder         "3"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000048
+                         ] ;
+        bat:hasValue     [ rdfs:label          "enzyme activity measurement method" ;
+                           bat:hasDescription  "It describes the different methods by which an enzyme activity can be measured and the ways it is expressed. This can be measured either directly or coupled to a secondary signal." ;
+                           bat:inOrder         "2"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000124
                          ] ;
         bat:hasValue     [ rdfs:label          "viability measurement method" ;
                            bat:hasDescription  "Compound cytotoxicity is an important parameter to measure when developing potential human therapeutics. Cytotoxicity is determined as a measure of radioisotope (3H thymidine or 51Cr) release, lactate dehydrogenase release from damaged cells, tetrazolium salt and alamar blue reduction, fluorescent dyes that selectively stain live or dead cells, and decrease in ATP content. The viability reporter technologies measure cell life or death by quantitating ATP content, caspase activity, membrane potential, and so on." ;
-                           bat:inOrder         "1"^^xsd:int ;
+                           bat:inOrder         "5"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000127
+                         ] ;
+        bat:hasValue     [ rdfs:label          "molecular redistribution determination method" ;
+                           bat:hasDescription  "The technologies used to measure the distribution of organelles and molecules within the cell (proteins, second messengers, metal ions, dyes, etc). This is generally visualized by microscopy." ;
+                           bat:inOrder         "4"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000126
                          ] ;
         bat:inOrder      "23"^^xsd:int .
 
@@ -886,110 +886,110 @@ bat:BiologicalProcess
         a                bat:Assignment ;
         rdfs:label       "biological process" ;
         bat:hasProperty  bao:BAO_0000264 ;
-        bat:hasValue     [ rdfs:label          "quorum sensing" ;
-                           bat:hasDescription  "The process in which single-celled organisms monitor their population density by detecting the concentration of small, diffusible signal molecules produced by the cells themselves." ;
-                           bat:inOrder         "21"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0009372
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of molecular function" ;
-                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of a molecular function, an elemental biological activity occurring at the molecular level, such as catalysis or binding." ;
-                           bat:inOrder         "9"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0065009
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of RNA splicing" ;
-                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of RNA splicing, the process of removing sections of the primary RNA transcript to remove sequences not present in the mature form of the RNA and joining the remaining sections to form the mature form of the RNA." ;
-                           bat:inOrder         "12"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0043484
-                         ] ;
-        bat:hasValue     [ rdfs:label          "platelet activation" ;
-                           bat:hasDescription  "A series of progressive, overlapping events triggered by exposure of the platelets to subendothelial tissue. These events include shape change, adhesiveness, aggregation, and release reactions. When carried through to completion, these events lead to the formation of a stable hemostatic plug." ;
-                           bat:inOrder         "19"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0030168
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of translation" ;
-                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of the chemical reactions and pathways resulting in the formation of proteins by the translation of mRNA." ;
-                           bat:inOrder         "18"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0006417
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of proteasomal protein catabolic process" ;
-                           bat:hasDescription  "Any process that modulates the rate, frequency, or extent of the chemical reactions and pathways resulting in the breakdown of a protein or peptide by hydrolysis of its peptide bonds that is mediated by the proteasome." ;
-                           bat:inOrder         "10"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0061136
-                         ] ;
-        bat:hasValue     [ rdfs:label          "lytic viral release" ;
-                           bat:hasDescription  "Disruption of host cellular membranes, leading to cell death and the release of cytoplasmic compounds, including cytoplasmic viral particles, into the extracellular space." ;
-                           bat:inOrder         "13"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0019077
-                         ] ;
-        bat:hasValue     [ rdfs:label          "viral genome replication" ;
-                           bat:hasDescription  "Any process involved directly in viral genome replication, including viral nucleotide metabolism." ;
-                           bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0019079
-                         ] ;
-        bat:hasValue     [ rdfs:label          "apoptotic process" ;
-                           bat:hasDescription  "A programmed cell death process which begins when a cell receives an internal (e.g. DNA damage) or external signal (e.g. an extracellular death ligand), and proceeds through a series of biochemical events (signaling pathways) which typically lead to rounding-up of the cell, retraction of pseudopodes, reduction of cellular volume (pyknosis), chromatin condensation, nuclear fragmentation (karyorrhexis), plasma membrane blebbing and fragmentation of the cell into apoptotic bodies. The process ends when the cell has died. The process is divided into a signaling pathway phase, and an execution phase, which is triggered by the former." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0006915
-                         ] ;
-        bat:hasValue     [ rdfs:label          "JAK-STAT cascade" ;
-                           bat:hasDescription  "Any process in which STAT proteins (Signal Transducers and Activators of Transcription) and JAK (Janus Activated Kinase) proteins convey a signal to trigger a change in the activity or state of a cell. The JAK-STAT cascade begins with activation of STAT proteins by members of the JAK family of tyrosine kinases, proceeds through dimerization and subsequent nuclear translocation of STAT proteins, and ends with regulation of target gene expression by STAT proteins." ;
-                           bat:inOrder         "11"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0007259
-                         ] ;
-        bat:hasValue     [ rdfs:label          "biofilm formation" ;
-                           bat:hasDescription  "A process in which microorganisms irreversibly attach to and grow on a surface and produce extracellular polymers that facilitate attachment and matrix formation, resulting in an alteration in the phenotype of the organisms with respect to growth rate and gene transcription." ;
-                           bat:inOrder         "1"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0042710
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of transcription, DNA-dependent" ;
-                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of cellular DNA-dependent transcription." ;
-                           bat:inOrder         "15"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0006355
-                         ] ;
-        bat:hasValue     [ rdfs:label          "protein stabilization" ;
-                           bat:hasDescription  "Any process involved in maintaining the structure and integrity of a protein and preventing it from degradation or aggregation." ;
-                           bat:inOrder         "14"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0050821
-                         ] ;
-        bat:hasValue     [ rdfs:label          "thrombocyte differentiation" ;
-                           bat:hasDescription  "The process in which a relatively unspecialized myeloid precursor cell acquires the specialized features of a thrombocyte, a nucleated cell found in all vertebrates but mammals involved in hemostasis." ;
-                           bat:inOrder         "5"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0002574
-                         ] ;
-        bat:hasValue     [ rdfs:label          "circadian rhythm" ;
-                           bat:hasDescription  "Any biological process in an organism that recurs with a regularity of approximately 24 hours." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0007623
-                         ] ;
-        bat:hasValue     [ rdfs:label          "alternative mRNA splicing, via spliceosome" ;
-                           bat:hasDescription  "The process of generating multiple mRNA molecules from a given set of exons by differential use of exons from the primary transcript(s) to form multiple mature mRNAs that vary in their exon composition." ;
-                           bat:inOrder         "6"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0000380
-                         ] ;
-        bat:hasValue     [ rdfs:label          "drug transport" ;
-                           bat:hasDescription  "The directed movement of a drug, a substance used in the diagnosis, treatment or prevention of a disease, into, out of or within a cell, or between cells, by means of some agent such as a transporter or pore." ;
-                           bat:inOrder         "16"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0015893
-                         ] ;
-        bat:hasValue     [ rdfs:label          "viral entry into host cell" ;
-                           bat:hasDescription  "The process that occurs after viral attachment by which a virion, or viral nucleic acid, breaches the plasma membrane or cell envelope and enters the host cell. The process ends when the viral nucleic acid is released into the host cell cytoplasm." ;
-                           bat:inOrder         "7"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0046718
-                         ] ;
-        bat:hasValue     [ rdfs:label          "regulation of gene expression" ;
-                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of gene expression. Gene expression is the process in which a gene's coding sequence is converted into a mature gene product or products (proteins or RNA). This includes the production of an RNA transcript as well as any processing to produce a mature RNA product or an mRNA (for protein-coding genes) and the translation of that mRNA into protein. Some protein processing events may be included when they are required to form an active form of a product from an inactive precursor form." ;
-                           bat:inOrder         "20"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0010468
-                         ] ;
-        bat:hasValue     [ rdfs:label          "cell death" ;
-                           bat:hasDescription  "Any biological process that results in permanent cessation of all vital functions of a cell. A cell should be considered dead when any one of the following molecular or morphological criteria is met: (1) the cell has lost the integrity of its plasma membrane; (2) the cell, including its nucleus, has undergone complete fragmentation into discrete bodies (frequently referred to as \\\\\\\\\\\"apoptotic bodies\\\\\\\\\\\"); and/or (3) its corpse (or its fragments) have been engulfed by an adjacent cell in vivo." ;
-                           bat:inOrder         "17"^^xsd:int ;
-                           bat:mapsTo          obo:GO_0008219
-                         ] ;
         bat:hasValue     [ rdfs:label          "cell proliferation" ;
                            bat:hasDescription  "The multiplication or reproduction of cells, resulting in the expansion of a cell population." ;
                            bat:inOrder         "8"^^xsd:int ;
                            bat:mapsTo          obo:GO_0008283
+                         ] ;
+        bat:hasValue     [ rdfs:label          "viral entry into host cell" ;
+                           bat:hasDescription  "The process that occurs after viral attachment by which a virion, or viral nucleic acid, breaches the plasma membrane or cell envelope and enters the host cell. The process ends when the viral nucleic acid is released into the host cell cytoplasm." ;
+                           bat:inOrder         "17"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0046718
+                         ] ;
+        bat:hasValue     [ rdfs:label          "circadian rhythm" ;
+                           bat:hasDescription  "Any biological process in an organism that recurs with a regularity of approximately 24 hours." ;
+                           bat:inOrder         "9"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0007623
+                         ] ;
+        bat:hasValue     [ rdfs:label          "thrombocyte differentiation" ;
+                           bat:hasDescription  "The process in which a relatively unspecialized myeloid precursor cell acquires the specialized features of a thrombocyte, a nucleated cell found in all vertebrates but mammals involved in hemostasis." ;
+                           bat:inOrder         "10"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0002574
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of gene expression" ;
+                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of gene expression. Gene expression is the process in which a gene's coding sequence is converted into a mature gene product or products (proteins or RNA). This includes the production of an RNA transcript as well as any processing to produce a mature RNA product or an mRNA (for protein-coding genes) and the translation of that mRNA into protein. Some protein processing events may be included when they are required to form an active form of a product from an inactive precursor form." ;
+                           bat:inOrder         "3"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0010468
+                         ] ;
+        bat:hasValue     [ rdfs:label          "lytic viral release" ;
+                           bat:hasDescription  "Disruption of host cellular membranes, leading to cell death and the release of cytoplasmic compounds, including cytoplasmic viral particles, into the extracellular space." ;
+                           bat:inOrder         "18"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0019077
+                         ] ;
+        bat:hasValue     [ rdfs:label          "alternative mRNA splicing, via spliceosome" ;
+                           bat:hasDescription  "The process of generating multiple mRNA molecules from a given set of exons by differential use of exons from the primary transcript(s) to form multiple mature mRNAs that vary in their exon composition." ;
+                           bat:inOrder         "12"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0000380
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of proteasomal protein catabolic process" ;
+                           bat:hasDescription  "Any process that modulates the rate, frequency, or extent of the chemical reactions and pathways resulting in the breakdown of a protein or peptide by hydrolysis of its peptide bonds that is mediated by the proteasome." ;
+                           bat:inOrder         "13"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0061136
+                         ] ;
+        bat:hasValue     [ rdfs:label          "drug transport" ;
+                           bat:hasDescription  "The directed movement of a drug, a substance used in the diagnosis, treatment or prevention of a disease, into, out of or within a cell, or between cells, by means of some agent such as a transporter or pore." ;
+                           bat:inOrder         "4"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0015893
+                         ] ;
+        bat:hasValue     [ rdfs:label          "platelet activation" ;
+                           bat:hasDescription  "A series of progressive, overlapping events triggered by exposure of the platelets to subendothelial tissue. These events include shape change, adhesiveness, aggregation, and release reactions. When carried through to completion, these events lead to the formation of a stable hemostatic plug." ;
+                           bat:inOrder         "11"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0030168
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of molecular function" ;
+                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of a molecular function, an elemental biological activity occurring at the molecular level, such as catalysis or binding." ;
+                           bat:inOrder         "19"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0065009
+                         ] ;
+        bat:hasValue     [ rdfs:label          "viral genome replication" ;
+                           bat:hasDescription  "Any process involved directly in viral genome replication, including viral nucleotide metabolism." ;
+                           bat:inOrder         "14"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0019079
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of RNA splicing" ;
+                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of RNA splicing, the process of removing sections of the primary RNA transcript to remove sequences not present in the mature form of the RNA and joining the remaining sections to form the mature form of the RNA." ;
+                           bat:inOrder         "2"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0043484
+                         ] ;
+        bat:hasValue     [ rdfs:label          "protein stabilization" ;
+                           bat:hasDescription  "Any process involved in maintaining the structure and integrity of a protein and preventing it from degradation or aggregation." ;
+                           bat:inOrder         "5"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0050821
+                         ] ;
+        bat:hasValue     [ rdfs:label          "biofilm formation" ;
+                           bat:hasDescription  "A process in which microorganisms irreversibly attach to and grow on a surface and produce extracellular polymers that facilitate attachment and matrix formation, resulting in an alteration in the phenotype of the organisms with respect to growth rate and gene transcription." ;
+                           bat:inOrder         "6"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0042710
+                         ] ;
+        bat:hasValue     [ rdfs:label          "quorum sensing" ;
+                           bat:hasDescription  "The process in which single-celled organisms monitor their population density by detecting the concentration of small, diffusible signal molecules produced by the cells themselves." ;
+                           bat:inOrder         "15"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0009372
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of transcription, DNA-dependent" ;
+                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of cellular DNA-dependent transcription." ;
+                           bat:inOrder         "20"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0006355
+                         ] ;
+        bat:hasValue     [ rdfs:label          "JAK-STAT cascade" ;
+                           bat:hasDescription  "Any process in which STAT proteins (Signal Transducers and Activators of Transcription) and JAK (Janus Activated Kinase) proteins convey a signal to trigger a change in the activity or state of a cell. The JAK-STAT cascade begins with activation of STAT proteins by members of the JAK family of tyrosine kinases, proceeds through dimerization and subsequent nuclear translocation of STAT proteins, and ends with regulation of target gene expression by STAT proteins." ;
+                           bat:inOrder         "21"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0007259
+                         ] ;
+        bat:hasValue     [ rdfs:label          "regulation of translation" ;
+                           bat:hasDescription  "Any process that modulates the frequency, rate or extent of the chemical reactions and pathways resulting in the formation of proteins by the translation of mRNA." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0006417
+                         ] ;
+        bat:hasValue     [ rdfs:label          "cell death" ;
+                           bat:hasDescription  "Any biological process that results in permanent cessation of all vital functions of a cell. A cell should be considered dead when any one of the following molecular or morphological criteria is met: (1) the cell has lost the integrity of its plasma membrane; (2) the cell, including its nucleus, has undergone complete fragmentation into discrete bodies (frequently referred to as \\\\\\\\\\\\\\\\\\\\\\\"apoptotic bodies\\\\\\\\\\\\\\\\\\\\\\\"); and/or (3) its corpse (or its fragments) have been engulfed by an adjacent cell in vivo." ;
+                           bat:inOrder         "1"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0008219
+                         ] ;
+        bat:hasValue     [ rdfs:label          "apoptotic process" ;
+                           bat:hasDescription  "A programmed cell death process which begins when a cell receives an internal (e.g. DNA damage) or external signal (e.g. an extracellular death ligand), and proceeds through a series of biochemical events (signaling pathways) which typically lead to rounding-up of the cell, retraction of pseudopodes, reduction of cellular volume (pyknosis), chromatin condensation, nuclear fragmentation (karyorrhexis), plasma membrane blebbing and fragmentation of the cell into apoptotic bodies. The process ends when the cell has died. The process is divided into a signaling pathway phase, and an execution phase, which is triggered by the former." ;
+                           bat:inOrder         "16"^^xsd:int ;
+                           bat:mapsTo          obo:GO_0006915
                          ] ;
         bat:inOrder      "13"^^xsd:int .
 
@@ -1027,202 +1027,202 @@ bat:AssayScreeningCampaignStage
 bat:CellLine  a          bat:Assignment ;
         rdfs:label       "cell line" ;
         bat:hasProperty  obo:CLO_0000031 ;
-        bat:hasValue     [ rdfs:label   "U3A" ;
-                           bat:inOrder  "11"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002683
-                         ] ;
-        bat:hasValue     [ rdfs:label   "BSC-1" ;
-                           bat:inOrder  "30"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002678
-                         ] ;
-        bat:hasValue     [ rdfs:label   "H4" ;
-                           bat:inOrder  "22"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002713
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-001" ;
-                           bat:inOrder  "23"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002674
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-008" ;
-                           bat:inOrder  "37"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002704
-                         ] ;
-        bat:hasValue     [ rdfs:label   "MSC 80" ;
-                           bat:inOrder  "4"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002705
-                         ] ;
-        bat:hasValue     [ rdfs:label   "PPC-1" ;
-                           bat:inOrder  "29"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002716
-                         ] ;
-        bat:hasValue     [ rdfs:label   "RBL-2H3" ;
-                           bat:inOrder  "16"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002694
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-007" ;
-                           bat:inOrder  "42"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002686
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-020" ;
-                           bat:inOrder  "43"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002680
-                         ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-002" ;
-                           bat:inOrder  "36"^^xsd:int ;
+                           bat:inOrder  "29"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002688
                          ] ;
-        bat:hasValue     [ rdfs:label   "N2a" ;
-                           bat:inOrder  "3"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002711
-                         ] ;
-        bat:hasValue     [ rdfs:label   "KOPN-8" ;
-                           bat:inOrder  "15"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002715
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-019" ;
-                           bat:inOrder  "10"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002692
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP1-003" ;
-                           bat:inOrder  "8"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002701
-                         ] ;
-        bat:hasValue     [ rdfs:label   "BJ" ;
-                           bat:inOrder  "33"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002670
-                         ] ;
-        bat:hasValue     [ rdfs:label   "HEC-1-A" ;
-                           bat:inOrder  "46"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002709
-                         ] ;
-        bat:hasValue     [ rdfs:label   "CSM14.1" ;
-                           bat:inOrder  "47"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002717
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-018" ;
-                           bat:inOrder  "40"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002679
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-016" ;
-                           bat:inOrder  "7"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002677
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-012" ;
-                           bat:inOrder  "28"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002675
-                         ] ;
-        bat:hasValue     [ rdfs:label   "ML-2" ;
-                           bat:inOrder  "20"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002714
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-022" ;
-                           bat:inOrder  "21"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002681
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Schneider's Drosophila Line 2" ;
-                           bat:inOrder  "1"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000743
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-014" ;
-                           bat:inOrder  "35"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002676
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-013" ;
-                           bat:inOrder  "27"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002695
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-005" ;
-                           bat:inOrder  "14"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002698
-                         ] ;
-        bat:hasValue     [ rdfs:label   "SK-BR-3" ;
-                           bat:inOrder  "41"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002712
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-017" ;
-                           bat:inOrder  "13"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002693
-                         ] ;
-        bat:hasValue     [ rdfs:label   "MV-4-11" ;
-                           bat:inOrder  "32"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002685
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-011" ;
-                           bat:inOrder  "2"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002696
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-021" ;
-                           bat:inOrder  "24"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002691
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-009" ;
-                           bat:inOrder  "39"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002697
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-026" ;
-                           bat:inOrder  "6"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002684
-                         ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-024" ;
-                           bat:inOrder  "31"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002682
-                         ] ;
-        bat:hasValue     [ rdfs:label   "OCI-Ly3" ;
-                           bat:inOrder  "18"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002707
-                         ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-023" ;
-                           bat:inOrder  "44"^^xsd:int ;
+                           bat:inOrder  "9"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002690
                          ] ;
-        bat:hasValue     [ rdfs:label   "LYMP1-002" ;
-                           bat:inOrder  "45"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002702
+        bat:hasValue     [ rdfs:label   "BSC-1" ;
+                           bat:inOrder  "10"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002678
                          ] ;
-        bat:hasValue     [ rdfs:label          "BSR" ;
-                           bat:hasDescription  "A clone of BHK (Baby hamster kidney) cells." ;
-                           bat:inOrder         "38"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0002718
+        bat:hasValue     [ rdfs:label   "LYMP2-010" ;
+                           bat:inOrder  "48"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002673
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-007" ;
+                           bat:inOrder  "34"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002686
+                         ] ;
+        bat:hasValue     [ rdfs:label   "U3A" ;
+                           bat:inOrder  "49"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002683
                          ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-025" ;
-                           bat:inOrder  "5"^^xsd:int ;
+                           bat:inOrder  "41"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002689
                          ] ;
+        bat:hasValue     [ rdfs:label   "PPC-1" ;
+                           bat:inOrder  "24"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002716
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-005" ;
+                           bat:inOrder  "5"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002698
+                         ] ;
+        bat:hasValue     [ rdfs:label   "BJ" ;
+                           bat:inOrder  "6"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002670
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Schneider's Drosophila Line 2" ;
+                           bat:inOrder  "33"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000743
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-020" ;
+                           bat:inOrder  "25"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002680
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-009" ;
+                           bat:inOrder  "19"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002697
+                         ] ;
+        bat:hasValue     [ rdfs:label   "CSM14.1" ;
+                           bat:inOrder  "13"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002717
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-019" ;
+                           bat:inOrder  "14"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002692
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-011" ;
+                           bat:inOrder  "36"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002696
+                         ] ;
+        bat:hasValue     [ rdfs:label   "HEC-1-A" ;
+                           bat:inOrder  "37"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002709
+                         ] ;
+        bat:hasValue     [ rdfs:label   "MSC 80" ;
+                           bat:inOrder  "28"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002705
+                         ] ;
+        bat:hasValue     [ rdfs:label   "SK-BR-3" ;
+                           bat:inOrder  "43"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002712
+                         ] ;
+        bat:hasValue     [ rdfs:label   "MV-4-11" ;
+                           bat:inOrder  "2"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002685
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-017" ;
+                           bat:inOrder  "27"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002693
+                         ] ;
+        bat:hasValue     [ rdfs:label   "KOPN-8" ;
+                           bat:inOrder  "23"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002715
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP1-003" ;
+                           bat:inOrder  "17"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002701
+                         ] ;
+        bat:hasValue     [ rdfs:label   "H4" ;
+                           bat:inOrder  "40"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002713
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-022" ;
+                           bat:inOrder  "46"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002681
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP1-002" ;
+                           bat:inOrder  "32"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002702
+                         ] ;
+        bat:hasValue     [ rdfs:label   "OCI-Ly3" ;
+                           bat:inOrder  "47"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002707
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-024" ;
+                           bat:inOrder  "22"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002682
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-004" ;
+                           bat:inOrder  "3"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002699
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-012" ;
+                           bat:inOrder  "4"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002675
+                         ] ;
         bat:hasValue     [ rdfs:label   "U937 (CD59+)" ;
-                           bat:inOrder  "34"^^xsd:int ;
+                           bat:inOrder  "31"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0000758
                          ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-015" ;
-                           bat:inOrder  "26"^^xsd:int ;
+                           bat:inOrder  "1"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002706
                          ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-001" ;
+                           bat:inOrder  "11"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002674
+                         ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-003" ;
-                           bat:inOrder  "17"^^xsd:int ;
+                           bat:inOrder  "12"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002700
                          ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-010" ;
-                           bat:inOrder  "9"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002673
-                         ] ;
-        bat:hasValue     [ rdfs:label   "WRO" ;
-                           bat:inOrder  "19"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002710
-                         ] ;
-        bat:hasValue     [ rdfs:label   "C2C12" ;
-                           bat:inOrder  "25"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002708
-                         ] ;
         bat:hasValue     [ rdfs:label   "C6" ;
-                           bat:inOrder  "12"^^xsd:int ;
+                           bat:inOrder  "35"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002703
                          ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-026" ;
+                           bat:inOrder  "26"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002684
+                         ] ;
+        bat:hasValue     [ rdfs:label          "BSR" ;
+                           bat:hasDescription  "A clone of BHK (Baby hamster kidney) cells." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0002718
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-013" ;
+                           bat:inOrder  "8"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002695
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-021" ;
+                           bat:inOrder  "42"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002691
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-016" ;
+                           bat:inOrder  "21"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002677
+                         ] ;
+        bat:hasValue     [ rdfs:label   "RBL-2H3" ;
+                           bat:inOrder  "15"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002694
+                         ] ;
         bat:hasValue     [ rdfs:label   "LYMP2-006" ;
-                           bat:inOrder  "48"^^xsd:int ;
+                           bat:inOrder  "16"^^xsd:int ;
                            bat:mapsTo   bao:BAO_0002687
                          ] ;
-        bat:hasValue     [ rdfs:label   "LYMP2-004" ;
-                           bat:inOrder  "49"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002699
+        bat:hasValue     [ rdfs:label   "ML-2" ;
+                           bat:inOrder  "38"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002714
+                         ] ;
+        bat:hasValue     [ rdfs:label   "C2C12" ;
+                           bat:inOrder  "39"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002708
+                         ] ;
+        bat:hasValue     [ rdfs:label   "N2a" ;
+                           bat:inOrder  "44"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002711
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-018" ;
+                           bat:inOrder  "30"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002679
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-014" ;
+                           bat:inOrder  "45"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002676
+                         ] ;
+        bat:hasValue     [ rdfs:label   "LYMP2-008" ;
+                           bat:inOrder  "20"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002704
+                         ] ;
+        bat:hasValue     [ rdfs:label   "WRO" ;
+                           bat:inOrder  "18"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002710
                          ] ;
         bat:inOrder      "1"^^xsd:int .
 
@@ -1230,120 +1230,120 @@ bat:BiologicalMacromolecule
         a                bat:Assignment ;
         rdfs:label       "biological macromolecule" ;
         bat:hasProperty  bao:BAO_0003111 ;
-        bat:hasValue     [ rdfs:label          "oxidoreductase" ;
-                           bat:hasDescription  "To catalyze oxidation/reduction reactions; transfer of H and O atoms or electrons from one substance to another." ;
-                           bat:inOrder         "22"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000291
-                         ] ;
-        bat:hasValue     [ rdfs:label          "membrane protein" ;
-                           bat:hasDescription  "Membrane proteins are associated with the cell membrane. They can be classified into two broad categories—integral (intrinsic) and peripheral (extrinsic). Intrinsic proteins have one or more segments embedded in the phospholipid bilayer, while extrinsic proteins do not traverse the membrane." ;
-                           bat:inOrder         "7"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000367
-                         ] ;
-        bat:hasValue     [ rdfs:label          "ion channel" ;
-                           bat:hasDescription  "Ion channels are present in the cell membrane. They are pore-forming protein complexes that facilitate diffusion of ions across membranes and thus establish the small voltage gradient across the plasma membrane of living cells." ;
-                           bat:inOrder         "6"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000280
-                         ] ;
         bat:hasValue     [ rdfs:label          "chaperone" ;
                            bat:hasDescription  "They have an essential role in the regulation of protein conformation states. Molecular chaperones help nascent polypeptides fold correctly and multimeric protein complexes assemble properly, and reduce the possibility of protein aggregation." ;
-                           bat:inOrder         "12"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000277
-                         ] ;
-        bat:hasValue     [ rdfs:label          "G protein coupled receptor" ;
-                           bat:hasDescription  "G protein-coupled receptors (GPCRs), comprise the largest integral membrane protein family with nearly 1000 members. They integrate extracellular signals from hormones, growth factors, neurotransmitters, etc to downstream cellular responses. They are important pharmacological targets, being associated with a number of diseases. Upon ligand binding extracellularly, the GPCR signals through a downstream heterotrimeric G protein complex, consisting of the α, β and γ subunits." ;
-                           bat:inOrder         "17"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000284
-                         ] ;
-        bat:hasValue     [ rdfs:label          "generic membrane protein" ;
-                           bat:hasDescription  "This class includes membrane proteins other than g-proteins, such as regulators of g-protein, GTPases, etc. " ;
                            bat:inOrder         "23"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000392
-                         ] ;
-        bat:hasValue     [ rdfs:label          "transferase" ;
-                           bat:hasDescription  "Transfer of a functional group from one substance to another. The group may be methyl-, acyl-, amino- or phosphate group." ;
-                           bat:inOrder         "9"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000292
-                         ] ;
-        bat:hasValue     [ rdfs:label          "hydrolase" ;
-                           bat:hasDescription  "Formation of two products from a substrate by hydrolysis." ;
-                           bat:inOrder         "15"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000287
-                         ] ;
-        bat:hasValue     [ rdfs:label          "phosphatase" ;
-                           bat:hasDescription  "A phosphatase is an enzyme that removes a phosphate group from its substrate by hydrolysis of phosphoric acid esters." ;
-                           bat:inOrder         "4"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000295
+                           bat:mapsTo          bao:BAO_0000277
                          ] ;
         bat:hasValue     [ rdfs:label          "structural" ;
                            bat:hasDescription  "These proteins constitute the largest class with respect to the total protein mass. They are fibrous proteins, e.g. keratin, actin, myosin, etc whose primary function is to provide scaffolding that maintains cell shape." ;
-                           bat:inOrder         "20"^^xsd:int ;
+                           bat:inOrder         "9"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000370
                          ] ;
-        bat:hasValue     [ rdfs:label          "transcription factor" ;
-                           bat:hasDescription  "It is a protein that binds to a specific sequence of DNA (upstream of the genes that it regulates) and regulates gene expression." ;
-                           bat:inOrder         "10"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000282
-                         ] ;
-        bat:hasValue     [ rdfs:label          "enzyme regulator" ;
-                           bat:hasDescription  "It modulates the activity of an enzyme." ;
+        bat:hasValue     [ rdfs:label          "G protein coupled receptor" ;
+                           bat:hasDescription  "G protein-coupled receptors (GPCRs), comprise the largest integral membrane protein family with nearly 1000 members. They integrate extracellular signals from hormones, growth factors, neurotransmitters, etc to downstream cellular responses. They are important pharmacological targets, being associated with a number of diseases. Upon ligand binding extracellularly, the GPCR signals through a downstream heterotrimeric G protein complex, consisting of the α, β and γ subunits." ;
                            bat:inOrder         "5"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000278
+                           bat:mapsTo          bao:BAO_0000284
                          ] ;
         bat:hasValue     [ rdfs:label          "cytosolic protein" ;
                            bat:hasDescription  "Proteins localized in the cytosol, but do not belong to the transcription factor, transporter, structural, enzyme, enzyme regulator and nuclear receptor classes of proteins in the cytosol." ;
-                           bat:inOrder         "21"^^xsd:int ;
+                           bat:inOrder         "15"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000365
                          ] ;
-        bat:hasValue     [ rdfs:label          "lyase" ;
-                           bat:hasDescription  "Non-hydrolytic addition or removal of groups from substrates. C-C, C-N, C-O or C-S bonds may be cleaved." ;
-                           bat:inOrder         "16"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000290
+        bat:hasValue     [ rdfs:label          "generic transferase" ;
+                           bat:hasDescription  "Includes all  transferases except kinases." ;
+                           bat:inOrder         "10"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000293
                          ] ;
         bat:hasValue     [ rdfs:label          "protease" ;
                            bat:hasDescription  "A protease is an enzyme that hydrolyzes the peptide bonds in a protein or a peptide." ;
                            bat:inOrder         "1"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000652
                          ] ;
-        bat:hasValue     [ rdfs:label          "generic transferase" ;
-                           bat:hasDescription  "Includes all  transferases except kinases." ;
-                           bat:inOrder         "18"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000293
+        bat:hasValue     [ rdfs:label          "transcription factor" ;
+                           bat:hasDescription  "It is a protein that binds to a specific sequence of DNA (upstream of the genes that it regulates) and regulates gene expression." ;
+                           bat:inOrder         "16"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000282
+                         ] ;
+        bat:hasValue     [ rdfs:label          "nuclear receptor" ;
+                           bat:hasDescription  "Nuclear receptors are localized in the cytosol and mediate the activity of hormones and certain vitamins. They are all transcription factors, which upon activation by ligand binding, translocate to the nucleus, bind specific DNA sequence and activate gene expression." ;
+                           bat:inOrder         "22"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000286
+                         ] ;
+        bat:hasValue     [ rdfs:label          "secreted" ;
+                           bat:hasDescription  "These proteins are translocated from the inside of the cell to the cell's exterior. Proteins targeted for secretion undergo glycosylation and other postranslational modifications in the endoplasmic reticulum and the golgi complex, and are enclosed in secretory vesicles. The fusion of vesicles to the cell membrane releases the secretory proteins to the exterior. Examples include growth factors, tumor necrosis factors, cytokines, etc." ;
+                           bat:inOrder         "21"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000369
+                         ] ;
+        bat:hasValue     [ rdfs:label          "G protein" ;
+                           bat:hasDescription  "There are two distinct G protein families, namely the heterotrimeric G proteins (consisting of the α, β and γ subunits) downstream of the G protein coupled receptors (GPCRs) and the monomeric G proteins that belong to the Ras superfamily of GTPases. Upon ligand binding, the GPCR undergoes a conformational change, which allows it to act as a guanine nucleotide exchange factor (GEF) of an associated G protein. The GTP-bound G α subunit then signals by regulating the activity of adenylate cyclase, phospholipase, or Rho GEFs." ;
+                           bat:inOrder         "8"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000368
+                         ] ;
+        bat:hasValue     [ rdfs:label          "hydrolase" ;
+                           bat:hasDescription  "Formation of two products from a substrate by hydrolysis." ;
+                           bat:inOrder         "6"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000287
                          ] ;
         bat:hasValue     [ rdfs:label          "isomerase" ;
                            bat:hasDescription  "Intramolecule rearrangement, i.e. isomerization changes within a single molecule." ;
                            bat:inOrder         "13"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000288
                          ] ;
-        bat:hasValue     [ rdfs:label          "nuclear receptor" ;
-                           bat:hasDescription  "Nuclear receptors are localized in the cytosol and mediate the activity of hormones and certain vitamins. They are all transcription factors, which upon activation by ligand binding, translocate to the nucleus, bind specific DNA sequence and activate gene expression." ;
+        bat:hasValue     [ rdfs:label          "generic membrane protein" ;
+                           bat:hasDescription  "This class includes membrane proteins other than g-proteins, such as regulators of g-protein, GTPases, etc. " ;
                            bat:inOrder         "3"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000286
+                           bat:mapsTo          bao:BAO_0000392
                          ] ;
-        bat:hasValue     [ rdfs:label          "kinase" ;
-                           bat:hasDescription  "A protein kinase is an enzyme that modifies other proteins by chemically adding phosphate groups to them. The substrate protein's activity, localization and overall function is modulated by the kinase reaction." ;
-                           bat:inOrder         "2"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000294
-                         ] ;
-        bat:hasValue     [ rdfs:label          "secreted" ;
-                           bat:hasDescription  "These proteins are translocated from the inside of the cell to the cell's exterior. Proteins targeted for secretion undergo glycosylation and other postranslational modifications in the endoplasmic reticulum and the golgi complex, and are enclosed in secretory vesicles. The fusion of vesicles to the cell membrane releases the secretory proteins to the exterior. Examples include growth factors, tumor necrosis factors, cytokines, etc." ;
-                           bat:inOrder         "8"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000369
-                         ] ;
-        bat:hasValue     [ rdfs:label          "ligase" ;
-                           bat:hasDescription  "Join together two molecules by synthesis of new C-O, C-S, C-N or C-C bonds with simultaneous breakdown of ATP." ;
-                           bat:inOrder         "14"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000289
-                         ] ;
-        bat:hasValue     [ rdfs:label          "G protein" ;
-                           bat:hasDescription  "There are two distinct G protein families, namely the heterotrimeric G proteins (consisting of the α, β and γ subunits) downstream of the G protein coupled receptors (GPCRs) and the monomeric G proteins that belong to the Ras superfamily of GTPases. Upon ligand binding, the GPCR undergoes a conformational change, which allows it to act as a guanine nucleotide exchange factor (GEF) of an associated G protein. The GTP-bound G α subunit then signals by regulating the activity of adenylate cyclase, phospholipase, or Rho GEFs." ;
+        bat:hasValue     [ rdfs:label          "ion channel" ;
+                           bat:hasDescription  "Ion channels are present in the cell membrane. They are pore-forming protein complexes that facilitate diffusion of ions across membranes and thus establish the small voltage gradient across the plasma membrane of living cells." ;
                            bat:inOrder         "19"^^xsd:int ;
-                           bat:mapsTo          bao:BAO_0000368
+                           bat:mapsTo          bao:BAO_0000280
+                         ] ;
+        bat:hasValue     [ rdfs:label          "lyase" ;
+                           bat:hasDescription  "Non-hydrolytic addition or removal of groups from substrates. C-C, C-N, C-O or C-S bonds may be cleaved." ;
+                           bat:inOrder         "4"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000290
+                         ] ;
+        bat:hasValue     [ rdfs:label          "membrane protein" ;
+                           bat:hasDescription  "Membrane proteins are associated with the cell membrane. They can be classified into two broad categories—integral (intrinsic) and peripheral (extrinsic). Intrinsic proteins have one or more segments embedded in the phospholipid bilayer, while extrinsic proteins do not traverse the membrane." ;
+                           bat:inOrder         "14"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000367
+                         ] ;
+        bat:hasValue     [ rdfs:label          "phosphatase" ;
+                           bat:hasDescription  "A phosphatase is an enzyme that removes a phosphate group from its substrate by hydrolysis of phosphoric acid esters." ;
+                           bat:inOrder         "20"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000295
                          ] ;
         bat:hasValue     [ rdfs:label          "generic hydrolase" ;
                            bat:hasDescription  "Includes all hydrolases except phosphatases and proteases." ;
                            bat:inOrder         "11"^^xsd:int ;
                            bat:mapsTo          bao:BAO_0000222
+                         ] ;
+        bat:hasValue     [ rdfs:label          "oxidoreductase" ;
+                           bat:hasDescription  "To catalyze oxidation/reduction reactions; transfer of H and O atoms or electrons from one substance to another." ;
+                           bat:inOrder         "17"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000291
+                         ] ;
+        bat:hasValue     [ rdfs:label          "kinase" ;
+                           bat:hasDescription  "A protein kinase is an enzyme that modifies other proteins by chemically adding phosphate groups to them. The substrate protein's activity, localization and overall function is modulated by the kinase reaction." ;
+                           bat:inOrder         "12"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000294
+                         ] ;
+        bat:hasValue     [ rdfs:label          "transferase" ;
+                           bat:hasDescription  "Transfer of a functional group from one substance to another. The group may be methyl-, acyl-, amino- or phosphate group." ;
+                           bat:inOrder         "7"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000292
+                         ] ;
+        bat:hasValue     [ rdfs:label          "ligase" ;
+                           bat:hasDescription  "Join together two molecules by synthesis of new C-O, C-S, C-N or C-C bonds with simultaneous breakdown of ATP." ;
+                           bat:inOrder         "18"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000289
+                         ] ;
+        bat:hasValue     [ rdfs:label          "enzyme regulator" ;
+                           bat:hasDescription  "It modulates the activity of an enzyme." ;
+                           bat:inOrder         "2"^^xsd:int ;
+                           bat:mapsTo          bao:BAO_0000278
                          ] ;
         bat:inOrder      "24"^^xsd:int .
 
@@ -1355,157 +1355,157 @@ bat:CommonAssayTemplate
 bat:Organism  a          bat:Assignment ;
         rdfs:label       "organism" ;
         bat:hasProperty  bao:BAO_0000551 ;
-        bat:hasValue     [ rdfs:label   "Leuconostoc mesenteroides" ;
+        bat:hasValue     [ rdfs:label   "Pseudomonas aeruginosa PAO1" ;
                            bat:inOrder  "24"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_1245
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Equus caballus" ;
-                           bat:inOrder  "28"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_9796
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Photuris pennsylvanica" ;
-                           bat:inOrder  "23"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_41716
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Yersinia enterocolitica" ;
-                           bat:inOrder  "12"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_630
-                         ] ;
-        bat:hasValue     [ rdfs:label   "H5N1 subtype" ;
-                           bat:inOrder  "11"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_102793
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Photinus pyralis" ;
-                           bat:inOrder  "31"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_7054
+                           bat:mapsTo   obo:NCBITaxon_208964
                          ] ;
         bat:hasValue     [ rdfs:label   "Mus musculus" ;
-                           bat:inOrder  "30"^^xsd:int ;
+                           bat:inOrder  "13"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_10090
                          ] ;
-        bat:hasValue     [ rdfs:label   "Plasmodium falciparum" ;
+        bat:hasValue     [ rdfs:label   "West Nile virus" ;
                            bat:inOrder  "7"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_11082
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Plasmodium falciparum" ;
+                           bat:inOrder  "6"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_5833
                          ] ;
+        bat:hasValue     [ rdfs:label   "H5N1 subtype" ;
+                           bat:inOrder  "4"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_102793
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Hepatitis C virus" ;
+                           bat:inOrder  "35"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_11103
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Simian virus 40" ;
+                           bat:inOrder  "34"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_10633
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Bos taurus" ;
+                           bat:inOrder  "27"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_9913
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Infectious bronchitis virus" ;
+                           bat:inOrder  "18"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002657
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Leuconostoc mesenteroides" ;
+                           bat:inOrder  "17"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_1245
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Chlorocebus aethiops" ;
+                           bat:inOrder  "26"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0002639
+                         ] ;
         bat:hasValue     [ rdfs:label   "Human immunodeficiency virus 1" ;
-                           bat:inOrder  "6"^^xsd:int ;
+                           bat:inOrder  "25"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_11676
                          ] ;
-        bat:hasValue     [ rdfs:label   "Caenorhabditis elegans" ;
-                           bat:inOrder  "37"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_6239
+        bat:hasValue     [ rdfs:label   "Vibrio harveyi" ;
+                           bat:inOrder  "31"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_669
                          ] ;
-        bat:hasValue     [ rdfs:label   "Canis lupus familiaris" ;
-                           bat:inOrder  "1"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_9615
+        bat:hasValue     [ rdfs:label   "Geobacillus stearothermophilus" ;
+                           bat:inOrder  "22"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_1422
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Trypanosoma brucei" ;
+                           bat:inOrder  "9"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_5691
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Yersinia pseudotuberculosis" ;
+                           bat:inOrder  "8"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_633
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Schistosoma mansoni" ;
+                           bat:inOrder  "37"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_6183
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Epstein-Barr virus" ;
+                           bat:inOrder  "36"^^xsd:int ;
+                           bat:mapsTo   bao:BAO_0000712
                          ] ;
         bat:hasValue     [ rdfs:label   "Sus scrofa" ;
-                           bat:inOrder  "26"^^xsd:int ;
+                           bat:inOrder  "29"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_9823
                          ] ;
-        bat:hasValue     [ rdfs:label   "Homo sapiens" ;
-                           bat:inOrder  "25"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_9606
+        bat:hasValue     [ rdfs:label   "Photinus pyralis" ;
+                           bat:inOrder  "28"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_7054
                          ] ;
-        bat:hasValue     [ rdfs:label   "Bluetongue virus 10" ;
-                           bat:inOrder  "14"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_10906
+        bat:hasValue     [ rdfs:label   "Caenorhabditis elegans" ;
+                           bat:inOrder  "1"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_6239
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Saccharomyces cerevisiae" ;
+                           bat:inOrder  "20"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_4932
                          ] ;
         bat:hasValue     [ rdfs:label   "Arabidopsis thaliana" ;
-                           bat:inOrder  "33"^^xsd:int ;
+                           bat:inOrder  "19"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_3702
                          ] ;
         bat:hasValue     [ rdfs:label   "Oryza sativa Japonica Group" ;
-                           bat:inOrder  "13"^^xsd:int ;
+                           bat:inOrder  "14"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_39947
                          ] ;
-        bat:hasValue     [ rdfs:label   "Rattus norvegicus" ;
-                           bat:inOrder  "32"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_10116
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Enterococcus faecalis" ;
-                           bat:inOrder  "20"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_1351
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Leishmania mexicana" ;
-                           bat:inOrder  "19"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_5665
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Escherichia coli" ;
-                           bat:inOrder  "9"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_562
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Trypanosoma brucei" ;
-                           bat:inOrder  "8"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_5691
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Salmonella enterica subsp. enterica serovar Typhi" ;
-                           bat:inOrder  "38"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_90370
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Epstein-Barr virus" ;
-                           bat:inOrder  "3"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0000712
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Schistosoma mansoni" ;
-                           bat:inOrder  "2"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_6183
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Streptococcus pneumoniae D39" ;
-                           bat:inOrder  "16"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_373153
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Saccharomyces cerevisiae" ;
-                           bat:inOrder  "35"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_4932
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Simian virus 40" ;
-                           bat:inOrder  "15"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_10633
-                         ] ;
-        bat:hasValue     [ rdfs:label   "Infectious bronchitis virus" ;
-                           bat:inOrder  "34"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002657
+        bat:hasValue     [ rdfs:label   "Yersinia enterocolitica" ;
+                           bat:inOrder  "5"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_630
                          ] ;
         bat:hasValue     [ rdfs:label   "SARS coronavirus" ;
-                           bat:inOrder  "27"^^xsd:int ;
+                           bat:inOrder  "32"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_227859
                          ] ;
-        bat:hasValue     [ rdfs:label   "Pseudomonas aeruginosa PAO1" ;
-                           bat:inOrder  "22"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_208964
+        bat:hasValue     [ rdfs:label   "Equus caballus" ;
+                           bat:inOrder  "23"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_9796
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Homo sapiens" ;
+                           bat:inOrder  "10"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_9606
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Escherichia coli" ;
+                           bat:inOrder  "38"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_562
+                         ] ;
+        bat:hasValue     [ rdfs:label   "Rattus norvegicus" ;
+                           bat:inOrder  "12"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_10116
                          ] ;
         bat:hasValue     [ rdfs:label   "Venezuelan equine encephalitis virus" ;
-                           bat:inOrder  "21"^^xsd:int ;
+                           bat:inOrder  "11"^^xsd:int ;
                            bat:mapsTo   obo:NCBITaxon_11036
                          ] ;
-        bat:hasValue     [ rdfs:label   "Bos taurus" ;
-                           bat:inOrder  "10"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_9913
+        bat:hasValue     [ rdfs:label   "Leishmania mexicana" ;
+                           bat:inOrder  "30"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_5665
                          ] ;
-        bat:hasValue     [ rdfs:label   "West Nile virus" ;
-                           bat:inOrder  "18"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_11082
+        bat:hasValue     [ rdfs:label   "Canis lupus familiaris" ;
+                           bat:inOrder  "3"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_9615
                          ] ;
-        bat:hasValue     [ rdfs:label   "Chlorocebus aethiops" ;
-                           bat:inOrder  "17"^^xsd:int ;
-                           bat:mapsTo   bao:BAO_0002639
+        bat:hasValue     [ rdfs:label   "Enterococcus faecalis" ;
+                           bat:inOrder  "2"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_1351
                          ] ;
-        bat:hasValue     [ rdfs:label   "Yersinia pseudotuberculosis" ;
-                           bat:inOrder  "29"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_633
+        bat:hasValue     [ rdfs:label   "Streptococcus pneumoniae D39" ;
+                           bat:inOrder  "33"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_373153
                          ] ;
-        bat:hasValue     [ rdfs:label   "Vibrio harveyi" ;
-                           bat:inOrder  "5"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_669
+        bat:hasValue     [ rdfs:label   "Bluetongue virus 10" ;
+                           bat:inOrder  "21"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_10906
                          ] ;
-        bat:hasValue     [ rdfs:label   "Hepatitis C virus" ;
-                           bat:inOrder  "4"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_11103
+        bat:hasValue     [ rdfs:label   "Salmonella enterica subsp. enterica serovar Typhi" ;
+                           bat:inOrder  "16"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_90370
                          ] ;
-        bat:hasValue     [ rdfs:label   "Geobacillus stearothermophilus" ;
-                           bat:inOrder  "36"^^xsd:int ;
-                           bat:mapsTo   obo:NCBITaxon_1422
+        bat:hasValue     [ rdfs:label   "Photuris pennsylvanica" ;
+                           bat:inOrder  "15"^^xsd:int ;
+                           bat:mapsTo   obo:NCBITaxon_41716
                          ] ;
         bat:inOrder      "18"^^xsd:int .
 

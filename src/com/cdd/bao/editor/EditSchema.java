@@ -40,31 +40,42 @@ public class EditSchema
     private Stage stage;
     private BorderPane root;
     private SplitPane splitter;
-    private TreeView<Branch> treeview;
-    private TreeItem<Branch> treeroot;
+    private TreeView<Branch> treeView;
+    private TreeItem<Branch> treeRoot, treeTemplate, treeAssays;
     private DetailPane detail;
     
     private MenuBar menuBar;
-    private Menu menuFile, menuEdit, menuValue;
-    private MenuItem miFileNew;
+    private Menu menuFile, menuEdit, menuValue, menuView;
     
     private boolean currentlyRebuilding = false;
     
+    // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
     public static final class Branch
     {
-    	Schema.Group group = null;
-    	Schema.Assignment assignment = null;
-    	String locatorID = null;
+    	public String heading = null;
+    	public Schema.Group group = null;
+    	public Schema.Assignment assignment = null;
+    	public Schema.Assay assay = null;
+    	public String locatorID = null;
 
-		Branch() {}
-    	Branch(Schema.Group group, String locatorID)
+		public Branch() {}
+		public Branch(String heading)
+		{
+			this.heading = heading;
+		}
+    	public Branch(Schema.Group group, String locatorID)
     	{
     		this.group = group.clone();
     		this.locatorID = locatorID;
     	}
-    	Branch(Schema.Assignment assignment, String locatorID)
+    	public Branch(Schema.Assignment assignment, String locatorID)
     	{
     		this.assignment = assignment.clone();
+    		this.locatorID = locatorID;
+    	}
+    	public Branch(Schema.Assay assay, String locatorID)
+    	{
+    		this.assay = assay;
     		this.locatorID = locatorID;
     	}
     }
@@ -80,13 +91,13 @@ public class EditSchema
 		menuBar.getMenus().add(menuFile = new Menu("_File"));
 		menuBar.getMenus().add(menuEdit = new Menu("_Edit"));
 		menuBar.getMenus().add(menuValue = new Menu("_Value"));
-		//menuBar.getMenus().add(menuWindow = new Menu("_Window"));
+		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
 		createMenuItems();
 
-		treeroot = new TreeItem<Branch>(new Branch());
-		treeview = new TreeView<Branch>(treeroot);
-		treeview.setEditable(true);
-		treeview.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
+		treeRoot = new TreeItem<Branch>(new Branch());
+		treeView = new TreeView<Branch>(treeRoot);
+		treeView.setEditable(true);
+		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
             public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
         });
@@ -104,7 +115,7 @@ public class EditSchema
 				if (event.getButton().equals(MouseButton.SECONDARY) || event.isControlDown()) treeRightClick(event);
 			}
 		});*/
-		treeview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
+		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
 		{
 	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
 	        {
@@ -112,12 +123,12 @@ public class EditSchema
 	        	if (newVal != null) pushDetail(newVal);
             }
 		});	
-		treeview.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
+		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
 
 		detail = new DetailPane(this);
 
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
-		sp1.getChildren().add(treeview);
+		sp1.getChildren().add(treeView);
 		sp2.getChildren().add(detail);
 		
 		splitter = new SplitPane();
@@ -133,7 +144,15 @@ public class EditSchema
 
 		stage.setScene(scene);
 		
+		treeView.setShowRoot(false);
+		treeRoot.getChildren().add(treeTemplate = new TreeItem<Branch>(new Branch("Template")));
+		treeRoot.getChildren().add(treeAssays = new TreeItem<Branch>(new Branch("Assays")));
+		treeTemplate.setExpanded(true);
+		treeAssays.setExpanded(true);
+		
 		rebuildTree();
+
+        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		stage.setOnCloseRequest(event -> 
 		{
@@ -146,7 +165,7 @@ public class EditSchema
 		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();
  	}
 
-	public TreeView<Branch> getTreeView() {return treeview;}
+	public TreeView<Branch> getTreeView() {return treeView;}
 	public DetailPane getDetailView() {return detail;}
 
 	// loads a file and parses the schema
@@ -196,6 +215,7 @@ public class EditSchema
     	
 		addMenu(menuEdit, "Add _Group", new KeyCharacterCombination("G", cmd, shift)).setOnAction(event -> actionGroupAdd());
 		addMenu(menuEdit, "Add _Assignment", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionAssignmentAdd());
+		addMenu(menuEdit, "Add Assa_y", new KeyCharacterCombination("Y", cmd, shift)).setOnAction(event -> actionAssayAdd());
 		menuEdit.getItems().add(new SeparatorMenuItem());
 		addMenu(menuEdit, "Cu_t", new KeyCharacterCombination("X", cmd)).setOnAction(event -> actionEditCopy(true));
 		addMenu(menuEdit, "_Copy", new KeyCharacterCombination("C", cmd)).setOnAction(event -> actionEditCopy(false));
@@ -215,6 +235,9 @@ public class EditSchema
 		menuValue.getItems().add(new SeparatorMenuItem());
 		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> detail.actionLookupURI());
 		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> detail.actionLookupName());
+
+    	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
+    	addMenu(menuView, "_Assays", new KeyCharacterCombination("2", cmd)).setOnAction(event -> actionViewAssays());
     }
     
     private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
@@ -229,14 +252,21 @@ public class EditSchema
 	{
 		currentlyRebuilding = true;
 	
-		treeroot.getChildren().clear();
-		treeroot.setExpanded(true);
+		treeTemplate.getChildren().clear();
+		treeAssays.getChildren().clear();
 		
 		Schema schema = stack.getSchema();
 		Schema.Group root = schema.getRoot();
 		
-		treeroot.setValue(new Branch(root, schema.locatorID(root)));
-		fillTreeGroup(schema, root, treeroot);
+		treeTemplate.setValue(new Branch(root, schema.locatorID(root)));
+		fillTreeGroup(schema, root, treeTemplate);
+		
+		for (int n = 0; n < schema.numAssays(); n++)
+		{
+			Schema.Assay assay = schema.getAssay(n);
+			TreeItem<Branch> item = new TreeItem<>(new Branch(assay, schema.locatorID(assay)));
+			treeAssays.getChildren().add(item);
+		}
 		
 		currentlyRebuilding = false;
 	}
@@ -258,11 +288,11 @@ public class EditSchema
 	}
 
 	// convenience for tree selection
-	public TreeItem<Branch> currentBranch() {return treeview.getSelectionModel().getSelectedItem();}
+	public TreeItem<Branch> currentBranch() {return treeView.getSelectionModel().getSelectedItem();}
 	public void setCurrentBranch(TreeItem<Branch> branch) 
 	{
-		treeview.getSelectionModel().select(branch);
-		treeview.scrollTo(treeview.getRow(branch));
+		treeView.getSelectionModel().select(branch);
+		treeView.scrollTo(treeView.getRow(branch));
 	}
 	public String currentLocatorID()
 	{
@@ -272,7 +302,7 @@ public class EditSchema
 	public TreeItem<Branch> locateBranch(String locatorID)
 	{
 		List<TreeItem<Branch>> stack = new ArrayList<>();
-		stack.add(treeroot);
+		stack.add(treeRoot);
 		while (stack.size() > 0)
 		{
 			TreeItem<Branch> branch = stack.remove(0);
@@ -284,7 +314,7 @@ public class EditSchema
 	public void clearSelection()
 	{
 		detail.clearContent();
-		treeview.getSelectionModel().clearSelection();
+		treeView.getSelectionModel().clearSelection();
 	}
 
 	// for the given branch, pulls out the content: if any changes have been made, pushes the modified schema onto the stack
@@ -316,7 +346,7 @@ public class EditSchema
 			item.setValue(new Branch());
 			item.setValue(branch); // triggers redraw
 		}
-		if (branch.assignment != null)
+		else if (branch.assignment != null)
 		{
 			Schema.Assignment modAssn = detail.extractAssignment();
 			if (modAssn == null) return;
@@ -335,6 +365,10 @@ public class EditSchema
 			item.setValue(new Branch());
 			item.setValue(branch); // triggers redraw
 		}
+		else if (branch.assay != null)
+		{
+			// TODO
+		}
 	}
 
 	// recreates all the widgets in the detail view, given that the indicated branch has been selected
@@ -345,6 +379,7 @@ public class EditSchema
 
 		if (branch.group != null) detail.setGroup(branch.group);
 		else if (branch.assignment != null) detail.setAssignment(branch.assignment);
+		else if (branch.assay != null) detail.setAssay(branch.assay);
 		else detail.clearContent();
 	}
 
@@ -529,9 +564,19 @@ public class EditSchema
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));
     }
+	private void actionAssayAdd()
+	{
+		pullDetail();
+		
+		Schema schema = stack.getSchema();
+		schema.addAssay(new Schema.Assay(""));
+		stack.changeSchema(schema);
+		rebuildTree();
+		// !! setcurrent... zog
+	}
 	private void actionEditCopy(boolean andCut)
 	{
-		if (!treeview.isFocused()) return; // punt to default action
+		if (!treeView.isFocused()) return; // punt to default action
 		
 		TreeItem<Branch> item = currentBranch();
 		if (item == null) return;
@@ -540,6 +585,7 @@ public class EditSchema
 		JSONObject json = null;
 		if (branch.group != null) json = ClipboardSchema.composeGroup(branch.group);
 		else if (branch.assignment != null) json = ClipboardSchema.composeAssignment(branch.assignment);
+		else if (branch.assay != null) {} // TODO
 		
 		String serial = null;
 		try {serial = json.toString(2);}
@@ -557,7 +603,7 @@ public class EditSchema
 	}
 	private void actionEditPaste()
 	{
-		if (!treeview.isFocused()) return; // punt to default action
+		if (!treeView.isFocused()) return; // punt to default action
 		
 		TreeItem<Branch> item = currentBranch();
 		if (item == null)
@@ -618,12 +664,13 @@ public class EditSchema
     {
     	TreeItem<Branch> item = currentBranch();
     	Branch branch = item == null ? null : item.getValue();
+    	// TODO: assay..
     	if (branch == null || (branch.group == null && branch.assignment == null))
     	{
     		informMessage("Delete Branch", "Select a group or assignment to delete.");
     		return;
     	}
-    	if (item == treeroot)
+    	if (item == treeRoot)
     	{
     		informMessage("Delete Branch", "Can't delete the root branch.");
     		return;
@@ -675,7 +722,8 @@ public class EditSchema
     {
     	TreeItem<Branch> item = currentBranch();
     	Branch branch = item == null ? null : item.getValue();
-    	if (item == treeroot || branch == null || (branch.group == null && branch.assignment == null)) return;
+    	// TODO: assay...
+    	if (item == treeRoot || branch == null || (branch.group == null && branch.assignment == null)) return;
     	
     	pullDetail();
     	Schema schema = stack.getSchema();
@@ -696,4 +744,19 @@ public class EditSchema
     	rebuildTree();
     	setCurrentBranch(locateBranch(newLocator));
     }
+    private void actionViewTemplate()
+    {
+		treeTemplate.setExpanded(true);
+		treeAssays.setExpanded(false);
+		treeView.getSelectionModel().select(treeTemplate);
+        treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex());
+        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));
+    }
+	private void actionViewAssays()
+	{
+		treeTemplate.setExpanded(false);
+		treeAssays.setExpanded(true);
+		treeView.getSelectionModel().select(treeAssays);
+        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));
+	}
 }

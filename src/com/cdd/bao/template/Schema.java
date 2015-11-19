@@ -50,29 +50,49 @@ public class Schema
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
 
-	public static final class Value
+	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
+	// contents make up the definition
+	public static final class Group
 	{
-		public String uri; // mapping to a URI in the BAO or related ontology; if null, is literal
-		public String name; // short label for the value; if no URI, this is the literal to use
-		public String descr = ""; // longer description
+		public Group parent;
+		public String name, descr = "";
+		public List<Assignment> assignments = new ArrayList<>();
+		public List<Group> subGroups = new ArrayList<>();
 		
-		public Value(String uri, String name)
+		public Group(Group parent, String name) 
 		{
-			this.uri = uri == null ? "" : uri;
+			this.parent = parent;
 			this.name = name == null ? "" : name;
 		}
-		public Value clone()
+		public Group clone() {return clone(parent);}
+		public Group clone(Group parent)
 		{
-			Value dup = new Value(uri, name);
+			Group dup = new Group(parent, name);
 			dup.descr = descr;
+			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
+			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
-		public boolean equals(Value other)
+		public boolean equals(Group other)
 		{
-			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr);
+			if (!name.equals(other.name) || !descr.equals(other.descr)) return false;
+			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
+			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
+			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
+			return true;
 		}
-	}
+		
+		private void outputAsString(StringBuffer buff, int indent)
+		{
+			for (int n = 0; n < indent; n++) buff.append("  ");
+			buff.append("[" + name + "] (" + descr + ")\n");
+			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
+			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
+		}
+	};
 
+	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure
+	// has a unique property URI, and a list of applicable values
 	public static final class Assignment
 	{
 		public Group parent;
@@ -115,45 +135,61 @@ public class Schema
 		}
 	}
 
-	public static final class Group
+	// a "value" consists of a URI (in the case of references to a known resource), and descriptive text; an assignment typically has many of these
+	public static final class Value
 	{
-		public Group parent;
-		public String name, descr = "";
-		public List<Assignment> assignments = new ArrayList<>();
-		public List<Group> subGroups = new ArrayList<>();
+		public String uri; // mapping to a URI in the BAO or related ontology; if null, is literal
+		public String name; // short label for the value; if no URI, this is the literal to use
+		public String descr = ""; // longer description
 		
-		public Group(Group parent, String name) 
+		public Value(String uri, String name)
 		{
-			this.parent = parent;
+			this.uri = uri == null ? "" : uri;
 			this.name = name == null ? "" : name;
 		}
-		public Group clone() {return clone(parent);}
-		public Group clone(Group parent)
+		public Value clone()
 		{
-			Group dup = new Group(parent, name);
+			Value dup = new Value(uri, name);
 			dup.descr = descr;
-			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
-			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
-		public boolean equals(Group other)
+		public boolean equals(Value other)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr)) return false;
-			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
-			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
-			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
+			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr);
+		}
+	}
+
+	// template root: the schema definition resides within here
+	private Group root = new Group(null, "common assay template");
+	
+	// an "assay" is an actual instance of the bioassay template, i.e. filling in the assignments with values, and 
+	public static final class Assay
+	{
+		public String name; // short label for the bioassay
+		public String descr = ""; // more descriptive label: used to complement the semantic assignments
+		public String para = ""; // plain text description of the assay, if available; sometimes this is available prior semantic assignments
+		//public String refURI; // reference to an external URI
+		
+		public Assay(String name)
+		{
+			this.name = name == null ? "" : name;
+		}
+		public Assay clone()
+		{
+			Assay dup = new Assay(name);
+			dup.descr = descr;
+			dup.para = para;
+			// !! the rest...
+			return dup;
+		}
+		public boolean equals(Assay other)
+		{
+			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para)) return false;
+			// !! the rest...
 			return true;
 		}
-		
-		private void outputAsString(StringBuffer buff, int indent)
-		{
-			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("[" + name + "] (" + descr + ")\n");
-			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
-			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
-		}
-	};
-	private Group root = new Group(null, "common assay template");
+	}
+	private List<Assay> assays = new ArrayList<>();
 
 	// defined during [de]serialisation
 	private Property rdfLabel, rdfType;
@@ -173,11 +209,21 @@ public class Schema
 		this.vocab = vocab;
 	}
 	
+	// returns true if the content is literally equivalent
+	public boolean equals(Schema other)
+	{
+		if (!root.equals(other.root)) return false;
+		if (assays.size() != other.assays.size()) return false;
+		for (int n = 0; n < assays.size(); n++) if (!assays.get(n).equals(other.assays.get(n))) return false;
+		return true;
+	}
+	
 	// makes a deep copy of the schema content
 	public Schema clone()
 	{
 		Schema dup = new Schema(vocab);
 		dup.root = root.clone(null);
+		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
 	}
 	
@@ -187,10 +233,21 @@ public class Schema
 	public Group getRoot() {return root;}
 	public void setRoot(Group root) {this.root = root;}
 	
+	// access to assays
+	public int numAssays() {return assays.size();}
+	public Assay getAssay(int idx) {return assays.get(idx);}
+	public void setAssay(int idx, Assay assay) {assays.set(idx, assay);}
+	public void addAssay(Assay assay) {assays.add(assay);}
+	public void insertAssay(int idx, Assay assay) {assays.add(idx, assay);}
+	public void deleteAssay(int idx) {assays.remove(idx);}
+	public void swapAssays(int idx1, int idx2) {Assay a = assays.get(idx1); assays.set(idx1, assays.get(idx2)); assays.set(idx2, a);}
+	
+	// produces a human-readable definition of the schema, mainly for debugging
 	public String toString()
 	{
 		StringBuffer buff = new StringBuffer();
 		root.outputAsString(buff, 0);
+		// !! and assays...
 		return buff.toString();
 	}
 	
@@ -254,8 +311,16 @@ public class Schema
 		if (assn == null) return null;
 		return locatorID(assn.parent) + assn.parent.assignments.indexOf(assn);
 	}
+	public String locatorID(Assay assay)
+	{
+		if (assay == null) return null;
+		int idx = assays.indexOf(assay);
+		if (idx < 0) return null;
+		return "*" + idx;
+	}
 	
-	// uses a locatorID to pull out the object from the schema hierarchy; returns null if couldn't find it for any reason
+	// uses a locatorID to pull out the object from the schema hierarchy; returns null if couldn't find it for any reason; note that using an assignment locator
+	// to obtain a group is valid: it will find the parent group
 	public Group obtainGroup(String locatorID)
 	{
 		Group group = root;
@@ -276,6 +341,13 @@ public class Schema
 		int idx = Integer.parseInt(locatorID.substring(locatorID.lastIndexOf(':') + 1));
 		if (idx < 0 || idx >= group.assignments.size()) return null;
 		return group.assignments.get(idx);
+	}
+	public Assay obtainAssay(String locatorID)
+	{
+		if (!locatorID.startsWith("*")) return null;
+		int idx = Integer.parseInt(locatorID.substring(1));
+		if (idx >= 0 && idx < assays.size()) return assays.get(idx);
+		return null;
 	}
 	
 	// adding of content
