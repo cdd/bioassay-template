@@ -75,11 +75,27 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             }
             else
             {
+				String style = "";
+
             	String label = branch.group != null ? branch.group.name : branch.assignment != null ? branch.assignment.name : "?";
 
-    			if (branch.group != null) setStyle("-fx-font-weight: bold;");
-    			else if (branch.assignment != null) setStyle("-fx-font-weight: normal;");
+				//style += setStyle(label.length() == 0 ? "-fx-text-fill: red;" : "-fx-text-fill: black");
+            	if (label.length() == 0)
+            	{
+            		label = "unnamed";
+            		//style += "-fx-font-style: italic;"; (doesn't work, not sure why)
+            		style += "-fx-text-fill: #800000;";
+            	}
+            	else
+            	{
+            		//style += "-fx-font-style: normal;";
+            		style += "-fx-text-fill: #404040;";
+            	}
+
+    			if (branch.group != null) style += "-fx-font-weight: bold;";
+    			else if (branch.assignment != null) style += "-fx-font-weight: normal;";
 				
+				setStyle(style);
                 setText(label);
                 setGraphic(getTreeItem().getGraphic());
                 setupContextMenu();

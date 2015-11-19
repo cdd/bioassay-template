@@ -202,21 +202,32 @@ public class DetailPane extends ScrollPane
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
     		LookupPanel lookup = new LookupPanel(searchText);
-    		Optional<Schema.Value> result = lookup.showAndWait();
+    		Optional<LookupPanel.Resource> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
-    			Schema.Value val = result.get();
-    			if (val != null && focusIndex >= 0)
+    			LookupPanel.Resource res = result.get();
+    			if (res != null)
     			{
-    				vw.fieldURI.setText(val.uri);
-    				vw.fieldName.setText(val.name);
-    				vw.fieldDescr.setText(val.descr);
+    				vw.fieldURI.setText(res.uri);
+    				vw.fieldName.setText(res.label);
+    				vw.fieldDescr.setText(res.descr);
 				}
     		}
     	}
-    	else
+    	else if (assignment != null)
     	{
-    		// (anything to do, if it's for the assignment/group overall?)
+    		LookupPanel lookup = new LookupPanel(fieldName.getText());
+    		Optional<LookupPanel.Resource> result = lookup.showAndWait();
+    		if (result.isPresent())
+    		{
+    			LookupPanel.Resource res = result.get();
+    			if (res != null)
+    			{
+    				fieldURI.setText(res.uri);
+    				fieldName.setText(res.label);
+    				fieldDescr.setText(res.descr);
+				}
+    		}
     	}
     }
 
@@ -228,7 +239,7 @@ public class DetailPane extends ScrollPane
 	
 		vbox.getChildren().clear();
 		
-		Label heading = new Label("Category");
+		Label heading = new Label("Group");
 		heading.setTextAlignment(TextAlignment.CENTER);
 		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFC0; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);

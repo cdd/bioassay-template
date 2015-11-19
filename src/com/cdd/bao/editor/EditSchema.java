@@ -504,7 +504,8 @@ public class EditSchema
     	pullDetail();
 
     	Schema schema = stack.getSchema();
-    	Schema.Group newGroup = schema.appendGroup(schema.obtainGroup(item.getValue().locatorID), new Schema.Group(null, "NEW"));
+    	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
+    	Schema.Group newGroup = schema.appendGroup(parent, new Schema.Group(null, ""));
     	stack.changeSchema(schema);
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newGroup)));
@@ -521,7 +522,9 @@ public class EditSchema
     	pullDetail();
 
     	Schema schema = stack.getSchema();
-    	Schema.Assignment newAssn = schema.appendAssignment(schema.obtainGroup(item.getValue().locatorID), new Schema.Assignment(null, "NEW", ""));
+
+    	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
+    	Schema.Assignment newAssn = schema.appendAssignment(parent, new Schema.Assignment(null, "", ""));
     	stack.changeSchema(schema);
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));

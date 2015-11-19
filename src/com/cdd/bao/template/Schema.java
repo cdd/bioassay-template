@@ -237,10 +237,11 @@ public class Schema
 	// the same layout (e.g. one that has been cloned)
 	public String locatorID(Group group)
 	{
+		if (group == null) return null;
 		List<Integer> seq = new ArrayList<>();
 		while (group.parent != null)
 		{
-			seq.add(group.parent.subGroups.indexOf(group));
+			seq.add(0, group.parent.subGroups.indexOf(group));
 			group = group.parent;
 		}
 		
@@ -250,6 +251,7 @@ public class Schema
 	}
 	public String locatorID(Assignment assn)
 	{
+		if (assn == null) return null;
 		return locatorID(assn.parent) + assn.parent.assignments.indexOf(assn);
 	}
 	

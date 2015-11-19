@@ -31,9 +31,9 @@ import javafx.util.*;
 	combinations.
 */
 
-public class LookupPanel extends Dialog<Schema.Value>
+public class LookupPanel extends Dialog<LookupPanel.Resource>
 {
-	private static final class Resource
+	public static final class Resource
 	{
 		String uri, label, descr;
 		Resource(String uri, String label, String descr)
@@ -106,7 +106,7 @@ public class LookupPanel extends Dialog<Schema.Value>
 		getDialogPane().getButtonTypes().add(btnTypeUse);
 		setResultConverter(buttonType ->
 		{
-			if (buttonType == btnTypeUse) return composeCurrentValue();
+			if (buttonType == btnTypeUse) return table.getSelectionModel().getSelectedItem(); // composeCurrentValue();
 			return null;
 		});
 		Button btnUse = (Button)getDialogPane().lookupButton(btnTypeUse);
@@ -143,6 +143,7 @@ public class LookupPanel extends Dialog<Schema.Value>
 		}
 	}
 
+/*
 	// manufactures a value from the selected item
 	private Schema.Value composeCurrentValue()
 	{
@@ -153,7 +154,7 @@ public class LookupPanel extends Dialog<Schema.Value>
 		val.descr = res.descr;
 		return val;
 	}
-	
+*/	
 	// returns a subset of the resources which matches the search text (or all if blank)
 	private List<Resource> searchedSubset(String searchText)
 	{
