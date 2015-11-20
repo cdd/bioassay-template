@@ -58,6 +58,15 @@ public class DetailPane extends ScrollPane
 	}
 	private List<ValueWidgets> valueList = new ArrayList<>();
 	
+	private final class AnnotWidgets
+	{
+		Lineup line;
+		Schema.Assignment sourceAssn;
+		Schema.Annotation sourceAnnot;
+		Button buttonShow;
+	}
+	private List<AnnotWidgets> annotList = new ArrayList<>();
+	
 	private int focusIndex = -1; // which "group of widgets" has the focus
 
 	// ------------ public methods ------------	
@@ -416,11 +425,12 @@ public class DetailPane extends ScrollPane
 		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #FFFFD0; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);
 
-		List<Schema.Annotation> annotList = new ArrayList<>(assay.annotations);
+		List<Schema.Annotation> orphans = new ArrayList<>(assay.annotations);
 		List<Schema.Group> groupList = new ArrayList<>();
 		groupList.add(schema.getRoot());
 		
 		// recursively add all known assignments, in depth order of groups
+		annotList.clear();
 		while (groupList.size() > 0)
 		{
 			Schema.Group group = groupList.remove(0);
@@ -437,17 +447,15 @@ public class DetailPane extends ScrollPane
 			}
 			for (Schema.Assignment assn : group.assignments)
 			{
-				vbox.getChildren().add(new Label(indstr + "!!" + assn.name));
-				// !! properly
-				
-				// ... !! match each annotation: first one that fits gets yanked and used as data
-				//
+				Schema.Annotation annot = null; // !! FIND in schema
+				appendAnnotationWidget(indstr + assn.name + ":", assn, annot);
+
 			}
 			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
 		}
 		
 		// if there are any annotations left over, they are orphans
-		if (annotList.size() > 0)
+		if (orphans.size() > 0)
 		{
     		heading = new Label("Orphans");
     		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
@@ -455,6 +463,72 @@ public class DetailPane extends ScrollPane
 			
 			// !! add the orphans
 		}
+	}
+
+	// creates a single annotation entry line; the assignment or annotation may be blank, not not both
+	private void appendAnnotationWidget(String title, Schema.Assignment assn, Schema.Annotation annot)
+	{
+		AnnotWidgets aw = new AnnotWidgets();
+		aw.line = new Lineup(PADDING);
+		aw.sourceAssn = assn;
+		aw.sourceAnnot = annot;
+		aw.buttonShow = new Button();
+		
+		updateAnnotationButton(aw);
+		
+		aw.buttonShow.setPrefWidth(300);
+		aw.buttonShow.setMaxWidth(Double.MAX_VALUE);
+		//observeFocus(fieldName, -1);
+		aw.line.add(aw.buttonShow, title, 1, 0);
+				
+		vbox.getChildren().add(aw.line);
+		
+		aw.buttonShow.setOnAction(event -> pressedAnnotationButton(aw));
+	}
+	
+	// configures the button content and theme for an annotation
+	private void updateAnnotationButton(AnnotWidgets aw)
+	{
+		Schema.Annotation annot = aw.sourceAnnot;
+		if (annot == null)
+		{
+			// blank value: waiting for the user to pick something
+			aw.buttonShow.setText("?");
+			aw.buttonShow.setStyle("-fx-base: #F0F0FF;");
+		}
+		else if (annot.value != null)
+		{
+			aw.buttonShow.setText(annot.value.name);
+			aw.buttonShow.setStyle("-fx-base: #000080; -fx-text-fill: white;");
+		}
+		else // annot.literal != null
+		{
+			aw.buttonShow.setText('"' + annot.literal + '"');
+			aw.buttonShow.setStyle("-fx-base: #FFFFD0;");
+		}
+
+		// it's an orphan: mark it noticeably
+		if (aw.sourceAssn == null)
+		{
+			// orphan
+			aw.buttonShow.setStyle("-fx-base: #C00000; -fx-text-fill: white;");
+		}
+		
+	}
+	
+	// responds to the pressing of an annotation button: typically brings up the edit panel
+	private void pressedAnnotationButton(AnnotWidgets aw)
+	{
+		// orphan annotations: clicking deletes
+		if (aw.sourceAssn == null)
+		{
+			Util.writeln("DELETE ORPHAN");
+			// !! do it
+			return;
+		}
+	
+		// bring up panel for assignment selection
+		Util.writeln("HIT!");
 	}
 
 	// respond to focus so that one of the blocks gets a highlight
