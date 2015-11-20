@@ -31,6 +31,7 @@ public class Schema
 	public static final String PFX_XSD = "http://www.w3.org/2001/XMLSchema#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
+	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
 	
 	// a group is made up of groups & assignments
 	public static final String BAT_GROUP = "Group";
@@ -44,6 +45,8 @@ public class Schema
 	public static final String HAS_PROPERTY = "hasProperty"; // maps to predicate (one per assignment)
 	public static final String HAS_VALUE = "hasValue"; // contains a value option (many per assignment)	
 	public static final String MAPS_TO = "mapsTo";
+
+	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
 
 	// ------------ private data ------------	
 
@@ -168,7 +171,8 @@ public class Schema
 		public String name; // short label for the bioassay
 		public String descr = ""; // more descriptive label: used to complement the semantic assignments
 		public String para = ""; // plain text description of the assay, if available; sometimes this is available prior semantic assignments
-		//public String refURI; // reference to an external URI
+		
+		public List<Annotation> annotations = new ArrayList<>();
 		
 		public Assay(String name)
 		{
@@ -179,7 +183,7 @@ public class Schema
 			Assay dup = new Assay(name);
 			dup.descr = descr;
 			dup.para = para;
-			// !! the rest...
+			for (Annotation a : annotations) dup.annotations.add(a.clone());
 			return dup;
 		}
 		public boolean equals(Assay other)
@@ -189,14 +193,89 @@ public class Schema
 			return true;
 		}
 	}
+	
+	// an "annotation" is associated with an assay, linking it to an assignment and a selected value; note that the assignment/value objects are cloned
+	// from the content in the template part of the schema, so they can be edited separately without doing too much damage - but this does mean that reconciliation
+	// gets interesting, which is a necessary evil
+	public static final class Annotation
+	{
+		public Assignment assn; // the assignment that the annotation corresponds to, as a linear-branched clone (never referenced to the schema assignment list)
+		public Value value = null; // mutually exclusive with literal; instances are always cloned
+		public String literal = null; // ditto/vv
+		
+		public Annotation(Assignment assn, Value value)
+		{
+			this.assn = linearBranch(assn);
+			this.value = value.clone();
+		}
+		public Annotation(Assignment assn, String literal)
+		{
+			this.assn = linearBranch(assn);
+			this.literal = literal;
+		}
+		public Annotation clone()
+		{
+			Annotation dup = value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
+			return dup;
+		}
+		public boolean equals(Annotation other)
+		{
+			if (!assn.equals(other)) return false;
+			Group p1 = assn.parent, p2 = other.assn.parent;
+			while (true)
+			{
+				if (p1 == null && p2 == null) break;
+				if (p1 == null || p2 == null) return false;
+				if (!p1.name.equals(p2.name)) return false;
+				p1 = p1.parent;
+				p2 = p2.parent;
+			}
+			
+			if (value == null && other.value == null) return literal.equals(other.literal);
+			else if (value != null && other.value == null) return false;
+			else if (value == null && other.value != null) return false;
+			return value.equals(other.value);
+		}
+		
+		// clones the assignment, and re-manufactures the whole branch, except makes it linear: the parent group sequence will therefore check out, in terms of being able to 
+		// recreate the tree with object names; this will enable comparison of annotations between two schema instances, with a significant amount of slack, i.e. if the schema is
+		// being changed, or is temporarily invalid, then most annotations will still be able to correlate the assignments unambiguously, and those that cannot will still provide
+		// a lot of clues for reconciliation; this is all in aid of the expectation that users will do some fairly radical schema refactorings, even after staying to annotate assays
+		public static Assignment linearBranch(Assignment assn)
+		{
+			Group par = assn.parent;
+			Group dup = new Group(null, par.name);
+			dup.descr = par.descr;
+			dup.assignments.add(assn);
+
+			assn = assn.clone(dup);
+
+			while (par.parent != null)
+			{
+				dup.parent = new Group(null, par.parent.name);
+				dup.parent.descr = par.parent.descr;
+				dup.parent.subGroups.add(dup);
+				
+				par = par.parent;
+				dup = par.parent;
+			}
+			
+			return assn;
+		}
+		
+		// (will need to write 'findAnnotation' to dig through group/assignment sequences, matching by name)
+		// (renaming a group will be trouble; maybe just make it really super easy to reparent things later - go hunting for the most likely candidates, using propURI and others)
+		// (will also need 'find closest matches', for when large rearrangements have occurred)
+	}
+	
 	private List<Assay> assays = new ArrayList<>();
 
 	// defined during [de]serialisation
 	private Property rdfLabel, rdfType;
-	private Resource batRoot;
+	private Resource batRoot, batAssay;
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder;
+	private Property hasDescription, inOrder, hasParagraph;
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
 	
@@ -286,6 +365,19 @@ public class Schema
 		if (root.descr.length() > 0) model.add(objRoot, hasDescription, root.descr);
 		
 		formulateGroup(model, objRoot, root);
+
+		for (int n = 0; n < assays.size(); n++)
+		{
+			Assay assay = assays.get(n);
+			Resource objAssay = model.createResource(PFX_BAT + turnLabelIntoName(assay.name));
+			model.add(objAssay, rdfType, batAssay);
+			model.add(objAssay, rdfLabel, assay.name);
+			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
+			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
+			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
+			
+			// !! the content....
+		}
 		
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
@@ -430,6 +522,7 @@ public class Schema
 		rdfType = model.createProperty(PFX_RDF + "type");
 
 		batRoot = model.createResource(PFX_BAT + BAT_ROOT);
+		batAssay = model.createResource(PFX_BAT + BAT_ASSAY);
 		batGroup = model.createResource(PFX_BAT + BAT_GROUP);
 		batAssignment = model.createResource(PFX_BAT + BAT_ASSIGNMENT);
 		hasGroup = model.createProperty(PFX_BAT + HAS_GROUP);
@@ -439,6 +532,7 @@ public class Schema
 		hasProperty = model.createProperty(PFX_BAT + HAS_PROPERTY);
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
+		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
 		
 		nameCounts = new HashMap<String, Integer>();
 	}
@@ -581,6 +675,8 @@ public class Schema
 	private String turnLabelIntoName(String label)
 	{
 		if (label == null) return null;
+		if (label.length() == 0) label = "unnamed";
+		
 		StringBuffer buff = new StringBuffer();
 		for (String bit : label.split(" "))
     	{
