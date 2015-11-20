@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.application.*;
@@ -35,19 +36,21 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 {
 	public static final class Resource
 	{
-		String uri, label, descr;
-		Resource(String uri, String label, String descr)
+		public String uri, label, descr;
+		public boolean beingUsed;
+		
+		public Resource(String uri, String label, String descr)
 		{
 			this.uri = uri;
 			this.label = label == null ? "" : label;
 			this.descr = descr == null ? "" : descr;
 		}
-		String getURI() {return uri;}
+		/*String getURI() {return uri;}
 		void setURI(String uri) {this.uri = uri;}
 		String getLabel() {return label;}
 		void setLabel(String label) {this.label = label;}
 		String getDescr() {return descr;}
-		void setDescr(String descr) {this.descr = descr;}
+		void setDescr(String descr) {this.descr = descr;}*/
 	};
 	private List<Resource> resources = new ArrayList<>();
 
@@ -56,11 +59,11 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 
 	// ------------ public methods ------------
 
-	public LookupPanel(String searchText)
+	public LookupPanel(String searchText, Set<String> usedURI)
 	{
 		super();
 		
-		loadResources();
+		loadResources(usedURI);
 		
 		setTitle("Lookup URI");
 
@@ -73,6 +76,11 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
  
         table.setEditable(false);
  
+        TableColumn<Resource, String> colUsed = new TableColumn<>("U");
+		colUsed.setMinWidth(20);
+		colUsed.setPrefWidth(20);
+        colUsed.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : "");});
+
         TableColumn<Resource, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
         colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(substitutePrefix(resource.getValue().uri));});
@@ -87,7 +95,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 
 		table.setMinHeight(450);        
         table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        table.getColumns().addAll(colURI, colLabel, colDescr);
+        table.getColumns().addAll(colUsed, colURI, colLabel, colDescr);
         table.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
  
         BorderPane pane = new BorderPane();
@@ -118,6 +126,10 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		{
 			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
 		});
+		table.setOnKeyPressed(event ->
+		{
+			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
+		});
 		
 		search.setText(searchText);
 		search.textProperty().addListener((observable, oldValue, newValue) -> 
@@ -130,7 +142,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 	
 	// ------------ private methods ------------
 
-	private void loadResources()
+	private void loadResources(Set<String> usedURI)
 	{
 		Vocabulary vocab = null;
 		try {vocab = Vocabulary.globalInstance();}
@@ -139,6 +151,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		for (String uri : vocab.getAllURIs())
 		{
 			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
+			res.beingUsed = usedURI.contains(uri);
 			resources.add(res);
 		}
 	}

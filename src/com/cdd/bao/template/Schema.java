@@ -513,6 +513,25 @@ public class Schema
 		}
 	}
 	
+	// returns a set containing every URI mentioned in the template
+	public Set<String> gatherAllURI()
+	{
+		Set<String> list = new HashSet<String>();
+		List<Group> stack = new ArrayList<>();
+		stack.add(root);
+		while (stack.size() > 0)
+		{
+			Group group = stack.remove(0);
+			for (Assignment assn : group.assignments)
+			{
+				if (assn.propURI.length() > 0) list.add(assn.propURI);
+				for (Value val : assn.values) if (val.uri.length() > 0) list.add(val.uri);
+			}
+			stack.addAll(group.subGroups);
+		}
+		return list;
+	}
+	
 	// ------------ private methods ------------	
 
 	private void setupResources(Model model)

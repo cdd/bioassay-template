@@ -389,9 +389,9 @@ public class EditSchema
 		if (currentlyRebuilding || item == null) return;
 		Branch branch = item.getValue();
 
-		if (branch.group != null) detail.setGroup(branch.group);
-		else if (branch.assignment != null) detail.setAssignment(branch.assignment);
-		else if (branch.assay != null) detail.setAssay(branch.assay);
+		if (branch.group != null) detail.setGroup(stack.peekSchema(), branch.group);
+		else if (branch.assignment != null) detail.setAssignment(stack.peekSchema(), branch.assignment);
+		else if (branch.assay != null) detail.setAssay(stack.peekSchema(), branch.assay);
 		else detail.clearContent();
 	}
 

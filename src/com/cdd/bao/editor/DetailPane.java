@@ -36,6 +36,7 @@ public class DetailPane extends ScrollPane
 
 	private EditSchema main;
 
+	private Schema schema = null;
 	private Schema.Group group = null;
 	private Schema.Assignment assignment = null;
 	private Schema.Assay assay = null;
@@ -79,6 +80,7 @@ public class DetailPane extends ScrollPane
 	// clears out the contents of the pane; does so without regard for saving the content
 	public void clearContent()
 	{
+		schema = null;
 		group = null;
 		assignment = null;
 		assay = null;
@@ -86,22 +88,25 @@ public class DetailPane extends ScrollPane
 	}
 	
 	// replaces the content with either type; any modifications to existing widgets will be zapped
-	public void setGroup(Schema.Group group)
+	public void setGroup(Schema schema, Schema.Group group)
 	{
+		this.schema = schema;
 		this.group = group;
 		assignment = null;
 		assay = null;
 		recreateGroup();
 	}
-	public void setAssignment(Schema.Assignment assignment)
+	public void setAssignment(Schema schema, Schema.Assignment assignment)
 	{
+		this.schema = schema;
 		this.assignment = assignment;
 		group = null;
 		assay = null;
 		recreateAssignment();
 	}
-	public void setAssay(Schema.Assay assay)
+	public void setAssay(Schema schema, Schema.Assay assay)
 	{
+		this.schema = schema;
 		this.assay = assay;
 		assignment = null;
 		group = null;
@@ -111,6 +116,7 @@ public class DetailPane extends ScrollPane
 	// inquiries as to what kind of content is currently being represented
 	public boolean isGroup() {return group != null;}
 	public boolean isAssignment() {return assignment != null;}
+	public boolean isAssay() {return assay != null;}
 	
 	// extracts a representation of the content from the current widgets; note that these return null if nothing has changed (or if it's not that content type)
 	public Schema.Group extractGroup()
@@ -225,7 +231,7 @@ public class DetailPane extends ScrollPane
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
-    		LookupPanel lookup = new LookupPanel(searchText);
+    		LookupPanel lookup = new LookupPanel(searchText, schema.gatherAllURI());
     		Optional<LookupPanel.Resource> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -240,7 +246,7 @@ public class DetailPane extends ScrollPane
     	}
     	else if (assignment != null)
     	{
-    		LookupPanel lookup = new LookupPanel(fieldName.getText());
+    		LookupPanel lookup = new LookupPanel(fieldName.getText(), schema.gatherAllURI());
     		Optional<LookupPanel.Resource> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -376,7 +382,6 @@ public class DetailPane extends ScrollPane
 		vbox.setMaxWidth(Double.MAX_VALUE);
 		
 		Label heading = new Label("Assay");
-		heading.setTextAlignment(TextAlignment.CENTER);
 		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #B0E0E0; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);
 
@@ -405,8 +410,51 @@ public class DetailPane extends ScrollPane
 
 		vbox.getChildren().add(line);
 
-		// and the annotations
-		//TODO
+		// annotations
+
+		heading = new Label("Annotations");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #FFFFD0; -fx-padding: 0.1em;");
+		vbox.getChildren().add(heading);
+
+		List<Schema.Annotation> annotList = new ArrayList<>(assay.annotations);
+		List<Schema.Group> groupList = new ArrayList<>();
+		groupList.add(schema.getRoot());
+		
+		// recursively add all known assignments, in depth order of groups
+		while (groupList.size() > 0)
+		{
+			Schema.Group group = groupList.remove(0);
+			int indent = 0;
+			String indstr = "";
+			Schema.Group p = group.parent;
+			while (p != null) {indent++; indstr += "  "; p = p.parent;}
+
+			if (group.parent != null) 
+			{
+				heading = new Label(indstr + group.name);
+				heading.setStyle("-fx-font-weight: bold;");				
+				vbox.getChildren().add(heading);
+			}
+			for (Schema.Assignment assn : group.assignments)
+			{
+				vbox.getChildren().add(new Label(indstr + "!!" + assn.name));
+				// !! properly
+				
+				// ... !! match each annotation: first one that fits gets yanked and used as data
+				//
+			}
+			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
+		}
+		
+		// if there are any annotations left over, they are orphans
+		if (annotList.size() > 0)
+		{
+    		heading = new Label("Orphans");
+    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
+    		vbox.getChildren().add(heading);
+			
+			// !! add the orphans
+		}
 	}
 
 	// respond to focus so that one of the blocks gets a highlight
