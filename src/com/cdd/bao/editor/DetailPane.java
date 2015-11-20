@@ -8,7 +8,6 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
-import com.cdd.bao.template.Schema.Assignment;
 
 import java.io.*;
 import java.util.*;
@@ -47,6 +46,7 @@ public class DetailPane extends ScrollPane
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private TextField fieldURI = null;
+	private TextArea fieldPara = null;
 	
 	private final class ValueWidgets
 	{
@@ -128,7 +128,7 @@ public class DetailPane extends ScrollPane
 	{
 		if (assignment == null) return null;
 		
-		Schema.Assignment mod = new Assignment(null, fieldName.getText(), fieldURI.getText());
+		Schema.Assignment mod = new Schema.Assignment(null, fieldName.getText(), fieldURI.getText());
 		mod.descr = fieldDescr.getText();
 		
 		for (ValueWidgets vw : valueList)
@@ -139,6 +139,19 @@ public class DetailPane extends ScrollPane
 		}
 		
 		if (assignment.equals(mod)) return null;
+		return mod;
+	}
+	public Schema.Assay extractAssay()
+	{
+		if (assay == null) return null;
+		
+		Schema.Assay mod = new Schema.Assay(fieldName.getText());
+		mod.descr = fieldDescr.getText();
+		mod.para = fieldPara.getText();
+		
+		// !! TODO: pull in the annotations
+		
+		if (assay.equals(mod)) return null;
 		return mod;
 	}
 
@@ -364,10 +377,36 @@ public class DetailPane extends ScrollPane
 		
 		Label heading = new Label("Assay");
 		heading.setTextAlignment(TextAlignment.CENTER);
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFFF; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #B0E0E0; -fx-padding: 0.1em;");
 		vbox.getChildren().add(heading);
 
-		// ... and the good stuff...		
+		Lineup line = new Lineup(PADDING);
+		
+		fieldName = new TextField(assay.name);
+		fieldName.setPrefWidth(300);
+		observeFocus(fieldName, -1);
+		line.add(fieldName, "Name:", 1, 0);
+		
+		fieldDescr = new TextArea(assay.descr);
+		fieldDescr.setPrefWidth(300);
+		fieldDescr.setPrefRowCount(5);
+		fieldDescr.setWrapText(true);
+		observeFocus(fieldDescr, -1);
+		passthroughTab(fieldDescr);
+		line.add(fieldDescr, "Description:", 1, 0);
+
+		fieldPara = new TextArea(assay.para);
+		fieldPara.setPrefWidth(300);
+		fieldPara.setPrefRowCount(5);
+		fieldPara.setWrapText(true);
+		observeFocus(fieldPara, -1);
+		passthroughTab(fieldPara);
+		line.add(fieldPara, "Paragraph:", 1, 0);
+
+		vbox.getChildren().add(line);
+
+		// and the annotations
+		//TODO
 	}
 
 	// respond to focus so that one of the blocks gets a highlight

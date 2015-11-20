@@ -434,12 +434,18 @@ public class Schema
 		if (idx < 0 || idx >= group.assignments.size()) return null;
 		return group.assignments.get(idx);
 	}
+	
+	// locating assays: this is a bit simpler because it's a flat list
+	public int indexOfAssay(String locatorID)
+	{
+		if (!locatorID.startsWith("*")) return -1;
+		int idx = Integer.parseInt(locatorID.substring(1));
+		return idx >= 0 && idx < assays.size() ? idx : -1;
+	}
 	public Assay obtainAssay(String locatorID)
 	{
-		if (!locatorID.startsWith("*")) return null;
-		int idx = Integer.parseInt(locatorID.substring(1));
-		if (idx >= 0 && idx < assays.size()) return assays.get(idx);
-		return null;
+		int idx = indexOfAssay(locatorID);
+		return idx < 0 ? null : assays.get(idx);
 	}
 	
 	// adding of content

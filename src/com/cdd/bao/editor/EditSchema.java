@@ -305,9 +305,10 @@ public class EditSchema
 		stack.add(treeRoot);
 		while (stack.size() > 0)
 		{
-			TreeItem<Branch> branch = stack.remove(0);
-			if (branch.getValue().locatorID.equals(locatorID)) return branch;
-			for (TreeItem<Branch> item : branch.getChildren()) stack.add(item);
+			TreeItem<Branch> item = stack.remove(0);
+			String lookID = item.getValue().locatorID;
+			if (lookID != null && lookID.equals(locatorID)) return item;
+			for (TreeItem<Branch> sub : item.getChildren()) stack.add(sub);
 		}
 		return null;
 	}
@@ -367,7 +368,18 @@ public class EditSchema
 		}
 		else if (branch.assay != null)
 		{
-			// TODO
+			Schema.Assay modAssay = detail.extractAssay();
+			if (modAssay == null) return;
+			
+			Schema schema = stack.getSchema();
+
+			int idx = schema.indexOfAssay(branch.locatorID);
+			schema.setAssay(idx, modAssay);
+			branch.assay = modAssay;
+			stack.changeSchema(schema, true);
+			
+			item.setValue(new Branch());
+			item.setValue(branch); // triggers redraw
 		}
 	}
 
@@ -542,6 +554,7 @@ public class EditSchema
     	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
     	Schema.Group newGroup = schema.appendGroup(parent, new Schema.Group(null, ""));
     	stack.changeSchema(schema);
+    	
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newGroup)));
     }
@@ -561,6 +574,7 @@ public class EditSchema
     	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
     	Schema.Assignment newAssn = schema.appendAssignment(parent, new Schema.Assignment(null, "", ""));
     	stack.changeSchema(schema);
+    	
     	rebuildTree();
     	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));
     }
@@ -569,10 +583,14 @@ public class EditSchema
 		pullDetail();
 		
 		Schema schema = stack.getSchema();
-		schema.addAssay(new Schema.Assay(""));
+		
+		Schema.Assay newAssay = new Schema.Assay("");
+		
+		schema.addAssay(newAssay);
 		stack.changeSchema(schema);
+		
 		rebuildTree();
-		// !! setcurrent... zog
+		setCurrentBranch(locateBranch(schema.locatorID(newAssay)));
 	}
 	private void actionEditCopy(boolean andCut)
 	{
