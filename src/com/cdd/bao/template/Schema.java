@@ -165,7 +165,7 @@ public class Schema
 	// template root: the schema definition resides within here
 	private Group root = new Group(null, "common assay template");
 	
-	// an "assay" is an actual instance of the bioassay template, i.e. filling in the assignments with values, and 
+	// an "assay" is an actual instance of the bioassay template, i.e. filling in the assignments with values
 	public static final class Assay
 	{
 		public String name; // short label for the bioassay
@@ -262,10 +262,6 @@ public class Schema
 			
 			return assn;
 		}
-		
-		// (will need to write 'findAnnotation' to dig through group/assignment sequences, matching by name)
-		// (renaming a group will be trouble; maybe just make it really super easy to reparent things later - go hunting for the most likely candidates, using propURI and others)
-		// (will also need 'find closest matches', for when large rearrangements have occurred)
 	}
 	
 	private List<Assay> assays = new ArrayList<>();
@@ -446,6 +442,62 @@ public class Schema
 	{
 		int idx = indexOfAssay(locatorID);
 		return idx < 0 ? null : assays.get(idx);
+	}
+	
+	// given an annotation, which carries its own cloned "linear branch" as baggage, matches this sequence to the current group hierarchy
+	public Assignment findAssignment(Annotation annot)
+	{
+		Assignment fakeAssn = annot.assn;
+		List<Group> fakeGroups = new ArrayList<>();
+		for (Group p = fakeAssn.parent; p != null && p.parent != null; p = p.parent) fakeGroups.add(0, p);
+
+		// drill down the sequence of groups, until "look" is defined to be the matching group that should contain the assignment; in this way any
+		// assignment that has an exact named hierarchy match is considered to be a hit
+		Group look = root;
+		descend: while (fakeGroups.size() > 0)
+		{
+			Group fake = fakeGroups.remove(0);
+			for (Group g : look.subGroups) if (g.name.equals(fake.name))
+			{
+				look = g;
+				continue descend;
+			}
+			look = null;
+			break;
+		}
+		if (look != null)
+		{
+			for (Assignment assn : look.assignments)
+			{
+				if (assn.name.equals(fakeAssn.name) && assn.propURI.equals(fakeAssn.propURI)) return assn;
+			}
+		}
+		
+		// (try other approaches? match anything in the hierarchy?)
+		// maybe: look for a partial match, looking for immediate parents; tolerant of renames, e.g. "foo -> bar -> thing" "fnord -> bar -> thing"
+		
+		return null;
+	}
+	
+	// returns true if the annotation is considered to belong to the assignment, i.e. the assignment heading and group hierarchies both match
+	public boolean matchAnnotation(Annotation annot, Assignment assn)
+	{
+		if (!annot.assn.name.equals(assn.name) || !annot.assn.propURI.equals(assn.propURI)) return false;
+		
+		// make sure the group trail has the same name at each step
+		Group p1 = annot.assn.parent, p2 = assn.parent;
+		while (true)
+		{
+			if (p1 == null || p2 == null) return false;
+			if (p1.parent == null && p2.parent == null) break; // traced both back to the root: this is fine
+			
+			if (!p1.name.equals(p2.name)) return false;
+			
+			p1 = p1.parent;
+			p2 = p2.parent;
+		}
+		
+		return true;
 	}
 	
 	// adding of content

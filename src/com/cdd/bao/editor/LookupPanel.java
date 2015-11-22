@@ -178,7 +178,8 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		List<Resource> subset = new ArrayList<>();
 		for (Resource res : resources)
 		{
-			if (res.label.toLowerCase().indexOf(searchLC) >= 0 || res.uri.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
+			if (res.label.toLowerCase().indexOf(searchLC) >= 0 || res.uri.toLowerCase().indexOf(searchLC) >= 0 ||
+				res.descr.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
 		}
 		return subset;
 	}

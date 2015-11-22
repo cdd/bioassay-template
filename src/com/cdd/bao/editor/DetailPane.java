@@ -280,7 +280,7 @@ public class DetailPane extends ScrollPane
 		
 		Label heading = new Label("Group");
 		heading.setTextAlignment(TextAlignment.CENTER);
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0A0FF; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0A0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
 		vbox.getChildren().add(heading);
 		
 		Lineup line = new Lineup(PADDING);
@@ -311,7 +311,7 @@ public class DetailPane extends ScrollPane
 
 		Label heading = new Label("Assignment");
 		heading.setTextAlignment(TextAlignment.CENTER);
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
 		vbox.getChildren().add(heading);
 
 		Lineup line = new Lineup(PADDING);
@@ -338,7 +338,7 @@ public class DetailPane extends ScrollPane
 		
 		heading = new Label("Values");
 		heading.setTextAlignment(TextAlignment.CENTER);
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFC0; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0FFC0; -fx-padding: 0.1em 1em 0.1em 1em;");
 		vbox.getChildren().add(heading);		
 
 		valueList.clear();
@@ -391,7 +391,7 @@ public class DetailPane extends ScrollPane
 		vbox.setMaxWidth(Double.MAX_VALUE);
 		
 		Label heading = new Label("Assay");
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #B0E0E0; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #B0E0E0; -fx-padding: 0.1em 1em 0.1em 1em;");
 		vbox.getChildren().add(heading);
 
 		Lineup line = new Lineup(PADDING);
@@ -422,7 +422,7 @@ public class DetailPane extends ScrollPane
 		// annotations
 
 		heading = new Label("Annotations");
-		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #FFFFD0; -fx-padding: 0.1em;");
+		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #FFFFD0; -fx-padding: 0.1em 1em 0.1em 1em;");
 		vbox.getChildren().add(heading);
 
 		List<Schema.Annotation> orphans = new ArrayList<>(assay.annotations);
@@ -436,8 +436,7 @@ public class DetailPane extends ScrollPane
 			Schema.Group group = groupList.remove(0);
 			int indent = 0;
 			String indstr = "";
-			Schema.Group p = group.parent;
-			while (p != null) {indent++; indstr += "  "; p = p.parent;}
+			for (Schema.Group p = group.parent; p != null; p = p.parent) {indent++; indstr += "  ";}
 
 			if (group.parent != null) 
 			{
@@ -447,9 +446,23 @@ public class DetailPane extends ScrollPane
 			}
 			for (Schema.Assignment assn : group.assignments)
 			{
-				Schema.Annotation annot = null; // !! FIND in schema
-				appendAnnotationWidget(indstr + assn.name + ":", assn, annot);
-
+				// insert any annotations that match this assignment; more than one is a possibility that will be reflected (though not necessarily valid); if none
+				// were found, manufacture the unassigned state
+				String title = indstr + assn.name + ":";
+				boolean anything = false;
+				for (int n = 0; n < orphans.size(); n++)
+				{
+					Schema.Annotation annot = orphans.get(n);
+					if (schema.matchAnnotation(annot, assn))
+					{
+						anything = true;
+						appendAnnotationWidget(title, assn, annot);
+						title = "";
+						orphans.remove(n);
+						n--;
+					}
+				}
+				if (!anything) appendAnnotationWidget(title, assn, null);
 			}
 			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
 		}
@@ -460,7 +473,18 @@ public class DetailPane extends ScrollPane
     		heading = new Label("Orphans");
     		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
     		vbox.getChildren().add(heading);
-			
+
+			for (Schema.Annotation annot : orphans)
+			{
+				String title = annot.assn.name + ":";
+				for (Schema.Group p = annot.assn.parent; p != null; p = p.parent)
+				{
+					title = p.name + " / " + title;
+					p = p.parent;
+				}
+				
+				appendAnnotationWidget(title, null, annot);
+			}		
 			// !! add the orphans
 		}
 	}
@@ -529,6 +553,21 @@ public class DetailPane extends ScrollPane
 	
 		// bring up panel for assignment selection
 		Util.writeln("HIT!");
+
+		AnnotatePanel lookup = new AnnotatePanel(aw.sourceAssn, aw.sourceAnnot);
+		Optional<Schema.Annotation> result = lookup.showAndWait();
+		if (result.isPresent())
+		{
+			Schema.Annotation res = result.get();
+			if (res != null)
+			{
+			/* !!
+				vw.fieldURI.setText(res.uri);
+				vw.fieldName.setText(res.label);
+				vw.fieldDescr.setText(res.descr);*/
+			}
+		}
+
 	}
 
 	// respond to focus so that one of the blocks gets a highlight

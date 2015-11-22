@@ -177,7 +177,6 @@ public class Lineup extends Pane
 			if (u.widget != null) h = Math.max(h,(int)Math.ceil(u.widget.prefHeight(width -tw)));
 			ph += h;
 		}
-//Util.writeln("PW:"+width+" H-> "+ph);		
 		return ph + (content.size() - 1) * padding;
 	}
 	protected void layoutChildren()
