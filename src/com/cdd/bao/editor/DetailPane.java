@@ -484,8 +484,7 @@ public class DetailPane extends ScrollPane
 				}
 				
 				appendAnnotationWidget(title, null, annot);
-			}		
-			// !! add the orphans
+			}
 		}
 	}
 
@@ -550,10 +549,8 @@ public class DetailPane extends ScrollPane
 			// !! do it
 			return;
 		}
-	
-		// bring up panel for assignment selection
-		Util.writeln("HIT!");
 
+		// bring up panel for assignment selection
 		AnnotatePanel lookup = new AnnotatePanel(aw.sourceAssn, aw.sourceAnnot);
 		Optional<Schema.Annotation> result = lookup.showAndWait();
 		if (result.isPresent())
@@ -561,10 +558,12 @@ public class DetailPane extends ScrollPane
 			Schema.Annotation res = result.get();
 			if (res != null)
 			{
-			/* !!
-				vw.fieldURI.setText(res.uri);
-				vw.fieldName.setText(res.label);
-				vw.fieldDescr.setText(res.descr);*/
+				if (res.assn == null)
+					aw.sourceAnnot = null;
+				else
+					aw.sourceAnnot = res;
+
+				updateAnnotationButton(aw);
 			}
 		}
 

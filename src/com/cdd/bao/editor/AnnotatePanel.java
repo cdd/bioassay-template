@@ -33,6 +33,7 @@ import javafx.util.*;
 
 public class AnnotatePanel extends Dialog<Schema.Annotation>
 {
+	private Schema.Assignment assn;
 	private List<Schema.Value> options = new ArrayList<>();
 
 	private Button btnUse, btnClear;
@@ -55,6 +56,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	{
 		super();
 		
+		this.assn = assn;
 		options.addAll(assn.values);
 		// !! loadResources(usedURI);
 		
@@ -93,15 +95,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 			if (composeCurrentValue() == null) event.consume();
 		});
 		
-		// !! setup current values: pick tab, fill in widgets
-		
-		/*search.setText(searchText);
-		search.textProperty().addListener((observable, oldValue, newValue) -> 
-		{
-			table.setItems(FXCollections.observableArrayList(searchedSubset(newValue)));
-		});*/
-
-        //Platform.runLater(() -> search.requestFocus());
+		if (annot != null) fillCurrent(annot);
 	}
 		
 	// ------------ private methods ------------
@@ -182,7 +176,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		content.add(fieldCustomURI, "URI:", 1, 0);
 
 		fieldCustomName.setPrefWidth(300);
-		content.add(fieldCustomName, "URI:", 1, 0);
+		content.add(fieldCustomName, "Name:", 1, 0);
 
 		fieldCustomDescr.setPrefRowCount(5);
 		fieldCustomDescr.setPrefWidth(300);
@@ -192,16 +186,63 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		tabCustom.setContent(content);
 	}
 
+	// fills in widget values from an existing annotation
+	private void fillCurrent(Schema.Annotation annot)
+	{
+		if (annot.literal != null)
+		{
+			tabber.getSelectionModel().select(tabLiteral);
+			fieldLiteral.setText(annot.literal);
+        	Platform.runLater(() -> fieldLiteral.requestFocus());
+			return;
+		}
+		
+		for (int n = 0; n < assn.values.size(); n++) if (assn.values.get(n).uri.equals(annot.value.uri))
+		{
+			tabber.getSelectionModel().select(tabValue);
+			table.getSelectionModel().select(n);
+			Platform.runLater(() -> table.requestFocus());
+			return;
+		}
+		
+		tabber.getSelectionModel().select(tabCustom);
+		fieldCustomURI.setText(annot.value.uri);
+		fieldCustomName.setText(annot.value.name);
+		fieldCustomDescr.setText(annot.value.descr);
+		Platform.runLater(() -> fieldCustomURI.requestFocus());
+	}	
+
 	// produces a value based on the current tab's contents, or returns null if not valid 
 	private Schema.Annotation composeCurrentValue()
 	{
-		return null; // !!
+		Tab seltab = tabber.selectionModelProperty().get().getSelectedItem();
+		if (seltab == tabValue)
+		{
+			int idx = table.getSelectionModel().getSelectedIndex();
+			if (idx < 0) return null;
+			Schema.Value val = options.get(idx);
+			return new Schema.Annotation(assn, val);
+		}
+		else if (seltab == tabLiteral)
+		{
+			String literal = fieldLiteral.getText();
+			if (literal.length() == 0) return null;
+			return new Schema.Annotation(assn, literal);
+		}
+		else if (seltab == tabCustom)
+		{
+			Schema.Value val = new Schema.Value(fieldCustomURI.getText(), fieldCustomName.getText());
+			if (val.uri.length() == 0) return null;
+			val.descr = fieldCustomDescr.getText();
+			return new Schema.Annotation(assn, val);
+		}
+		return null;
 	}
 	
 	// creates a "blank" value, which signifies to the caller that the annotation should be zapped
 	private Schema.Annotation composeBlank()
 	{
-		return null; // !!
+		return new Schema.Annotation();
 	}
 
 	/*private void loadResources(Set<String> usedURI)

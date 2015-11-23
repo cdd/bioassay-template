@@ -203,6 +203,7 @@ public class Schema
 		public Value value = null; // mutually exclusive with literal; instances are always cloned
 		public String literal = null; // ditto/vv
 		
+		public Annotation() {assn = null;}
 		public Annotation(Assignment assn, Value value)
 		{
 			this.assn = linearBranch(assn);
