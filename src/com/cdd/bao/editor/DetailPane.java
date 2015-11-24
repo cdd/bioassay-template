@@ -567,7 +567,6 @@ public class DetailPane extends ScrollPane
 				updateAnnotationButton(aw);
 			}
 		}
-
 	}
 
 	// respond to focus so that one of the blocks gets a highlight

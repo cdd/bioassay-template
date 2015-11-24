@@ -682,10 +682,9 @@ public class EditSchema
     {
     	TreeItem<Branch> item = currentBranch();
     	Branch branch = item == null ? null : item.getValue();
-    	// TODO: assay..
-    	if (branch == null || (branch.group == null && branch.assignment == null))
+    	if (branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
     	{
-    		informMessage("Delete Branch", "Select a group or assignment to delete.");
+    		informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
     		return;
     	}
     	if (item == treeRoot)
@@ -710,9 +709,17 @@ public class EditSchema
     		parent = assn.parent;
     		schema.deleteAssignment(assn);
     	}
+    	if (branch.assay != null)
+    	{
+    		Schema.Assay assay = schema.obtainAssay(branch.locatorID);
+    		schema.deleteAssay(assay);
+    	}
     	stack.changeSchema(schema);
     	rebuildTree();
-    	setCurrentBranch(locateBranch(schema.locatorID(parent)));
+    	if (parent != null) 
+    		setCurrentBranch(locateBranch(schema.locatorID(parent)));
+    	else
+    		detail.clearContent();
     }
     private void actionEditUndo()
     {

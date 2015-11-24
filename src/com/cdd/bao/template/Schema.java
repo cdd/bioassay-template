@@ -557,6 +557,10 @@ public class Schema
 	{
 		assn.parent.assignments.remove(assn);
 	}
+	public void deleteAssay(Assay assay)
+	{
+		assays.remove(assay);
+	}
 
 	// shuffles the object up or down the parents' hierarchy
 	public void moveGroup(Group group, int dir)
