@@ -164,9 +164,12 @@ public class DetailPane extends ScrollPane
 		mod.descr = fieldDescr.getText();
 		mod.para = fieldPara.getText();
 		
-		// !! TODO: pull in the annotations
-		
+		for (AnnotWidgets aw : annotList) if (aw.sourceAnnot != null) mod.annotations.add(aw.sourceAnnot.clone());
+
 		if (assay.equals(mod)) return null;
+		
+		assay = mod; // (makes sure that the next call will claim nothing happened; is this valid?)
+		
 		return mod;
 	}
 
@@ -507,6 +510,8 @@ public class DetailPane extends ScrollPane
 		vbox.getChildren().add(aw.line);
 		
 		aw.buttonShow.setOnAction(event -> pressedAnnotationButton(aw));
+		
+		annotList.add(aw);
 	}
 	
 	// configures the button content and theme for an annotation

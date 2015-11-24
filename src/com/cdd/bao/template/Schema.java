@@ -47,11 +47,24 @@ public class Schema
 	public static final String MAPS_TO = "mapsTo";
 
 	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
+	
+	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
+	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
 
 	// ------------ private data ------------	
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
+
+	// defined during [de]serialisation
+	private Property rdfLabel, rdfType;
+	private Resource batRoot, batAssay;
+	private Resource batGroup, batAssignment;
+	private Property hasGroup, hasAssignment;
+	private Property hasDescription, inOrder, hasParagraph;
+	private Property hasProperty, hasValue;
+	private Property mapsTo;
+	private Property hasAnnotation, isAssignment;
 
 	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
@@ -189,7 +202,9 @@ public class Schema
 		public boolean equals(Assay other)
 		{
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para)) return false;
-			// !! the rest...
+			if (annotations.size() != other.annotations.size()) return false;
+			for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
+			
 			return true;
 		}
 	}
@@ -221,7 +236,7 @@ public class Schema
 		}
 		public boolean equals(Annotation other)
 		{
-			if (!assn.equals(other)) return false;
+			if (!assn.equals(other.assn)) return false;
 			Group p1 = assn.parent, p2 = other.assn.parent;
 			while (true)
 			{
@@ -266,17 +281,10 @@ public class Schema
 	}
 	
 	private List<Assay> assays = new ArrayList<>();
-
-	// defined during [de]serialisation
-	private Property rdfLabel, rdfType;
-	private Resource batRoot, batAssay;
-	private Resource batGroup, batAssignment;
-	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder, hasParagraph;
-	private Property hasProperty, hasValue;
-	private Property mapsTo;
 	
-	private Map<String, Integer> nameCounts; // restart this for each serialisation: ensures no name clashes
+	// data used only during serialisation
+	private Map<String, Integer> nameCounts; // ensures no name clashes
+	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
 
 	// ------------ public methods ------------	
 
@@ -373,7 +381,30 @@ public class Schema
 			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
 			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
 			
-			// !! the content....
+			for (int i = 0; i < assay.annotations.size(); i++)
+			{
+				Annotation annot = assay.annotations.get(i);
+			
+				Resource blank = model.createResource();
+				model.add(objAssay, hasAnnotation, blank);
+
+				// looks up the assignment in the overall hierarchy, to obtain the recently-created URI
+				Assignment assn = findAssignment(annot);
+				if (assn != null) model.add(blank, isAssignment, assignmentToResource.get(assn));
+
+				// emits either value or literal, with any accompanying decoration
+				if (annot.value != null)
+				{
+					model.add(blank, hasProperty, model.createResource(annot.assn.propURI)); // note: using propURI stored in its own linear branch
+					model.add(blank, hasValue, model.createResource(annot.value.uri));
+					if (annot.value.name.length() > 0) model.add(blank, rdfLabel, model.createLiteral(annot.value.name));
+					if (annot.value.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(annot.value.descr));
+				}
+				else
+				{
+					model.add(blank, hasValue, model.createLiteral(annot.literal));
+				}
+			}
 		}
 		
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
@@ -611,8 +642,11 @@ public class Schema
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
 		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
+		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
+		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
 		
-		nameCounts = new HashMap<String, Integer>();
+		nameCounts = new HashMap<>();
+		assignmentToResource = new HashMap<>();
 	}
 
 	private void formulateGroup(Model model, Resource objParent, Group group)
@@ -645,6 +679,8 @@ public class Schema
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
+			
+			assignmentToResource.put(assn,  objAssn); // for subsequent retrieval
 		}
 		
 		// recursively emit any subcategories
