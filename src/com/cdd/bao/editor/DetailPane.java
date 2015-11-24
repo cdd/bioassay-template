@@ -480,11 +480,7 @@ public class DetailPane extends ScrollPane
 			for (Schema.Annotation annot : orphans)
 			{
 				String title = annot.assn.name + ":";
-				for (Schema.Group p = annot.assn.parent; p != null; p = p.parent)
-				{
-					title = p.name + " / " + title;
-					p = p.parent;
-				}
+				for (Schema.Group p = annot.assn.parent; p != null; p = p.parent) title = p.name + " / " + title;
 				
 				appendAnnotationWidget(title, null, annot);
 			}
@@ -550,8 +546,8 @@ public class DetailPane extends ScrollPane
 		// orphan annotations: clicking deletes
 		if (aw.sourceAssn == null)
 		{
-			Util.writeln("DELETE ORPHAN");
-			// !! do it
+			vbox.getChildren().remove(aw.line);
+			annotList.remove(aw);
 			return;
 		}
 

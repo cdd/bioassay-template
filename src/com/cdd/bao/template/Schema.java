@@ -50,6 +50,7 @@ public class Schema
 	
 	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
+	public static final String HAS_LITERAL = "hasLiteral"; // used for annotations
 
 	// ------------ private data ------------	
 
@@ -64,7 +65,7 @@ public class Schema
 	private Property hasDescription, inOrder, hasParagraph;
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
-	private Property hasAnnotation, isAssignment;
+	private Property hasAnnotation, isAssignment, hasLiteral;
 
 	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
@@ -285,6 +286,7 @@ public class Schema
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
 	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
+	private Map<Resource, Assignment> resourceToAssignment; // or vice versa for loading
 
 	// ------------ public methods ------------	
 
@@ -402,7 +404,7 @@ public class Schema
 				}
 				else
 				{
-					model.add(blank, hasValue, model.createLiteral(annot.literal));
+					model.add(blank, hasLiteral, model.createLiteral(annot.literal));
 				}
 			}
 		}
@@ -644,6 +646,7 @@ public class Schema
 		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
 		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
 		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
+		hasLiteral = model.createProperty(PFX_BAT + HAS_LITERAL);
 		
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
@@ -709,7 +712,7 @@ public class Schema
 	
 		setupResources(model);	
 
-		//model.add(objRoot, rdfType, batRoot);
+		// extract the template
 		Resource objRoot = null;
 		for (StmtIterator it = model.listStatements(null, rdfType, batRoot); it.hasNext();)
 		{
@@ -721,21 +724,28 @@ public class Schema
 		root = new Group(null, findString(model, objRoot, rdfLabel));
 		root.descr = findString(model, objRoot, hasDescription);
 		
+		resourceToAssignment = new HashMap<>();
+		
 		parseGroup(model, objRoot, root);
+
+		// extract each of the assays
+		Map<Object, Integer> order = new HashMap<>();
+		for (StmtIterator it = model.listStatements(null, rdfType, batAssay); it.hasNext();)
+		{
+			Resource objAssay = it.next().getSubject();
+			
+			Assay assay = parseAssay(model, objAssay);
+			assays.add(assay);
+			
+			order.put(assay, findInteger(model, objAssay, inOrder));
+		}
+		assays.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
 	}
 	
 	// for a given category node, pulls out and parses all of its assignments and subcategories
 	private void parseGroup(Model model, Resource objParent, Group group) throws IOException
 	{
 		final Map<Object, Integer> order = new HashMap<>();
-		Comparator<Object> comparator = new Comparator<Object>()
-		{
-    		public int compare(Object r1, Object r2)
-    		{
-    			int v1 = order.get(r1), v2 = order.get(r2);
-    			return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-    		}
-		};
 	
 		// look for assignments
 		for (StmtIterator it = model.listStatements(objParent, hasAssignment, (RDFNode)null); it.hasNext();)
@@ -748,8 +758,10 @@ public class Schema
 			Assignment assn = parseAssignment(model, group, objAssn);
 			group.assignments.add(assn);
 			order.put(assn, findInteger(model, objAssn, inOrder));
+			
+			resourceToAssignment.put(objAssn, assn);
 		}
-		group.assignments.sort(comparator);
+		group.assignments.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
 		
 		// look for subcategories
 		order.clear();
@@ -766,7 +778,7 @@ public class Schema
     		
     		parseGroup(model, objGroup, subgrp);
 		}
-		group.subGroups.sort(comparator);
+		group.subGroups.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
 	}
 	
 	private Assignment parseAssignment(Model model, Group group, Resource objAssn) throws IOException
@@ -784,6 +796,50 @@ public class Schema
 		}
 
 		return assn;
+	}
+	
+	private Assay parseAssay(Model model, Resource objAssay)
+	{
+		Assay assay = new Assay(findString(model, objAssay, rdfLabel));
+		
+		assay.descr = findString(model, objAssay, hasDescription);
+		assay.para = findString(model, objAssay, hasParagraph);
+		
+		for (StmtIterator it = model.listStatements(objAssay, hasAnnotation, (RDFNode)null); it.hasNext();)
+		{
+			Resource blank = (Resource)it.next().getObject();
+
+			Resource assnURI = findResource(model, blank, isAssignment);
+			String label = findString(model, blank, rdfLabel);
+			String descr = findString(model, blank, hasDescription);
+			Resource propURI = findResource(model, blank, hasProperty);
+			Resource valueURI = findResource(model, blank, hasValue);
+			String valueLiteral = findString(model, blank, hasLiteral);
+
+			// lookup the assignment in the template and if none, make a fake one (will be treated as an "orphan")
+			Assignment assn = resourceToAssignment.get(assnURI);
+			if (assn == null)
+			{	
+				// !! not saving enough information to recreate a dummy assignment
+				continue;
+			}
+
+			// create the annotation
+			if (valueURI != null)
+			{
+				Annotation annot = new Annotation(assn, new Value(valueURI.toString(), label));
+				annot.value.descr = descr;
+				assay.annotations.add(annot);
+			}
+			else if (valueLiteral.length() > 0)
+			{
+				Annotation annot = new Annotation(assn, valueLiteral);
+				assay.annotations.add(annot);
+			}
+			// (else ignore)
+		}
+	
+		return assay;
 	}
 	
 	private String turnLabelIntoName(String label)
