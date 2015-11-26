@@ -24,6 +24,7 @@ public class Schema
 {
 	public static final String PFX_BAO = "http://www.bioassayontology.org/bao#"; // BioAssay Ontology
 	public static final String PFX_BAT = "http://www.bioassayontology.org/bat#"; // BioAssay Template
+	public static final String PFX_BAS = "http://www.bioassayontology.org/bas#"; // BioAssay Schema (used as the default)
 	
 	public static final String PFX_OBO = "http://purl.obolibrary.org/obo/";
 	public static final String PFX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -52,7 +53,7 @@ public class Schema
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
 	public static final String HAS_LITERAL = "hasLiteral"; // used for annotations
 
-	// ------------ private data ------------	
+	// ------------ private data: transient ------------	
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -66,6 +67,16 @@ public class Schema
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral;
+
+	// data used only during serialisation
+	private Map<String, Integer> nameCounts; // ensures no name clashes
+	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
+	private Map<Resource, Assignment> resourceToAssignment; // or vice versa for loading
+
+	// ------------ private data: content ------------	
+
+	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
+	private String schemaPrefix = PFX_BAS;
 
 	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
@@ -283,11 +294,6 @@ public class Schema
 	
 	private List<Assay> assays = new ArrayList<>();
 	
-	// data used only during serialisation
-	private Map<String, Integer> nameCounts; // ensures no name clashes
-	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
-	private Map<Resource, Assignment> resourceToAssignment; // or vice versa for loading
-
 	// ------------ public methods ------------	
 
 	public Schema(Vocabulary vocab)
@@ -312,6 +318,10 @@ public class Schema
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
 	}
+	
+	// access to the schema prefix, which serves as the namespace
+	public String getSchemaPrefix() {return schemaPrefix;}
+	public void setSchemaPrefix(String prefix) {schemaPrefix = prefix;}
 	
 	// returns the top level group: all of the assignments and subgroups are considered to be
 	// connected to the primary assay description, and the root's category name is a description of this
@@ -365,7 +375,7 @@ public class Schema
 				
 		setupResources(model);
 		
-		Resource objRoot = model.createResource(PFX_BAT + turnLabelIntoName(root.name));
+		Resource objRoot = model.createResource(schemaPrefix + turnLabelIntoName(root.name));
 		model.add(objRoot, rdfType, batRoot);
 		model.add(objRoot, rdfType, batGroup);
 		model.add(objRoot, rdfLabel, root.name);
@@ -376,7 +386,7 @@ public class Schema
 		for (int n = 0; n < assays.size(); n++)
 		{
 			Assay assay = assays.get(n);
-			Resource objAssay = model.createResource(PFX_BAT + turnLabelIntoName(assay.name));
+			Resource objAssay = model.createResource(schemaPrefix + turnLabelIntoName(assay.name));
 			model.add(objAssay, rdfType, batAssay);
 			model.add(objAssay, rdfLabel, assay.name);
 			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
@@ -628,6 +638,7 @@ public class Schema
 	{
 		model.setNsPrefix("bao", Schema.PFX_BAO);
 		model.setNsPrefix("bat", Schema.PFX_BAT);
+		model.setNsPrefix("bas", schemaPrefix);
 		model.setNsPrefix("obo", Schema.PFX_OBO);
 		model.setNsPrefix("rdfs", Schema.PFX_RDFS);
 		model.setNsPrefix("xsd", Schema.PFX_XSD);
@@ -664,7 +675,7 @@ public class Schema
 		{
 			String name = turnLabelIntoName(assn.name);
 						
-			Resource objAssn = model.createResource(PFX_BAT + name);
+			Resource objAssn = model.createResource(schemaPrefix + name);
 			model.add(objParent, hasAssignment, objAssn);
 			model.add(objAssn, rdfType, batAssignment);
 			model.add(objAssn, rdfLabel, assn.name);
@@ -694,7 +705,7 @@ public class Schema
 		String parentName = turnLabelIntoName(group.name);
 		for (Group subgrp : group.subGroups)
 		{
-    		Resource objGroup = model.createResource(PFX_BAT + turnLabelIntoName(subgrp.name));
+    		Resource objGroup = model.createResource(schemaPrefix + turnLabelIntoName(subgrp.name));
     		model.add(objParent, hasGroup, objGroup);
     		model.add(objGroup, rdfType, batGroup);
     		model.add(objGroup, rdfLabel, subgrp.name);
@@ -724,6 +735,10 @@ public class Schema
 			break;
 		}
 		if (objRoot == null) throw new IOException("No template root found: this is probably not a bioassay template file.");
+		
+		String rootURI = objRoot.toString();
+		int pfxsz = rootURI.lastIndexOf('#');
+		if (pfxsz > 0) schemaPrefix = rootURI.substring(0, pfxsz + 1);
 
 		root = new Group(null, findString(model, objRoot, rdfLabel));
 		root.descr = findString(model, objRoot, hasDescription);

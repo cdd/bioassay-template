@@ -44,6 +44,7 @@ public class DetailPane extends ScrollPane
 	private final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
+	private TextField fieldPrefix = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private TextField fieldURI = null;
@@ -127,6 +128,12 @@ public class DetailPane extends ScrollPane
 	public boolean isAssignment() {return assignment != null;}
 	public boolean isAssay() {return assay != null;}
 	
+	// fetches the current version of the editing prefix (unlike below, does not check for changed)
+	public String extractPrefix()
+	{
+		return group == null || group.parent != null ? null : fieldPrefix.getText();
+	}
+
 	// extracts a representation of the content from the current widgets; note that these return null if nothing has changed (or if it's not that content type)
 	public Schema.Group extractGroup()
 	{
@@ -280,6 +287,31 @@ public class DetailPane extends ScrollPane
 		focusIndex = -1;
 	
 		vbox.getChildren().clear();
+		
+		if (group.parent == null)
+		{
+    		Label heading = new Label("Root");
+    		heading.setTextAlignment(TextAlignment.CENTER);
+    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
+    		vbox.getChildren().add(heading);
+    		
+    		Lineup line = new Lineup(PADDING);
+    		line.setMaxWidth(Double.MAX_VALUE);
+    		
+    		Label notes = new Label(
+    			"The schema prefix is a URI stem, which is used as the basis for naming all of the objects that are used by the schema. For loading and saving files, " +
+    			"its value does not matter, but for publishing on the semantic web, it is essential to select a unique namespace.");
+    		notes.setWrapText(true);
+    		notes.setPrefWidth(300);
+    		notes.setMaxWidth(Double.MAX_VALUE);
+    		line.add(notes, null, 1, 0, Lineup.NOINDENT);
+    
+    		fieldPrefix = new TextField(schema.getSchemaPrefix());
+    		fieldPrefix.setPrefWidth(300);
+    		line.add(fieldPrefix, "Prefix:", 1, 0);
+
+    		vbox.getChildren().add(line);
+		}
 		
 		Label heading = new Label("Group");
 		heading.setTextAlignment(TextAlignment.CENTER);

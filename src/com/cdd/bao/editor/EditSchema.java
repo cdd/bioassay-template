@@ -10,6 +10,7 @@ import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import javafx.event.*;
@@ -327,6 +328,27 @@ public class EditSchema
 
 		if (branch.group != null)
 		{
+			// if root, check prefix first
+			String prefix = detail.extractPrefix();
+			if (prefix != null)
+			{
+				prefix = prefix.trim();
+				if (!prefix.endsWith("#")) prefix += "#";
+				if (!stack.peekSchema().getSchemaPrefix().equals(prefix))
+				{
+    				try {new URI(prefix);}
+    				catch (Exception ex)
+    				{
+    					//informMessage("Invalid URI", "Prefix is not a valid URI: " + prefix);
+    					return;
+    				}
+    				Schema schema = stack.getSchema();
+    				schema.setSchemaPrefix(prefix);
+    				stack.setSchema(schema);
+				}
+			}
+			
+			// then handle the group content
 			Schema.Group modGroup = detail.extractGroup();
 			if (modGroup == null) return;
 
