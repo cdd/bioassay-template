@@ -11,73 +11,14 @@ import com.cdd.bao.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.riot.*;
-
 /*
-	Schema: functionality for encapsulating a "BioAssay Template" document. The serialisation format is an OWL
-	file consisting of RDF triples used to describe a schema that instructs on how to use the BioAssay Ontology
-	(and related vocabulatory) to mark up an biological assay.
+	Schema: functionality for encapsulating a "BioAssay Template" document and some number of accompanying annotated
+	assays. The datastructure matches a portion of the semantic triples that represent the same thing, but once it
+	is deserialised, it is independent of the underlying triples. It works closely with ModelSchema.
 */
 
 public class Schema
 {
-	public static final String PFX_BAO = "http://www.bioassayontology.org/bao#"; // BioAssay Ontology
-	public static final String PFX_BAT = "http://www.bioassayontology.org/bat#"; // BioAssay Template
-	public static final String PFX_BAS = "http://www.bioassayontology.org/bas#"; // BioAssay Schema (used as the default)
-	
-	public static final String PFX_OBO = "http://purl.obolibrary.org/obo/";
-	public static final String PFX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	public static final String PFX_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
-	public static final String PFX_XSD = "http://www.w3.org/2001/XMLSchema#";
-
-	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
-	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
-	
-	// a group is made up of groups & assignments
-	public static final String BAT_GROUP = "Group";
-	public static final String HAS_GROUP = "hasGroup";
-	public static final String BAT_ASSIGNMENT = "Assignment";
-	public static final String HAS_ASSIGNMENT = "hasAssignment";
-
-	public static final String HAS_DESCRIPTION = "hasDescription"; // longwinded version of rdf:label
-	public static final String IN_ORDER = "inOrder"; // each group/assignment can have one of these
-	
-	public static final String HAS_PROPERTY = "hasProperty"; // maps to predicate (one per assignment)
-	public static final String HAS_VALUE = "hasValue"; // contains a value option (many per assignment)	
-	public static final String MAPS_TO = "mapsTo";
-
-	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
-	
-	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
-	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
-	public static final String HAS_LITERAL = "hasLiteral"; // used for annotations
-
-	// ------------ private data: transient ------------	
-
-	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
-	private int watermark = 1; // autogenned next editable identifier
-
-	// defined during [de]serialisation
-	private Property rdfLabel, rdfType;
-	private Resource batRoot, batAssay;
-	private Resource batGroup, batAssignment;
-	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder, hasParagraph;
-	private Property hasProperty, hasValue;
-	private Property mapsTo;
-	private Property hasAnnotation, isAssignment, hasLiteral;
-
-	// data used only during serialisation
-	private Map<String, Integer> nameCounts; // ensures no name clashes
-	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
-	private Map<Resource, Assignment> resourceToAssignment; // or vice versa for loading
-
-	// ------------ private data: content ------------	
-
-	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
-	private String schemaPrefix = PFX_BAS;
-
 	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
 	public static final class Group
@@ -187,9 +128,6 @@ public class Schema
 		}
 	}
 
-	// template root: the schema definition resides within here
-	private Group root = new Group(null, "common assay template");
-	
 	// an "assay" is an actual instance of the bioassay template, i.e. filling in the assignments with values
 	public static final class Assay
 	{
@@ -292,13 +230,21 @@ public class Schema
 		}
 	}
 	
+	// ------------ private methods ------------	
+	
+	// template root: the schema definition resides within here
+	private Group root = new Group(null, "common assay template");
+	
+	// accompanying assays
 	private List<Assay> assays = new ArrayList<>();
+	
+	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
+	private String schemaPrefix = ModelSchema.PFX_BAS;
 	
 	// ------------ public methods ------------	
 
-	public Schema(Vocabulary vocab)
+	public Schema()
 	{
-		this.vocab = vocab;
 	}
 	
 	// returns true if the content is literally equivalent
@@ -313,7 +259,7 @@ public class Schema
 	// makes a deep copy of the schema content
 	public Schema clone()
 	{
-		Schema dup = new Schema(vocab);
+		Schema dup = new Schema();
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
@@ -345,81 +291,6 @@ public class Schema
 		root.outputAsString(buff, 0);
 		// !! and assays...
 		return buff.toString();
-	}
-	
-	// load in previously saved file
-	public static Schema deserialise(File file) throws IOException
-	{
-		FileInputStream istr = new FileInputStream(file);
-		Schema schema = deserialise(istr);
-		istr.close();
-		return schema;
-	}
-	public static Schema deserialise(InputStream istr) throws IOException
-	{
-		Schema schema = new Schema(null);
-		schema.parseFromStream(istr);
-		return schema;
-	}
-	
-	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
-	public void serialise(File file) throws IOException
-	{
-		BufferedOutputStream ostr = new BufferedOutputStream(new FileOutputStream(file));
-		serialise(ostr);
-		ostr.close();
-	}
-	public void serialise(OutputStream ostr) throws IOException
-	{
-		Model model = ModelFactory.createDefaultModel();
-				
-		setupResources(model);
-		
-		Resource objRoot = model.createResource(schemaPrefix + turnLabelIntoName(root.name));
-		model.add(objRoot, rdfType, batRoot);
-		model.add(objRoot, rdfType, batGroup);
-		model.add(objRoot, rdfLabel, root.name);
-		if (root.descr.length() > 0) model.add(objRoot, hasDescription, root.descr);
-		
-		formulateGroup(model, objRoot, root);
-
-		for (int n = 0; n < assays.size(); n++)
-		{
-			Assay assay = assays.get(n);
-			Resource objAssay = model.createResource(schemaPrefix + turnLabelIntoName(assay.name));
-			model.add(objAssay, rdfType, batAssay);
-			model.add(objAssay, rdfLabel, assay.name);
-			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
-			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
-			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
-			
-			for (int i = 0; i < assay.annotations.size(); i++)
-			{
-				Annotation annot = assay.annotations.get(i);
-			
-				Resource blank = model.createResource();
-				model.add(objAssay, hasAnnotation, blank);
-
-				// looks up the assignment in the overall hierarchy, to obtain the recently-created URI
-				Assignment assn = findAssignment(annot);
-				if (assn != null) model.add(blank, isAssignment, assignmentToResource.get(assn));
-
-				// emits either value or literal, with any accompanying decoration
-				if (annot.value != null)
-				{
-					model.add(blank, hasProperty, model.createResource(annot.assn.propURI)); // note: using propURI stored in its own linear branch
-					model.add(blank, hasValue, model.createResource(annot.value.uri));
-					if (annot.value.name.length() > 0) model.add(blank, rdfLabel, model.createLiteral(annot.value.name));
-					if (annot.value.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(annot.value.descr));
-				}
-				else
-				{
-					model.add(blank, hasLiteral, model.createLiteral(annot.literal));
-				}
-			}
-		}
-		
-		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
 	
 	// returns a string that identifies the object's position in the hierarchy; this can be used to apply between two schema instances with
@@ -634,304 +505,4 @@ public class Schema
 	
 	// ------------ private methods ------------	
 
-	private void setupResources(Model model)
-	{
-		model.setNsPrefix("bao", Schema.PFX_BAO);
-		model.setNsPrefix("bat", Schema.PFX_BAT);
-		model.setNsPrefix("bas", schemaPrefix);
-		model.setNsPrefix("obo", Schema.PFX_OBO);
-		model.setNsPrefix("rdfs", Schema.PFX_RDFS);
-		model.setNsPrefix("xsd", Schema.PFX_XSD);
-		model.setNsPrefix("rdf", Schema.PFX_RDF);
-
-		rdfLabel = model.createProperty(PFX_RDFS + "label");
-		rdfType = model.createProperty(PFX_RDF + "type");
-
-		batRoot = model.createResource(PFX_BAT + BAT_ROOT);
-		batAssay = model.createResource(PFX_BAT + BAT_ASSAY);
-		batGroup = model.createResource(PFX_BAT + BAT_GROUP);
-		batAssignment = model.createResource(PFX_BAT + BAT_ASSIGNMENT);
-		hasGroup = model.createProperty(PFX_BAT + HAS_GROUP);
-		hasAssignment = model.createProperty(PFX_BAT + HAS_ASSIGNMENT);
-		hasDescription = model.createProperty(PFX_BAT + HAS_DESCRIPTION);
-		inOrder = model.createProperty(PFX_BAT + IN_ORDER);
-		hasProperty = model.createProperty(PFX_BAT + HAS_PROPERTY);
-		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
-		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
-		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
-		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
-		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
-		hasLiteral = model.createProperty(PFX_BAT + HAS_LITERAL);
-		
-		nameCounts = new HashMap<>();
-		assignmentToResource = new HashMap<>();
-	}
-
-	private void formulateGroup(Model model, Resource objParent, Group group)
-	{
-		int order = 0;
-		
- 		for (Assignment assn : group.assignments)
-		{
-			String name = turnLabelIntoName(assn.name);
-						
-			Resource objAssn = model.createResource(schemaPrefix + name);
-			model.add(objParent, hasAssignment, objAssn);
-			model.add(objAssn, rdfType, batAssignment);
-			model.add(objAssn, rdfLabel, assn.name);
-			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
-			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
-			model.add(objAssn, hasProperty, model.createResource(assn.propURI));
-			
-			int vorder = 0;
-			for (Value val : assn.values)
-			{
-				Resource objValue = val.uri == null ? null : model.createResource(val.uri);
-				
-				Resource blank = model.createResource();
-				
-				model.add(objAssn, hasValue, blank);
-				
-				if (objValue != null) model.add(blank, mapsTo, objValue);
-				model.add(blank, rdfLabel, model.createLiteral(val.name));
-				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
-				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
-			}
-			
-			assignmentToResource.put(assn,  objAssn); // for subsequent retrieval
-		}
-		
-		// recursively emit any subcategories
-		String parentName = turnLabelIntoName(group.name);
-		for (Group subgrp : group.subGroups)
-		{
-    		Resource objGroup = model.createResource(schemaPrefix + turnLabelIntoName(subgrp.name));
-    		model.add(objParent, hasGroup, objGroup);
-    		model.add(objGroup, rdfType, batGroup);
-    		model.add(objGroup, rdfLabel, subgrp.name);
-    		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
-			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
-    		
-    		formulateGroup(model, objGroup, subgrp);
-		}
-	}
-
-	// pull in an RDF-compatible file, and pull out the model information
-	private void parseFromStream(InputStream istr) throws IOException
-	{
-		Model model = ModelFactory.createDefaultModel();
-
-		try {RDFDataMgr.read(model, istr, Lang.TTL);}
-		//catch (IOException ex) {throw ex;}
-		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
-	
-		setupResources(model);	
-
-		// extract the template
-		Resource objRoot = null;
-		for (StmtIterator it = model.listStatements(null, rdfType, batRoot); it.hasNext();)
-		{
-			objRoot = it.next().getSubject();
-			break;
-		}
-		if (objRoot == null) throw new IOException("No template root found: this is probably not a bioassay template file.");
-		
-		String rootURI = objRoot.toString();
-		int pfxsz = rootURI.lastIndexOf('#');
-		if (pfxsz > 0) schemaPrefix = rootURI.substring(0, pfxsz + 1);
-
-		root = new Group(null, findString(model, objRoot, rdfLabel));
-		root.descr = findString(model, objRoot, hasDescription);
-		
-		resourceToAssignment = new HashMap<>();
-		
-		parseGroup(model, objRoot, root);
-
-		// extract each of the assays
-		Map<Object, Integer> order = new HashMap<>();
-		for (StmtIterator it = model.listStatements(null, rdfType, batAssay); it.hasNext();)
-		{
-			Resource objAssay = it.next().getSubject();
-			
-			Assay assay = parseAssay(model, objAssay);
-			assays.add(assay);
-			
-			order.put(assay, findInteger(model, objAssay, inOrder));
-		}
-		assays.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
-	}
-	
-	// for a given category node, pulls out and parses all of its assignments and subcategories
-	private void parseGroup(Model model, Resource objParent, Group group) throws IOException
-	{
-		final Map<Object, Integer> order = new HashMap<>();
-	
-		// look for assignments
-		for (StmtIterator it = model.listStatements(objParent, hasAssignment, (RDFNode)null); it.hasNext();)
-		{
-			Statement st = it.next();
-			Resource objAssn = (Resource)st.getObject();
-			
-			//Util.writeln("Cat:"+category.categoryName+ " prop:"+clsProp.toString());
-			
-			Assignment assn = parseAssignment(model, group, objAssn);
-			group.assignments.add(assn);
-			order.put(assn, findInteger(model, objAssn, inOrder));
-			
-			resourceToAssignment.put(objAssn, assn);
-		}
-		group.assignments.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
-		
-		// look for subcategories
-		order.clear();
-		for (StmtIterator it = model.listStatements(objParent, hasGroup, (RDFNode)null); it.hasNext();)
-		{
-			Statement st = it.next();
-			Resource objGroup = (Resource)st.getObject();
-			
-    		Group subgrp = new Group(group, findString(model, objGroup, rdfLabel));
-    		subgrp.descr = findString(model, objGroup, hasDescription);
-    		
-    		group.subGroups.add(subgrp);
-    		order.put(subgrp, findInteger(model, objGroup, inOrder));
-    		
-    		parseGroup(model, objGroup, subgrp);
-		}
-		group.subGroups.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
-	}
-	
-	private Assignment parseAssignment(Model model, Group group, Resource objAssn) throws IOException
-	{
-		Assignment assn = new Assignment(group, findString(model, objAssn, rdfLabel), findAsString(model, objAssn, hasProperty));
-		assn.descr = findString(model, objAssn, hasDescription);
-		
-		for (StmtIterator it = model.listStatements(objAssn, hasValue, (RDFNode)null); it.hasNext();)
-		{
-			Resource blank = (Resource)it.next().getObject();
-					
-			Value val = new Value(findAsString(model, blank, mapsTo), findString(model, blank, rdfLabel));
-			val.descr = findString(model, blank, hasDescription);
-			assn.values.add(val);
-		}
-
-		return assn;
-	}
-	
-	private Assay parseAssay(Model model, Resource objAssay)
-	{
-		Assay assay = new Assay(findString(model, objAssay, rdfLabel));
-		
-		assay.descr = findString(model, objAssay, hasDescription);
-		assay.para = findString(model, objAssay, hasParagraph);
-		
-		for (StmtIterator it = model.listStatements(objAssay, hasAnnotation, (RDFNode)null); it.hasNext();)
-		{
-			Resource blank = (Resource)it.next().getObject();
-
-			Resource assnURI = findResource(model, blank, isAssignment);
-			String label = findString(model, blank, rdfLabel);
-			String descr = findString(model, blank, hasDescription);
-			Resource propURI = findResource(model, blank, hasProperty);
-			Resource valueURI = findResource(model, blank, hasValue);
-			String valueLiteral = findString(model, blank, hasLiteral);
-
-			// lookup the assignment in the template and if none, make a fake one (will be treated as an "orphan")
-			Assignment assn = resourceToAssignment.get(assnURI);
-			if (assn == null)
-			{	
-				// !! not saving enough information to recreate a dummy assignment
-				continue;
-			}
-
-			// create the annotation
-			if (valueURI != null)
-			{
-				Annotation annot = new Annotation(assn, new Value(valueURI.toString(), label));
-				annot.value.descr = descr;
-				assay.annotations.add(annot);
-			}
-			else if (valueLiteral.length() > 0)
-			{
-				Annotation annot = new Annotation(assn, valueLiteral);
-				assay.annotations.add(annot);
-			}
-			// (else ignore)
-		}
-	
-		return assay;
-	}
-	
-	private String turnLabelIntoName(String label)
-	{
-		if (label == null) return null;
-		if (label.length() == 0) label = "unnamed";
-		
-		StringBuffer buff = new StringBuffer();
-		for (String bit : label.split(" "))
-    	{
-    		if (bit.length() == 0) continue;
-    		char[] chars = new char[bit.length()];
-    		bit.getChars(0, bit.length(), chars, 0);
-    		chars[0] = Character.toUpperCase(chars[0]);
-    		for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
-    			buff.append(ch);
-    	}
-    	
-    	// if the name was previously encountered, give it a number suffix to disambiguate
-    	String name = buff.toString();
-    	Integer count = nameCounts.get(name);
-    	if (count != null)
-    	{
-    		count++;
-    		name += count;
-    		nameCounts.put(name, count);
-    	}
-    	else nameCounts.put(name, count);
-    	
-    	return name;    	
-	}
-	
-	// looks for an assignment and returns it as a string regardless of what type it actually is; blank if not found
-	private String findAsString(Model model, Resource subj, Property prop)
-	{
-		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();) return it.next().getObject().toString();
-		return "";
-	}
-
-	// looks up a specific string, typically a label or similar; returns blank string if not found
-	private String findString(Model model, Resource subj, Property prop)
-	{
-		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
-		{
-			RDFNode obj = it.next().getObject();
-			if (obj.isLiteral()) return obj.toString();
-		}
-		return "";
-	}
-	
-	// looks for an explicitly typed integer; returns 0 if not found
-	private int findInteger(Model model, Resource subj, Property prop)
-	{
-		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
-		{
-			RDFNode obj = it.next().getObject();
-			if (obj.isLiteral())
-			{
-				Literal lit = obj.asLiteral();
-				if (lit.getValue() instanceof Object) return lit.getInt();
-			}
-		}
-		return 0;
-	}
-	
-	// look for a URI node; returns null if none
-	private Resource findResource(Model model, Resource subj, Property prop)
-	{
-		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
-		{
-			RDFNode obj = it.next().getObject();
-			if (obj.isResource()) return obj.asResource();
-		}
-		return null;
-	}
 }

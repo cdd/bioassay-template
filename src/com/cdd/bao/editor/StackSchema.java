@@ -38,7 +38,7 @@ public class StackSchema
 
 	public StackSchema()
 	{
-		current.schema = new Schema(null);
+		current.schema = new Schema();
 	}
 	
 	// returns the current schema: caller must not modify; saves overhead from cloning

@@ -41,12 +41,12 @@ public class PrepareTemplate
 			Util.writeln(" ... loaded priorities: " + categories.size());
 			
 			Util.writeln("Building schema...");
-			schema = new Schema(vocab);
+			schema = new Schema();
 			buildSchema();
 			
 			File f = new File(cwd + "/template/schema.ttl");
 			Util.writeln("Serialising to: " + f.getPath());
-			schema.serialise(f);
+			ModelSchema.serialise(schema, f);
 			Util.writeln("Done.");
 		}
 		catch (Exception ex) {ex.printStackTrace();}

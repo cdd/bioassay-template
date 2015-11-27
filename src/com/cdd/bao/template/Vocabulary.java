@@ -155,7 +155,7 @@ public class Vocabulary
 			if (list.length == 1) continue;
 			Arrays.sort(list);
 			int idx = -1;
-			for (int n = 0; n < list.length; n++) if (list[n].startsWith(Schema.PFX_BAO)) {idx = n; break;}
+			for (int n = 0; n < list.length; n++) if (list[n].startsWith(ModelSchema.PFX_BAO)) {idx = n; break;}
 			// NOTE: if there's more than one BAO-based label, that with the lowest sort order will be retained; there are a 
 			// couple of these in the list
 			if (idx >= 0) labelToURI.put(label, new String[]{list[idx]});

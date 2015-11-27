@@ -174,7 +174,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = Schema.deserialise(file);
+			Schema schema = ModelSchema.deserialise(file);
 			loadFile(file, schema);
 		}
 		catch (Exception ex) 
@@ -210,6 +210,10 @@ public class EditSchema
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
     	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+		menuFile.getItems().add(new SeparatorMenuItem());
+		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
+		addMenu(menuFile, "_Browse Triples", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
+		addMenu(menuFile, "_Upload Triples", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
 		menuFile.getItems().add(new SeparatorMenuItem());
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
     	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -520,7 +524,7 @@ public class EditSchema
 			//schema.serialise(System.out);
 			
 			OutputStream ostr = new FileOutputStream(schemaFile);
-			schema.serialise(ostr);
+			ModelSchema.serialise(schema, ostr);
 			ostr.close();
 			
 			stack.setDirty(false);
@@ -538,7 +542,7 @@ public class EditSchema
 		
 		try
 		{
-			Schema schema = Schema.deserialise(file);
+			Schema schema = ModelSchema.deserialise(file);
 
     		Stage stage = new Stage();
     		EditSchema edit = new EditSchema(stage);
@@ -551,6 +555,18 @@ public class EditSchema
 			informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
 	}
+    private void actionFileConfigure()
+    {
+    	Util.writeln("!! cfg");
+    }
+    private void actionFileBrowse()
+    {
+    	Util.writeln("!! browse");
+    }
+    private void actionFileUpload()
+    {
+    	Util.writeln("!! upload");
+    }
 	private void actionFileClose()
 	{
 		if (!confirmClose()) return;
