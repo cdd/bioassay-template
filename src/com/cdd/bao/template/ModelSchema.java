@@ -98,7 +98,6 @@ public class ModelSchema
 	{
 		Model model = ModelFactory.createDefaultModel();
 		try {RDFDataMgr.read(model, istr, Lang.TTL);}
-		//catch (IOException ex) {throw ex;}
 		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
 
 		ModelSchema thing = new ModelSchema(new Schema(), model);
@@ -121,7 +120,6 @@ public class ModelSchema
 		
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
-	
 	
 	// ------------ private methods ------------	
 
@@ -341,14 +339,20 @@ public class ModelSchema
 		Assignment assn = new Assignment(group, findString(objAssn, rdfLabel), findAsString(objAssn, hasProperty));
 		assn.descr = findString(objAssn, hasDescription);
 		
+		Map<Object, Integer> order = new HashMap<>();
+
 		for (StmtIterator it = model.listStatements(objAssn, hasValue, (RDFNode)null); it.hasNext();)
 		{
 			Resource blank = (Resource)it.next().getObject();
 					
 			Value val = new Value(findAsString(blank, mapsTo), findString(blank, rdfLabel));
 			val.descr = findString(blank, hasDescription);
+			
 			assn.values.add(val);
+			order.put(val, findInteger(blank, inOrder));
 		}
+
+		assn.values.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
 
 		return assn;
 	}

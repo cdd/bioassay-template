@@ -562,6 +562,12 @@ public class EditSchema
     }
     private void actionFileBrowse()
     {
+    	if (EditorPrefs.getSparqlEndpoint().length() == 0)
+    	{
+    		informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
+    		return;
+    	}
+    
 		Stage stage = new Stage();
 		BrowseEndpoint browse = new BrowseEndpoint(stage);
 		stage.show();

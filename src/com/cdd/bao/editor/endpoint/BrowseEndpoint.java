@@ -8,10 +8,13 @@ package com.cdd.bao.editor.endpoint;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.editor.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import javax.sql.rowset.Joinable;
 
 import javafx.event.*;
 import javafx.geometry.*;
@@ -36,57 +39,44 @@ public class BrowseEndpoint
 {
 	// ------------ private data ------------	
 
-	/*private File schemaFile = null;
-	private StackSchema stack = new StackSchema();*/
+	private Schema[] schemaList = new Schema[0];
 
     private Stage stage;
-    /*private BorderPane root;
+    private BorderPane root;
     private SplitPane splitter;
     private TreeView<Branch> treeView;
-    private TreeItem<Branch> treeRoot, treeTemplate, treeAssays;
-    private DetailPane detail;
+    private TreeItem<Branch> treeRoot;
+    //private DetailPane detail;
     
     private MenuBar menuBar;
-    private Menu menuFile, menuEdit, menuValue, menuView;
+    //private Menu menuFile, menuEdit, menuValue, menuView;
     
     private boolean currentlyRebuilding = false;
     
     // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
     public static final class Branch
     {
-    	public String heading = null;
-    	public Schema.Group group = null;
-    	public Schema.Assignment assignment = null;
+    	public Schema template = null;
     	public Schema.Assay assay = null;
-    	public String locatorID = null;
 
 		public Branch() {}
-		public Branch(String heading)
-		{
-			this.heading = heading;
-		}
-    	public Branch(Schema.Group group, String locatorID)
+    	public Branch(Schema template)
     	{
-    		this.group = group.clone();
-    		this.locatorID = locatorID;
+    		this.template = template;
     	}
-    	public Branch(Schema.Assignment assignment, String locatorID)
-    	{
-    		this.assignment = assignment.clone();
-    		this.locatorID = locatorID;
-    	}
-    	public Branch(Schema.Assay assay, String locatorID)
+    	public Branch(Schema.Assay assay)
     	{
     		this.assay = assay;
-    		this.locatorID = locatorID;
     	}
     }
-*/
+
 	// ------------ public methods ------------	
 
 	public BrowseEndpoint(Stage stage)
 	{
 		this.stage = stage;
+
+        stage.setTitle("BioAssay Schema Browser");
 
 		/*menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
@@ -94,15 +84,15 @@ public class BrowseEndpoint
 		menuBar.getMenus().add(menuEdit = new Menu("_Edit"));
 		menuBar.getMenus().add(menuValue = new Menu("_Value"));
 		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
-		createMenuItems();
+		createMenuItems();*/
 
 		treeRoot = new TreeItem<Branch>(new Branch());
 		treeView = new TreeView<Branch>(treeRoot);
 		treeView.setEditable(true);
 		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
-        });*/
+            public TreeCell<Branch> call(TreeView<Branch> p) {return new BrowseTreeCell();}
+        });
         /*treeview.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             public void handle(MouseEvent event)
@@ -126,12 +116,13 @@ public class BrowseEndpoint
             }
 		});	
 		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
+		*/
 
-		detail = new DetailPane(this);
+		//detail = new DetailPane(this);
 
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
 		sp1.getChildren().add(treeView);
-		sp2.getChildren().add(detail);
+		sp2.getChildren().add(new Label("fnord!"));
 		
 		splitter = new SplitPane();
 		splitter.setOrientation(Orientation.HORIZONTAL);
@@ -142,69 +133,35 @@ public class BrowseEndpoint
 		root.setTop(menuBar);
 		root.setCenter(splitter);
 
-		Scene scene = new Scene(root, 900, 800, Color.WHITE);
+		Scene scene = new Scene(root, 700, 600, Color.WHITE);
 
 		stage.setScene(scene);
 		
 		treeView.setShowRoot(false);
+		/* !! fetch assays...
 		treeRoot.getChildren().add(treeTemplate = new TreeItem<Branch>(new Branch("Template")));
 		treeRoot.getChildren().add(treeAssays = new TreeItem<Branch>(new Branch("Assays")));
 		treeTemplate.setExpanded(true);
-		treeAssays.setExpanded(true);
+		treeAssays.setExpanded(true);*/
 		
 		rebuildTree();
 
         Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
-		stage.setOnCloseRequest(event -> 
+		/*stage.setOnCloseRequest(event -> 
 		{
 			if (!confirmClose()) event.consume();
-		});
+		});*/
 		
-		updateTitle();
-		
-		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
-		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();*/
+		new Thread(() -> backgroundLoadTemplates()).run();
  	}
 
-/*
 	public TreeView<Branch> getTreeView() {return treeView;}
-	public DetailPane getDetailView() {return detail;}
-
-	// loads a file and parses the schema
-	public void loadFile(File file)
-	{
-		try
-		{
-			Schema schema = Schema.deserialise(file);
-			loadFile(file, schema);
-		}
-		catch (Exception ex) 
-		{
-			ex.printStackTrace();
-			return;
-		}
-	}
-	
-	// loads a file with an already-parsed schema
-	public void loadFile(File file, Schema schema)
-	{
-		schemaFile = file;
-		stack.setSchema(schema);
-		updateTitle();
-		rebuildTree();
-	}*/
+	//public DetailPane getDetailView() {return detail;}
 
 	// ------------ private methods ------------	
 
 /*
-	private void updateTitle()
-	{
-		String title = "BioAssay Schema Editor";
-		if (schemaFile != null) title += " - " + schemaFile.getName();
-        stage.setTitle(title);
-	}
-
 	private void createMenuItems()
     {
     	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN;
@@ -254,49 +211,31 @@ public class BrowseEndpoint
     	parent.getItems().add(item);
     	if (accel != null) item.setAccelerator(accel);
     	return item;
-    }
+    }*/
 
 	private void rebuildTree()
 	{
 		currentlyRebuilding = true;
 	
-		treeTemplate.getChildren().clear();
-		treeAssays.getChildren().clear();
+		treeRoot.getChildren().clear();
 		
-		Schema schema = stack.getSchema();
-		Schema.Group root = schema.getRoot();
-		
-		treeTemplate.setValue(new Branch(root, schema.locatorID(root)));
-		fillTreeGroup(schema, root, treeTemplate);
-		
-		for (int n = 0; n < schema.numAssays(); n++)
+		for (int n = 0; n < schemaList.length; n++)
 		{
-			Schema.Assay assay = schema.getAssay(n);
-			TreeItem<Branch> item = new TreeItem<>(new Branch(assay, schema.locatorID(assay)));
-			treeAssays.getChildren().add(item);
+			TreeItem<Branch> item = new TreeItem<>(new Branch(schemaList[n]));
+			treeRoot.getChildren().add(item);
+			
+			for (int i = 0; i < schemaList[n].numAssays(); i++)
+			{
+				Schema.Assay assay = schemaList[n].getAssay(i);
+				item.getChildren().add(new TreeItem<Branch>(new Branch(assay)));
+			}
 		}
 		
 		currentlyRebuilding = false;
 	}
-	
-	private void fillTreeGroup(Schema schema, Schema.Group group, TreeItem<Branch> parent)
-	{
-		for (Schema.Assignment assn : group.assignments)
-		{
-			TreeItem<Branch> item = new TreeItem<>(new Branch(assn, schema.locatorID(assn)));
-			parent.getChildren().add(item);
-		}
-		for (Schema.Group subgrp : group.subGroups)
-		{
-			TreeItem<Branch> item = new TreeItem<>(new Branch(subgrp, schema.locatorID(subgrp)));
-			item.setExpanded(true);
-			parent.getChildren().add(item);
-			fillTreeGroup(schema, subgrp, item);
-		}
-	}
 
 	// convenience for tree selection
-	public TreeItem<Branch> currentBranch() {return treeView.getSelectionModel().getSelectedItem();}
+	/*public TreeItem<Branch> currentBranch() {return treeView.getSelectionModel().getSelectedItem();}
 	public void setCurrentBranch(TreeItem<Branch> branch) 
 	{
 		treeView.getSelectionModel().select(branch);
@@ -428,24 +367,35 @@ public class BrowseEndpoint
 	private void maybeUpdateTree()
 	{
 		pullDetail();
-	}
+	}*/
 
-	// returns true if the data is already saved, or the user agrees to abandon it
-	private boolean confirmClose()
+	// fires up a thread that pulls the list of assays from the SPARQL endpoint
+	private void backgroundLoadTemplates()
 	{
-		pullDetail();
-	
-		if (!stack.isDirty()) return true;
-		
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Close Window");
-        alert.setHeaderText("Abandon changes");
-        alert.setContentText("Closing this window will cause modifications to be lost.");
-        
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.get() == ButtonType.OK;
+		try
+		{
+			EndpointSchema endpoint = new EndpointSchema(EditorPrefs.getSparqlEndpoint());
+			String[] rootURI = endpoint.enumerateTemplates();
+			Schema[] schemaList = new Schema[rootURI.length];
+			
+			for (int n = 0; n < rootURI.length; n++) 
+			{
+				schemaList[n] = endpoint.fetchTemplate(rootURI[n]);
+			}
+			
+			Platform.runLater(() -> 
+			{
+				this.schemaList = schemaList;
+				rebuildTree();
+			});
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+	        Platform.runLater(() -> informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
+		}
 	}
-
+	
 	private void informMessage(String title, String msg)
 	{
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -462,7 +412,6 @@ public class BrowseEndpoint
         alert.setContentText(msg);
         alert.showAndWait();
 	}
-*/
 
 	// ------------ action responses ------------	
 	
