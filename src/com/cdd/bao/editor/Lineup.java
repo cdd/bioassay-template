@@ -33,7 +33,7 @@ public class Lineup extends Pane
 	}
 	private List<Unit> content = new ArrayList<>();
 
-	private int margin, padding;
+	private int padding, margin;
 
 	// ------------ public methods ------------
 
@@ -177,7 +177,7 @@ public class Lineup extends Pane
 			if (u.widget != null) h = Math.max(h,(int)Math.ceil(u.widget.prefHeight(width -tw)));
 			ph += h;
 		}
-		return ph + (content.size() - 1) * padding;
+		return ph + 2 * margin + (content.size() - 1) * padding;
 	}
 	protected void layoutChildren()
 	{

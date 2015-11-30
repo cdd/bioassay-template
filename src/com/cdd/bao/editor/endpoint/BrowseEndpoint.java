@@ -4,11 +4,10 @@
  * (c) 2014-2015 Collaborative Drug Discovery Inc.
  */
 
-package com.cdd.bao.editor;
+package com.cdd.bao.editor.endpoint;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
-import com.cdd.bao.editor.endpoint.*;
 
 import java.io.*;
 import java.net.*;
@@ -29,18 +28,19 @@ import javafx.util.*;
 import org.json.*;
 
 /*
-	Edit Schema: the primary window for BAO schema editing, which is responsible for taking care of a data instance.
+	Browse Endpoint: opens up a connection to a SPARQL endpoint, which is presumed to contain templates and possibly assays. Allows
+	them to be viewed and fetched.
 */
 
-public class EditSchema
+public class BrowseEndpoint
 {
 	// ------------ private data ------------	
 
-	private File schemaFile = null;
-	private StackSchema stack = new StackSchema();
+	/*private File schemaFile = null;
+	private StackSchema stack = new StackSchema();*/
 
     private Stage stage;
-    private BorderPane root;
+    /*private BorderPane root;
     private SplitPane splitter;
     private TreeView<Branch> treeView;
     private TreeItem<Branch> treeRoot, treeTemplate, treeAssays;
@@ -81,14 +81,14 @@ public class EditSchema
     		this.locatorID = locatorID;
     	}
     }
-
+*/
 	// ------------ public methods ------------	
 
-	public EditSchema(Stage stage)
+	public BrowseEndpoint(Stage stage)
 	{
 		this.stage = stage;
 
-		menuBar = new MenuBar();
+		/*menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
 		menuBar.getMenus().add(menuFile = new Menu("_File"));
 		menuBar.getMenus().add(menuEdit = new Menu("_Edit"));
@@ -102,7 +102,7 @@ public class EditSchema
 		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
             public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
-        });
+        });*/
         /*treeview.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             public void handle(MouseEvent event)
@@ -117,7 +117,7 @@ public class EditSchema
 				if (event.getButton().equals(MouseButton.SECONDARY) || event.isControlDown()) treeRightClick(event);
 			}
 		});*/
-		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
+		/*treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
 		{
 	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
 	        {
@@ -164,9 +164,10 @@ public class EditSchema
 		updateTitle();
 		
 		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
-		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();
+		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();*/
  	}
 
+/*
 	public TreeView<Branch> getTreeView() {return treeView;}
 	public DetailPane getDetailView() {return detail;}
 
@@ -175,7 +176,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = ModelSchema.deserialise(file);
+			Schema schema = Schema.deserialise(file);
 			loadFile(file, schema);
 		}
 		catch (Exception ex) 
@@ -192,10 +193,11 @@ public class EditSchema
 		stack.setSchema(schema);
 		updateTitle();
 		rebuildTree();
-	}
+	}*/
 
 	// ------------ private methods ------------	
 
+/*
 	private void updateTitle()
 	{
 		String title = "BioAssay Schema Editor";
@@ -213,8 +215,8 @@ public class EditSchema
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
-		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
-		addMenu(menuFile, "_Upload Endpoint", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
+		addMenu(menuFile, "_Browse Triples", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
+		addMenu(menuFile, "_Upload Triples", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
 		menuFile.getItems().add(new SeparatorMenuItem());
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
     	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -444,28 +446,6 @@ public class EditSchema
         return result.get() == ButtonType.OK;
 	}
 
-	/*private void treeDoubleClick(MouseEvent event)
-	{
-        TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-        System.out.println("DOUBLE CLICK : " + item.getValue());
-	}        
-	private void treeRightClick(MouseEvent event)
-	{
-        MenuItem addMenuItem = new MenuItem("Fnord!");
-        ContextMenu ctx = new ContextMenu();
-        ctx.getItems().add(addMenuItem);
-        addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent t)
-            {
-            	Util.writeln("--> FNORD!");
-            }
-        });
-        
-        TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-		Util.writeln("RIGHT CLICK");
-	}*/
-	
 	private void informMessage(String title, String msg)
 	{
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -482,347 +462,9 @@ public class EditSchema
         alert.setContentText(msg);
         alert.showAndWait();
 	}
+*/
 
 	// ------------ action responses ------------	
 	
-	private void actionFileNew()
-	{
-		Stage stage = new Stage();
-		EditSchema edit = new EditSchema(stage);
-		stage.show();
-	}
-	private void actionFileSave(boolean promptNew)
-	{
-		pullDetail();
-	
-		// dialog in case filename is missing or requested as save-to-other
-		if (promptNew || schemaFile == null)
-		{
-            FileChooser chooser = new FileChooser();
-        	chooser.setTitle("Save Schema Template");
-        	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
-        	
-        	File file = chooser.showSaveDialog(stage);
-    		if (file == null) return;
-    		
-    		if (!file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
 
-			schemaFile = file;
-		}
-		
-		// validity checking
-		if (schemaFile == null) return;
-		if (!schemaFile.getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
-		{
-			informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
-            return;
-		}
-	
-		// serialise-to-file
-		Schema schema = stack.peekSchema();
-		try 
-		{
-			//schema.serialise(System.out);
-			
-			OutputStream ostr = new FileOutputStream(schemaFile);
-			ModelSchema.serialise(schema, ostr);
-			ostr.close();
-			
-			stack.setDirty(false);
-		}
-		catch (Exception ex) {ex.printStackTrace();}
-	}
-	private void actionFileOpen()
-	{
-        FileChooser chooser = new FileChooser();
-    	chooser.setTitle("Open Schema Template");
-    	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
-    	
-    	File file = chooser.showOpenDialog(stage);
-		if (file == null) return;
-		
-		try
-		{
-			Schema schema = ModelSchema.deserialise(file);
-
-    		Stage stage = new Stage();
-    		EditSchema edit = new EditSchema(stage);
-			edit.loadFile(file, schema);
-    		stage.show();
-		}
-		catch (IOException ex)
-		{
-			ex.printStackTrace();
-			informWarning("Open", "Failed to parse file: is it a valid schema?");
-		}
-	}
-    private void actionFileConfigure()
-    {
-		new ConfigPanel().showAndWait();
-    }
-    private void actionFileBrowse()
-    {
-		Stage stage = new Stage();
-		BrowseEndpoint browse = new BrowseEndpoint(stage);
-		stage.show();
-    }
-    private void actionFileUpload()
-    {
-    	Util.writeln("!! upload");
-    }
-	private void actionFileClose()
-	{
-		if (!confirmClose()) return;
-		stage.close();
-	}
-	private void actionFileQuit()
-	{
-		if (!confirmClose()) return;
-		Platform.exit();
-	}
-    private void actionGroupAdd()
-    {
-    	TreeItem<Branch> item = currentBranch();
-    	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
-    	{
-    		informMessage("Add Group", "Select a group to add to.");
-    		return;
-    	}
-
-    	pullDetail();
-
-    	Schema schema = stack.getSchema();
-    	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
-    	Schema.Group newGroup = schema.appendGroup(parent, new Schema.Group(null, ""));
-    	stack.changeSchema(schema);
-    	
-    	rebuildTree();
-    	setCurrentBranch(locateBranch(schema.locatorID(newGroup)));
-    }
-    private void actionAssignmentAdd()
-    {
-    	TreeItem<Branch> item = currentBranch();
-    	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
-    	{
-    		informMessage("Add Assignment", "Select a group to add to.");
-    		return;
-    	}
-
-    	pullDetail();
-
-    	Schema schema = stack.getSchema();
-
-    	Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
-    	Schema.Assignment newAssn = schema.appendAssignment(parent, new Schema.Assignment(null, "", ""));
-    	stack.changeSchema(schema);
-    	
-    	rebuildTree();
-    	setCurrentBranch(locateBranch(schema.locatorID(newAssn)));
-    }
-	private void actionAssayAdd()
-	{
-		pullDetail();
-		
-		Schema schema = stack.getSchema();
-		
-		Schema.Assay newAssay = new Schema.Assay("");
-		
-		schema.addAssay(newAssay);
-		stack.changeSchema(schema);
-		
-		rebuildTree();
-		setCurrentBranch(locateBranch(schema.locatorID(newAssay)));
-	}
-	private void actionEditCopy(boolean andCut)
-	{
-		if (!treeView.isFocused()) return; // punt to default action
-		
-		TreeItem<Branch> item = currentBranch();
-		if (item == null) return;
-		Branch branch = item.getValue();
-		
-		JSONObject json = null;
-		if (branch.group != null) json = ClipboardSchema.composeGroup(branch.group);
-		else if (branch.assignment != null) json = ClipboardSchema.composeAssignment(branch.assignment);
-		else if (branch.assay != null) {} // TODO
-		
-		String serial = null;
-		try {serial = json.toString(2);}
-		catch (JSONException ex) {return;}
-		
-		ClipboardContent content = new ClipboardContent();
-		content.putString(serial);
-		if (!Clipboard.getSystemClipboard().setContent(content))
-		{
-			informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
-			return;
-		}
-		
-		if (andCut) actionEditDelete();
-	}
-	private void actionEditPaste()
-	{
-		if (!treeView.isFocused()) return; // punt to default action
-		
-		TreeItem<Branch> item = currentBranch();
-		if (item == null)
-		{
-			informMessage("Clipboard Paste", "Select a group to paste into.");
-			return;
-		}
-		Branch branch = item.getValue();
-		
-		Clipboard clipboard = Clipboard.getSystemClipboard();
-		String serial = clipboard.getString();
-		if (serial == null)
-		{
-			informWarning("Clipboard Paste", "Content is not parseable.");
-			return;
-		}
-		
-		JSONObject json = null;
-		try {json = new JSONObject(new JSONTokener(serial));}
-		catch (JSONException ex)
-		{
-			informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
-			return;
-		}
-		
-		Schema.Group group = ClipboardSchema.unpackGroup(json);
-		Schema.Assignment assn = ClipboardSchema.unpackAssignment(json);
-		if (group == null && assn == null)
-		{
-			informWarning("Clipboard Paste", "Content does not represent a group or assignment: cannot paste.");
-			return;
-		}
-		
-		pullDetail();
-		Schema schema = stack.getSchema();
-		
-		if (group != null)
-		{
-			//Util.writeln("PASTEGROUP:"+group.name);
-			//Util.writeln(ClipboardSchema.composeGroup(group).toString());
-			schema.appendGroup(schema.obtainGroup(branch.locatorID), group);
-		}
-		else if (assn != null)
-		{
-			//Util.writeln("PASTEASSN:"+assn.name);
-			//Util.writeln(ClipboardSchema.composeAssignment(assn).toString());
-			schema.appendAssignment(schema.obtainGroup(branch.locatorID), assn);
-		}
-		
-    	stack.changeSchema(schema);
-    	rebuildTree();
-
-		if (group != null) setCurrentBranch(locateBranch(schema.locatorID(group)));
-		else if (assn != null) setCurrentBranch(locateBranch(schema.locatorID(assn)));
-    	
-	}
-    private void actionEditDelete()
-    {
-    	TreeItem<Branch> item = currentBranch();
-    	Branch branch = item == null ? null : item.getValue();
-    	if (branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
-    	{
-    		informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
-    		return;
-    	}
-    	if (item == treeRoot)
-    	{
-    		informMessage("Delete Branch", "Can't delete the root branch.");
-    		return;
-    	}
-    	
-    	pullDetail();
-    	
-    	Schema schema = stack.getSchema();
-    	Schema.Group parent = null;
-    	if (branch.group != null)
-    	{
-    		Schema.Group group = schema.obtainGroup(branch.locatorID);
-    		parent = group.parent;
-    		schema.deleteGroup(group);
-    	}
-    	if (branch.assignment != null)
-    	{
-    		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
-    		parent = assn.parent;
-    		schema.deleteAssignment(assn);
-    	}
-    	if (branch.assay != null)
-    	{
-    		Schema.Assay assay = schema.obtainAssay(branch.locatorID);
-    		schema.deleteAssay(assay);
-    	}
-    	stack.changeSchema(schema);
-    	rebuildTree();
-    	if (parent != null) 
-    		setCurrentBranch(locateBranch(schema.locatorID(parent)));
-    	else
-    		detail.clearContent();
-    }
-    private void actionEditUndo()
-    {
-    	if (!stack.canUndo())
-    	{
-    		informMessage("Undo", "Nothing to undo.");
-    		return;
-    	}
-    	stack.performUndo();
-    	rebuildTree();
-    	clearSelection();
-    }
-    private void actionEditRedo()
-    {
-    	if (!stack.canRedo())
-    	{
-    		informMessage("Redo", "Nothing to redo.");
-    		return;
-    	}
-    	stack.performRedo();
-    	rebuildTree();
-    	clearSelection();
-    }
-    private void actionEditMove(int dir)
-    {
-    	TreeItem<Branch> item = currentBranch();
-    	Branch branch = item == null ? null : item.getValue();
-    	// TODO: assay...
-    	if (item == treeRoot || branch == null || (branch.group == null && branch.assignment == null)) return;
-    	
-    	pullDetail();
-    	Schema schema = stack.getSchema();
-    	String newLocator = "";
-    	if (branch.group != null)
-    	{
-    		Schema.Group group = schema.obtainGroup(branch.locatorID);
-    		schema.moveGroup(group, dir);
-    		newLocator = schema.locatorID(group);
-    	}
-    	if (branch.assignment != null)
-    	{
-    		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
-    		schema.moveAssignment(assn, dir);
-    		newLocator = schema.locatorID(assn);
-    	}
-    	stack.changeSchema(schema);
-    	rebuildTree();
-    	setCurrentBranch(locateBranch(newLocator));
-    }
-    private void actionViewTemplate()
-    {
-		treeTemplate.setExpanded(true);
-		treeAssays.setExpanded(false);
-		treeView.getSelectionModel().select(treeTemplate);
-        treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex());
-        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));
-    }
-	private void actionViewAssays()
-	{
-		treeTemplate.setExpanded(false);
-		treeAssays.setExpanded(true);
-		treeView.getSelectionModel().select(treeAssays);
-        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));
-	}
 }
