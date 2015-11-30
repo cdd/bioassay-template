@@ -633,7 +633,7 @@ public class EditSchema
 		
 		Schema.Assay newAssay = new Schema.Assay("");
 		
-		schema.addAssay(newAssay);
+		schema.appendAssay(newAssay);
 		stack.changeSchema(schema);
 		
 		rebuildTree();
@@ -650,7 +650,7 @@ public class EditSchema
 		JSONObject json = null;
 		if (branch.group != null) json = ClipboardSchema.composeGroup(branch.group);
 		else if (branch.assignment != null) json = ClipboardSchema.composeAssignment(branch.assignment);
-		else if (branch.assay != null) {} // TODO
+		else if (branch.assay != null) json = ClipboardSchema.composeAssay(branch.assay);
 		
 		String serial = null;
 		try {serial = json.toString(2);}
@@ -696,9 +696,10 @@ public class EditSchema
 		
 		Schema.Group group = ClipboardSchema.unpackGroup(json);
 		Schema.Assignment assn = ClipboardSchema.unpackAssignment(json);
-		if (group == null && assn == null)
+		Schema.Assay assay = ClipboardSchema.unpackAssay(json);
+		if (group == null && assn == null && assay == null)
 		{
-			informWarning("Clipboard Paste", "Content does not represent a group or assignment: cannot paste.");
+			informWarning("Clipboard Paste", "Content does not represent a group, assignment or assay: cannot paste.");
 			return;
 		}
 		
@@ -716,6 +717,11 @@ public class EditSchema
 			//Util.writeln("PASTEASSN:"+assn.name);
 			//Util.writeln(ClipboardSchema.composeAssignment(assn).toString());
 			schema.appendAssignment(schema.obtainGroup(branch.locatorID), assn);
+		}
+		else if (assay != null)
+		{
+			// !! this would be a good place to do some reconciliation of assignment branches, if necessary
+			schema.appendAssay(assay);
 		}
 		
     	stack.changeSchema(schema);

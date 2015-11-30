@@ -292,7 +292,7 @@ public class ModelSchema
 			order.put(assay, findInteger(objAssay, inOrder));
 		}
 		assayList.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
-		for (Assay assay : assayList) schema.addAssay(assay);
+		for (Assay assay : assayList) schema.appendAssay(assay);
 	}
 	
 	// for a given category node, pulls out and parses all of its assignments and subcategories

@@ -93,7 +93,6 @@ public class Vocabulary
                     String path = ze.getName();
                     if (path.startsWith("data/bao/") && path.endsWith(".owl"))
                     {
-                    	Util.writeln(path);
                     	InputStream res = getClass().getResourceAsStream("/" + path);
                     	RDFDataMgr.read(model, res, Lang.RDFXML);
                     	res.close();

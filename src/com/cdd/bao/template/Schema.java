@@ -279,7 +279,7 @@ public class Schema
 	public int numAssays() {return assays.size();}
 	public Assay getAssay(int idx) {return assays.get(idx);}
 	public void setAssay(int idx, Assay assay) {assays.set(idx, assay);}
-	public void addAssay(Assay assay) {assays.add(assay);}
+	public void appendAssay(Assay assay) {assays.add(assay);}
 	public void insertAssay(int idx, Assay assay) {assays.add(idx, assay);}
 	public void deleteAssay(int idx) {assays.remove(idx);}
 	public void swapAssays(int idx1, int idx2) {Assay a = assays.get(idx1); assays.set(idx1, assays.get(idx2)); assays.set(idx2, a);}
