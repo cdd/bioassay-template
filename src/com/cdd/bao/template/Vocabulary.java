@@ -32,6 +32,16 @@ public class Vocabulary
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
 	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
+	
+	public static class Branch
+	{
+		public String uri;
+		public List<Branch> parents = new ArrayList<>();
+		public List<Branch> children = new ArrayList<>();
+		
+		public Branch(String uri) {this.uri = uri;}
+	}
+	private List<Branch> rootBranches = new ArrayList<>();
 
 	// ------------ public methods ------------
 
@@ -49,7 +59,8 @@ public class Vocabulary
 	// this object any more often than necessary
 	public Vocabulary() throws IOException
 	{
-		// TODO: the "./bao" directory needs to be configurable, perhaps as a command line option
+		// several options for BAO loading configurability; right now it goes for local files first, then looks in the JAR file (if there
+		// is one); loading from an external endpoint might be interesting, too
 		String cwd = System.getProperty("user.dir");
 		try {loadLabels(new File(cwd + "/bao"));}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
@@ -71,6 +82,9 @@ public class Vocabulary
 	
 	// grab all of the URIs
 	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
+	
+	// fetches the roots that can be used to create some number of hierarchies
+	public Branch[] getRootBranches() {return rootBranches.toArray(new Branch[rootBranches.size()]);}
 	
 	// ------------ private methods ------------
 
@@ -173,5 +187,42 @@ public class Vocabulary
 		}
 		
 		Util.writeln("Labelled Items:" + uriToLabel.size() + ", descriptions: " + uriToDescr.size());*/
+		
+		generateBranch(model);
+	}
+	
+	// looks over the entire class inheritance system, and builds a collection of trees
+	private void generateBranch(Model model)
+	{
+		Map<String, Branch> uriToBranch = new HashMap<>();
+		
+		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		for (StmtIterator it = model.listStatements(null, subClassOf, (RDFNode)null); it.hasNext();)
+		{
+			Statement st = it.next();
+			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+			
+			if (!uriToLabel.containsKey(uriChild) || !uriToLabel.containsKey(uriParent)) continue;
+			
+			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
+			
+			Branch child = uriToBranch.get(uriChild), parent = uriToBranch.get(uriParent);
+			if (child == null) 
+			{
+				child = new Branch(uriChild);
+				uriToBranch.put(uriChild, child);
+			}
+			if (parent == null)
+			{
+				parent = new Branch(uriParent);
+				uriToBranch.put(uriParent, parent);
+			}
+			
+			parent.children.add(child);
+			child.parents.add(parent);
+		}
+		
+		// anything with zero parents is a "root": this is all that is needed
+		for (Branch branch : uriToBranch.values()) if (branch.parents.size() == 0) rootBranches.add(branch);
 	}
 }

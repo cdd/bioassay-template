@@ -34,6 +34,8 @@ import javafx.util.*;
 
 public class LookupPanel extends Dialog<LookupPanel.Resource>
 {
+	private Vocabulary vocab = null;
+
 	public static final class Resource
 	{
 		public String uri, label, descr;
@@ -54,9 +56,53 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 	};
 	private List<Resource> resources = new ArrayList<>();
 
-	private TextField search = new TextField();
-	private TableView<Resource> table = new TableView<>();
+	private TabPane tabber = new TabPane();
+	private Tab tabList = new Tab("List"), tabTree = new Tab("Hierarchy");
 
+	private TextField fieldSearch = new TextField();
+	private TableView<Resource> tableList = new TableView<>();
+
+    private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<Vocabulary.Branch>(new Vocabulary.Branch(null));
+    private TreeView<Vocabulary.Branch> treeView = new TreeView<Vocabulary.Branch>(treeRoot);
+
+    private final class HierarchyTreeCell extends TreeCell<Vocabulary.Branch>
+    {
+        public void updateItem(Vocabulary.Branch branch, boolean empty)
+        {
+            super.updateItem(branch, empty);
+            
+            if (branch != null)
+            {
+                String text = "URI <" + branch.uri + ">";
+    			String descr = vocab.getDescr(branch.uri);
+                if (descr != null && descr.length() > 0) text += "\n\n" + descr;
+                Tooltip tip = new Tooltip(text);
+                tip.setWrapText(true);
+                tip.setMaxWidth(400);
+    			Tooltip.install(this, tip);
+            }
+     
+            if (empty)
+            {
+                setText(null);
+                setGraphic(null);
+            }
+            else 
+            {
+            	String label = vocab.getLabel(branch.uri);
+            	setText(label);
+   				//setStyle(style);
+                setGraphic(getTreeItem().getGraphic());
+    	    }
+        }
+    	/*private String getString() 
+        {
+            return getItem() == null ? "" : getItem().toString();
+        }*/
+    }
+
+    private final int PADDING = 2;
+       
 	// ------------ public methods ------------
 
 	public LookupPanel(String searchText, Set<String> usedURI)
@@ -69,12 +115,64 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 
 		setResizable(true);
 
-        final int PADDING = 2;
-        
+		for (Tab tab : new Tab[]{tabList, tabTree}) {tab.setClosable(false);}
+
+		setupList(searchText);
+		setupTree(searchText);
+
+		tabber.getTabs().addAll(tabList, tabTree);
+
+		getDialogPane().setContent(tabber);
+
+		getDialogPane().getButtonTypes().add(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
+		
+		// setup the buttons
+		
+		ButtonType btnTypeUse = new ButtonType("Use", ButtonBar.ButtonData.OK_DONE);
+		getDialogPane().getButtonTypes().add(btnTypeUse);
+		setResultConverter(buttonType ->
+		{
+			if (buttonType == btnTypeUse) return tableList.getSelectionModel().getSelectedItem(); // composeCurrentValue();
+			return null;
+		});
+		Button btnUse = (Button)getDialogPane().lookupButton(btnTypeUse);
+		btnUse.addEventFilter(ActionEvent.ACTION, event ->
+		{
+			if (tableList.getSelectionModel().getSelectedIndex() < 0) event.consume();
+		});
+		tableList.setOnMousePressed(event ->
+		{
+			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
+		});
+		tableList.setOnKeyPressed(event ->
+		{
+			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
+		});
+		
+        Platform.runLater(() -> fieldSearch.requestFocus());
+	}
+	
+	// ------------ private methods ------------
+
+	private void loadResources(Set<String> usedURI)
+	{
+		try {vocab = Vocabulary.globalInstance();}
+		catch (IOException ex) {ex.printStackTrace(); return;}
+		
+		for (String uri : vocab.getAllURIs())
+		{
+			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
+			res.beingUsed = usedURI.contains(uri);
+			resources.add(res);
+		}
+	}
+
+	private void setupList(String searchText)
+	{
 		Lineup line = new Lineup(PADDING);
-		line.add(search, "Search:", 1, 0);
+		line.add(fieldSearch, "Search:", 1, 0);
  
-        table.setEditable(false);
+        tableList.setEditable(false);
  
         TableColumn<Resource, String> colUsed = new TableColumn<>("U");
 		colUsed.setMinWidth(20);
@@ -93,68 +191,73 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		colDescr.setMinWidth(400);
         colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
 
-		table.setMinHeight(450);        
-        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        table.getColumns().addAll(colUsed, colURI, colLabel, colDescr);
-        table.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
- 
+		tableList.setMinHeight(450);        
+        tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        tableList.getColumns().addAll(colUsed, colURI, colLabel, colDescr);
+        tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
+
         BorderPane pane = new BorderPane();
         pane.setPrefSize(800, 500);
         pane.setMaxHeight(Double.MAX_VALUE);
         pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
         BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
         pane.setTop(line);
-        pane.setCenter(table);
+        pane.setCenter(tableList);
+        
+        tabList.setContent(pane);
 
-		getDialogPane().setContent(pane);
+		fieldSearch.setText(searchText);
+		fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> 
+		{
+			tableList.setItems(FXCollections.observableArrayList(searchedSubset(newValue)));
+		});
+	}
 
-		getDialogPane().getButtonTypes().add(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
+	private void setupTree(String searchText)
+	{
+		for (Vocabulary.Branch branch : vocab.getRootBranches()) 
+		{
+			TreeItem<Vocabulary.Branch> item = populateTreeBranch(treeRoot, branch);
+			item.setExpanded(true); // open up just the first level
+		}
 		
-		ButtonType btnTypeUse = new ButtonType("Use", ButtonBar.ButtonData.OK_DONE);
-		getDialogPane().getButtonTypes().add(btnTypeUse);
-		setResultConverter(buttonType ->
+		treeView.setShowRoot(false);
+		treeView.setCellFactory((p) -> new HierarchyTreeCell());
+	
+        BorderPane pane = new BorderPane();
+        pane.setPrefSize(800, 500);
+        pane.setMaxHeight(Double.MAX_VALUE);
+        pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
+        pane.setCenter(treeView);
+        
+        tabTree.setContent(pane);
+	
+/*
+		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
-			if (buttonType == btnTypeUse) return table.getSelectionModel().getSelectedItem(); // composeCurrentValue();
-			return null;
-		});
-		Button btnUse = (Button)getDialogPane().lookupButton(btnTypeUse);
-		btnUse.addEventFilter(ActionEvent.ACTION, event ->
+            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
+        });
+		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
 		{
-			if (table.getSelectionModel().getSelectedIndex() < 0) event.consume();
-		});
-		table.setOnMousePressed(event ->
-		{
-			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
-		});
-		table.setOnKeyPressed(event ->
-		{
-			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
-		});
-		
-		search.setText(searchText);
-		search.textProperty().addListener((observable, oldValue, newValue) -> 
-		{
-			table.setItems(FXCollections.observableArrayList(searchedSubset(newValue)));
-		});
-
-        Platform.runLater(() -> search.requestFocus());
+	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
+	        {
+	        	if (oldVal != null) pullDetail(oldVal);
+	        	if (newVal != null) pushDetail(newVal);
+            }
+		});	
+		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));*/	
+	
 	}
 	
-	// ------------ private methods ------------
-
-	private void loadResources(Set<String> usedURI)
+	// recursively add a new branch into the tree
+	private TreeItem<Vocabulary.Branch> populateTreeBranch(TreeItem<Vocabulary.Branch> parent, Vocabulary.Branch branch)
 	{
-		Vocabulary vocab = null;
-		try {vocab = Vocabulary.globalInstance();}
-		catch (IOException ex) {ex.printStackTrace(); return;}
-		
-		for (String uri : vocab.getAllURIs())
-		{
-			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
-			res.beingUsed = usedURI.contains(uri);
-			resources.add(res);
-		}
+		TreeItem<Vocabulary.Branch> item = new TreeItem<>(branch);
+		parent.getChildren().add(item);
+		for (Vocabulary.Branch child : branch.children) populateTreeBranch(item, child);
+		return item;
 	}
+	
 
 /*
 	// manufactures a value from the selected item
