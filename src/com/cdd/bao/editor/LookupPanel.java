@@ -32,7 +32,7 @@ import javafx.util.*;
 	combinations.
 */
 
-public class LookupPanel extends Dialog<LookupPanel.Resource>
+public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 {
 	private Vocabulary vocab = null;
 
@@ -105,7 +105,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
        
 	// ------------ public methods ------------
 
-	public LookupPanel(String searchText, Set<String> usedURI)
+	public LookupPanel(String searchText, Set<String> usedURI, boolean multi)
 	{
 		super();
 		
@@ -132,13 +132,14 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		getDialogPane().getButtonTypes().add(btnTypeUse);
 		setResultConverter(buttonType ->
 		{
-			if (buttonType == btnTypeUse) return tableList.getSelectionModel().getSelectedItem(); // composeCurrentValue();
+			if (buttonType == btnTypeUse) return composeCurrentValue();
 			return null;
 		});
 		Button btnUse = (Button)getDialogPane().lookupButton(btnTypeUse);
 		btnUse.addEventFilter(ActionEvent.ACTION, event ->
 		{
-			if (tableList.getSelectionModel().getSelectedIndex() < 0) event.consume();
+			if (tableList.getSelectionModel().getSelectedIndex() < 0 &&
+				treeView.getSelectionModel().getSelectedIndex() < 0) event.consume();
 		});
 		tableList.setOnMousePressed(event ->
 		{
@@ -148,6 +149,9 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		{
 			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
 		});
+		
+        tableList.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
+        treeView.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
 		
         Platform.runLater(() -> fieldSearch.requestFocus());
 	}
@@ -258,19 +262,28 @@ public class LookupPanel extends Dialog<LookupPanel.Resource>
 		return item;
 	}
 	
-
-/*
-	// manufactures a value from the selected item
-	private Schema.Value composeCurrentValue()
+	// manufactures a value from the selected items
+	private LookupPanel.Resource[] composeCurrentValue()
 	{
-		Resource res = table.getSelectionModel().getSelectedItem();
-		if (res == null) return null;
-	
-		Schema.Value val = new Schema.Value(res.uri, res.label);
-		val.descr = res.descr;
-		return val;
+		if (tabber.getSelectionModel().getSelectedItem() == tabList)
+		{
+			List<LookupPanel.Resource> list = tableList.getSelectionModel().getSelectedItems();
+			return list.toArray(new LookupPanel.Resource[list.size()]);
+		}
+		else if (tabber.getSelectionModel().getSelectedItem() == tabTree)
+		{
+			List<TreeItem<Vocabulary.Branch>> list = treeView.getSelectionModel().getSelectedItems();
+			LookupPanel.Resource[] ret = new LookupPanel.Resource[list.size()];
+			for (int n = 0; n < list.size(); n++)
+			{
+				Vocabulary.Branch branch = list.get(n).getValue();
+				ret[n] = new Resource(branch.uri, vocab.getLabel(branch.uri), vocab.getDescr(branch.uri));
+			}
+			return ret;
+		}
+		return null;
 	}
-*/	
+
 	// returns a subset of the resources which matches the search text (or all if blank)
 	private List<Resource> searchedSubset(String searchText)
 	{

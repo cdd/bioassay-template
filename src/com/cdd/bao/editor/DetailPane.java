@@ -196,6 +196,34 @@ public class DetailPane extends ScrollPane
 		// scroll to end; have to pause first, though    	
         Platform.runLater(() -> setVvalue(getVmax()));
     }
+    public void actionValueMultiAdd()
+    {
+    	if (assignment == null) return;
+
+		LookupPanel lookup = new LookupPanel("", schema.gatherAllURI(), true);
+		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
+		if (!result.isPresent()) return;
+		LookupPanel.Resource[] resList = result.get();
+		if (resList == null || resList.length == 0) return;
+
+    	Schema.Assignment modified = extractAssignment();
+    	if (modified != null) assignment = modified;
+
+		int watermark = assignment.values.size();
+		for (LookupPanel.Resource res : resList)
+		{
+			Schema.Value val = new Schema.Value(res.uri, res.label);
+			val.descr = res.descr;
+    		assignment.values.add(val);
+		}
+    	recreateAssignment();
+
+    	valueList.get(watermark).fieldURI.requestFocus();
+
+		// scroll to end; have to pause first, though    	
+        Platform.runLater(() -> setVvalue(getVmax()));
+    }
+    
     public void actionValueDelete()
     {
     	if (assignment == null || focusIndex < 0) return;	
@@ -250,31 +278,31 @@ public class DetailPane extends ScrollPane
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
-    		LookupPanel lookup = new LookupPanel(searchText, schema.gatherAllURI());
-    		Optional<LookupPanel.Resource> result = lookup.showAndWait();
+    		LookupPanel lookup = new LookupPanel(searchText, schema.gatherAllURI(), false);
+    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
-    			LookupPanel.Resource res = result.get();
-    			if (res != null)
+    			LookupPanel.Resource[] res = result.get();
+    			if (res != null && res.length > 0)
     			{
-    				vw.fieldURI.setText(res.uri);
-    				vw.fieldName.setText(res.label);
-    				vw.fieldDescr.setText(res.descr);
+    				vw.fieldURI.setText(res[0].uri);
+    				vw.fieldName.setText(res[0].label);
+    				vw.fieldDescr.setText(res[0].descr);
 				}
     		}
     	}
     	else if (assignment != null)
     	{
-    		LookupPanel lookup = new LookupPanel(fieldName.getText(), schema.gatherAllURI());
-    		Optional<LookupPanel.Resource> result = lookup.showAndWait();
+    		LookupPanel lookup = new LookupPanel(fieldName.getText(), schema.gatherAllURI(), false);
+    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
-    			LookupPanel.Resource res = result.get();
-    			if (res != null)
+    			LookupPanel.Resource[] res = result.get();
+    			if (res != null && res.length >= 1)
     			{
-    				fieldURI.setText(res.uri);
-    				fieldName.setText(res.label);
-    				fieldDescr.setText(res.descr);
+    				fieldURI.setText(res[0].uri);
+    				fieldName.setText(res[0].label);
+    				fieldDescr.setText(res[0].descr);
 				}
     		}
     	}
