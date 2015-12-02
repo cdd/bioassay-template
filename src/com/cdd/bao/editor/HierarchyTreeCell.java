@@ -101,7 +101,7 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 				setStyle(style);
                 setText(label);
                 setGraphic(getTreeItem().getGraphic());
-                setupContextMenu();
+                setupContextMenu(branch);
 /*
 		TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
             MenuItem addMenuItem = new MenuItem("Fnord!");
@@ -121,21 +121,36 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 	    }
     }
 
-    private void setupContextMenu()
-    {
-    	TreeItem<EditSchema.Branch> item = getTreeView().getSelectionModel().getSelectedItem();
-        MenuItem addMenuItem = new MenuItem("Fnord!");
+    private void setupContextMenu(EditSchema.Branch branch)
+    {   	
         ContextMenu ctx = new ContextMenu();
-        ctx.getItems().add(addMenuItem);
-        addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent t)
-            {
-            	Util.writeln("--> FNORD!");
-            }
-        });
+        //MenuItem addMenuItem = new MenuItem("Fnord!");
+        //ctx.getItems().add(addMenuItem);
+
+		if (branch.group != null) addMenu(ctx, "Add _Group").setOnAction(event -> branch.owner.actionGroupAdd());
+		if (branch.group != null) addMenu(ctx, "Add _Assignment").setOnAction(event -> branch.owner.actionAssignmentAdd());
+		if (branch.group == null && branch.assignment == null) addMenu(ctx, "Add Assa_y").setOnAction(event -> branch.owner.actionAssayAdd());
+		if (branch.group != null || branch.assignment != null || branch.assay != null)
+		{
+			
+    		addMenu(ctx, "Cu_t").setOnAction(event -> branch.owner.actionEditCopy(true));
+    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionEditCopy(false));
+    		addMenu(ctx, "_Paste").setOnAction(event -> branch.owner.actionEditPaste());
+        	addMenu(ctx, "_Delete").setOnAction(event -> branch.owner.actionEditDelete());
+		}
+
+		/* maybe add these: but need to check validity first
+		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
+		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));
+		*/
         
-        setContextMenu(ctx);
+        if (ctx.getItems().size() > 0) setContextMenu(ctx);
+    }
+    private MenuItem addMenu(ContextMenu parent, String title)
+    {
+    	MenuItem item = new MenuItem(title);
+    	parent.getItems().add(item);
+    	return item;
     }
 
     /*private void createTextField() 
