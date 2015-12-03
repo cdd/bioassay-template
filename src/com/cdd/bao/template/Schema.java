@@ -134,6 +134,7 @@ public class Schema
 		public String name; // short label for the bioassay
 		public String descr = ""; // more descriptive label: used to complement the semantic assignments
 		public String para = ""; // plain text description of the assay, if available; sometimes this is available prior semantic assignments
+		public String originURI = ""; // optional: use to indicate the semantic resource that the assay originated from
 		
 		public List<Annotation> annotations = new ArrayList<>();
 		
@@ -146,12 +147,13 @@ public class Schema
 			Assay dup = new Assay(name);
 			dup.descr = descr;
 			dup.para = para;
+			dup.originURI = originURI;
 			for (Annotation a : annotations) dup.annotations.add(a.clone());
 			return dup;
 		}
 		public boolean equals(Assay other)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para)) return false;
+			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
 			if (annotations.size() != other.annotations.size()) return false;
 			for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
 			

@@ -9,6 +9,7 @@ package com.cdd.bao.editor;
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.editor.endpoint.*;
+import com.cdd.bao.editor.fetch.*;
 
 import java.io.*;
 import java.net.*;
@@ -219,10 +220,11 @@ public class EditSchema
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
     	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+		menuFile.getItems().add(new SeparatorMenuItem());
+		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
     	if (true)
-    	{
-    		menuFile.getItems().add(new SeparatorMenuItem());
     		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
+    	{
     		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
     		addMenu(menuFile, "_Upload Endpoint", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
     	}
@@ -567,6 +569,22 @@ public class EditSchema
 			ex.printStackTrace();
 			informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
+	}
+	public void actionFilePubChem()
+	{
+		Schema schema = stack.getSchema();
+
+		PubChemPanel pubchem = new PubChemPanel(schema);
+		Optional<Schema.Assay> result = pubchem.showAndWait();
+		if (!result.isPresent()) return;
+		Schema.Assay newAssay = result.get();
+		if (newAssay == null) return;
+		
+		schema.appendAssay(newAssay);
+		stack.changeSchema(schema);
+		
+		rebuildTree();
+		setCurrentBranch(locateBranch(schema.locatorID(newAssay)));
 	}
     public void actionFileConfigure()
     {

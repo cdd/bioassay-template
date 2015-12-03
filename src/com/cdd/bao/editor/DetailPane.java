@@ -351,6 +351,7 @@ public class DetailPane extends ScrollPane
 		fieldName = new TextField(group.name);
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
+		Tooltip.install(fieldName, new Tooltip("Very short name for the group"));
 		line.add(fieldName, "Name:", 1, 0);
 		
 		fieldDescr = new TextArea(group.descr);
@@ -359,6 +360,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr.setWrapText(true);
 		observeFocus(fieldDescr, -1);
 		passthroughTab(fieldDescr);
+		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph explaining what the group represents"));
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -382,6 +384,7 @@ public class DetailPane extends ScrollPane
 		fieldName = new TextField(assignment.name);
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
+		Tooltip.install(fieldName, new Tooltip("Very short name for the assignment"));
 		line.add(fieldName, "Name:", 1, 0);
 		
 		fieldDescr = new TextArea(assignment.descr);
@@ -390,11 +393,13 @@ public class DetailPane extends ScrollPane
 		fieldDescr.setWrapText(true);
 		observeFocus(fieldDescr, -1);
 		passthroughTab(fieldDescr);
+		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph describing the assignment to the user"));
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		fieldURI = new TextField(assignment.propURI);
 		fieldURI.setPrefWidth(350);
 		observeFocus(fieldURI, -1);
+		Tooltip.install(fieldURI, new Tooltip("The property URI used to link the assay to the assignment"));
 		line.add(fieldURI, "URI:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -419,11 +424,13 @@ public class DetailPane extends ScrollPane
 			vw.fieldURI = new TextField(val.uri == null ? "" : val.uri);
 			vw.fieldURI.setPrefWidth(350);
 			observeFocus(vw.fieldURI, n);
+			Tooltip.install(vw.fieldURI, new Tooltip("The URI for this assignment value"));
 			vw.line.add(vw.fieldURI, "URI:", 1, 0);
 			
 			vw.fieldName = new TextField(val.name);
 			vw.fieldName.setPrefWidth(350);
 			observeFocus(vw.fieldName, n);
+			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			vw.line.add(vw.fieldName, "Name:", 1, 0);
 			
 			vw.fieldDescr = new TextArea(val.descr);
@@ -432,6 +439,7 @@ public class DetailPane extends ScrollPane
 			vw.fieldDescr.setWrapText(true);
 			observeFocus(vw.fieldDescr, n);
 			passthroughTab(vw.fieldDescr);
+			Tooltip.install(vw.fieldDescr, new Tooltip("Concise paragraph describing the value to the user"));
 			vw.line.add(vw.fieldDescr, "Description:", 1, 0);
 			
 			vbox.getChildren().add(vw.line);
@@ -462,6 +470,7 @@ public class DetailPane extends ScrollPane
 		fieldName = new TextField(assay.name);
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
+		Tooltip.install(fieldName, new Tooltip("Very short label for the assay being annotated"));
 		line.add(fieldName, "Name:", 1, 0);
 		
 		fieldDescr = new TextArea(assay.descr);
@@ -470,6 +479,7 @@ public class DetailPane extends ScrollPane
 		fieldDescr.setWrapText(true);
 		observeFocus(fieldDescr, -1);
 		passthroughTab(fieldDescr);
+		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph summarizing the assay"));
 		line.add(fieldDescr, "Description:", 1, 0);
 
 		fieldPara = new TextArea(assay.para);
@@ -478,7 +488,14 @@ public class DetailPane extends ScrollPane
 		fieldPara.setWrapText(true);
 		observeFocus(fieldPara, -1);
 		passthroughTab(fieldPara);
+		Tooltip.install(fieldPara, new Tooltip("Optional detailed text for the assay, typically imported"));
 		line.add(fieldPara, "Paragraph:", 1, 0);
+		
+		fieldURI = new TextField(assay.originURI);
+		fieldURI.setPrefWidth(300);
+		observeFocus(fieldURI, -1);
+		Tooltip.install(fieldURI, new Tooltip("Optional URI referencing the origin of the assay"));
+		line.add(fieldURI, "Origin URI:", 1, 0);
 
 		vbox.getChildren().add(line);
 

@@ -6,6 +6,8 @@
 
 package com.cdd.bao.editor;
 
+import com.cdd.bao.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -182,7 +184,6 @@ public class Lineup extends Pane
 	protected void layoutChildren()
 	{
 		double width = getWidth(), height = getHeight();
-		
 		//Util.writeln("WH:"+w+","+h);
 		
 		int totalStretch = 0, stretchPoints = (int)Math.floor(height - computePrefHeight(width));
