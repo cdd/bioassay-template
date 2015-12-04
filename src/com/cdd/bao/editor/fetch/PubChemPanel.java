@@ -397,7 +397,6 @@ public class PubChemPanel extends Dialog<Schema.Assay>
         alert.setContentText(msg);
         alert.showAndWait();
 	}
-	
 }
 
 
