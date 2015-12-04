@@ -35,6 +35,8 @@ import javafx.util.*;
 public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 {
 	private Vocabulary vocab = null;
+	private Set<String> usedURI;
+	private boolean multi;
 
 	public static final class Resource
 	{
@@ -90,10 +92,15 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             else 
             {
             	String label = vocab.getLabel(branch.uri);
+
+    			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
+    			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+            	
             	setText(label);
-   				//setStyle(style);
+   				setStyle(style);
                 setGraphic(getTreeItem().getGraphic());
     	    }
+    	    
         }
     	/*private String getString() 
         {
@@ -109,7 +116,10 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	{
 		super();
 		
-		loadResources(usedURI);
+		this.usedURI = usedURI;
+		this.multi = multi;
+		
+		loadResources();
 		
 		setTitle("Lookup URI");
 
@@ -158,7 +168,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	
 	// ------------ private methods ------------
 
-	private void loadResources(Set<String> usedURI)
+	private void loadResources()
 	{
 		try {vocab = Vocabulary.globalInstance();}
 		catch (IOException ex) {ex.printStackTrace(); return;}
@@ -258,6 +268,17 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	{
 		TreeItem<Vocabulary.Branch> item = new TreeItem<>(branch);
 		parent.getChildren().add(item);
+		
+		if (usedURI.contains(branch.uri))
+		{
+			TreeItem<Vocabulary.Branch> look = item.getParent();
+			while (look != null)
+			{
+				look.setExpanded(true);
+				look = look.getParent();
+			}
+		}
+		
 		for (Vocabulary.Branch child : branch.children) populateTreeBranch(item, child);
 		return item;
 	}
@@ -273,13 +294,17 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		else if (tabber.getSelectionModel().getSelectedItem() == tabTree)
 		{
 			List<TreeItem<Vocabulary.Branch>> list = treeView.getSelectionModel().getSelectedItems();
-			LookupPanel.Resource[] ret = new LookupPanel.Resource[list.size()];
+			
+			List<LookupPanel.Resource> ret = new ArrayList<>();
 			for (int n = 0; n < list.size(); n++)
 			{
 				Vocabulary.Branch branch = list.get(n).getValue();
-				ret[n] = new Resource(branch.uri, vocab.getLabel(branch.uri), vocab.getDescr(branch.uri));
+				
+				if (multi && usedURI.contains(branch.uri)) continue;
+				
+				ret.add(new Resource(branch.uri, vocab.getLabel(branch.uri), vocab.getDescr(branch.uri)));
 			}
-			return ret;
+			return ret.toArray(new LookupPanel.Resource[ret.size()]);
 		}
 		return null;
 	}

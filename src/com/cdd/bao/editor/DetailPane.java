@@ -200,7 +200,7 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null) return;
 
-		LookupPanel lookup = new LookupPanel("", schema.gatherAllURI(), true);
+		LookupPanel lookup = new LookupPanel("", listValueURI(), true);
 		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
 		if (!result.isPresent()) return;
 		LookupPanel.Resource[] resList = result.get();
@@ -278,7 +278,7 @@ public class DetailPane extends ScrollPane
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
-    		LookupPanel lookup = new LookupPanel(searchText, schema.gatherAllURI(), false);
+    		LookupPanel lookup = new LookupPanel(searchText, listValueURI(), false);
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -293,7 +293,7 @@ public class DetailPane extends ScrollPane
     	}
     	else if (assignment != null)
     	{
-    		LookupPanel lookup = new LookupPanel(fieldName.getText(), schema.gatherAllURI(), false);
+    		LookupPanel lookup = new LookupPanel(fieldName.getText(), new HashSet<>(), false);
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -705,6 +705,18 @@ public class DetailPane extends ScrollPane
 			}
 			if (child instanceof Pane) recursiveControls(list, (Pane)child);
 		}
+	}
+	
+	// make a list of the URIs currently being used for values
+	private Set<String> listValueURI()
+	{
+		Set<String> used = new HashSet<>();
+		for (ValueWidgets vw : valueList)
+		{
+			String uri = vw.fieldURI.getText();
+			if (uri.length() > 0) used.add(uri);
+		}
+		return used;
 	}
 }
 
