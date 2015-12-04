@@ -33,13 +33,17 @@ import javafx.util.*;
 
 public class AnnotatePanel extends Dialog<Schema.Annotation>
 {
+	private Vocabulary vocab;
+	
 	private Schema.Assignment assn;
 	private List<Schema.Value> options = new ArrayList<>();
 
 	private Button btnUse, btnClear;
 
-	// !! private TextField search = new TextField();
 	private final int PADDING = 2;
+
+	private TextField fieldSearch = new TextField();
+	private CheckBox chkHierarchy = new CheckBox("Show ontology hierarchy");
 
 	private TabPane tabber = new TabPane();
 	private Tab tabValue = new Tab("Values"), tabLiteral = new Tab("Literal"), tabCustom = new Tab("Custom");
@@ -56,6 +60,8 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	{
 		super();
 		
+		try {vocab = Vocabulary.globalInstance();} catch (Exception ex) {}
+		
 		this.assn = assn;
 		options.addAll(assn.values);
 		// !! loadResources(usedURI);
@@ -69,9 +75,6 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		setupLiteral();
 		setupCustom();
         
-		//Lineup line = new Lineup(PADDING);
-		//line.add(search, "Search:", 1, 0);
- 
 		tabber.getTabs().addAll(tabValue, tabLiteral, tabCustom);
 
 		getDialogPane().setContent(tabber);
@@ -96,6 +99,8 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		});
 		
 		if (annot != null) fillCurrent(annot);
+
+        //Platform.runLater(() -> fieldSearch.requestFocus());
 	}
 		
 	// ------------ private methods ------------
@@ -106,31 +111,54 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
  
         TableColumn<Schema.Value, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-        colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(substitutePrefix(resource.getValue().uri));});
+        colURI.setCellValueFactory(value -> {return new SimpleStringProperty(substitutePrefix(value.getValue().uri));});
          
         TableColumn<Schema.Value, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
-        colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().name);});
+        colLabel.setCellValueFactory(value -> {return new SimpleStringProperty(valueName(value.getValue()));});
         
         TableColumn<Schema.Value, String> colDescr = new TableColumn<>("Description");
 		colDescr.setMinWidth(400);
-        colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
+        colDescr.setCellValueFactory(value -> {return new SimpleStringProperty(cleanupDescription(value.getValue().descr));});
 
 		table.setMinHeight(450);        
         table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         table.getColumns().addAll(colURI, colLabel, colDescr);
         table.setItems(FXCollections.observableArrayList(options));
  
+		Lineup line = new Lineup(PADDING);
+		fieldSearch.setPrefWidth(500);
+		fieldSearch.setMaxWidth(Double.MAX_VALUE);
+		FlowPane flow = new FlowPane(Orientation.HORIZONTAL, PADDING * 2, 0, fieldSearch, chkHierarchy);
+		line.add(flow, "Search:", 1, 0);
+
         BorderPane pane = new BorderPane();
         pane.setPrefSize(800, 500);
         pane.setMaxHeight(Double.MAX_VALUE);
         pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        //BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
-        //pane.setTop(line);
+        BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
+        pane.setTop(line);
         pane.setCenter(table);
         
         tabValue.setContent(pane);
         
+		fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> 
+		{
+			List<Schema.Value> selected = table.getSelectionModel().getSelectedItems();
+			List<Schema.Value> newSelection = searchedSubset(newValue);
+			table.setItems(FXCollections.observableArrayList(newSelection));
+			for (Schema.Value sel : selected)
+			{
+				int idx = newSelection.indexOf(sel);
+				if (idx >= 0) table.getSelectionModel().select(idx);
+			}
+		});
+		chkHierarchy.selectedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			colLabel.setVisible(false);
+			colLabel.setVisible(true);
+		});
+		
 		table.setOnMousePressed(event ->
 		{
 			if (event.isPrimaryButtonDown() && event.getClickCount() == 2) btnUse.fire();
@@ -305,5 +333,42 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	private String cleanupDescription(String descr)
 	{
 		return descr.replaceAll("\n", " ");
+	}
+	
+	// returns a subset of the resources which matches the search text (or all if blank)
+	private List<Schema.Value> searchedSubset(String searchText)
+	{
+		if (searchText.length() == 0) return options;
+		
+		String searchLC = searchText.toLowerCase();
+		
+		List<Schema.Value> subset = new ArrayList<>();
+		for (Schema.Value val : options)
+		{
+			if (val.name.toLowerCase().indexOf(searchLC) >= 0 || val.uri.toLowerCase().indexOf(searchLC) >= 0 ||
+				val.descr.toLowerCase().indexOf(searchLC) >= 0) subset.add(val);
+		}
+		return subset;
+	}	
+	
+	// returns the "name" of a value: whether this is just the name itself, or the hierarchy sequence
+	private String valueName(Schema.Value val)
+	{
+		if (!chkHierarchy.isSelected()) return val.name;
+
+		String prefix = "";
+		Vocabulary.Branch branch = vocab.getBranch(val.uri);
+		if (branch != null)
+		{
+			while (branch.parents.size() > 0)
+			{
+				branch = branch.parents.get(0);
+				String label = vocab.getLabel(branch.uri);
+				if (label == null) label = branch.uri;
+				prefix = label + " \u25BA " + prefix;
+			}
+		}
+		
+		return prefix + val.name;
 	}
 }

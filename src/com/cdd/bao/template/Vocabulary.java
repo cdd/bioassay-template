@@ -41,6 +41,7 @@ public class Vocabulary
 		
 		public Branch(String uri) {this.uri = uri;}
 	}
+	private Map<String, Branch> uriToBranch = new HashMap<>();
 	private List<Branch> rootBranches = new ArrayList<>();
 
 	// ------------ public methods ------------
@@ -83,6 +84,9 @@ public class Vocabulary
 	// grab all of the URIs
 	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
 	
+	// fetches a specific root branch, if there is one
+	public Branch getBranch(String uri) {return uri == null || uri.length() == 0 ? null : uriToBranch.get(uri);}
+
 	// fetches the roots that can be used to create some number of hierarchies
 	public Branch[] getRootBranches() {return rootBranches.toArray(new Branch[rootBranches.size()]);}
 	
@@ -194,8 +198,6 @@ public class Vocabulary
 	// looks over the entire class inheritance system, and builds a collection of trees
 	private void generateBranch(Model model)
 	{
-		Map<String, Branch> uriToBranch = new HashMap<>();
-		
 		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
 		for (StmtIterator it = model.listStatements(null, subClassOf, (RDFNode)null); it.hasNext();)
 		{
