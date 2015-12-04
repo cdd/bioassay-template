@@ -203,6 +203,76 @@ public class EditSchema
 		rebuildTree();
 	}
 
+	// given that a part of the current/indicated branch may have been modified, updates the internal representation of the schema -
+	// and pushes the modified version to the undo stack - then informs the detail view of the modifications; all of this without any
+	// changes in the UI widget states
+	public void updateBranchGroup(Schema.Group modGroup)
+	{
+		if (modGroup == null) return;
+		TreeItem<Branch> item = currentBranch();
+		if (item == null || item.getValue() == null) return;
+		updateBranchGroup(item.getValue(), modGroup);
+		
+	}
+	public void updateBranchGroup(Branch branch, Schema.Group modGroup)
+	{
+		Schema schema = stack.getSchema();
+		if (branch.group.parent != null)
+		{
+			// reparent the modified group, then swap it out in the parent's child list
+			Schema.Group replGroup = schema.obtainGroup(branch.locatorID);
+			modGroup.parent = replGroup.parent;
+			int idx = replGroup.parent.subGroups.indexOf(replGroup);
+			replGroup.parent.subGroups.set(idx, modGroup);
+		}
+		else schema.setRoot(modGroup);
+		
+		branch.group = modGroup;
+		stack.changeSchema(schema, true);
+		
+		detail.setGroup(schema, branch.group, false);
+	}
+	public void updateBranchAssignment(Schema.Assignment modAssn)
+	{
+		if (modAssn == null) return;
+		TreeItem<Branch> item = currentBranch();
+		if (item == null || item.getValue() == null) return;
+		updateBranchAssignment(item.getValue(), modAssn);
+	}
+	public void updateBranchAssignment(Branch branch, Schema.Assignment modAssn)
+	{
+		Schema schema = stack.getSchema();
+		
+		// reparent the modified assignment, then swap it out in the parent's child list
+		Schema.Assignment replAssn = schema.obtainAssignment(branch.locatorID);
+		modAssn.parent = replAssn.parent;
+		int idx = replAssn.parent.assignments.indexOf(replAssn);
+		replAssn.parent.assignments.set(idx, modAssn);
+		
+		branch.assignment = modAssn;
+		stack.changeSchema(schema, true);
+		
+		detail.setAssignment(schema, branch.assignment, false);
+	}
+	public void updateBranchAssay(Schema.Assay modAssay)
+	{
+		if (modAssay == null) return;
+		TreeItem<Branch> item = currentBranch();
+		if (item == null || item.getValue() == null) return;
+		updateBranchAssay(item.getValue(), modAssay);
+	}
+	public void updateBranchAssay(Branch branch, Schema.Assay modAssay)
+	{
+		Schema schema = stack.getSchema();
+
+		int idx = schema.indexOfAssay(branch.locatorID);
+		schema.setAssay(idx, modAssay);
+		branch.assay = modAssay;
+		stack.changeSchema(schema, true);
+		
+		detail.setAssay(schema, branch.assay, false);
+	}
+
 	// ------------ private methods ------------	
 
 	private void updateTitle()
@@ -371,20 +441,8 @@ public class EditSchema
 			Schema.Group modGroup = detail.extractGroup();
 			if (modGroup == null) return;
 
-			Schema schema = stack.getSchema();
-			if (branch.group.parent != null)
-			{
-				// reparent the modified group, then swap it out in the parent's child list
-				Schema.Group replGroup = schema.obtainGroup(branch.locatorID);
-				modGroup.parent = replGroup.parent;
-				int idx = replGroup.parent.subGroups.indexOf(replGroup);
-				replGroup.parent.subGroups.set(idx, modGroup);
-			}
-			else schema.setRoot(modGroup);
-			
-			branch.group = modGroup;
-			stack.changeSchema(schema, true);
-			
+			updateBranchGroup(branch, modGroup);
+
 			item.setValue(new Branch(this));
 			item.setValue(branch); // triggers redraw
 		}
@@ -393,17 +451,8 @@ public class EditSchema
 			Schema.Assignment modAssn = detail.extractAssignment();
 			if (modAssn == null) return;
 			
-			Schema schema = stack.getSchema();
-			
-			// reparent the modified assignment, then swap it out in the parent's child list
-			Schema.Assignment replAssn = schema.obtainAssignment(branch.locatorID);
-			modAssn.parent = replAssn.parent;
-			int idx = replAssn.parent.assignments.indexOf(replAssn);
-			replAssn.parent.assignments.set(idx, modAssn);
-			
-			branch.assignment = modAssn;
-			stack.changeSchema(schema, true);
-			
+			updateBranchAssignment(branch, modAssn);
+
 			item.setValue(new Branch(this));
 			item.setValue(branch); // triggers redraw
 		}
@@ -412,13 +461,8 @@ public class EditSchema
 			Schema.Assay modAssay = detail.extractAssay();
 			if (modAssay == null) return;
 			
-			Schema schema = stack.getSchema();
+			updateBranchAssay(branch, modAssay);
 
-			int idx = schema.indexOfAssay(branch.locatorID);
-			schema.setAssay(idx, modAssay);
-			branch.assay = modAssay;
-			stack.changeSchema(schema, true);
-			
 			item.setValue(new Branch(this));
 			item.setValue(branch); // triggers redraw
 		}
@@ -430,12 +474,12 @@ public class EditSchema
 		if (currentlyRebuilding || item == null) return;
 		Branch branch = item.getValue();
 
-		if (branch.group != null) detail.setGroup(stack.peekSchema(), branch.group);
-		else if (branch.assignment != null) detail.setAssignment(stack.peekSchema(), branch.assignment);
-		else if (branch.assay != null) detail.setAssay(stack.peekSchema(), branch.assay);
+		if (branch.group != null) detail.setGroup(stack.peekSchema(), branch.group, true);
+		else if (branch.assignment != null) detail.setAssignment(stack.peekSchema(), branch.assignment, true);
+		else if (branch.assay != null) detail.setAssay(stack.peekSchema(), branch.assay, true);
 		else detail.clearContent();
 	}
-
+	
 	// in case the detail has changed, update the main part of the tree
 	private void maybeUpdateTree()
 	{

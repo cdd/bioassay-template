@@ -98,29 +98,29 @@ public class DetailPane extends ScrollPane
 	}
 	
 	// replaces the content with either type; any modifications to existing widgets will be zapped
-	public void setGroup(Schema schema, Schema.Group group)
+	public void setGroup(Schema schema, Schema.Group group, boolean recreate)
 	{
 		this.schema = schema;
 		this.group = group;
 		assignment = null;
 		assay = null;
-		recreateGroup();
+		if (recreate) recreateGroup();
 	}
-	public void setAssignment(Schema schema, Schema.Assignment assignment)
+	public void setAssignment(Schema schema, Schema.Assignment assignment, boolean recreate)
 	{
 		this.schema = schema;
 		this.assignment = assignment;
 		group = null;
 		assay = null;
-		recreateAssignment();
+		if (recreate) recreateAssignment();
 	}
-	public void setAssay(Schema schema, Schema.Assay assay)
+	public void setAssay(Schema schema, Schema.Assay assay, boolean recreate)
 	{
 		this.schema = schema;
 		this.assay = assay;
 		assignment = null;
 		group = null;
-		recreateAssay();
+		if (recreate) recreateAssay();
 	}
 	
 	// inquiries as to what kind of content is currently being represented
@@ -185,10 +185,12 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null) return;	
     	
-    	Schema.Assignment modified = extractAssignment();
-    	if (modified != null) assignment = modified;
+    	Schema.Assignment modAssn = extractAssignment();
+    	if (modAssn == null) modAssn = assignment;
 
-    	assignment.values.add(new Schema.Value("", ""));
+    	modAssn.values.add(new Schema.Value("", ""));
+
+    	main.updateBranchAssignment(modAssn);
     	recreateAssignment();
 
     	valueList.get(valueList.size() - 1).fieldURI.requestFocus();
@@ -206,16 +208,18 @@ public class DetailPane extends ScrollPane
 		LookupPanel.Resource[] resList = result.get();
 		if (resList == null || resList.length == 0) return;
 
-    	Schema.Assignment modified = extractAssignment();
-    	if (modified != null) assignment = modified;
+    	Schema.Assignment modAssn = extractAssignment();
+    	if (modAssn == null) modAssn = assignment;
 
-		int watermark = assignment.values.size();
+		int watermark = modAssn.values.size();
 		for (LookupPanel.Resource res : resList)
 		{
 			Schema.Value val = new Schema.Value(res.uri, res.label);
 			val.descr = res.descr;
-    		assignment.values.add(val);
+    		modAssn.values.add(val);
 		}
+		
+    	main.updateBranchAssignment(modAssn);
     	recreateAssignment();
 
     	valueList.get(watermark).fieldURI.requestFocus();
@@ -228,11 +232,13 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null || focusIndex < 0) return;	
 
-    	Schema.Assignment modified = extractAssignment();
-    	if (modified != null) assignment = modified;
+    	Schema.Assignment modAssn = extractAssignment();
+    	if (modAssn == null) modAssn = assignment;
 
 		int idx = focusIndex;
-    	assignment.values.remove(focusIndex);
+    	modAssn.values.remove(focusIndex);
+
+    	main.updateBranchAssignment(modAssn);
     	recreateAssignment();
     	
     	if (valueList.size() > 0)
@@ -244,14 +250,17 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null || focusIndex < 0) return;	
 
-    	Schema.Assignment modified = extractAssignment();
-    	if (modified != null) assignment = modified;
-    	if (focusIndex + dir < 0 || focusIndex + dir >= assignment.values.size()) return;
+    	Schema.Assignment modAssn = extractAssignment();
+    	if (modAssn == null) modAssn = assignment;
+
+    	if (focusIndex + dir < 0 || focusIndex + dir >= modAssn.values.size()) return;
 
 		int newIndex = focusIndex + dir;
-		Schema.Value v1 = assignment.values.get(focusIndex), v2 = assignment.values.get(newIndex);
-		assignment.values.set(focusIndex, v2);
-		assignment.values.set(newIndex, v1);
+		Schema.Value v1 = modAssn.values.get(focusIndex), v2 = modAssn.values.get(newIndex);
+		modAssn.values.set(focusIndex, v2);
+		modAssn.values.set(newIndex, v1);
+
+    	main.updateBranchAssignment(modAssn);
     	recreateAssignment();
     	
    		valueList.get(newIndex).fieldURI.requestFocus();
