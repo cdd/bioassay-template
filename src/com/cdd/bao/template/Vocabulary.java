@@ -35,11 +35,15 @@ public class Vocabulary
 	
 	public static class Branch
 	{
-		public String uri;
+		public String uri, label;
 		public List<Branch> parents = new ArrayList<>();
 		public List<Branch> children = new ArrayList<>();
 		
-		public Branch(String uri) {this.uri = uri;}
+		public Branch(String uri, String label)
+		{
+			this.uri = uri;
+			this.label = label;
+		}
 	}
 	private Map<String, Branch> uriToBranch = new HashMap<>();
 	private List<Branch> rootBranches = new ArrayList<>();
@@ -203,28 +207,38 @@ public class Vocabulary
 		{
 			Statement st = it.next();
 			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
-			
-			if (!uriToLabel.containsKey(uriChild) || !uriToLabel.containsKey(uriParent)) continue;
+
+			String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
+			if (labelChild == null || labelParent == null) continue;
 			
 			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
 			
 			Branch child = uriToBranch.get(uriChild), parent = uriToBranch.get(uriParent);
 			if (child == null) 
 			{
-				child = new Branch(uriChild);
+				child = new Branch(uriChild, labelChild);
 				uriToBranch.put(uriChild, child);
 			}
 			if (parent == null)
 			{
-				parent = new Branch(uriParent);
+				parent = new Branch(uriParent, labelParent);
 				uriToBranch.put(uriParent, parent);
 			}
 			
 			parent.children.add(child);
 			child.parents.add(parent);
 		}
-		
+
 		// anything with zero parents is a "root": this is all that is needed
 		for (Branch branch : uriToBranch.values()) if (branch.parents.size() == 0) rootBranches.add(branch);
+
+		// sort each level by name
+		List<Branch> stack = new ArrayList<>(rootBranches);
+		while (stack.size() > 0)
+		{
+			Branch branch = stack.remove(0);
+			branch.children.sort((v1, v2) -> v1.label.compareTo(v2.label));
+			stack.addAll(branch.children);
+		}
 	}
 }

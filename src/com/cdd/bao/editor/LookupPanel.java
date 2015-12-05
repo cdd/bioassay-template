@@ -49,12 +49,6 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			this.label = label == null ? "" : label;
 			this.descr = descr == null ? "" : descr;
 		}
-		/*String getURI() {return uri;}
-		void setURI(String uri) {this.uri = uri;}
-		String getLabel() {return label;}
-		void setLabel(String label) {this.label = label;}
-		String getDescr() {return descr;}
-		void setDescr(String descr) {this.descr = descr;}*/
 	};
 	private List<Resource> resources = new ArrayList<>();
 
@@ -64,7 +58,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	private TextField fieldSearch = new TextField();
 	private TableView<Resource> tableList = new TableView<>();
 
-    private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<Vocabulary.Branch>(new Vocabulary.Branch(null));
+    private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<Vocabulary.Branch>(new Vocabulary.Branch(null, null));
     private TreeView<Vocabulary.Branch> treeView = new TreeView<Vocabulary.Branch>(treeRoot);
 
     private final class HierarchyTreeCell extends TreeCell<Vocabulary.Branch>
@@ -91,7 +85,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             }
             else 
             {
-            	String label = vocab.getLabel(branch.uri);
+            	String label = branch.label;
 
     			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
     			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
@@ -162,8 +156,26 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		
         tableList.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
         treeView.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
+
+		tabber.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+		{
+			if (oldValue == tabList && newValue == tabTree) syncSelectionListToTree();
+			else if (oldValue == tabTree && newValue == tabList) syncSelectionTreeToList();
+		});
 		
         Platform.runLater(() -> fieldSearch.requestFocus());
+	}
+	
+	// if there's a starting value, set it in the list
+	public void setInitialURI(String uri)
+	{
+		if (uri == null || uri.length() == 0) return;
+		List<Resource> resList = tableList.getItems();
+		for (int n = 0; n < resList.size(); n++) if (resList.get(n).uri.equals(uri))
+		{
+			tableList.getSelectionModel().clearAndSelect(n);
+			return;
+		}
 	}
 	
 	// ------------ private methods ------------
@@ -302,7 +314,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 				
 				if (multi && usedURI.contains(branch.uri)) continue;
 				
-				ret.add(new Resource(branch.uri, vocab.getLabel(branch.uri), vocab.getDescr(branch.uri)));
+				ret.add(new Resource(branch.uri, branch.label, vocab.getDescr(branch.uri)));
 			}
 			return ret.toArray(new LookupPanel.Resource[ret.size()]);
 		}
@@ -324,7 +336,64 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		}
 		return subset;
 	}
+
+	// when switching tabs: update selection to match	
+	private void syncSelectionListToTree()
+	{
+		if (tableList.getSelectionModel().getSelectedIndex() < 0) return; // nothing selected: do not disturb
+
+		Set<String> selected = new HashSet<>();
+		for (Resource res : tableList.getSelectionModel().getSelectedItems()) selected.add(res.uri);
+		
+		treeView.getSelectionModel().clearSelection();
+		
+		List<TreeItem<Vocabulary.Branch>> stack = new ArrayList<>();
+		stack.add(treeRoot);
+		List<TreeItem<Vocabulary.Branch>> toSelect = new ArrayList<>();
+		while (stack.size() > 0)
+		{
+			TreeItem<Vocabulary.Branch> item = stack.remove(0);
+			
+			if (selected.contains(item.getValue().uri))
+			{
+				toSelect.add(item);
+				for (TreeItem<Vocabulary.Branch> look = item.getParent(); look != null; look = look.getParent()) look.setExpanded(true);
+			}
+			
+			for (TreeItem<Vocabulary.Branch> child : item.getChildren()) stack.add(child);
+		}
+		
+		for (int n = 0; n < toSelect.size(); n++)
+		{
+			TreeItem<Vocabulary.Branch> item = toSelect.get(n);
+			int row = treeView.getRow(item);
+			treeView.getSelectionModel().select(row);
+			if (n == 0) treeView.scrollTo(row);
+		}
+	}
+	private void syncSelectionTreeToList()
+	{
+		if (treeView.getSelectionModel().getSelectedIndex() < 0) return; // nothing selected: do not disturb
 	
+		Map<String, Integer> uriToIndex = new HashMap<>();
+		List<Resource> resList = tableList.getItems();
+		for (int n = 0; n < resList.size(); n++) uriToIndex.put(resList.get(n).uri, n);
+		
+		tableList.getSelectionModel().clearSelection();
+		int scrollTo = -1;
+		for (TreeItem<Vocabulary.Branch> item : treeView.getSelectionModel().getSelectedItems())
+		{
+			Integer idx = uriToIndex.get(item.getValue().uri);
+			if (idx != null)
+			{
+				tableList.getSelectionModel().select(idx);
+				if (scrollTo < 0) scrollTo = idx;
+			}
+		}
+		
+		if (scrollTo >= 0) tableList.scrollTo(scrollTo);
+	}
+			
 	// switches shorter prefixes for display convenience
 	private final String[] SUBST = 
     {

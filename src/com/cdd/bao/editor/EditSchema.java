@@ -566,6 +566,7 @@ public class EditSchema
     		if (!file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
 
 			schemaFile = file;
+			updateTitle();
 		}
 		
 		// validity checking

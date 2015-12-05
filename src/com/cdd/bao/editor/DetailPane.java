@@ -288,6 +288,7 @@ public class DetailPane extends ScrollPane
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
     		LookupPanel lookup = new LookupPanel(searchText, listValueURI(), false);
+    		lookup.setInitialURI(vw.fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -303,6 +304,7 @@ public class DetailPane extends ScrollPane
     	else if (assignment != null)
     	{
     		LookupPanel lookup = new LookupPanel(fieldName.getText(), new HashSet<>(), false);
+    		lookup.setInitialURI(fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
