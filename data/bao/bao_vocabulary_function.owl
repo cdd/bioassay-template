@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0"?>
 
 
 <!DOCTYPE rdf:RDF [
@@ -11,17 +11,24 @@
 ]>
 
 
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_function.owl#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:obo="http://purl.obolibrary.org/obo/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_function.owl">
+<rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_function.owl#"
+     xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_function.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_function.owl">
         <rdfs:label>bioassay ontology</rdfs:label>
         <owl:versionInfo>2.1</owl:versionInfo>
         <dc:date>05/09/2013</dc:date>
         <rdfs:comment xml:lang="en">There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
 
-contact: Stephan Schurer: sschurer</rdfs:comment>
+contact: Stephan Schurer:  stephan dot schurer at gmail dot com</rdfs:comment>
         <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
+        <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
-	<dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
     </owl:Ontology>
     
 
@@ -34,15 +41,6 @@ contact: Stephan Schurer: sschurer</rdfs:comment>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 
 
@@ -70,7 +68,7 @@ contact: Stephan Schurer: sschurer</rdfs:comment>
 
     <!-- http://www.w3.org/2002/07/owl#topObjectProperty -->
 
-    <owl:ObjectProperty rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    <owl:ObjectProperty rdf:about="&owl;topObjectProperty"/>
     
 
 
@@ -87,7 +85,7 @@ contact: Stephan Schurer: sschurer</rdfs:comment>
 
     <!-- http://www.w3.org/2002/07/owl#topDataProperty -->
 
-    <owl:DatatypeProperty rdf:about="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <owl:DatatypeProperty rdf:about="&owl;topDataProperty"/>
     
 
 
@@ -121,7 +119,7 @@ contact: Stephan Schurer: sschurer</rdfs:comment>
 
     <!-- http://www.w3.org/2002/07/owl#Thing -->
 
-    <owl:Class rdf:about="http://www.w3.org/2002/07/owl#Thing"/>
+    <owl:Class rdf:about="&owl;Thing"/>
 </rdf:RDF>
 
 

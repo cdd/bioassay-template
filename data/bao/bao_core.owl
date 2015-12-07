@@ -24,32 +24,20 @@
      xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#"
      xmlns:bao="http://www.bioassayontology.org/bao#">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_core.owl">
+        <rdfs:label>BAO</rdfs:label>
+        <rdfs:label>BioAssay Ontology</rdfs:label>
+        <rdfs:comment>Contact:
+Stephan Schurer
+stephan dot schurer at gmail dot com</rdfs:comment>
+        <owl:versionInfo>2.0</owl:versionInfo>
+        <rdfs:comment>Created by:
+Saminda Abeyruwan, Uma Vempati, Hande Kucuk, Kunie Sakurai, Ubbo Visser, Vance Lemmon, Stephan Schurer*</rdfs:comment>
+        <rdfs:comment>Release date:
+Feb 4th 2014</rdfs:comment>
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:versionIRI rdf:resource="http://www.bioassayontology.org/bao/bao_core.owl"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_module_vocabularies.owl"/>
     </owl:Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
     
 
 
@@ -160,7 +148,19 @@
     <owl:Class rdf:about="&bao;BAO_0000015">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002202"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000076"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -176,8 +176,36 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000076"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="&bao;BAO_0003043"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
+                                <owl:someValuesFrom rdf:resource="&bao;BAO_0002001"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003043"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:allValuesFrom rdf:resource="&bao;BAO_0000019"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -194,12 +222,6 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002202"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000209"/>
                 <owl:onClass rdf:resource="&bao;BAO_0000040"/>
                 <owl:minQualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:minQualifiedCardinality>
@@ -207,42 +229,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:intersectionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="&bao;BAO_0003043"/>
-                            <owl:Restriction>
-                                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
-                                <owl:someValuesFrom rdf:resource="&bao;BAO_0002001"/>
-                            </owl:Restriction>
-                        </owl:intersectionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000035"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003043"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:allValuesFrom rdf:resource="&bao;BAO_0000019"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -290,11 +278,23 @@
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0000035"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0002202"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                         <owl:someValuesFrom rdf:resource="&bao;BAO_0000076"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                        <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                         <owl:someValuesFrom>
                             <owl:Class>
                                 <owl:intersectionOf rdf:parseType="Collection">
@@ -308,7 +308,7 @@
                         </owl:someValuesFrom>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                        <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                         <owl:someValuesFrom>
                             <owl:Class>
                                 <owl:intersectionOf rdf:parseType="Collection">
@@ -322,18 +322,6 @@
                         </owl:someValuesFrom>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
-                        <owl:someValuesFrom rdf:resource="&bao;BAO_0000035"/>
-                    </owl:Restriction>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                        <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
-                    </owl:Restriction>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
-                        <owl:someValuesFrom rdf:resource="&bao;BAO_0002202"/>
-                    </owl:Restriction>
-                    <owl:Restriction>
                         <owl:onProperty rdf:resource="&bao;BAO_0000426"/>
                         <owl:allValuesFrom rdf:resource="&bao;BAO_0000015"/>
                     </owl:Restriction>
@@ -342,8 +330,24 @@
         </owl:equivalentClass>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000076"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000426"/>
+                <owl:allValuesFrom rdf:resource="&bao;BAO_0000015"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="&bao;BAO_0003111"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
+                                <owl:someValuesFrom rdf:resource="&bao;BAO_0003064"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -354,19 +358,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000035"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -382,24 +374,20 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000426"/>
-                <owl:allValuesFrom rdf:resource="&bao;BAO_0000015"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000076"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:intersectionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="&bao;BAO_0003111"/>
-                            <owl:Restriction>
-                                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
-                                <owl:someValuesFrom rdf:resource="&bao;BAO_0003064"/>
-                            </owl:Restriction>
-                        </owl:intersectionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
+                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000035"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000179"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -411,14 +399,14 @@
     <owl:Class rdf:about="&bao;BAO_0000042">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003025"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000193"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000193"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003025"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -430,7 +418,7 @@
     <owl:Class rdf:about="&bao;BAO_0000044">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -442,12 +430,6 @@
                         </owl:intersectionOf>
                     </owl:Class>
                 </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000502"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -470,6 +452,12 @@
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000005"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000502"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -611,6 +599,12 @@
     <owl:Class rdf:about="&bao;BAO_0000165">
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003050"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
                 <owl:someValuesFrom>
                     <owl:Class>
@@ -631,12 +625,6 @@
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000450"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003050"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -646,7 +634,7 @@
     <owl:Class rdf:about="&bao;BAO_0000167">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0003051"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -659,20 +647,20 @@
     <owl:Class rdf:about="&bao;BAO_0000169">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000363"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000047"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -684,7 +672,7 @@
     <owl:Class rdf:about="&bao;BAO_0000175">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000325"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -705,11 +693,11 @@
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                        <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                         <owl:someValuesFrom rdf:resource="&bao;BAO_0000015"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                        <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                         <owl:allValuesFrom rdf:resource="&bao;BAO_0000015"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -1351,21 +1339,21 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000300"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;string"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000582"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0003018"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000582"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000300"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1580,7 +1568,7 @@
     <owl:Class rdf:about="&bao;BAO_0000360">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -1719,15 +1707,15 @@
     <owl:Class rdf:about="&bao;BAO_0000550">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002926"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003048"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002813"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;int"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002813"/>
-                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="&xsd;int"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002926"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003048"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1745,7 +1733,13 @@
     <owl:Class rdf:about="&bao;BAO_0000582">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003020"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0003019"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -1753,12 +1747,6 @@
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000398"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000282"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003020"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1928,14 +1916,14 @@
     <owl:Class rdf:about="&bao;BAO_0000682">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002002"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000776"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002664"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000141"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002664"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000141"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002002"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000776"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -4635,13 +4623,7 @@
     <owl:Class rdf:about="&bao;BAO_0002022">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000005"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000315"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -4653,7 +4635,13 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000005"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -4677,13 +4665,13 @@
         <owl:equivalentClass>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000106"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002743"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000021"/>
             </owl:Restriction>
         </owl:equivalentClass>
         <owl:equivalentClass>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000106"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000021"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002743"/>
             </owl:Restriction>
         </owl:equivalentClass>
     </owl:Class>
@@ -4714,6 +4702,12 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002006"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
                 <owl:someValuesFrom>
                     <owl:Class>
@@ -4726,12 +4720,6 @@
                         </owl:unionOf>
                     </owl:Class>
                 </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002006"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5304,13 +5292,13 @@
     <owl:Class rdf:about="&bao;BAO_0002554">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0002555"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
                 <owl:allValuesFrom rdf:resource="&bao;BAO_0002555"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -5433,7 +5421,7 @@
     <owl:Class rdf:about="&bao;BAO_0002595">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -5543,8 +5531,8 @@
     <owl:Class rdf:about="&bao;BAO_0002740">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002742"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -5555,8 +5543,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002742"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="&bao;BAO_0002741"/>
@@ -5569,8 +5557,8 @@
     <owl:Class rdf:about="&bao;BAO_0002741">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002743"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000021"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -5581,8 +5569,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000021"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002743"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5606,6 +5594,87 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0002803 -->
+
+    <rdf:Description rdf:about="&bao;BAO_0002803">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000219"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0002797"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0000316"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0002797"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0030009"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0095001"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0170022"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0003103"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002973"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0080013"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0080014"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                        <owl:someValuesFrom rdf:resource="&bao;BAO_0080015"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000452"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000294"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000295"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000416"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </rdf:Description>
     
 
 
@@ -5646,19 +5715,6 @@
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:someValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="&bao;BAO_0000217"/>
-                            <rdf:Description rdf:about="&bao;BAO_0000219"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:someValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
                 <owl:allValuesFrom>
                     <owl:Class>
                         <owl:unionOf rdf:parseType="Collection">
@@ -5667,6 +5723,19 @@
                         </owl:unionOf>
                     </owl:Class>
                 </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="&bao;BAO_0000217"/>
+                            <rdf:Description rdf:about="&bao;BAO_0000219"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5697,14 +5766,14 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002022"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000219"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000219"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002022"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5729,12 +5798,6 @@
     <owl:Class rdf:about="&bao;BAO_0003006">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:allValuesFrom rdf:resource="&bao;BAO_0000219"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0002000"/>
                 <owl:someValuesFrom>
                     <owl:Class>
@@ -5749,6 +5812,12 @@
                 </owl:someValuesFrom>
             </owl:Restriction>
         </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:allValuesFrom rdf:resource="&bao;BAO_0000219"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -5758,8 +5827,8 @@
     <owl:Class rdf:about="&bao;BAO_0003009">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000219"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000202"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -5770,8 +5839,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000202"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000219"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5783,8 +5852,8 @@
     <owl:Class rdf:about="&bao;BAO_0003011">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000196"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000441"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003030"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -5795,20 +5864,20 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
-                <owl:allValuesFrom rdf:resource="&bao;BAO_0000217"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000212"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003030"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000196"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000441"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&bao;BAO_0000208"/>
                 <owl:someValuesFrom rdf:resource="&bao;BAO_0000201"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0000205"/>
+                <owl:allValuesFrom rdf:resource="&bao;BAO_0000217"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5833,8 +5902,8 @@
     <owl:Class rdf:about="&bao;BAO_0003019">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000398"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000282"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090004"/>
+                <owl:allValuesFrom rdf:resource="&bao;BAO_0003017"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -5845,14 +5914,14 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090004"/>
-                <owl:allValuesFrom rdf:resource="&bao;BAO_0003017"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000589"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003020"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000589"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003020"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000398"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000282"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5864,13 +5933,7 @@
     <owl:Class rdf:about="&bao;BAO_0003025">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000005"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -5886,14 +5949,20 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000502"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000294"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000294"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000207"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000005"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000502"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -5911,7 +5980,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -5927,13 +5996,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002797"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090012"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0090012"/>
                 <owl:someValuesFrom>
                     <owl:Class>
                         <owl:intersectionOf rdf:parseType="Collection">
@@ -5945,6 +6008,12 @@
                         </owl:intersectionOf>
                     </owl:Class>
                 </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0002797"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -6014,14 +6083,14 @@
     <owl:Class rdf:about="&bao;BAO_0003047">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002659"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000141"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0002656"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0002656"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002659"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000141"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -6033,9 +6102,15 @@
     <owl:Class rdf:about="&bao;BAO_0003048">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002788"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002811"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;int"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&bao;BAO_0090006"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000551"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -6046,13 +6121,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BA0_0090006"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000551"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0002811"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0002788"/>
                 <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="&xsd;int"/>
             </owl:Restriction>
@@ -6079,14 +6148,14 @@
     <owl:Class rdf:about="&bao;BAO_0003051">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0003065"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0000135"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&bao;BAO_0000135"/>
-                <owl:someValuesFrom rdf:resource="&bao;BAO_0000269"/>
+                <owl:onProperty rdf:resource="&bao;BAO_0003102"/>
+                <owl:someValuesFrom rdf:resource="&bao;BAO_0003065"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -6181,6 +6250,9 @@
     <rdf:Description rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_organization.owl">
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
     </rdf:Description>
+    <rdf:Description rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_people.owl">
+        <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
+    </rdf:Description>
     <rdf:Description rdf:about="http://www.bioassayontology.org/bao/bao_metadata.owl">
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
     </rdf:Description>
@@ -6222,148 +6294,10 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000007"/>
-            <rdf:Description rdf:about="&bao;BAO_0000249"/>
-            <rdf:Description rdf:about="&bao;BAO_0000250"/>
-            <rdf:Description rdf:about="&bao;BAO_0000251"/>
-            <rdf:Description rdf:about="&bao;BAO_0000252"/>
-            <rdf:Description rdf:about="&bao;BAO_0000253"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000045"/>
-            <rdf:Description rdf:about="&bao;BAO_0000046"/>
-            <rdf:Description rdf:about="&bao;BAO_0000049"/>
-            <rdf:Description rdf:about="&bao;BAO_0000427"/>
-            <rdf:Description rdf:about="&bao;BAO_0000452"/>
-            <rdf:Description rdf:about="&bao;BAO_0000657"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000636"/>
-            <rdf:Description rdf:about="&bao;BAO_0000712"/>
-            <rdf:Description rdf:about="&bao;BAO_0002657"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000649"/>
-            <rdf:Description rdf:about="&bao;BAO_0000650"/>
-            <rdf:Description rdf:about="&bao;BAO_0000651"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000216"/>
-            <rdf:Description rdf:about="&bao;BAO_0000298"/>
-            <rdf:Description rdf:about="&bao;BAO_0000299"/>
-            <rdf:Description rdf:about="&bao;BAO_0000307"/>
-            <rdf:Description rdf:about="&bao;BAO_0000310"/>
-            <rdf:Description rdf:about="&bao;BAO_0000311"/>
-            <rdf:Description rdf:about="&bao;BAO_0000333"/>
-            <rdf:Description rdf:about="&bao;BAO_0000670"/>
-            <rdf:Description rdf:about="&bao;BAO_0000674"/>
-            <rdf:Description rdf:about="&bao;BAO_0000675"/>
-            <rdf:Description rdf:about="&bao;BAO_0000678"/>
-            <rdf:Description rdf:about="&bao;BAO_0000679"/>
-            <rdf:Description rdf:about="&bao;BAO_0000680"/>
-            <rdf:Description rdf:about="&bao;BAO_0000681"/>
-            <rdf:Description rdf:about="&bao;BAO_0000682"/>
-            <rdf:Description rdf:about="&bao;BAO_0000683"/>
-            <rdf:Description rdf:about="&bao;BAO_0000685"/>
-            <rdf:Description rdf:about="&bao;BAO_0000686"/>
-            <rdf:Description rdf:about="&bao;BAO_0000687"/>
-            <rdf:Description rdf:about="&bao;BAO_0000688"/>
-            <rdf:Description rdf:about="&bao;BAO_0000689"/>
-            <rdf:Description rdf:about="&bao;BAO_0000690"/>
-            <rdf:Description rdf:about="&bao;BAO_0000814"/>
-            <rdf:Description rdf:about="&bao;BAO_0000815"/>
-            <rdf:Description rdf:about="&bao;BAO_0000816"/>
-            <rdf:Description rdf:about="&bao;BAO_0000873"/>
-            <rdf:Description rdf:about="&bao;BAO_0000898"/>
-            <rdf:Description rdf:about="&bao;BAO_0000908"/>
-            <rdf:Description rdf:about="&bao;BAO_0000917"/>
-            <rdf:Description rdf:about="&bao;BAO_0000923"/>
-            <rdf:Description rdf:about="&bao;BAO_0000936"/>
-            <rdf:Description rdf:about="&bao;BAO_0000937"/>
-            <rdf:Description rdf:about="&bao;BAO_0000938"/>
-            <rdf:Description rdf:about="&bao;BAO_0000939"/>
-            <rdf:Description rdf:about="&bao;BAO_0000940"/>
-            <rdf:Description rdf:about="&bao;BAO_0000941"/>
-            <rdf:Description rdf:about="&bao;BAO_0000942"/>
-            <rdf:Description rdf:about="&bao;BAO_0000948"/>
-            <rdf:Description rdf:about="&bao;BAO_0000953"/>
-            <rdf:Description rdf:about="&bao;BAO_0000958"/>
-            <rdf:Description rdf:about="&bao;BAO_0000983"/>
-            <rdf:Description rdf:about="&bao;BAO_0000988"/>
-            <rdf:Description rdf:about="&bao;BAO_0001025"/>
-            <rdf:Description rdf:about="&bao;BAO_0002018"/>
-            <rdf:Description rdf:about="&bao;BAO_0002540"/>
-            <rdf:Description rdf:about="&bao;BAO_0002561"/>
-            <rdf:Description rdf:about="&bao;BAO_0002562"/>
-            <rdf:Description rdf:about="&bao;BAO_0002563"/>
-            <rdf:Description rdf:about="&bao;BAO_0002564"/>
-            <rdf:Description rdf:about="&bao;BAO_0002565"/>
-            <rdf:Description rdf:about="&bao;BAO_0002566"/>
-            <rdf:Description rdf:about="&bao;BAO_0002567"/>
-            <rdf:Description rdf:about="&bao;BAO_0002727"/>
-            <rdf:Description rdf:about="&bao;BAO_0002728"/>
-            <rdf:Description rdf:about="&bao;BAO_0002732"/>
-            <rdf:Description rdf:about="&bao;BAO_0002974"/>
-            <rdf:Description rdf:about="&bao;BAO_0002975"/>
-            <rdf:Description rdf:about="&bao;BAO_0002976"/>
-            <rdf:Description rdf:about="&bao;BAO_0002977"/>
-            <rdf:Description rdf:about="&bao;BAO_0002978"/>
-            <rdf:Description rdf:about="&bao;BAO_0002979"/>
-            <rdf:Description rdf:about="&bao;BAO_0002980"/>
-            <rdf:Description rdf:about="&bao;BAO_0002981"/>
-            <rdf:Description rdf:about="&bao;BAO_0002982"/>
-            <rdf:Description rdf:about="&bao;BAO_0002983"/>
-            <rdf:Description rdf:about="&bao;BAO_0002984"/>
-            <rdf:Description rdf:about="&bao;BAO_0002985"/>
-            <rdf:Description rdf:about="&bao;BAO_0002986"/>
-            <rdf:Description rdf:about="&bao;BAO_0003076"/>
-            <rdf:Description rdf:about="&bao;BAO_0003077"/>
-            <rdf:Description rdf:about="&bao;BAO_0003078"/>
-            <rdf:Description rdf:about="&bao;BAO_0003079"/>
-            <rdf:Description rdf:about="&bao;BAO_0003080"/>
-            <rdf:Description rdf:about="&bao;BAO_0003081"/>
-            <rdf:Description rdf:about="&bao;BAO_0003082"/>
-            <rdf:Description rdf:about="&bao;BAO_0003083"/>
-            <rdf:Description rdf:about="&bao;BAO_0003084"/>
-            <rdf:Description rdf:about="&bao;BAO_0003085"/>
-            <rdf:Description rdf:about="&bao;BAO_0003086"/>
-            <rdf:Description rdf:about="&bao;BAO_0003087"/>
-            <rdf:Description rdf:about="&bao;BAO_0003088"/>
-            <rdf:Description rdf:about="&bao;BAO_0003089"/>
-            <rdf:Description rdf:about="&bao;BAO_0003090"/>
-            <rdf:Description rdf:about="&bao;BAO_0003091"/>
-            <rdf:Description rdf:about="&bao;BAO_0003092"/>
-            <rdf:Description rdf:about="&bao;BAO_0003109"/>
-            <rdf:Description rdf:about="&bao;BAO_0140001"/>
-            <rdf:Description rdf:about="&bao;BAO_0140002"/>
-            <rdf:Description rdf:about="&bao;BAO_0140003"/>
-            <rdf:Description rdf:about="&bao;BAO_0140004"/>
-            <rdf:Description rdf:about="&bao;BAO_0140005"/>
-            <rdf:Description rdf:about="&bao;BAO_0140006"/>
-            <rdf:Description rdf:about="&bao;BAO_0140007"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000100"/>
-            <rdf:Description rdf:about="&bao;BAO_0000217"/>
-            <rdf:Description rdf:about="&bao;BAO_0000218"/>
-            <rdf:Description rdf:about="&bao;BAO_0000219"/>
-            <rdf:Description rdf:about="&bao;BAO_0000221"/>
-            <rdf:Description rdf:about="&bao;BAO_0000366"/>
+            <rdf:Description rdf:about="&bao;BAO_0000418"/>
+            <rdf:Description rdf:about="&bao;BAO_0000605"/>
+            <rdf:Description rdf:about="&bao;BAO_0000659"/>
+            <rdf:Description rdf:about="&bao;BAO_0000662"/>
         </owl:members>
     </rdf:Description>
     <rdf:Description>
@@ -6529,6 +6463,142 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000216"/>
+            <rdf:Description rdf:about="&bao;BAO_0000298"/>
+            <rdf:Description rdf:about="&bao;BAO_0000299"/>
+            <rdf:Description rdf:about="&bao;BAO_0000307"/>
+            <rdf:Description rdf:about="&bao;BAO_0000310"/>
+            <rdf:Description rdf:about="&bao;BAO_0000311"/>
+            <rdf:Description rdf:about="&bao;BAO_0000333"/>
+            <rdf:Description rdf:about="&bao;BAO_0000670"/>
+            <rdf:Description rdf:about="&bao;BAO_0000674"/>
+            <rdf:Description rdf:about="&bao;BAO_0000675"/>
+            <rdf:Description rdf:about="&bao;BAO_0000678"/>
+            <rdf:Description rdf:about="&bao;BAO_0000679"/>
+            <rdf:Description rdf:about="&bao;BAO_0000680"/>
+            <rdf:Description rdf:about="&bao;BAO_0000681"/>
+            <rdf:Description rdf:about="&bao;BAO_0000682"/>
+            <rdf:Description rdf:about="&bao;BAO_0000683"/>
+            <rdf:Description rdf:about="&bao;BAO_0000685"/>
+            <rdf:Description rdf:about="&bao;BAO_0000686"/>
+            <rdf:Description rdf:about="&bao;BAO_0000687"/>
+            <rdf:Description rdf:about="&bao;BAO_0000688"/>
+            <rdf:Description rdf:about="&bao;BAO_0000689"/>
+            <rdf:Description rdf:about="&bao;BAO_0000690"/>
+            <rdf:Description rdf:about="&bao;BAO_0000814"/>
+            <rdf:Description rdf:about="&bao;BAO_0000815"/>
+            <rdf:Description rdf:about="&bao;BAO_0000816"/>
+            <rdf:Description rdf:about="&bao;BAO_0000873"/>
+            <rdf:Description rdf:about="&bao;BAO_0000898"/>
+            <rdf:Description rdf:about="&bao;BAO_0000908"/>
+            <rdf:Description rdf:about="&bao;BAO_0000917"/>
+            <rdf:Description rdf:about="&bao;BAO_0000923"/>
+            <rdf:Description rdf:about="&bao;BAO_0000936"/>
+            <rdf:Description rdf:about="&bao;BAO_0000937"/>
+            <rdf:Description rdf:about="&bao;BAO_0000938"/>
+            <rdf:Description rdf:about="&bao;BAO_0000939"/>
+            <rdf:Description rdf:about="&bao;BAO_0000940"/>
+            <rdf:Description rdf:about="&bao;BAO_0000941"/>
+            <rdf:Description rdf:about="&bao;BAO_0000942"/>
+            <rdf:Description rdf:about="&bao;BAO_0000948"/>
+            <rdf:Description rdf:about="&bao;BAO_0000953"/>
+            <rdf:Description rdf:about="&bao;BAO_0000958"/>
+            <rdf:Description rdf:about="&bao;BAO_0000983"/>
+            <rdf:Description rdf:about="&bao;BAO_0000988"/>
+            <rdf:Description rdf:about="&bao;BAO_0001025"/>
+            <rdf:Description rdf:about="&bao;BAO_0002018"/>
+            <rdf:Description rdf:about="&bao;BAO_0002540"/>
+            <rdf:Description rdf:about="&bao;BAO_0002561"/>
+            <rdf:Description rdf:about="&bao;BAO_0002562"/>
+            <rdf:Description rdf:about="&bao;BAO_0002563"/>
+            <rdf:Description rdf:about="&bao;BAO_0002564"/>
+            <rdf:Description rdf:about="&bao;BAO_0002565"/>
+            <rdf:Description rdf:about="&bao;BAO_0002566"/>
+            <rdf:Description rdf:about="&bao;BAO_0002567"/>
+            <rdf:Description rdf:about="&bao;BAO_0002727"/>
+            <rdf:Description rdf:about="&bao;BAO_0002728"/>
+            <rdf:Description rdf:about="&bao;BAO_0002732"/>
+            <rdf:Description rdf:about="&bao;BAO_0002974"/>
+            <rdf:Description rdf:about="&bao;BAO_0002975"/>
+            <rdf:Description rdf:about="&bao;BAO_0002976"/>
+            <rdf:Description rdf:about="&bao;BAO_0002977"/>
+            <rdf:Description rdf:about="&bao;BAO_0002978"/>
+            <rdf:Description rdf:about="&bao;BAO_0002979"/>
+            <rdf:Description rdf:about="&bao;BAO_0002980"/>
+            <rdf:Description rdf:about="&bao;BAO_0002981"/>
+            <rdf:Description rdf:about="&bao;BAO_0002982"/>
+            <rdf:Description rdf:about="&bao;BAO_0002983"/>
+            <rdf:Description rdf:about="&bao;BAO_0002984"/>
+            <rdf:Description rdf:about="&bao;BAO_0002985"/>
+            <rdf:Description rdf:about="&bao;BAO_0002986"/>
+            <rdf:Description rdf:about="&bao;BAO_0003076"/>
+            <rdf:Description rdf:about="&bao;BAO_0003077"/>
+            <rdf:Description rdf:about="&bao;BAO_0003078"/>
+            <rdf:Description rdf:about="&bao;BAO_0003079"/>
+            <rdf:Description rdf:about="&bao;BAO_0003080"/>
+            <rdf:Description rdf:about="&bao;BAO_0003081"/>
+            <rdf:Description rdf:about="&bao;BAO_0003082"/>
+            <rdf:Description rdf:about="&bao;BAO_0003083"/>
+            <rdf:Description rdf:about="&bao;BAO_0003084"/>
+            <rdf:Description rdf:about="&bao;BAO_0003085"/>
+            <rdf:Description rdf:about="&bao;BAO_0003086"/>
+            <rdf:Description rdf:about="&bao;BAO_0003087"/>
+            <rdf:Description rdf:about="&bao;BAO_0003088"/>
+            <rdf:Description rdf:about="&bao;BAO_0003089"/>
+            <rdf:Description rdf:about="&bao;BAO_0003090"/>
+            <rdf:Description rdf:about="&bao;BAO_0003091"/>
+            <rdf:Description rdf:about="&bao;BAO_0003092"/>
+            <rdf:Description rdf:about="&bao;BAO_0003109"/>
+            <rdf:Description rdf:about="&bao;BAO_0140001"/>
+            <rdf:Description rdf:about="&bao;BAO_0140002"/>
+            <rdf:Description rdf:about="&bao;BAO_0140003"/>
+            <rdf:Description rdf:about="&bao;BAO_0140004"/>
+            <rdf:Description rdf:about="&bao;BAO_0140005"/>
+            <rdf:Description rdf:about="&bao;BAO_0140006"/>
+            <rdf:Description rdf:about="&bao;BAO_0140007"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000636"/>
+            <rdf:Description rdf:about="&bao;BAO_0000712"/>
+            <rdf:Description rdf:about="&bao;BAO_0002657"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000100"/>
+            <rdf:Description rdf:about="&bao;BAO_0000217"/>
+            <rdf:Description rdf:about="&bao;BAO_0000218"/>
+            <rdf:Description rdf:about="&bao;BAO_0000219"/>
+            <rdf:Description rdf:about="&bao;BAO_0000221"/>
+            <rdf:Description rdf:about="&bao;BAO_0000366"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000649"/>
+            <rdf:Description rdf:about="&bao;BAO_0000650"/>
+            <rdf:Description rdf:about="&bao;BAO_0000651"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000045"/>
+            <rdf:Description rdf:about="&bao;BAO_0000046"/>
+            <rdf:Description rdf:about="&bao;BAO_0000049"/>
+            <rdf:Description rdf:about="&bao;BAO_0000427"/>
+            <rdf:Description rdf:about="&bao;BAO_0000452"/>
+            <rdf:Description rdf:about="&bao;BAO_0000657"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
             <rdf:Description rdf:about="&bao;BAO_0000011"/>
             <rdf:Description rdf:about="&bao;BAO_0000171"/>
             <rdf:Description rdf:about="&bao;BAO_0000175"/>
@@ -6545,24 +6615,26 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="&bao;BAO_0000418"/>
-            <rdf:Description rdf:about="&bao;BAO_0000605"/>
-            <rdf:Description rdf:about="&bao;BAO_0000659"/>
-            <rdf:Description rdf:about="&bao;BAO_0000662"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
             <rdf:Description rdf:about="&bao;BAO_0000073"/>
             <rdf:Description rdf:about="&bao;BAO_0000159"/>
             <rdf:Description rdf:about="&bao;BAO_0000165"/>
             <rdf:Description rdf:about="&bao;BAO_0000423"/>
         </owl:members>
     </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&bao;BAO_0000007"/>
+            <rdf:Description rdf:about="&bao;BAO_0000249"/>
+            <rdf:Description rdf:about="&bao;BAO_0000250"/>
+            <rdf:Description rdf:about="&bao;BAO_0000251"/>
+            <rdf:Description rdf:about="&bao;BAO_0000252"/>
+            <rdf:Description rdf:about="&bao;BAO_0000253"/>
+        </owl:members>
+    </rdf:Description>
 </rdf:RDF>
 
 
 
-<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 

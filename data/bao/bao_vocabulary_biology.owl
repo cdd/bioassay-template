@@ -13,45 +13,23 @@
 
 <rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_materialentity.owl#"
      xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_materialentity.owl"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:obo="http://purl.obolibrary.org/obo/"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_biology.owl">
         <rdfs:label>bioassay ontology</rdfs:label>
         <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
         <owl:versionInfo>2.1</owl:versionInfo>
-        <dc:date>06/01/2013</dc:date>
-        <rdfs:comment xml:lang="en">There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
+        <rdfs:comment>There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
 
-contact: Stephan Schurer: sschurer</rdfs:comment>
+contact: Stephan Schurer:  stephan dot schurer at gmail dot com</rdfs:comment>
+        <dc:date>06/01/2013</dc:date>
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
     </owl:Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
     
 
 
@@ -497,8 +475,8 @@ Here, a protein is a perturbagen whereby its ability to modulate a physiological
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000315">
         <rdfs:label>cDNA</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000269"/>
-        <obo:IAO_0000118>complimentary deoxyribonucleic acid</obo:IAO_0000118>
         <obo:IAO_0000115>cDNA or complementary DNA is complementary in sequence to a particular messenger RNA (mRNA). It is synthesized from mRNA in a reverse transcription reaction by reverse transcriptase enzyme. cDNA can be cloned in a vector and introduced into cells to bring about the expression of that particular gene in those cells.</obo:IAO_0000115>
+        <obo:IAO_0000118>complimentary deoxyribonucleic acid</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -519,8 +497,8 @@ Here, a protein is a perturbagen whereby its ability to modulate a physiological
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000317">
         <rdfs:label>plasmid DNA</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000269"/>
-        <obo:IAO_0000118>plasmid deoxyribonucleic acid</obo:IAO_0000118>
         <obo:IAO_0000115>Plasmid is a double stranded circular DNA molecule that can replicate independently of the chromosomal DNA. It exists naturally in bacteria and some yeast. In genetic engineering, plasmids are exploited to clone and multiply a gene of interest. Several plasmid vectors are available commercially to introduce cloned DNA into different cell types.</obo:IAO_0000115>
+        <obo:IAO_0000118>plasmid deoxyribonucleic acid</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -620,8 +598,8 @@ Here, a protein is a perturbagen whereby its ability to modulate a physiological
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000412">
         <rdfs:label>LNA</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000270"/>
-        <obo:IAO_0000118>locked nucleic acid</obo:IAO_0000118>
         <obo:IAO_0000115>Locked nucleic acid (LNA) is a nucleic acid analogue containing one or more LNA nucleotide monomers with a bicyclic furanose unit locked in an RNA mimicking sugar conformation. LNA oligonucleotides have high affinity toward complementary single-stranded RNA and complementary single- or double-stranded DNA. This makes LNA suitable for sequence specific targeting of RNA in vitro or in vivo.</obo:IAO_0000115>
+        <obo:IAO_0000118>locked nucleic acid</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1709,8 +1687,8 @@ Trp-Lys-Tyr-Met-Val-D-Med-NH2</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002066">
         <rdfs:label>Serum albumin</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000369"/>
-        <obo:IAO_0000118>Bovine serum albumin</obo:IAO_0000118>
         <obo:IAO_0000118>BSA</obo:IAO_0000118>
+        <obo:IAO_0000118>Bovine serum albumin</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -2434,12 +2412,12 @@ Trp-Lys-Tyr-Met-Val-D-Med-NH2</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003048">
         <rdfs:label>permanent cell line</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002931"/>
+        <obo:IAO_0000115>A cell line that is immortalized.</obo:IAO_0000115>
         <rdfs:comment>has associated disease some disease
 or
 is bearer of disease (relation in new RO)
 
 Disease import from DOID</rdfs:comment>
-        <obo:IAO_0000115>A cell line that is immortalized.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -2449,6 +2427,7 @@ Disease import from DOID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003049">
         <rdfs:label>Caspase-3</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000222"/>
+        <rdfs:comment>P42574</rdfs:comment>
     </owl:Class>
     
 
@@ -2498,6 +2477,136 @@ Disease import from DOID</rdfs:comment>
     
 
 
+    <!-- http://www.bioassayontology.org/bao#BAO_0030000 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030000">
+        <rdfs:label xml:lang="en">Histone H3.3</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000175"/>
+        <rdfs:comment>P84243</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030001 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030001">
+        <rdfs:label xml:lang="en">G2/mitotic-specific cyclin-B1</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000175"/>
+        <rdfs:comment>P14635</rdfs:comment>
+        <obo:IAO_0000118>cyclin-B1</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030002 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030002">
+        <rdfs:label xml:lang="en">Antigen KI-67</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000175"/>
+        <rdfs:comment>P46013</rdfs:comment>
+        <obo:IAO_0000118>Ki67</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030003 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030003">
+        <rdfs:label xml:lang="en">Retinoblastoma-associated protein</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000175"/>
+        <obo:IAO_0000118>Retinoblastoma protein</obo:IAO_0000118>
+        <rdfs:comment>P06400</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030004 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030004">
+        <rdfs:label xml:lang="en">Transcription factor AP-1</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000282"/>
+        <obo:IAO_0000118>c-jun</obo:IAO_0000118>
+        <rdfs:comment>P05412</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030005 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030005">
+        <rdfs:label xml:lang="en">Annexin A5</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000365"/>
+        <obo:IAO_0000118>Annexin V</obo:IAO_0000118>
+        <rdfs:comment>P08758</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030006 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030006">
+        <rdfs:label xml:lang="en">E-selectin</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000237"/>
+        <rdfs:comment>P16581</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030007 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030007">
+        <rdfs:label xml:lang="en">Vascular cell adhesion protein 1</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000237"/>
+        <rdfs:comment>P19320</rdfs:comment>
+        <obo:IAO_0000118>VCAM-1</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030008 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030008">
+        <rdfs:label xml:lang="en">Microtubule-associated proteins 1A/1B light chain 3B</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000175"/>
+        <obo:IAO_0000118>Autophagy-related protein LC3 B</obo:IAO_0000118>
+        <rdfs:comment>Q9GZQ8</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030009 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030009">
+        <rdfs:label xml:lang="en">Tubulin beta-3 chain</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000370"/>
+        <obo:IAO_0000118>Tubulin beta-III</obo:IAO_0000118>
+        <rdfs:comment>Q13509</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030010 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030010">
+        <rdfs:label xml:lang="en">Transcription factor p65</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000282"/>
+        <rdfs:comment>Q04206</rdfs:comment>
+        <obo:IAO_0000118>Nuclear factor NF-kappa-B p65 subunit
+Nuclear factor of kappa light polypeptide gene enhancer in B-cells 3</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0030011 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0030011">
+        <rdfs:label xml:lang="en">primary neuron</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000239"/>
+        <rdfs:comment>http://purl.obolibrary.org/obo/CL_0000530</rdfs:comment>
+    </owl:Class>
+    
+
+
     <!-- http://www.w3.org/2002/07/owl#Thing -->
 
     <owl:Class rdf:about="&owl;Thing"/>
@@ -2505,5 +2614,5 @@ Disease import from DOID</rdfs:comment>
 
 
 
-<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net -->
 

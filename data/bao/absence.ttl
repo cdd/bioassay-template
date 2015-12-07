@@ -1,0 +1,43 @@
+# asserts a short class hierarchy for defining "ambiguous" terms
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+bat:Absence
+  rdfs:label "absence" ;
+  obo:IAO_0000115 "A group of annotations that explain why an annotation is missing, when it should not be." 
+  .
+  
+bat:NotDetermined
+  rdfs:label "not determined" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "The measurement was not made." 
+  .
+
+bat:Unknown
+  rdfs:label "unknown" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "The value should be known, but is not." 
+  .
+   
+bat:Ambiguous
+  rdfs:label "ambiguous" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "The source information is ambiguous: there are multiple indeterminate possibilities." 
+  .
+
+bat:Missing
+  rdfs:label "missing" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "The information is missing from the source data, presumed to be a communication error." 
+.
+
+bat:Dubious
+  rdfs:label "dubious" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "The source information appears to be dubious, and has been omitted for this reason." 
+  .

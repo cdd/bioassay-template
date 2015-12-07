@@ -248,7 +248,8 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		{
 			int idx = table.getSelectionModel().getSelectedIndex();
 			if (idx < 0) return null;
-			Schema.Value val = options.get(idx);
+			//Schema.Value val = options.get(idx);
+			Schema.Value val = table.getSelectionModel().getSelectedItem();
 			return new Schema.Annotation(assn, val);
 		}
 		else if (seltab == tabLiteral)

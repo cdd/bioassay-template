@@ -146,6 +146,7 @@ public class ClipboardSchema
 		json.put("name", assay.name);
 		json.put("descr", assay.descr);
 		json.put("para", assay.para);
+		json.put("originURI", assay.originURI);
 		
 		JSONArray jannots = new JSONArray();
 		for (Schema.Annotation annot : assay.annotations)
@@ -218,7 +219,8 @@ public class ClipboardSchema
 	{
 		Schema.Assay assay = new Schema.Assay(json.getString("name"));
 		assay.descr = json.getString("descr");
-		assay.para = json.getString("para");
+		assay.para = json.optString("para", "");
+		assay.originURI = json.optString("originURI", "");
 		
 		JSONArray jannots = json.getJSONArray("annotations");
 		for (int n = 0; n < jannots.length(); n++)

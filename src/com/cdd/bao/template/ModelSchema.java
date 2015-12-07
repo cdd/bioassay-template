@@ -48,6 +48,7 @@ public class ModelSchema
 	public static final String MAPS_TO = "mapsTo";
 
 	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
+	public static final String HAS_ORIGIN = "hasOriginURI"; // origin URI: where the assay came from
 	
 	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
@@ -60,7 +61,7 @@ public class ModelSchema
 	private Resource batRoot, batAssay;
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder, hasParagraph;
+	private Property hasDescription, inOrder, hasParagraph, hasOrigin;
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral;
@@ -148,6 +149,7 @@ public class ModelSchema
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
 		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
+		hasOrigin = model.createProperty(PFX_BAT + HAS_ORIGIN);
 		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
 		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
 		hasLiteral = model.createProperty(PFX_BAT + HAS_LITERAL);
@@ -177,6 +179,7 @@ public class ModelSchema
 			model.add(objAssay, rdfLabel, assay.name);
 			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
 			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
+			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI);
 			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
 			
 			for (int i = 0; i < assay.annotations.size(); i++)
@@ -363,6 +366,7 @@ public class ModelSchema
 		
 		assay.descr = findString(objAssay, hasDescription);
 		assay.para = findString(objAssay, hasParagraph);
+		assay.originURI = findString(objAssay, hasOrigin);
 		
 		for (StmtIterator it = model.listStatements(objAssay, hasAnnotation, (RDFNode)null); it.hasNext();)
 		{

@@ -16,3 +16,7 @@ hs_err_pid*
 pkg/
 
 /bin/
+
+# data stuff to skip
+data/bao/bad.zip
+data/bao/oldversion.zip

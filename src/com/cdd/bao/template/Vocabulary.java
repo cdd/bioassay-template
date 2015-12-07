@@ -96,7 +96,7 @@ public class Vocabulary
 	
 	// ------------ private methods ------------
 
-	private void loadLabels(File baseDir)
+	private void loadLabels(File baseDir) throws IOException
 	{
 		Model model = ModelFactory.createDefaultModel();
 
@@ -105,36 +105,37 @@ public class Vocabulary
 		if (jarsrc != null)
 		{
             URL jar = jarsrc.getLocation();
-            try
+
+        	ZipInputStream zip = new ZipInputStream(jar.openStream());
+            ZipEntry ze = null;
+        
+            while ((ze = zip.getNextEntry()) != null) 
             {
-            	ZipInputStream zip = new ZipInputStream(jar.openStream());
-                ZipEntry ze = null;
-            
-                while ((ze = zip.getNextEntry()) != null) 
+                String path = ze.getName();
+                if (path.startsWith("data/bao/") && (path.endsWith(".owl") || path.endsWith(".ttl")))
                 {
-                    String path = ze.getName();
-                    if (path.startsWith("data/bao/") && path.endsWith(".owl"))
-                    {
-                    	InputStream res = getClass().getResourceAsStream("/" + path);
-                    	RDFDataMgr.read(model, res, Lang.RDFXML);
-                    	res.close();
-                    }
+                	InputStream res = getClass().getResourceAsStream("/" + path);
+                	try {RDFDataMgr.read(model, res, path.endsWith(".owl") ? Lang.RDFXML : Lang.TURTLE);}
+                	catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
+                	res.close();
                 }
-                
-                zip.close();
             }
-            catch (IOException ex) {ex.printStackTrace();}
+            
+            zip.close();
     	}
 
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
 		if (baseDir != null && baseDir.isDirectory()) for (File f : baseDir.listFiles())
 		{
-			if (!f.getName().endsWith(".owl")) continue;
-			//Util.writeln("Loading: " + f.getPath());
-			RDFDataMgr.read(model, f.getPath(), Lang.RDFXML);
+			String fn = f.getName();
+			if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
+			Util.writeln("Loading: " + f.getPath());
+			try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".owl") ? Lang.RDFXML : Lang.TURTLE);}
+			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
 		}
-		
+		Util.writeln("Done.");
+	
 		// iterate over the list looking for label definitions
 		StmtIterator iter = model.listStatements();
 		while (iter.hasNext())
@@ -198,35 +199,50 @@ public class Vocabulary
 		
 		generateBranch(model);
 	}
-	
+
 	// looks over the entire class inheritance system, and builds a collection of trees
 	private void generateBranch(Model model)
 	{
 		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
-		for (StmtIterator it = model.listStatements(null, subClassOf, (RDFNode)null); it.hasNext();)
+		for (int pass = 0; pass < 2; pass++) // want to do BAO first
 		{
-			Statement st = it.next();
-			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+    		for (StmtIterator it = model.listStatements(null, subClassOf, (RDFNode)null); it.hasNext();)
+    		{
+    			Statement st = it.next();
+    			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+    
+    			String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
+    			if (labelChild == null || labelParent == null) continue;
+    			
+    			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
+    			
+    			Branch child = uriToBranch.get(uriChild), parent = uriToBranch.get(uriParent);
+   				boolean isBAO = uriParent.startsWith(ModelSchema.PFX_BAO);
+   				if (isBAO != (pass == 0)) continue; // BAO first, other second
+   				if (pass == 1 && child != null && child.parents.size() > 0) continue; // if second pass, and already parented, then don't add the non-BAO part of the hierarchy
 
-			String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
-			if (labelChild == null || labelParent == null) continue;
-			
-			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
-			
-			Branch child = uriToBranch.get(uriChild), parent = uriToBranch.get(uriParent);
-			if (child == null) 
-			{
-				child = new Branch(uriChild, labelChild);
-				uriToBranch.put(uriChild, child);
-			}
-			if (parent == null)
-			{
-				parent = new Branch(uriParent, labelParent);
-				uriToBranch.put(uriParent, parent);
-			}
-			
-			parent.children.add(child);
-			child.parents.add(parent);
+    			if (child == null) 
+    			{
+    				child = new Branch(uriChild, labelChild);
+    				uriToBranch.put(uriChild, child);
+    			}
+    			if (parent == null)
+    			{
+    				if (pass == 0)
+    				{
+    					if (!isBAO) continue;
+    				}
+    				else // second pass: 
+    				{
+    				}
+    			
+    				parent = new Branch(uriParent, labelParent);
+    				uriToBranch.put(uriParent, parent);
+    			}
+    			
+    			parent.children.add(child);
+    			child.parents.add(parent);
+    		}
 		}
 
 		// anything with zero parents is a "root": this is all that is needed

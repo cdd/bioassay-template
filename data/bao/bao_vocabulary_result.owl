@@ -13,45 +13,23 @@
 
 <rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_result.owl#"
      xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_result.owl"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:obo="http://purl.obolibrary.org/obo/"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_result.owl">
         <rdfs:label>bioassay ontology</rdfs:label>
-        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
-        <owl:versionInfo>2.1</owl:versionInfo>
         <dc:date>05/09/2013</dc:date>
-        <rdfs:comment xml:lang="en">There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
+        <owl:versionInfo>2.1</owl:versionInfo>
+        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
+        <rdfs:comment>There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
 
-contact: Stephan Schurer: sschurer</rdfs:comment>
+contact: Stephan Schurer:  stephan dot schurer at gmail dot com</rdfs:comment>
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
     </owl:Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
     
 
 
@@ -105,11 +83,11 @@ contact: Stephan Schurer: sschurer</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000006">
         <rdfs:label>percent cytotoxicity</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000201"/>
+        <obo:IAO_0000118>% cytotoxicity</obo:IAO_0000118>
         <obo:IAO_0000115>It is a measure of the number of dead cells in a culture well. We consider it as a subclass of &apos;percent inhibition&apos;, because cell death is induced by inhibition of vital cellular processes and percent cytotoxicity increases as the number of dead cells increases.  It can be estimated in the compound treated wells in comparison to vehicle-treated control wells and is expressed as a percent. The compound treatment is preferably performed in a short window of time to avoid masking the effect due to cell proliferation.
 Compound cytotoxicity is an important parameter to measure when developing potential human therapeutics. Cytotoxicity is determined as a measure of radioisotope (3H thymidine or 51Cr) release, lactate dehydrogenase release from damaged cells, tetrazolium salt and alamar blue reduction, fluorescent dyes that selectively stain live or dead cells, and decrease in ATP content. ATP levels are detected using a luminescence based assay kit such as CellTiter-Glo (Promega). ATP values higher than controls indicate proliferation and cultures with ATP concentrations lower than controls indicate cytotoxicity.
 
 Percent cytotoxicity = 100-percent viability</obo:IAO_0000115>
-        <obo:IAO_0000118>% cytotoxicity</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -151,8 +129,8 @@ The dissociation constant has molar units (M), which corresponds to the concentr
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000074">
         <rdfs:label>mode of action</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003115"/>
-        <obo:IAO_0000118>MOA</obo:IAO_0000118>
         <obo:IAO_0000115>This refers to the effect of the perturbagen on the target of an assay, whether it brings about inhibition, activation, cytotoxicity, etc. </obo:IAO_0000115>
+        <obo:IAO_0000118>MOA</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -162,8 +140,8 @@ The dissociation constant has molar units (M), which corresponds to the concentr
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000082">
         <rdfs:label>percent response</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000181"/>
-        <obo:IAO_0000115>Percent increase or decrease of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay.</obo:IAO_0000115>
         <obo:IAO_0000118>% response</obo:IAO_0000118>
+        <obo:IAO_0000115>Percent increase or decrease of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -311,8 +289,8 @@ As a measure of viable or proliferating cells, different researchers measure dif
     <!-- http://www.bioassayontology.org/bao#BAO_0000179 -->
 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000179">
-        <rdfs:label>result</rdfs:label>
         <rdfs:label>endpoint</rdfs:label>
+        <rdfs:label>result</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003115"/>
         <obo:IAO_0000115>The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a &quot;closed&quot; model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay.</obo:IAO_0000115>
     </owl:Class>
@@ -345,8 +323,8 @@ As a measure of viable or proliferating cells, different researchers measure dif
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000186">
         <rdfs:label>AC50</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002162"/>
-        <obo:IAO_0000118>Potency</obo:IAO_0000118>
         <obo:IAO_0000115>The effective concentration of a perturbagen, which produces 50% of the maximal possible response, which could mean either activation (EC50) or inhibition (IC50) for that perturbagen.</obo:IAO_0000115>
+        <obo:IAO_0000118>Potency</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -378,9 +356,9 @@ Compound cytotoxicity is an important parameter to measure when developing poten
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000189">
         <rdfs:label>GI50</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002162"/>
+        <obo:IAO_0000118>growth inhibition by 50%</obo:IAO_0000118>
         <obo:IAO_0000115>The effective concentration of a growth inhibitor, which produces 50% of the maximum possible response for that inhibitor. GI50 is calculated from [(Ti-Tz)/(C-Tz)] x 100 = 50, where Tz is absorbance at time zero, Ti is absorbance in the presence of test drug, and C is absorbance in the control (untreated cells). 
 As a measure of viable or proliferating cells, different researchers measure different parameters, namely, protein content (by sulforhodamine B staining followed by absorbance measurement), mitochondrial dehydrogenase activity (by 3-(4,5-dimethylthiazol-2-yl)-2,5-diphenyl tetrasodium bromide, known as MTT staining followed by absorbance measurement), expression of proliferation associated antigens (by immunostaining for Ki-67), and ATP content (by using CellTiter-Glo reagent (Promega) followed by luminescence measurement).</obo:IAO_0000115>
-        <obo:IAO_0000118>growth inhibition by 50%</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -433,10 +411,10 @@ The Cheng and Prusoff equation: Ki - (IC50) / ( 1+ ([S]/Km)) relates IC50 to Ki 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000194">
         <rdfs:label>TGI</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002162"/>
-        <obo:IAO_0000118>total growth inhibition</obo:IAO_0000118>
         <obo:IAO_0000115>TGI is total growth inhibition, which is the effective concentration of a growth inhibitor, which produces 0% relative growth for that inhibitor. Thus TGI signifies a cytostatic effect.
 tgi is calculated from [(Ti-Tz)/(C-Tz)] x 100 =0, where Ti = Tz and Tz is absorbance at time zero, Ti is absorbance in the presence of test drug, and C is absorbance in the control (untreated cells). 
 As a measure of viable cells, different researchers measure different parameters, namely, protein content (by sulforhodamine B staining followed by absorbance measurement), mitochondrial dehydrogenase activity (by 3-(4,5-dimethylthiazol-2-yl)-2,5-diphenyl tetrasodium bromide, known as MTT staining followed by absorbance measurement), and ATP content (by using CellTiter-Glo reagent (Promega) followed by luminescence measurement).</obo:IAO_0000115>
+        <obo:IAO_0000118>total growth inhibition</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -466,8 +444,8 @@ As a measure of viable cells, different researchers measure different parameters
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000199">
         <rdfs:label>pIC50</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000190"/>
-        <obo:IAO_0000115>pIC50 is -log IC50, where IC50 is the effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor.</obo:IAO_0000115>
         <obo:IAO_0000118>-log IC50</obo:IAO_0000118>
+        <obo:IAO_0000115>pIC50 is -log IC50, where IC50 is the effective concentration of an inhibitor, which produces 50% of the maximum possible response for that inhibitor.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -533,8 +511,8 @@ Percent viability = 100-percent cytotoxicity</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000346">
         <rdfs:label>50 percent activation</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000200"/>
-        <obo:IAO_0000118>50% activation</obo:IAO_0000118>
         <obo:IAO_0000115>50% increase of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay.</obo:IAO_0000115>
+        <obo:IAO_0000118>50% activation</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -544,8 +522,8 @@ Percent viability = 100-percent cytotoxicity</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000347">
         <rdfs:label>50 percent inhibition</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000201"/>
-        <obo:IAO_0000115>50% reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay.</obo:IAO_0000115>
         <obo:IAO_0000118>50% inhibition</obo:IAO_0000118>
+        <obo:IAO_0000115>50% reduction of a predefined stimulus. Unit of Measure is always % when normalized to the dynamic range of the assay.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -948,8 +926,8 @@ In nucleic acid thermodynamics, it is the temperature at which 50% of the DNA st
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000656">
         <rdfs:label>efficacy</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000082"/>
-        <obo:IAO_0000115>The maximum response that can be achieved with the perturbagen as percentage of the positive control.</obo:IAO_0000115>
         <obo:IAO_0000118>Efficacy</obo:IAO_0000118>
+        <obo:IAO_0000115>The maximum response that can be achieved with the perturbagen as percentage of the positive control.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -1027,8 +1005,8 @@ In nucleic acid thermodynamics, it is the temperature at which 50% of the DNA st
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002042">
         <rdfs:label>percent interphase cells</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0001103"/>
-        <rdfs:comment>&apos;has marker&apos; some (not (&apos;DEVD-NucView 488&apos; or &apos;LysoTracker Red&apos; or &apos;Hoechst 33342&apos;)) </rdfs:comment>
         <obo:IAO_0000115>This represents the percentage of cells in a cell population that are preparing for cell division and that exist in either G1, S or G2 phases of the cell cycle. This is calculated by subtracting from the total cell number, the number of cells in the M phase, apoptotic and dead cells in an assay plate.</obo:IAO_0000115>
+        <rdfs:comment>&apos;has marker&apos; some (not (&apos;DEVD-NucView 488&apos; or &apos;LysoTracker Red&apos; or &apos;Hoechst 33342&apos;)) </rdfs:comment>
     </owl:Class>
     
 
@@ -1173,8 +1151,8 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002123">
         <rdfs:label>Cp</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002122"/>
-        <obo:IAO_0000115>Crossing point- In an exponential amplification curve (i.e., qPCR amplification) the value in number of amplification cycles at which the signal enters log phase, as determined by the maximal second derivative of the curve.</obo:IAO_0000115>
         <obo:IAO_0000118>crossing point</obo:IAO_0000118>
+        <obo:IAO_0000115>Crossing point- In an exponential amplification curve (i.e., qPCR amplification) the value in number of amplification cycles at which the signal enters log phase, as determined by the maximal second derivative of the curve.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -1464,8 +1442,8 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002759">
         <rdfs:label xml:lang="en">CL</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002758"/>
-        <obo:IAO_0000115>Clearance is the volume of plasma from which the drug is completely removed per unit time, or, alternatively, the volume of plasma that would have to lose all of the drug that it contains within a unit of time to account for an observed rate of drug elimination.</obo:IAO_0000115>
         <obo:IAO_0000118>Drug clearance</obo:IAO_0000118>
+        <obo:IAO_0000115>Clearance is the volume of plasma from which the drug is completely removed per unit time, or, alternatively, the volume of plasma that would have to lose all of the drug that it contains within a unit of time to account for an observed rate of drug elimination.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -1862,8 +1840,8 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003040">
         <rdfs:label xml:lang="en">Vd</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002758"/>
-        <obo:IAO_0000118>Volume of distribution</obo:IAO_0000118>
         <obo:IAO_0000115>Volume of Distribution is defined as the theoretical volume in which the total drug administered would need to be distributed to produce the concentration that is observed in plasma. Measured as the total amount of drug in the body divided by the concentration of drug in the plasma.</obo:IAO_0000115>
+        <obo:IAO_0000118>Volume of distribution</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1884,9 +1862,9 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003042">
         <rdfs:label xml:lang="en">F</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002118"/>
-        <obo:IAO_0000115>Bioavailability is a subcategory of absorption and is the fraction (or %) of unchanged drug that reaches the systemic circulation, thereby accessing the site of action. It is usually determined as the ratio of AUC(oral)/AUC(iv).</obo:IAO_0000115>
         <obo:IAO_0000118>Bioavailability</obo:IAO_0000118>
         <obo:IAO_0000118>BA</obo:IAO_0000118>
+        <obo:IAO_0000115>Bioavailability is a subcategory of absorption and is the fraction (or %) of unchanged drug that reaches the systemic circulation, thereby accessing the site of action. It is usually determined as the ratio of AUC(oral)/AUC(iv).</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -1894,8 +1872,8 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     <!-- http://www.bioassayontology.org/bao#BAO_0003115 -->
 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003115">
-        <rdfs:label xml:lang="en">assay endpoint component</rdfs:label>
         <rdfs:label>assay result component</rdfs:label>
+        <rdfs:label xml:lang="en">assay endpoint component</rdfs:label>
     </owl:Class>
     
 
@@ -1930,6 +1908,117 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
     
 
 
+    <!-- http://www.bioassayontology.org/bao#BAO_0080004 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080004">
+        <rdfs:label xml:lang="en">phenotypic mode of action</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000074"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080005 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080005">
+        <rdfs:label xml:lang="en">neurite blebbing</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080006 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080006">
+        <rdfs:label xml:lang="en">neurite branching</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080007 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080007">
+        <rdfs:label xml:lang="en">neurite outgrowth</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+        <obo:IAO_0000118>neurite elongation</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080008 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080008">
+        <rdfs:label xml:lang="en">neurite shortening</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080009 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080009">
+        <rdfs:label xml:lang="en">axon bundle defasciculation</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080010 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080010">
+        <rdfs:label xml:lang="en">axon fasciculation</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080011 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080011">
+        <rdfs:label xml:lang="en">fragments per kilobase of exon per million mapped reads</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002138"/>
+        <obo:IAO_0000118>FPKM</obo:IAO_0000118>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080012 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080012">
+        <rdfs:label xml:lang="en">NF-KappaB p65 translocation</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0080004"/>
+        <rdfs:comment>need to be reviewed</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080013 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080013">
+        <rdfs:label xml:lang="en">percent neurite outgrowth</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0001103"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080014 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080014">
+        <rdfs:label xml:lang="en">percent neurite count</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0001103"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0080015 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0080015">
+        <rdfs:label xml:lang="en">percent neurite branch point</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0001103"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.w3.org/2002/07/owl#Thing -->
 
     <owl:Class rdf:about="&owl;Thing"/>
@@ -1937,5 +2026,5 @@ m= y2-y1 / x2-x1</obo:IAO_0000115>
 
 
 
-<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net -->
 

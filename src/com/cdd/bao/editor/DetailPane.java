@@ -170,6 +170,7 @@ public class DetailPane extends ScrollPane
 		Schema.Assay mod = new Schema.Assay(fieldName.getText());
 		mod.descr = fieldDescr.getText();
 		mod.para = fieldPara.getText();
+		mod.originURI = fieldURI.getText();
 		
 		for (AnnotWidgets aw : annotList) if (aw.sourceAnnot != null) mod.annotations.add(aw.sourceAnnot.clone());
 

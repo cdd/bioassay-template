@@ -358,6 +358,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			{
 				toSelect.add(item);
 				for (TreeItem<Vocabulary.Branch> look = item.getParent(); look != null; look = look.getParent()) look.setExpanded(true);
+				if (!multi) break; // since a URI can appear twice in the tree due to multiple inheritance, this check is necessary
 			}
 			
 			for (TreeItem<Vocabulary.Branch> child : item.getChildren()) stack.add(child);

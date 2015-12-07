@@ -21,15 +21,37 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_assay.owl">
         <rdfs:label>bioassay ontology</rdfs:label>
+        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
+        <owl:versionInfo>2.1</owl:versionInfo>
         <dc:date>05/09/2013</dc:date>
         <rdfs:comment xml:lang="en">There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
 
-contact: Stephan Schurer: sschurer</rdfs:comment>
-        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
-        <owl:versionInfo>2.1</owl:versionInfo>
+contact: Stephan Schurer:  stephan dot schurer at gmail dot com</rdfs:comment>
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
     </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
     
 
 
@@ -263,9 +285,9 @@ Measure group links to those classes that can vary among different measurements 
                 </owl:unionOf>
             </owl:Class>
         </rdfs:subClassOf>
-        <obo:IAO_0000118>HCS</obo:IAO_0000118>
         <obo:IAO_0000115>High content screening (HCS) is an automated screening method using live cells to understand various aspects of their biology. HCS employs imaging (bright-field or fluorescence) and analyses in a high throughput format. HCS can be applied to monitor complex cellular aspects, namely, signaling, morphology, phenotype, proliferation, motility, intracellular trafficking, toxicology, RNAi knockdown, and receptor activation.</obo:IAO_0000115>
         <obo:IAO_0000118>High content screening</obo:IAO_0000118>
+        <obo:IAO_0000118>HCS</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -275,8 +297,8 @@ Measure group links to those classes that can vary among different measurements 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000378">
         <rdfs:label>protein redistribution assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002999"/>
-        <obo:IAO_0000115>Cellular signaling can bring about the movement of proteins in cells. Upon receiving a cue, proteins undergo posttranslational modifications, e.g. phosphorylation, dephosphorylation, etc, which results in their activation and migration to different compartments, often to the nucleus, where they regulate gene expression.</obo:IAO_0000115>
         <rdfs:comment>Add a relation between this class and immunoassay using a new object property &apos;is detected by&apos;.</rdfs:comment>
+        <obo:IAO_0000115>Cellular signaling can bring about the movement of proteins in cells. Upon receiving a cue, proteins undergo posttranslational modifications, e.g. phosphorylation, dephosphorylation, etc, which results in their activation and migration to different compartments, often to the nucleus, where they regulate gene expression.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -386,8 +408,8 @@ Measure group links to those classes that can vary among different measurements 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000478">
         <rdfs:label>selectivity assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000032"/>
-        <obo:IAO_0000118>specificity</obo:IAO_0000118>
         <obo:IAO_0000115>Assay employed to elucidate the specificity of biologically active chemical entities towards one or more targets that are (closely) related to the (intended) primary target.</obo:IAO_0000115>
+        <obo:IAO_0000118>specificity</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -447,9 +469,9 @@ Measure group links to those classes that can vary among different measurements 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000508">
         <rdfs:label>microplate</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000512"/>
-        <obo:IAO_0000118>microtiter plate</obo:IAO_0000118>
-        <obo:IAO_0000118>microwell plate</obo:IAO_0000118>
         <obo:IAO_0000115>The assay is performed in a microplate, which can either be 96 well, 384 well, or 1536 well plates.</obo:IAO_0000115>
+        <obo:IAO_0000118>microwell plate</obo:IAO_0000118>
+        <obo:IAO_0000118>microtiter plate</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -549,10 +571,10 @@ Measure group links to those classes that can vary among different measurements 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000523">
         <rdfs:label>assay protocol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000520"/>
-        <obo:IAO_0000115>This includes the methodology used to perform a particular bioassay and is found on the PubChem website associated with each assay ID (AID). It includes the assay components and the order in which they were added, the incubation times, detection method and the kit used, etc.</obo:IAO_0000115>
         <rdfs:comment>use cito:
 
 citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
+        <obo:IAO_0000115>This includes the methodology used to perform a particular bioassay and is found on the PubChem website associated with each assay ID (AID). It includes the assay components and the order in which they were added, the incubation times, detection method and the kit used, etc.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -592,8 +614,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000534">
         <rdfs:label>single readout</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002169"/>
-        <obo:IAO_0000115>This is a typical HTS assay, which uses a plate reader and generates one or two readouts, in contrast to high content screening, which can generate tens to hundreds of parameters.</obo:IAO_0000115>
         <obo:IAO_0000118>HTS</obo:IAO_0000118>
+        <obo:IAO_0000115>This is a typical HTS assay, which uses a plate reader and generates one or two readouts, in contrast to high content screening, which can generate tens to hundreds of parameters.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -702,8 +724,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000590">
         <rdfs:label>DNA-RNA interaction assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002989"/>
-        <obo:IAO_0000115>DNA-RNA interaction</obo:IAO_0000115>
         <obo:IAO_0000118>deoxyribonucleic acid-ribonucleic acid</obo:IAO_0000118>
+        <obo:IAO_0000115>DNA-RNA interaction</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -713,8 +735,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000591">
         <rdfs:label>protein-DNA interaction assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002989"/>
-        <obo:IAO_0000118>protein-deoxyribonucleic acid</obo:IAO_0000118>
         <obo:IAO_0000115>Protein-DNA interaction</obo:IAO_0000115>
+        <obo:IAO_0000118>protein-deoxyribonucleic acid</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -724,8 +746,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000593">
         <rdfs:label>protein-RNA interaction assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002989"/>
-        <obo:IAO_0000115>Protein-RNA interaction</obo:IAO_0000115>
         <obo:IAO_0000118>protein-ribonucleic acid</obo:IAO_0000118>
+        <obo:IAO_0000115>Protein-RNA interaction</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -815,8 +837,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000650">
         <rdfs:label>cAMP redistribution assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000379"/>
-        <obo:IAO_0000115>Cyclic AMP (cAMP) functions as second messenger in cell signaling.</obo:IAO_0000115>
         <obo:IAO_0000118>cAMP</obo:IAO_0000118>
+        <obo:IAO_0000115>Cyclic AMP (cAMP) functions as second messenger in cell signaling.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -826,8 +848,8 @@ citesForInformation or citeAsSourceData some DOI or PMID</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000651">
         <rdfs:label>cGMP redistribution assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000379"/>
-        <obo:IAO_0000118>cGMP</obo:IAO_0000118>
         <obo:IAO_0000115>Cyclic GMP (cGMP) functions as second messenger in cell signaling.</obo:IAO_0000115>
+        <obo:IAO_0000118>cGMP</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1163,9 +1185,9 @@ percent non-arrested</rdfs:comment>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002185">
         <rdfs:label>measure group specification</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003112"/>
+        <obo:IAO_0000115>An abstract concept to group one or more assay readout and allow description of an assay that measures one or more effect of a perturbagen on the biological entity.  This does not define the physical readout method itself, which is captured in assay design, but rather classifies the data being generated by those readouts.</obo:IAO_0000115>
         <rdfs:comment>Called &apos;assay measurement&apos; in BARD.
 For HCS measurement, we need to define &apos;assay measurement&apos; as the outcome of image analysis and is most often a calculated value. This is similar to &apos;parameters&apos;, such as &apos;intensity&apos;, &apos;count&apos;, &apos;morphology&apos;, etc which are all dependent on phenotype, e.g., intensity and count (number of bright spots) are a result of the amount of gene expression, and morphology is dependent on morphological phenotype, which is detected by the expression of a marker.</rdfs:comment>
-        <obo:IAO_0000115>An abstract concept to group one or more assay readout and allow description of an assay that measures one or more effect of a perturbagen on the biological entity.  This does not define the physical readout method itself, which is captured in assay design, but rather classifies the data being generated by those readouts.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -1648,10 +1670,10 @@ For HCS measurement, we need to define &apos;assay measurement&apos; as the outc
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002969">
         <rdfs:label xml:lang="en">assay readout parameter</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002185"/>
-        <rdfs:comment> Since &apos;measurement&apos; and &apos;parameter&apos; are so similar in HCS, we need to decide on one term that says it all.</rdfs:comment>
+        <obo:IAO_0000118>measured parameter</obo:IAO_0000118>
         <obo:IAO_0000115>assay readout parameter is the outcome of image analysis and is most often a calculated value.
 This includes &apos;parameters&apos;, such as &apos;intensity&apos;, &apos;count&apos;, &apos;morphology&apos;, etc which are all dependent on phenotype, e.g., intensity and count (number of bright spots) are a result of the amount of gene expression, and morphology is dependent on morphological phenotype, which is detected by the expression of a marker.</obo:IAO_0000115>
-        <obo:IAO_0000118>measured parameter</obo:IAO_0000118>
+        <rdfs:comment> Since &apos;measurement&apos; and &apos;parameter&apos; are so similar in HCS, we need to decide on one term that says it all.</rdfs:comment>
     </owl:Class>
     
 
@@ -1863,8 +1885,8 @@ This includes &apos;parameters&apos;, such as &apos;intensity&apos;, &apos;count
         <rdfs:label>phosphorylation assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0000042"/>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003004"/>
-        <rdfs:comment>detect some (protein phosphorilation and (&apos;catalyzed by&apos; some kinase))</rdfs:comment>
         <obo:IAO_0000115>This assay quantifies the phosphorylation levels of a protein. The phosphorylation status is detected by one of several methods: using phosphorylation specific antibodies followed by western blotting or imaging, mass spectrometry, etc.</obo:IAO_0000115>
+        <rdfs:comment>detect some (protein phosphorilation and (&apos;catalyzed by&apos; some kinase))</rdfs:comment>
     </owl:Class>
     
 
@@ -1874,10 +1896,10 @@ This includes &apos;parameters&apos;, such as &apos;intensity&apos;, &apos;count
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003006">
         <rdfs:label>reporter gene assay</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0002785"/>
+        <obo:IAO_0000115>Reporter gene assay measures the gene expression from a reporter gene. The reporter gene is inserted under the control of a foreign promoter or an artificial regulatory element of interest. Reporters include luciferase, beta galactosidase, beta lactamase, chloramphenicol acetyl transferase, or a fluorescent protein.</obo:IAO_0000115>
         <rdfs:comment>reports some 
 (&apos;gene expression&apos; and (&apos;has part&apos; some &apos;reporter gene&apos;))
 needs clean up to say has part gene with role of reporter.</rdfs:comment>
-        <obo:IAO_0000115>Reporter gene assay measures the gene expression from a reporter gene. The reporter gene is inserted under the control of a foreign promoter or an artificial regulatory element of interest. Reporters include luciferase, beta galactosidase, beta lactamase, chloramphenicol acetyl transferase, or a fluorescent protein.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -2010,5 +2032,5 @@ needs clean up to say has part gene with role of reporter.</rdfs:comment>
 
 
 
-<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
 
