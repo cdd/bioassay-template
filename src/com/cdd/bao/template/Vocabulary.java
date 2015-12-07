@@ -7,6 +7,7 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.net.*;
@@ -130,11 +131,11 @@ public class Vocabulary
 		{
 			String fn = f.getName();
 			if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
-			Util.writeln("Loading: " + f.getPath());
+			//Util.writeln("Loading: " + f.getPath());
 			try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".owl") ? Lang.RDFXML : Lang.TURTLE);}
 			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
 		}
-		Util.writeln("Done.");
+		//Util.writeln("Done.");
 	
 		// iterate over the list looking for label definitions
 		StmtIterator iter = model.listStatements();
@@ -228,14 +229,6 @@ public class Vocabulary
     			}
     			if (parent == null)
     			{
-    				if (pass == 0)
-    				{
-    					if (!isBAO) continue;
-    				}
-    				else // second pass: 
-    				{
-    				}
-    			
     				parent = new Branch(uriParent, labelParent);
     				uriToBranch.put(uriParent, parent);
     			}

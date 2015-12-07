@@ -4,13 +4,14 @@
  * (c) 2014-2015 Collaborative Drug Discovery Inc.
  */
 
-package com.cdd.bao;
+package com.cdd.bao.util;
 
 import java.awt.Color;
 import java.io.*;
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
+import javafx.scene.control.*;
 
 /*
  * Static utilities to make life a little bit easier.
@@ -1000,5 +1001,29 @@ public class Util
 		if (loose == null) return;
 		int len = 0;
 		for (int n = 0; n < loose.length; n++) if (loose[n] != null) packed[len++] = loose[n];
+	}
+	
+	/**
+	 * Displays a helpful informational message.
+	 */	
+	public static void informMessage(String title, String msg)
+	{
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+	}
+	
+	/**
+	 * Displays a message with warning theme.
+	 */
+	public static void informWarning(String title, String msg)
+	{
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
 	}
 }

@@ -8,6 +8,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.util.*;
 import com.cdd.bao.editor.endpoint.*;
 import com.cdd.bao.editor.fetch.*;
 
@@ -523,23 +524,6 @@ public class EditSchema
         TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
 		Util.writeln("RIGHT CLICK");
 	}*/
-	
-	private void informMessage(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-	}
-	private void informWarning(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-	}
 
 	// ------------ action responses ------------	
 	
@@ -573,7 +557,7 @@ public class EditSchema
 		if (schemaFile == null) return;
 		if (!schemaFile.getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
-			informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
+			Util.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
             return;
 		}
 	
@@ -612,7 +596,7 @@ public class EditSchema
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-			informWarning("Open", "Failed to parse file: is it a valid schema?");
+			Util.informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
 	}
 	public void actionFilePubChem()
@@ -639,7 +623,7 @@ public class EditSchema
     {
     	if (EditorPrefs.getSparqlEndpoint().length() == 0)
     	{
-    		informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
+    		Util.informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
     		return;
     	}
     
@@ -666,7 +650,7 @@ public class EditSchema
     	TreeItem<Branch> item = currentBranch();
     	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
     	{
-    		informMessage("Add Group", "Select a group to add to.");
+    		Util.informMessage("Add Group", "Select a group to add to.");
     		return;
     	}
 
@@ -685,7 +669,7 @@ public class EditSchema
     	TreeItem<Branch> item = currentBranch();
     	if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
     	{
-    		informMessage("Add Assignment", "Select a group to add to.");
+    		Util.informMessage("Add Assignment", "Select a group to add to.");
     		return;
     	}
 
@@ -735,7 +719,7 @@ public class EditSchema
 		content.putString(serial);
 		if (!Clipboard.getSystemClipboard().setContent(content))
 		{
-			informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
 			return;
 		}
 		
@@ -748,7 +732,7 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null)
 		{
-			informMessage("Clipboard Paste", "Select a group to paste into.");
+			Util.informMessage("Clipboard Paste", "Select a group to paste into.");
 			return;
 		}
 		Branch branch = item.getValue();
@@ -757,7 +741,7 @@ public class EditSchema
 		String serial = clipboard.getString();
 		if (serial == null)
 		{
-			informWarning("Clipboard Paste", "Content is not parseable.");
+			Util.informWarning("Clipboard Paste", "Content is not parseable.");
 			return;
 		}
 		
@@ -765,7 +749,7 @@ public class EditSchema
 		try {json = new JSONObject(new JSONTokener(serial));}
 		catch (JSONException ex)
 		{
-			informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
+			Util.informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
 			return;
 		}
 		
@@ -774,7 +758,7 @@ public class EditSchema
 		Schema.Assay assay = ClipboardSchema.unpackAssay(json);
 		if (group == null && assn == null && assay == null)
 		{
-			informWarning("Clipboard Paste", "Content does not represent a group, assignment or assay: cannot paste.");
+			Util.informWarning("Clipboard Paste", "Content does not represent a group, assignment or assay: cannot paste.");
 			return;
 		}
 		
@@ -812,12 +796,12 @@ public class EditSchema
     	Branch branch = item == null ? null : item.getValue();
     	if (branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
     	{
-    		informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
+    		Util.informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
     		return;
     	}
     	if (item == treeRoot)
     	{
-    		informMessage("Delete Branch", "Can't delete the root branch.");
+    		Util.informMessage("Delete Branch", "Can't delete the root branch.");
     		return;
     	}
     	
@@ -853,7 +837,7 @@ public class EditSchema
     {
     	if (!stack.canUndo())
     	{
-    		informMessage("Undo", "Nothing to undo.");
+    		Util.informMessage("Undo", "Nothing to undo.");
     		return;
     	}
     	stack.performUndo();
@@ -864,7 +848,7 @@ public class EditSchema
     {
     	if (!stack.canRedo())
     	{
-    		informMessage("Redo", "Nothing to redo.");
+    		Util.informMessage("Redo", "Nothing to redo.");
     		return;
     	}
     	stack.performRedo();

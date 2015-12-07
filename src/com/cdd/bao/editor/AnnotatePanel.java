@@ -8,6 +8,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -129,8 +130,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		Lineup line = new Lineup(PADDING);
 		fieldSearch.setPrefWidth(500);
 		fieldSearch.setMaxWidth(Double.MAX_VALUE);
-		FlowPane flow = new FlowPane(Orientation.HORIZONTAL, PADDING * 2, 0, fieldSearch, chkHierarchy);
-		line.add(flow, "Search:", 1, 0);
+		line.add(RowLine.pair(PADDING, fieldSearch, 1, chkHierarchy, 0), "Search:", 1, 0);
 
         BorderPane pane = new BorderPane();
         pane.setPrefSize(800, 500);

@@ -9,6 +9,7 @@ package com.cdd.bao.editor.endpoint;
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.editor.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.net.*;
@@ -392,27 +393,10 @@ public class BrowseEndpoint
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-	        Platform.runLater(() -> informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
+	        Platform.runLater(() -> Util.informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
 		}
 	}
 	
-	private void informMessage(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-	}
-	private void informWarning(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-	}
-
 	// ------------ action responses ------------	
 	
 

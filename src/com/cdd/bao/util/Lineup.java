@@ -4,7 +4,7 @@
  * (c) 2014-2015 Collaborative Drug Discovery Inc.
  */
 
-package com.cdd.bao.editor;
+package com.cdd.bao.util;
 
 import com.cdd.bao.*;
 

@@ -8,6 +8,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -501,7 +502,9 @@ public class DetailPane extends ScrollPane
 		observeFocus(fieldPara, -1);
 		passthroughTab(fieldPara);
 		Tooltip.install(fieldPara, new Tooltip("Optional detailed text for the assay, typically imported"));
-		line.add(fieldPara, "Paragraph:", 1, 0);
+		Button btnPara = new Button("View");
+		btnPara.setOnAction((ev) -> popupViewPara());
+		line.add(RowLine.pair(PADDING, 0, fieldPara, 1, RowLine.TOP, btnPara, 0, RowLine.BOTTOM), "Paragraph:", 1, 0);
 		
 		fieldURI = new TextField(assay.originURI);
 		fieldURI.setPrefWidth(300);
@@ -729,6 +732,74 @@ public class DetailPane extends ScrollPane
 			if (uri.length() > 0) used.add(uri);
 		}
 		return used;
+	}
+	
+	// brings up a popup window to show the paragraph text, which is handy for annotating
+	private void popupViewPara()
+	{
+		String text = fieldPara.getText();
+		if (text.length() == 0)
+		{
+			Util.informMessage("Paragraph", "Text is blank: nothing to show.");
+			return;
+		}
+	
+		Stage stage = new Stage();
+		
+		String title = fieldName.getText();
+		if (title.length() == 0) title = "Paragraph";
+		stage.setTitle(title);
+
+		TextArea area = new TextArea(text);
+		area.setWrapText(true);
+
+		BorderPane root = new BorderPane();
+		root.setCenter(area);
+
+		Scene scene = new Scene(root, 500, 500, Color.WHITE);
+		stage.setScene(scene);
+	
+/*
+         stage.setTitle("BioAssay Schema Browser");
+
+		treeRoot = new TreeItem<Branch>(new Branch());
+		treeView = new TreeView<Branch>(treeRoot);
+		treeView.setEditable(true);
+		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
+		{
+            public TreeCell<Branch> call(TreeView<Branch> p) {return new BrowseTreeCell();}
+        });
+        
+
+		//detail = new DetailPane(this);
+
+		StackPane sp1 = new StackPane(), sp2 = new StackPane();
+		sp1.getChildren().add(treeView);
+		sp2.getChildren().add(new Label("fnord!"));
+		
+		splitter = new SplitPane();
+		splitter.setOrientation(Orientation.HORIZONTAL);
+		splitter.getItems().addAll(sp1, sp2);
+		splitter.setDividerPositions(0.4, 1.0);
+
+		root = new BorderPane();
+		root.setTop(menuBar);
+		root.setCenter(splitter);
+
+		Scene scene = new Scene(root, 700, 600, Color.WHITE);
+
+		stage.setScene(scene);
+		
+		treeView.setShowRoot(false);
+		
+		rebuildTree();
+
+        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
+		
+		new Thread(() -> backgroundLoadTemplates()).run();*/
+
+
+		stage.show();
 	}
 }
 

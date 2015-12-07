@@ -8,6 +8,8 @@ package com.cdd.bao.editor.fetch;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.util.Lineup;
+import com.cdd.bao.util.*;
 import com.cdd.bao.editor.*;
 
 import java.io.*;
@@ -190,7 +192,7 @@ public class PubChemPanel extends Dialog<Schema.Assay>
 		
 		if (aid <= 0)
 		{
-			informWarning("Invalid AID", "Enter a valid PubChem AID number, which is counting number.");
+			Util.informWarning("Invalid AID", "Enter a valid PubChem AID number, which is counting number.");
             return;
 		}
 		
@@ -211,7 +213,7 @@ public class PubChemPanel extends Dialog<Schema.Assay>
 			background = null;
     		if (assay == null)
     		{
-    			informWarning("Not Found", "PubChem AID " + aid + " not found (or there's a network connectivity issue).");
+    			Util.informWarning("Not Found", "PubChem AID " + aid + " not found (or there's a network connectivity issue).");
     			return;
     		}
 			Platform.runLater(() -> applyFetchedAssay(assay));
@@ -387,15 +389,6 @@ public class PubChemPanel extends Dialog<Schema.Assay>
 		istr.close();
 		
 		return new String(buff.toByteArray(), Util.UTF8);
-	}
-	
-	private void informWarning(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
 	}
 }
 
