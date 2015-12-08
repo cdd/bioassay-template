@@ -35,6 +35,7 @@ import javafx.util.*;
 public class AnnotatePanel extends Dialog<Schema.Annotation>
 {
 	private Vocabulary vocab;
+	private Vocabulary.Hierarchy hier;
 	
 	private Schema.Assignment assn;
 	private List<Schema.Value> options = new ArrayList<>();
@@ -61,11 +62,15 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	{
 		super();
 		
-		try {vocab = Vocabulary.globalInstance();} catch (Exception ex) {}
+		try 
+		{
+			vocab = Vocabulary.globalInstance();
+			hier = vocab.getValueHierarchy();
+		} 
+		catch (Exception ex) {}
 		
 		this.assn = assn;
 		options.addAll(assn.values);
-		// !! loadResources(usedURI);
 		
 		setTitle("Annotation: " + assn.name);
 
@@ -358,7 +363,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		if (!chkHierarchy.isSelected()) return val.name;
 
 		String prefix = "";
-		Vocabulary.Branch branch = vocab.getBranch(val.uri);
+		Vocabulary.Branch branch = hier.uriToBranch.get(val.uri);
 		if (branch != null)
 		{
 			while (branch.parents.size() > 0)

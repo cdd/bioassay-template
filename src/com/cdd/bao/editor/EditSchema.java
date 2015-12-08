@@ -174,7 +174,11 @@ public class EditSchema
 		updateTitle();
 		
 		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
-		new Thread(() -> {try {Vocabulary.globalInstance();} catch (IOException ex) {}}).start();
+		new Thread(() -> 
+		{
+			try {Vocabulary.globalInstance();} 
+			catch (IOException ex) {ex.printStackTrace();}}
+		).start();
  	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}

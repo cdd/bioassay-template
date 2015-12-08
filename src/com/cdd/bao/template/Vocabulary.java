@@ -33,6 +33,8 @@ public class Vocabulary
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
 	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
+	// URIs that are known to be involved in property & class relationships, respectively
+	private Set<String> uriProperties = new HashSet<>(), uriValues = new HashSet<>();
 	
 	public static class Branch
 	{
@@ -46,8 +48,13 @@ public class Vocabulary
 			this.label = label;
 		}
 	}
-	private Map<String, Branch> uriToBranch = new HashMap<>();
-	private List<Branch> rootBranches = new ArrayList<>();
+	
+	public static class Hierarchy
+	{
+		public Map<String, Branch> uriToBranch = new HashMap<>();
+		public List<Branch> rootBranches = new ArrayList<>();
+	}
+	private Hierarchy properties = null, values = null;
 
 	// ------------ public methods ------------
 
@@ -89,11 +96,21 @@ public class Vocabulary
 	// grab all of the URIs
 	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
 	
+	// just the URIs involved in a property/class hierarchy
+	public String[] getPropertyURIs() {return uriProperties.toArray(new String[uriProperties.size()]);}
+	public String[] getValueURIs() {return uriValues.toArray(new String[uriValues.size()]);}
+	
+	/*
 	// fetches a specific root branch, if there is one
 	public Branch getBranch(String uri) {return uri == null || uri.length() == 0 ? null : uriToBranch.get(uri);}
 
 	// fetches the roots that can be used to create some number of hierarchies
 	public Branch[] getRootBranches() {return rootBranches.toArray(new Branch[rootBranches.size()]);}
+	*/
+	
+	// fetch the branch structure hierarchy for either properties or values
+	public Hierarchy getPropertyHierarchy() {return properties;}
+	public Hierarchy getValueHierarchy() {return values;}
 	
 	// ------------ private methods ------------
 
@@ -137,6 +154,16 @@ public class Vocabulary
 		}
 		//Util.writeln("Done.");
 	
+		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
+		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
+		Property subPropOf = model.createProperty(ModelSchema.PFX_RDFS + "subPropertyOf");
+		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		Property rdfType = model.createProperty(ModelSchema.PFX_RDF + "type");
+		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
+		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
+		
+		Set<String> anyProp = new HashSet<>(), anyValue = new HashSet<>();
+
 		// iterate over the list looking for label definitions
 		StmtIterator iter = model.listStatements();
 		while (iter.hasNext())
@@ -147,12 +174,28 @@ public class Vocabulary
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();
 
+			// separately collect everything that's part of the class/property hierarchy
+			if (predicate.equals(subPropOf) && object.isURIResource())
+			{
+				anyProp.add(subject.getURI());
+				anyProp.add(((Resource)object).getURI());
+			}
+			else if (predicate.equals(subClassOf) && object.isURIResource())
+			{
+				anyValue.add(subject.getURI());
+				anyValue.add(((Resource)object).getURI());
+			}
+			else if (predicate.equals(rdfType) && (object.equals(owlDataType) || object.equals(owlObjProp)))
+			{
+				anyProp.add(subject.getURI());
+			}
+			
 			if (!object.isLiteral()) continue;
 
 			String uri = subject.getURI();
 			String label = object.asLiteral().getString();
 
-			if (predicate.getLocalName().equals("label"))
+			if (predicate.equals(propLabel))
 			{
     			uriToLabel.put(uri, label);
     			String[] list = labelToURI.get(label);
@@ -164,7 +207,7 @@ public class Vocabulary
     			}
     			else labelToURI.put(label, new String[]{uri});
 			}
-			else if (predicate.getLocalName().equals("IAO_0000115"))
+			else if (predicate.equals(propDescr))
 			{
 				uriToDescr.put(uri, label);
 			}
@@ -184,30 +227,43 @@ public class Vocabulary
 			if (idx >= 0) labelToURI.put(label, new String[]{list[idx]});
 		}
 		
-		/*Util.writeln("All labels and their meanings:");
-		for (String label : labelToURI.keySet())
+		// spool class/property values: only those that have a label
+		for (String uri : anyProp) if (uriToLabel.containsKey(uri)) uriProperties.add(uri);
+		for (String uri : anyValue) if (uriToLabel.containsKey(uri)) uriValues.add(uri);
+		
+		// build up the hierarchies for properties and classes, respectively
+		properties = generateBranch(model, subPropOf);
+		values = generateBranch(model, subClassOf);
+
+		// properties need a bit more attention, because singletons need to be represented too
+		for (int pass = 0; pass < 2; pass++)
+   		for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
+   		{
+			Statement st = it.next();
+			String uri = st.getSubject().getURI();
+			if (properties.uriToBranch.containsKey(uri)) continue;
+			String label = uriToLabel.get(uri);
+			if (label == null) continue;
+			Branch branch = new Branch(uri, label);
+			properties.uriToBranch.put(uri, branch);
+			properties.rootBranches.add(branch);
+   		}
+		properties.rootBranches.sort((v1, v2) -> 
 		{
-			String[] list = labelToURI.get(label);
-			Util.writeln("'" + label + "': " + Arrays.toString(list));
-			for (String uri : list) 
-			{
-				String descr = uriToDescr.get(uri);
-				if (descr != null) Util.writeln("   : " + descr);
-			}
-		}
-		
-		Util.writeln("Labelled Items:" + uriToLabel.size() + ", descriptions: " + uriToDescr.size());*/
-		
-		generateBranch(model);
+			String str1 = (v1.children.size() > 0 ? "A" : "Z") + v1.label;
+			String str2 = (v2.children.size() > 0 ? "A" : "Z") + v2.label;
+			return str1.compareTo(str2);
+		});
 	}
 
 	// looks over the entire class inheritance system, and builds a collection of trees
-	private void generateBranch(Model model)
+	private Hierarchy generateBranch(Model model, Property verb)
 	{
-		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		Hierarchy hier = new Hierarchy();
+		
 		for (int pass = 0; pass < 2; pass++) // want to do BAO first
 		{
-    		for (StmtIterator it = model.listStatements(null, subClassOf, (RDFNode)null); it.hasNext();)
+    		for (StmtIterator it = model.listStatements(null, verb, (RDFNode)null); it.hasNext();)
     		{
     			Statement st = it.next();
     			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
@@ -217,7 +273,7 @@ public class Vocabulary
     			
     			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
     			
-    			Branch child = uriToBranch.get(uriChild), parent = uriToBranch.get(uriParent);
+    			Branch child = hier.uriToBranch.get(uriChild), parent = hier.uriToBranch.get(uriParent);
    				boolean isBAO = uriParent.startsWith(ModelSchema.PFX_BAO);
    				if (isBAO != (pass == 0)) continue; // BAO first, other second
    				if (pass == 1 && child != null && child.parents.size() > 0) continue; // if second pass, and already parented, then don't add the non-BAO part of the hierarchy
@@ -225,12 +281,12 @@ public class Vocabulary
     			if (child == null) 
     			{
     				child = new Branch(uriChild, labelChild);
-    				uriToBranch.put(uriChild, child);
+    				hier.uriToBranch.put(uriChild, child);
     			}
     			if (parent == null)
     			{
     				parent = new Branch(uriParent, labelParent);
-    				uriToBranch.put(uriParent, parent);
+    				hier.uriToBranch.put(uriParent, parent);
     			}
     			
     			parent.children.add(child);
@@ -239,15 +295,18 @@ public class Vocabulary
 		}
 
 		// anything with zero parents is a "root": this is all that is needed
-		for (Branch branch : uriToBranch.values()) if (branch.parents.size() == 0) rootBranches.add(branch);
+		for (Branch branch : hier.uriToBranch.values()) if (branch.parents.size() == 0) hier.rootBranches.add(branch);
+		hier.rootBranches.sort((v1, v2) -> v1.label.compareTo(v2.label));
 
 		// sort each level by name
-		List<Branch> stack = new ArrayList<>(rootBranches);
+		List<Branch> stack = new ArrayList<>(hier.rootBranches);
 		while (stack.size() > 0)
 		{
 			Branch branch = stack.remove(0);
 			branch.children.sort((v1, v2) -> v1.label.compareTo(v2.label));
 			stack.addAll(branch.children);
 		}
+		
+		return hier;
 	}
 }

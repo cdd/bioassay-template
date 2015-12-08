@@ -204,7 +204,7 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null) return;
 
-		LookupPanel lookup = new LookupPanel("", listValueURI(), true);
+		LookupPanel lookup = new LookupPanel(false, "", listValueURI(), true);
 		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
 		if (!result.isPresent()) return;
 		LookupPanel.Resource[] resList = result.get();
@@ -289,7 +289,7 @@ public class DetailPane extends ScrollPane
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
-    		LookupPanel lookup = new LookupPanel(searchText, listValueURI(), false);
+    		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), false);
     		lookup.setInitialURI(vw.fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
@@ -298,14 +298,14 @@ public class DetailPane extends ScrollPane
     			if (res != null && res.length > 0)
     			{
     				vw.fieldURI.setText(res[0].uri);
-    				vw.fieldName.setText(res[0].label);
-    				vw.fieldDescr.setText(res[0].descr);
+    				if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(res[0].label);
+    				if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(res[0].descr);
 				}
     		}
     	}
     	else if (assignment != null)
     	{
-    		LookupPanel lookup = new LookupPanel(fieldName.getText(), new HashSet<>(), false);
+    		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), false);
     		lookup.setInitialURI(fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
@@ -314,8 +314,8 @@ public class DetailPane extends ScrollPane
     			if (res != null && res.length >= 1)
     			{
     				fieldURI.setText(res[0].uri);
-    				fieldName.setText(res[0].label);
-    				fieldDescr.setText(res[0].descr);
+    				if (fieldName.getText().length() == 0) fieldName.setText(res[0].label);
+    				if (fieldDescr.getText().length() == 0) fieldDescr.setText(res[0].descr);
 				}
     		}
     	}

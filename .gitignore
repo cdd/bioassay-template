@@ -20,3 +20,5 @@ pkg/
 # data stuff to skip
 data/bao/bad.zip
 data/bao/oldversion.zip
+data/template/schema_bak2.ttl
+

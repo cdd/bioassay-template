@@ -36,6 +36,8 @@ import javafx.util.*;
 public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 {
 	private Vocabulary vocab = null;
+	private Vocabulary.Hierarchy hier = null;
+	private boolean isProperty; // false = value lookup, true = property lookup
 	private Set<String> usedURI;
 	private boolean multi;
 
@@ -107,16 +109,17 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
        
 	// ------------ public methods ------------
 
-	public LookupPanel(String searchText, Set<String> usedURI, boolean multi)
+	public LookupPanel(boolean isProperty, String searchText, Set<String> usedURI, boolean multi)
 	{
 		super();
 		
+		this.isProperty = isProperty;
 		this.usedURI = usedURI;
 		this.multi = multi;
 		
 		loadResources();
 		
-		setTitle("Lookup URI");
+		setTitle("Lookup " + (isProperty ? "Property" : multi ? "Values" : "Value"));
 
 		setResizable(true);
 
@@ -183,10 +186,15 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
 	private void loadResources()
 	{
-		try {vocab = Vocabulary.globalInstance();}
+		try 
+		{
+			vocab = Vocabulary.globalInstance();
+			hier = isProperty ? vocab.getPropertyHierarchy() : vocab.getValueHierarchy();
+		}
 		catch (IOException ex) {ex.printStackTrace(); return;}
 		
-		for (String uri : vocab.getAllURIs())
+		String[] source = isProperty ? vocab.getPropertyURIs() : vocab.getValueURIs();
+		for (String uri : source)
 		{
 			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
 			res.beingUsed = usedURI.contains(uri);
@@ -242,7 +250,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
 	private void setupTree(String searchText)
 	{
-		for (Vocabulary.Branch branch : vocab.getRootBranches()) 
+		for (Vocabulary.Branch branch : hier.rootBranches) 
 		{
 			TreeItem<Vocabulary.Branch> item = populateTreeBranch(treeRoot, branch);
 			item.setExpanded(true); // open up just the first level

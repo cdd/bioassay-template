@@ -1944,8 +1944,6 @@ BSL4:</obo:IAO_0000115>
         <rdfs:label xml:lang="en">reports assay measurment value</rdfs:label>
     </owl:DatatypeProperty>
     
-
-
     <!-- http://www.w3.org/2002/07/owl#topDataProperty -->
 
     <owl:DatatypeProperty rdf:about="&owl;topDataProperty"/>
@@ -1960,12 +1958,85 @@ BSL4:</obo:IAO_0000115>
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
 
     <!-- http://www.w3.org/2002/07/owl#Thing -->
 
     <owl:Class rdf:about="&owl;Thing"/>
+
+
+    <!-- extensions made for the BioAssay Template -->
+
+    <owl:DatatypeProperty rdf:about="&bao;BAX_0000001">
+        <rdfs:label xml:lang="en">has other</rdfs:label>
+        <obo:IAO_0000115 xml:lang="en">Extensions used by the BioAssay Template.</obo:IAO_0000115>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:DatatypeProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000002">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has bioassay</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000003">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has assay design method</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000004">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has biological process</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000005">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has biological macromolecule</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000006">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has result</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000007">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has unit of measurement</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+	<owl:ObjectProperty rdf:about="&bao;BAX_000000">
+        <rdfs:subPropertyOf rdf:resource="&bao;BAX_0000001"/>
+        <rdfs:label xml:lang="en">has compound library</rdfs:label>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+
+
+<!--
+	<owl:ObjectProperty rdf:about="&bao;BAX_0000001">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:label xml:lang="en">has other</rdfs:label>
+        <obo:IAO_0000115 xml:lang="en">Extensions used by the BioAssay Template.</obo:IAO_0000115>
+        <obo:IAO_0000117 xml:lang="en">Collaborative Drug Discovery, Inc.</obo:IAO_0000117>
+    </owl:ObjectProperty>
+
+   <owl:ObjectProperty rdf:about="&bao;BAO_0000097">
+        <rdfs:label>has temperature unit</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="&bao;BAO_0002874"/>
+    </owl:ObjectProperty>
+ 
+
+    <owl:DatatypeProperty rdf:about="&bao;BAO_0002919">
+        <rdfs:label xml:lang="en">has absorbance wavelength value</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="&bao;BAO_0002866"/>
+    </owl:DatatypeProperty>
+-->
+
+
 </rdf:RDF>
 
 

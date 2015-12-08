@@ -30,6 +30,7 @@ public class ModelSchema
 	public static final String PFX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	public static final String PFX_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
 	public static final String PFX_XSD = "http://www.w3.org/2001/XMLSchema#";
+	public static final String PFX_OWL = "http://www.w3.org/2002/07/owl#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -48,7 +49,7 @@ public class ModelSchema
 	public static final String MAPS_TO = "mapsTo";
 
 	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
-	public static final String HAS_ORIGIN = "hasOriginURI"; // origin URI: where the assay came from
+	public static final String HAS_ORIGIN = "hasOrigin"; // origin URI: where the assay came from
 	
 	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
@@ -229,12 +230,10 @@ public class ModelSchema
 			int vorder = 0;
 			for (Value val : assn.values)
 			{
-				Resource objValue = val.uri == null ? null : model.createResource(val.uri);
-				
-				Resource blank = model.createResource();
-				
+				Resource blank = model.createResource();		
 				model.add(objAssn, hasValue, blank);
 				
+				Resource objValue = val.uri == null ? null : model.createResource(val.uri);
 				if (objValue != null) model.add(blank, mapsTo, objValue);
 				model.add(blank, rdfLabel, model.createLiteral(val.name));
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
@@ -417,8 +416,7 @@ public class ModelSchema
     		char[] chars = new char[bit.length()];
     		bit.getChars(0, bit.length(), chars, 0);
     		chars[0] = Character.toUpperCase(chars[0]);
-    		for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
-    			buff.append(ch);
+    		for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) buff.append(ch);
     	}
     	
     	// if the name was previously encountered, give it a number suffix to disambiguate
