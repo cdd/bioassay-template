@@ -237,22 +237,24 @@ public class Vocabulary
 
 		// properties need a bit more attention, because singletons need to be represented too
 		for (int pass = 0; pass < 2; pass++)
-   		for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
-   		{
-			Statement st = it.next();
-			String uri = st.getSubject().getURI();
-			if (properties.uriToBranch.containsKey(uri)) continue;
-			String label = uriToLabel.get(uri);
-			if (label == null) continue;
-			Branch branch = new Branch(uri, label);
-			properties.uriToBranch.put(uri, branch);
-			properties.rootBranches.add(branch);
-   		}
+		{
+       		for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
+       		{
+    			Statement st = it.next();
+    			String uri = st.getSubject().getURI();
+    			if (properties.uriToBranch.containsKey(uri)) continue;
+    			String label = uriToLabel.get(uri);
+    			if (label == null) continue;
+    			Branch branch = new Branch(uri, label);
+    			properties.uriToBranch.put(uri, branch);
+    			properties.rootBranches.add(branch);
+       		}
+		}
 		properties.rootBranches.sort((v1, v2) -> 
 		{
-			String str1 = (v1.children.size() > 0 ? "A" : "Z") + v1.label;
-			String str2 = (v2.children.size() > 0 ? "A" : "Z") + v2.label;
-			return str1.compareTo(str2);
+			if (v1.children.size() > 0 && v2.children.size() == 0) return -1;
+			if (v1.children.size() == 0 && v2.children.size() > 0) return 1;
+			return v1.label.compareTo(v2.label);
 		});
 	}
 

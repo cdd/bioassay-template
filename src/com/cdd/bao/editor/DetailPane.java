@@ -64,8 +64,9 @@ public class DetailPane extends ScrollPane
 	{
 		Lineup line;
 		Schema.Assignment sourceAssn;
-		Schema.Annotation sourceAnnot;
-		Button buttonShow;
+		Schema.Annotation[] sourceAnnot;
+		Button[] buttonShow;
+		Button buttonAdd;
 	}
 	private List<AnnotWidgets> annotList = new ArrayList<>();
 	
@@ -173,7 +174,10 @@ public class DetailPane extends ScrollPane
 		mod.para = fieldPara.getText();
 		mod.originURI = fieldURI.getText();
 		
-		for (AnnotWidgets aw : annotList) if (aw.sourceAnnot != null) mod.annotations.add(aw.sourceAnnot.clone());
+		for (AnnotWidgets aw : annotList) if (aw.sourceAnnot != null) 
+		{
+			for (Schema.Annotation annot : aw.sourceAnnot) mod.annotations.add(annot.clone());
+		}
 
 		if (assay.equals(mod)) return null;
 		
@@ -521,6 +525,8 @@ public class DetailPane extends ScrollPane
 		vbox.getChildren().add(heading);
 
 		List<Schema.Annotation> orphans = new ArrayList<>(assay.annotations);
+		List<Integer> orphidx = new ArrayList<>();
+		for (int n = 0; n < orphans.size(); n++) orphidx.add(n);
 		List<Schema.Group> groupList = new ArrayList<>();
 		groupList.add(schema.getRoot());
 		
@@ -543,21 +549,23 @@ public class DetailPane extends ScrollPane
 			{
 				// insert any annotations that match this assignment; more than one is a possibility that will be reflected (though not necessarily valid); if none
 				// were found, manufacture the unassigned state
-				String title = indstr + assn.name + ":";
-				boolean anything = false;
+				List<Schema.Annotation> matches = new ArrayList<>();
+				List<Integer> indices = new ArrayList<>();
 				for (int n = 0; n < orphans.size(); n++)
 				{
 					Schema.Annotation annot = orphans.get(n);
 					if (schema.matchAnnotation(annot, assn))
 					{
-						anything = true;
-						appendAnnotationWidget(title, assn, annot);
-						title = "";
+						matches.add(annot);
+						indices.add(orphidx.get(n));
+						
 						orphans.remove(n);
+						orphidx.remove(n);
 						n--;
 					}
 				}
-				if (!anything) appendAnnotationWidget(title, assn, null);
+				String title = indstr + assn.name + ":";
+				appendAnnotationWidgets(title, assn, matches.toArray(new Schema.Annotation[matches.size()]), indices.toArray(new Integer[indices.size()]));
 			}
 			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
 		}
@@ -569,95 +577,125 @@ public class DetailPane extends ScrollPane
     		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
     		vbox.getChildren().add(heading);
 
-			for (Schema.Annotation annot : orphans)
+			for (int n = 0; n < orphans.size(); n++)
 			{
+				Schema.Annotation annot = orphans.get(n);
 				String title = annot.assn.name + ":";
 				for (Schema.Group p = annot.assn.parent; p != null; p = p.parent) title = p.name + " / " + title;
 				
-				appendAnnotationWidget(title, null, annot);
+				appendAnnotationWidgets(title, null, new Schema.Annotation[]{annot}, new Integer[]{orphidx.get(n)});
 			}
 		}
 	}
 
 	// creates a single annotation entry line; the assignment or annotation may be blank, not not both
-	private void appendAnnotationWidget(String title, Schema.Assignment assn, Schema.Annotation annot)
+	private void appendAnnotationWidgets(String title, Schema.Assignment assn, Schema.Annotation[] annots, Integer[] indices)
 	{
 		AnnotWidgets aw = new AnnotWidgets();
 		aw.line = new Lineup(PADDING);
 		aw.sourceAssn = assn;
-		aw.sourceAnnot = annot;
-		aw.buttonShow = new Button();
+		aw.sourceAnnot = annots;
+		final int nbtn = Math.max(1, annots.length);
+		aw.buttonShow = new Button[nbtn];
+		for (int n = 0; n < nbtn; n++) aw.buttonShow[n] = new Button();
+		if (annots.length > 0) 
+		{
+			aw.buttonAdd = new Button("+");
+			aw.buttonAdd.setOnAction(event -> pressedAnnotationButton(aw.sourceAssn, -1));
+		}
 		
-		updateAnnotationButton(aw);
+		updateAnnotationButtons(aw);
 		
-		aw.buttonShow.setPrefWidth(300);
-		aw.buttonShow.setMaxWidth(Double.MAX_VALUE);
-		//observeFocus(fieldName, -1);
-		aw.line.add(aw.buttonShow, title, 1, 0);
+		for (int n = 0; n < nbtn; n++)
+		{
+    		aw.buttonShow[n].setPrefWidth(300);
+    		aw.buttonShow[n].setMaxWidth(Double.MAX_VALUE);
+    		Region row = annots.length == 0 || n < nbtn - 1 ? aw.buttonShow[n] : RowLine.pair(PADDING, aw.buttonShow[n], 1, aw.buttonAdd, 0);
+    		aw.line.add(row, n == 0 ? title : null, 1, 0);
+
+			final int idx = n < indices.length ? indices[n] : -1;
+			aw.buttonShow[n].setOnAction(event -> pressedAnnotationButton(aw.sourceAssn, idx));
+		}
 				
 		vbox.getChildren().add(aw.line);
-		
-		aw.buttonShow.setOnAction(event -> pressedAnnotationButton(aw));
 		
 		annotList.add(aw);
 	}
 	
 	// configures the button content and theme for an annotation
-	private void updateAnnotationButton(AnnotWidgets aw)
+	private void updateAnnotationButtons(AnnotWidgets aw)
 	{
-		Schema.Annotation annot = aw.sourceAnnot;
-		if (annot == null)
+		for (int n = 0; n < aw.buttonShow.length; n++)
 		{
-			// blank value: waiting for the user to pick something
-			aw.buttonShow.setText("?");
-			aw.buttonShow.setStyle("-fx-base: #F0F0FF;");
+			Button btn = aw.buttonShow[n];
+			Schema.Annotation annot = n < aw.sourceAnnot.length ? aw.sourceAnnot[n] : null;
+			
+    		if (annot == null)
+    		{
+    			// blank value: waiting for the user to pick something
+    			btn.setText("?");
+    			btn.setStyle("-fx-base: #F0F0FF;");
+    		}
+    		else if (annot.value != null)
+    		{
+    			btn.setText(annot.value.name);
+    			btn.setStyle("-fx-base: #000080; -fx-text-fill: white;");
+    		}
+    		else // annot.literal != null
+    		{
+    			btn.setText('"' + annot.literal + '"');
+    			btn.setStyle("-fx-base: #FFFFD0;");
+    		}
+    
+    		// it's an orphan: mark it noticeably
+    		if (aw.sourceAssn == null)
+    		{
+    			// orphan
+    			btn.setStyle("-fx-base: #C00000; -fx-text-fill: white;");
+    		}
 		}
-		else if (annot.value != null)
-		{
-			aw.buttonShow.setText(annot.value.name);
-			aw.buttonShow.setStyle("-fx-base: #000080; -fx-text-fill: white;");
-		}
-		else // annot.literal != null
-		{
-			aw.buttonShow.setText('"' + annot.literal + '"');
-			aw.buttonShow.setStyle("-fx-base: #FFFFD0;");
-		}
-
-		// it's an orphan: mark it noticeably
-		if (aw.sourceAssn == null)
-		{
-			// orphan
-			aw.buttonShow.setStyle("-fx-base: #C00000; -fx-text-fill: white;");
-		}
-		
 	}
 	
 	// responds to the pressing of an annotation button: typically brings up the edit panel
-	private void pressedAnnotationButton(AnnotWidgets aw)
+	private void pressedAnnotationButton(Schema.Assignment assn, int idx)
 	{
+    	Schema.Assay modAssay = extractAssay();
+    	if (modAssay == null) modAssay = assay.clone();
+
 		// orphan annotations: clicking deletes
-		if (aw.sourceAssn == null)
+		if (assn == null)
 		{
-			vbox.getChildren().remove(aw.line);
-			annotList.remove(aw);
+			schema.deleteAssay(idx);
+
+        	main.updateBranchAssay(modAssay);
+        	recreateAssay();
 			return;
 		}
 
 		// bring up panel for assignment selection
-		AnnotatePanel lookup = new AnnotatePanel(aw.sourceAssn, aw.sourceAnnot);
+		Schema.Annotation annot = idx >= 0 ? modAssay.annotations.get(idx) : null;
+		AnnotatePanel lookup = new AnnotatePanel(assn, annot);
 		Optional<Schema.Annotation> result = lookup.showAndWait();
 		if (result.isPresent())
 		{
 			Schema.Annotation res = result.get();
-			if (res != null)
-			{
-				if (res.assn == null)
-					aw.sourceAnnot = null;
-				else
-					aw.sourceAnnot = res;
-
-				updateAnnotationButton(aw);
-			}
+			if (res == null) return;
+			
+    		if (res.assn == null) // clear
+    		{
+    			if (idx < 0) return; // nop
+    			modAssay.annotations.remove(idx);
+    		}
+    		else
+    		{
+    			if (idx < 0)
+    				modAssay.annotations.add(res);
+    			else
+	    			modAssay.annotations.set(idx, res);
+    		}
+    
+        	main.updateBranchAssay(modAssay);
+        	recreateAssay();
 		}
 	}
 
