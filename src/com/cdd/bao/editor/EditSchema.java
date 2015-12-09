@@ -289,7 +289,7 @@ public class EditSchema
 
 	private void createMenuItems()
     {
-    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN;
+    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN; // alt = KeyCombination.ALT_DOWN;
     
     	addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
@@ -298,11 +298,15 @@ public class EditSchema
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
     	if (false)
-    		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
     	{
+    		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
     		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
     		addMenu(menuFile, "_Upload Endpoint", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
     	}
+    	Menu menuFileGraphics = new Menu("Graphics");
+    	addMenu(menuFileGraphics, "_Template", new KeyCharacterCombination("T", cmd, shift)).setOnAction(event -> actionFileGraphicsTemplate());
+    	addMenu(menuFileGraphics, "_Assay", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionFileGraphicsAssay());
+    	menuFile.getItems().add(menuFileGraphics);
 		menuFile.getItems().add(new SeparatorMenuItem());
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
     	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -330,6 +334,9 @@ public class EditSchema
 		menuValue.getItems().add(new SeparatorMenuItem());
 		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> detail.actionLookupURI());
 		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> detail.actionLookupName());
+		menuValue.getItems().add(new SeparatorMenuItem());
+		addMenu(menuValue, "_Sort Values", null).setOnAction(event -> actionValueSort());
+		addMenu(menuValue, "_Remove Duplicates", null).setOnAction(event -> actionValueDuplicates());
 
     	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
     	addMenu(menuView, "_Assays", new KeyCharacterCombination("2", cmd)).setOnAction(event -> actionViewAssays());
@@ -639,6 +646,31 @@ public class EditSchema
     {
     	Util.writeln("!! upload");
     }
+    public void actionFileGraphicsTemplate()
+    {
+    	// NOTE: stripped down version; upgrade it to let the user pick the filename, or ideally code up a preview panel
+
+    	if (schemaFile == null) return;
+    	RenderSchema render = new RenderSchema(stack.peekSchema());
+    	try
+    	{
+			render.createPageTemplate();
+			
+			String fn = schemaFile.getAbsolutePath();
+			int i = fn.lastIndexOf('.');
+			if (i < fn.lastIndexOf('/')) i = -1;
+			if (i >= 0) fn = fn.substring(0, i);
+			fn += "_template.pdf";
+			render.write(new File(fn));
+			
+			Util.informMessage("Saved PDF", "Written to: " + fn);
+    	}
+    	catch (Exception ex) {ex.printStackTrace();}
+    }
+    public void actionFileGraphicsAssay()
+    {
+    	Util.writeln("!! graphics assay");
+    }
 	public void actionFileClose()
 	{
 		if (!confirmClose()) return;
@@ -884,6 +916,70 @@ public class EditSchema
     	stack.changeSchema(schema);
     	rebuildTree();
     	setCurrentBranch(locateBranch(newLocator));
+    }
+    public void actionValueSort()
+    {
+    	TreeItem<Branch> item = currentBranch();
+    	Branch branch = item == null ? null : item.getValue();
+    	if (branch == null || branch.assignment == null)
+    	{
+    		Util.informMessage("Sort Values", "Select an assignment with values to sort.");
+    		return;
+    	}
+
+    	pullDetail();
+    	
+		Schema schema = stack.getSchema();
+		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+		assn.values.sort((v1, v2) -> v1.name.compareToIgnoreCase(v2.name));
+		
+		if (schema.equals(stack.peekSchema()))
+		{
+			Util.informMessage("Sort", "Values were already sorted.");
+			return;
+		}
+		stack.changeSchema(schema);
+		rebuildTree();
+		setCurrentBranch(locateBranch(branch.locatorID));
+    }
+    public void actionValueDuplicates()
+    {
+    	TreeItem<Branch> item = currentBranch();
+    	Branch branch = item == null ? null : item.getValue();
+    	if (branch == null || branch.assignment == null)
+    	{
+    		Util.informMessage("Remove Duplicate Values", "Select an assignment with values to de-duplicate.");
+    		return;
+    	}
+
+    	pullDetail();
+    	
+		Schema schema = stack.getSchema();
+		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+		
+		int snippy = 0;
+		for (int i = 1; i < assn.values.size(); i++)
+		{
+			Schema.Value v = assn.values.get(i);
+			for (int j = 0; j < i; j++) if (v.uri.equals(assn.values.get(j).uri))
+			{
+				snippy++;
+				assn.values.remove(i);
+				i--;
+				break;				
+			}
+		}
+		
+		if (snippy == 0)
+		{
+			Util.informMessage("Remove Duplicate Values", "No duplicate URI values were found.");
+			return;
+		}
+		stack.changeSchema(schema);
+		rebuildTree();
+		setCurrentBranch(locateBranch(branch.locatorID));
+		
+		Util.informMessage("Remove Duplicate Values", "Number of values removed because of duplicated URI values: " + snippy);
     }
     public void actionViewTemplate()
     {

@@ -21,4 +21,5 @@ pkg/
 data/bao/bad.zip
 data/bao/oldversion.zip
 data/template/schema_bak2.ttl
-
+data/template/schema_bak3.ttl
+data/template/schema_template.pdf

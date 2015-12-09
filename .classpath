@@ -27,5 +27,7 @@
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/json-x.jar"/>
+	<classpathentry kind="lib" path="lib/fontbox-2.0.0-RC2.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-2.0.0-RC2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
