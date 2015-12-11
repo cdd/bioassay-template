@@ -8,6 +8,7 @@ package com.cdd.bao.template;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.Schema.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -50,6 +51,7 @@ public class ModelSchema
 
 	public static final String HAS_PARAGRAPH = "hasParagraph"; // text description of the assay, if available
 	public static final String HAS_ORIGIN = "hasOrigin"; // origin URI: where the assay came from
+	public static final String USES_TEMPLATE = "usesTemplate"; // linking an assay description to a template
 	
 	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
@@ -62,7 +64,7 @@ public class ModelSchema
 	private Resource batRoot, batAssay;
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder, hasParagraph, hasOrigin;
+	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral;
@@ -151,6 +153,7 @@ public class ModelSchema
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
 		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
 		hasOrigin = model.createProperty(PFX_BAT + HAS_ORIGIN);
+		usesTemplate = model.createProperty(PFX_BAT + USES_TEMPLATE);
 		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
 		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
 		hasLiteral = model.createProperty(PFX_BAT + HAS_LITERAL);
@@ -178,6 +181,7 @@ public class ModelSchema
 			Resource objAssay = model.createResource(pfx + turnLabelIntoName(assay.name));
 			model.add(objAssay, rdfType, batAssay);
 			model.add(objAssay, rdfLabel, assay.name);
+			model.add(objAssay, usesTemplate, objRoot);
 			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
 			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
 			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI);
@@ -243,7 +247,7 @@ public class ModelSchema
 			assignmentToResource.put(assn,  objAssn); // for subsequent retrieval
 		}
 		
-		// recursively emit any subcategories
+		// recursively emit any subgroups
 		String parentName = turnLabelIntoName(group.name);
 		for (Group subgrp : group.subGroups)
 		{
@@ -349,7 +353,7 @@ public class ModelSchema
 					
 			Value val = new Value(findAsString(blank, mapsTo), findString(blank, rdfLabel));
 			val.descr = findString(blank, hasDescription);
-			
+
 			assn.values.add(val);
 			order.put(val, findInteger(blank, inOrder));
 		}
@@ -425,10 +429,10 @@ public class ModelSchema
     	if (count != null)
     	{
     		count++;
-    		name += count;
     		nameCounts.put(name, count);
+    		name += count;
     	}
-    	else nameCounts.put(name, count);
+    	else nameCounts.put(name, 1);
     	
     	return name;    	
 	}
@@ -436,7 +440,12 @@ public class ModelSchema
 	// looks for an assignment and returns it as a string regardless of what type it actually is; blank if not found
 	private String findAsString(Resource subj, Property prop)
 	{
-		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();) return it.next().getObject().toString();
+		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();) 
+		{
+			RDFNode obj = it.next().getObject();
+			if (obj.isLiteral()) return obj.asLiteral().getString();
+			return obj.toString();
+		}
 		return "";
 	}
 
@@ -446,7 +455,7 @@ public class ModelSchema
 		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
 		{
 			RDFNode obj = it.next().getObject();
-			if (obj.isLiteral()) return obj.toString();
+			if (obj.isLiteral()) return obj.asLiteral().getString();
 		}
 		return "";
 	}

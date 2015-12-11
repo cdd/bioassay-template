@@ -1002,6 +1002,30 @@ public class Util
 		int len = 0;
 		for (int n = 0; n < loose.length; n++) if (loose[n] != null) packed[len++] = loose[n];
 	}
+
+	/**
+	 * Opens a file resource which may be incorporated into the current .jar file, or it may be a file relative to the current
+	 * working directory, which is the case when running with a folder of .class files.
+	 * @param obj the object associated with the appropriate .jar file, usually 'this'
+	 * @param fn full file path within .jar file, e.g. /foo/bar/fnord.txt
+	 */
+	public static InputStream openResource(Object obj, String fn) throws IOException
+	{
+		InputStream istr = obj.getClass().getResourceAsStream(fn);
+		if (istr == null)
+		{
+			String ufn = System.getProperty("user.dir") + fn;
+			if (new File(ufn).exists()) istr = new FileInputStream(ufn);
+		}
+		if (istr == null)
+		{
+			String ufn = System.getProperty("user.dir") + "/.." + fn;
+			if (new File(ufn).exists()) istr = new FileInputStream(ufn);
+		}
+		if (istr == null) throw new IOException("Missing resource: " + fn);
+		return istr;
+	}
+
 	
 	/**
 	 * Displays a helpful informational message.

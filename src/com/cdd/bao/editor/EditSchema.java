@@ -98,6 +98,8 @@ public class EditSchema
 	{
 		this.stage = stage;
 
+		if (MainApplication.icon != null) stage.getIcons().add(MainApplication.icon);
+
 		menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
 		menuBar.getMenus().add(menuFile = new Menu("_File"));
@@ -306,6 +308,8 @@ public class EditSchema
     	Menu menuFileGraphics = new Menu("Graphics");
     	addMenu(menuFileGraphics, "_Template", new KeyCharacterCombination("T", cmd, shift)).setOnAction(event -> actionFileGraphicsTemplate());
     	addMenu(menuFileGraphics, "_Assay", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionFileGraphicsAssay());
+    	addMenu(menuFileGraphics, "_Properties", new KeyCharacterCombination("R", cmd, shift)).setOnAction(event -> actionFileGraphicsProperties());
+    	addMenu(menuFileGraphics, "_Values", new KeyCharacterCombination("L", cmd, shift)).setOnAction(event -> actionFileGraphicsValues());
     	menuFile.getItems().add(menuFileGraphics);
 		menuFile.getItems().add(new SeparatorMenuItem());
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
@@ -663,13 +667,55 @@ public class EditSchema
 			fn += "_template.pdf";
 			render.write(new File(fn));
 			
-			Util.informMessage("Saved PDF", "Written to: " + fn);
+			Util.informMessage("Saved PDF", "Written to:\n" + fn);
     	}
     	catch (Exception ex) {ex.printStackTrace();}
     }
     public void actionFileGraphicsAssay()
     {
     	Util.writeln("!! graphics assay");
+    }
+    public void actionFileGraphicsProperties()
+    {
+    	// NOTE: stripped down version; upgrade it to let the user pick the filename, or ideally code up a preview panel
+
+    	if (schemaFile == null) return;
+    	RenderSchema render = new RenderSchema(stack.peekSchema());
+    	try
+    	{
+			render.createPageProperties();
+			
+			String fn = schemaFile.getAbsolutePath();
+			int i = fn.lastIndexOf('.');
+			if (i < fn.lastIndexOf('/')) i = -1;
+			if (i >= 0) fn = fn.substring(0, i);
+			fn += "_properties.pdf";
+			render.write(new File(fn));
+			
+			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+    	}
+    	catch (Exception ex) {ex.printStackTrace();}
+    }
+    public void actionFileGraphicsValues()
+    {
+    	// NOTE: stripped down version; upgrade it to let the user pick the filename, or ideally code up a preview panel
+
+    	if (schemaFile == null) return;
+    	RenderSchema render = new RenderSchema(stack.peekSchema());
+    	try
+    	{
+			render.createPageValues();
+			
+			String fn = schemaFile.getAbsolutePath();
+			int i = fn.lastIndexOf('.');
+			if (i < fn.lastIndexOf('/')) i = -1;
+			if (i >= 0) fn = fn.substring(0, i);
+			fn += "_values.pdf";
+			render.write(new File(fn));
+			
+			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+    	}
+    	catch (Exception ex) {ex.printStackTrace();}
     }
 	public void actionFileClose()
 	{

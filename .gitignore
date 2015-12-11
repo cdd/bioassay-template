@@ -23,3 +23,6 @@ data/bao/oldversion.zip
 data/template/schema_bak2.ttl
 data/template/schema_bak3.ttl
 data/template/schema_template.pdf
+data/template/funky.ttl
+data/template/*.pdf
+

@@ -14,6 +14,7 @@ import java.util.*;
 
 import javafx.application.*;
 import javafx.stage.*;
+import javafx.scene.image.*;
 
 /*
 	BioAssay Ontology Tools: entrypoint with command line parameters.
@@ -21,14 +22,19 @@ import javafx.stage.*;
 
 public class MainApplication extends Application
 {
-	// ------------ private data ------------	
-
-
+	public static Image icon = null;
 
 	// ------------ public methods ------------	
 
 	public MainApplication()
 	{
+		try
+		{
+    		InputStream istr = Util.openResource(this, "/images/MainIcon.png");
+    		icon = new Image(istr);
+    		istr.close();
+		}
+		catch (Exception ex) {ex.printStackTrace();}
 	}
 	
 	public void exec(String[] args)

@@ -38,6 +38,7 @@
     	    	<attribute name="Main-Class" value="com.cdd.bao.Main"/>
     	    </manifest>
 			<fileset dir="." includes="data/bao/**"/>
+            <fileset dir="." includes="images/*.png"/>
 			<zipgroupfileset dir="lib" includes="*.jar"/>
 		</jar>
     </target>
