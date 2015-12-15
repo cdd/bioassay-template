@@ -55,15 +55,15 @@ public final class BrowseTreeCell extends TreeCell<BrowseEndpoint.Branch>
             {
 				String label = "?", style = "";
 				
-				if (branch.template != null)
+				if (branch.assay == null)
 				{
-					label = branch.template.getRoot().name;
+					label = branch.schema.getRoot().name;
 					style = "-fx-font-weight: bold; -fx-text-fill: #000000;";
 				}
-				else if (branch.assay != null)
+				else
 				{
 					label = branch.assay.name;
-					style = "-fx-font-weight: normal; -fx-text-fill: #606060;";
+					style = "-fx-font-weight: normal; -fx-text-fill: #404040;";
 				}
 
 				setStyle(style);

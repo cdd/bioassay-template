@@ -299,10 +299,10 @@ public class EditSchema
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
+		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
+		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
     	if (false)
     	{
-    		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
-    		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
     		addMenu(menuFile, "_Upload Endpoint", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
     	}
     	Menu menuFileGraphics = new Menu("Graphics");
@@ -636,7 +636,9 @@ public class EditSchema
     }
     public void actionFileBrowse()
     {
-    	if (EditorPrefs.getSparqlEndpoint().length() == 0)
+    	String endpoint = EditorPrefs.getSparqlEndpoint();
+    
+    	if (endpoint == null || endpoint.length() == 0)
     	{
     		Util.informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
     		return;

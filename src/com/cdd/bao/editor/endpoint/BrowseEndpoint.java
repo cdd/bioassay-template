@@ -47,7 +47,7 @@ public class BrowseEndpoint
     private SplitPane splitter;
     private TreeView<Branch> treeView;
     private TreeItem<Branch> treeRoot;
-    //private DetailPane detail;
+    private DisplaySchema display;
     
     private MenuBar menuBar;
     //private Menu menuFile, menuEdit, menuValue, menuView;
@@ -57,16 +57,17 @@ public class BrowseEndpoint
     // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
     public static final class Branch
     {
-    	public Schema template = null;
+    	public Schema schema = null;
     	public Schema.Assay assay = null;
 
 		public Branch() {}
-    	public Branch(Schema template)
+    	public Branch(Schema schema)
     	{
-    		this.template = template;
+    		this.schema = schema;
     	}
-    	public Branch(Schema.Assay assay)
+    	public Branch(Schema schema, Schema.Assay assay)
     	{
+    		this.schema = schema;
     		this.assay = assay;
     	}
     }
@@ -118,12 +119,13 @@ public class BrowseEndpoint
 		});	
 		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
 		*/
+		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldval, newval) -> {changeValue(newval.getValue());});
 
-		//detail = new DetailPane(this);
+		display = new DisplaySchema();
 
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
 		sp1.getChildren().add(treeView);
-		sp2.getChildren().add(new Label("fnord!"));
+		sp2.getChildren().add(display);
 		
 		splitter = new SplitPane();
 		splitter.setOrientation(Orientation.HORIZONTAL);
@@ -139,11 +141,6 @@ public class BrowseEndpoint
 		stage.setScene(scene);
 		
 		treeView.setShowRoot(false);
-		/* !! fetch assays...
-		treeRoot.getChildren().add(treeTemplate = new TreeItem<Branch>(new Branch("Template")));
-		treeRoot.getChildren().add(treeAssays = new TreeItem<Branch>(new Branch("Assays")));
-		treeTemplate.setExpanded(true);
-		treeAssays.setExpanded(true);*/
 		
 		rebuildTree();
 
@@ -223,12 +220,13 @@ public class BrowseEndpoint
 		for (int n = 0; n < schemaList.length; n++)
 		{
 			TreeItem<Branch> item = new TreeItem<>(new Branch(schemaList[n]));
+			item.setExpanded(true);
 			treeRoot.getChildren().add(item);
 			
 			for (int i = 0; i < schemaList[n].numAssays(); i++)
 			{
 				Schema.Assay assay = schemaList[n].getAssay(i);
-				item.getChildren().add(new TreeItem<Branch>(new Branch(assay)));
+				item.getChildren().add(new TreeItem<Branch>(new Branch(schemaList[n], assay)));
 			}
 		}
 		
@@ -369,6 +367,11 @@ public class BrowseEndpoint
 	{
 		pullDetail();
 	}*/
+	
+	private void changeValue(Branch branch)
+	{
+		if (branch.assay == null) display.setTemplate(branch.schema); else display.setAssay(branch.schema, branch.assay);
+	}
 
 	// fires up a thread that pulls the list of assays from the SPARQL endpoint
 	private void backgroundLoadTemplates()
@@ -381,8 +384,12 @@ public class BrowseEndpoint
 			
 			for (int n = 0; n < rootURI.length; n++) 
 			{
-				schemaList[n] = endpoint.fetchTemplate(rootURI[n]);
+				schemaList[n] = endpoint.obtainTemplate(rootURI[n]);
+				
+				String[] assayURI = endpoint.enumerateAssays(rootURI[n]);
+				for (String uri : assayURI) endpoint.obtainAssay(schemaList[n], uri);
 			}
+			Arrays.sort(schemaList, (v1, v2) -> v1.getRoot().name.compareTo(v2.getRoot().name));
 			
 			Platform.runLater(() -> 
 			{
