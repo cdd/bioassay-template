@@ -102,21 +102,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
                 setText(label);
                 setGraphic(getTreeItem().getGraphic());
                 setupContextMenu(branch);
-/*
-		TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-            MenuItem addMenuItem = new MenuItem("Fnord!");
-            ContextMenu ctx = new ContextMenu();
-            ctx.getItems().add(addMenuItem);
-            addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-            {
-                public void handle(ActionEvent t)
-                {
-                	Util.writeln("--> FNORD!");
-                }
-            });
-            
-            setContextMenu(ctx);
-*/
             }
 	    }
     }
@@ -124,8 +109,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
     private void setupContextMenu(EditSchema.Branch branch)
     {   	
         ContextMenu ctx = new ContextMenu();
-        //MenuItem addMenuItem = new MenuItem("Fnord!");
-        //ctx.getItems().add(addMenuItem);
 
 		if (branch.group != null) addMenu(ctx, "Add _Group").setOnAction(event -> branch.owner.actionGroupAdd());
 		if (branch.group != null) addMenu(ctx, "Add _Assignment").setOnAction(event -> branch.owner.actionAssignmentAdd());

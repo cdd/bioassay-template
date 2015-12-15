@@ -565,7 +565,7 @@ public class DetailPane extends ScrollPane
 					}
 				}
 				String title = indstr + assn.name + ":";
-				appendAnnotationWidgets(title, assn, matches.toArray(new Schema.Annotation[matches.size()]), indices.toArray(new Integer[indices.size()]));
+				appendAnnotationWidgets(title, assn, matches.toArray(new Schema.Annotation[matches.size()]), indices.toArray(new Integer[indices.size()]), false);
 			}
 			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
 		}
@@ -583,13 +583,13 @@ public class DetailPane extends ScrollPane
 				String title = annot.assn.name + ":";
 				for (Schema.Group p = annot.assn.parent; p != null; p = p.parent) title = p.name + " / " + title;
 				
-				appendAnnotationWidgets(title, null, new Schema.Annotation[]{annot}, new Integer[]{orphidx.get(n)});
+				appendAnnotationWidgets(title, null, new Schema.Annotation[]{annot}, new Integer[]{orphidx.get(n)}, true);
 			}
 		}
 	}
 
 	// creates a single annotation entry line; the assignment or annotation may be blank, not not both
-	private void appendAnnotationWidgets(String title, Schema.Assignment assn, Schema.Annotation[] annots, Integer[] indices)
+	private void appendAnnotationWidgets(String title, Schema.Assignment assn, Schema.Annotation[] annots, Integer[] indices, boolean orphan)
 	{
 		AnnotWidgets aw = new AnnotWidgets();
 		aw.line = new Lineup(PADDING);
@@ -598,7 +598,7 @@ public class DetailPane extends ScrollPane
 		final int nbtn = Math.max(1, annots.length);
 		aw.buttonShow = new Button[nbtn];
 		for (int n = 0; n < nbtn; n++) aw.buttonShow[n] = new Button();
-		if (annots.length > 0) 
+		if (annots.length > 0 && !orphan) 
 		{
 			aw.buttonAdd = new Button("+");
 			aw.buttonAdd.setOnAction(event -> pressedAnnotationButton(aw.sourceAssn, -1));
@@ -610,7 +610,7 @@ public class DetailPane extends ScrollPane
 		{
     		aw.buttonShow[n].setPrefWidth(300);
     		aw.buttonShow[n].setMaxWidth(Double.MAX_VALUE);
-    		Region row = annots.length == 0 || n < nbtn - 1 ? aw.buttonShow[n] : RowLine.pair(PADDING, aw.buttonShow[n], 1, aw.buttonAdd, 0);
+    		Region row = orphan || annots.length == 0 || n < nbtn - 1 ? aw.buttonShow[n] : RowLine.pair(PADDING, aw.buttonShow[n], 1, aw.buttonAdd, 0);
     		aw.line.add(row, n == 0 ? title : null, 1, 0);
 
 			final int idx = n < indices.length ? indices[n] : -1;
@@ -665,8 +665,7 @@ public class DetailPane extends ScrollPane
 		// orphan annotations: clicking deletes
 		if (assn == null)
 		{
-			schema.deleteAssay(idx);
-
+			modAssay.annotations.remove(idx);
         	main.updateBranchAssay(modAssay);
         	recreateAssay();
 			return;

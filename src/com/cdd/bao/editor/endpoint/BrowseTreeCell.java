@@ -69,41 +69,31 @@ public final class BrowseTreeCell extends TreeCell<BrowseEndpoint.Branch>
 				setStyle(style);
                 setText(label);
                 setGraphic(getTreeItem().getGraphic());
-                setupContextMenu();
-/*
-		TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-            MenuItem addMenuItem = new MenuItem("Fnord!");
-            ContextMenu ctx = new ContextMenu();
-            ctx.getItems().add(addMenuItem);
-            addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-            {
-                public void handle(ActionEvent t)
-                {
-                	Util.writeln("--> FNORD!");
-                }
-            });
-            
-            setContextMenu(ctx);
-*/
+                setupContextMenu(branch);
             }
 	    }
     }
 
-    private void setupContextMenu()
+    private void setupContextMenu(BrowseEndpoint.Branch branch)
     {
-    	TreeItem<BrowseEndpoint.Branch> item = getTreeView().getSelectionModel().getSelectedItem();
-        MenuItem addMenuItem = new MenuItem("Fnord!");
         ContextMenu ctx = new ContextMenu();
-        ctx.getItems().add(addMenuItem);
-        addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent t)
-            {
-            	Util.writeln("--> FNORD!");
-            }
-        });
-        
-        setContextMenu(ctx);
+
+		if (branch.schema != null && branch.assay == null)
+		{
+    		addMenu(ctx, "_Open").setOnAction(event -> branch.owner.actionOpen());
+		}
+		else if (branch.assay != null)
+		{
+    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionCopy());
+		}
+
+        if (ctx.getItems().size() > 0) setContextMenu(ctx);
+    }
+    private MenuItem addMenu(ContextMenu parent, String title)
+    {
+    	MenuItem item = new MenuItem(title);
+    	parent.getItems().add(item);
+    	return item;
     }
 
 	private String getString() 

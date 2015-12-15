@@ -57,16 +57,22 @@ public class BrowseEndpoint
     // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
     public static final class Branch
     {
+    	public BrowseEndpoint owner;
     	public Schema schema = null;
     	public Schema.Assay assay = null;
 
-		public Branch() {}
-    	public Branch(Schema schema)
+		public Branch(BrowseEndpoint owner) 
+		{
+			this.owner = owner;
+		}
+    	public Branch(BrowseEndpoint owner, Schema schema)
     	{
+			this.owner = owner;
     		this.schema = schema;
     	}
-    	public Branch(Schema schema, Schema.Assay assay)
+    	public Branch(BrowseEndpoint owner, Schema schema, Schema.Assay assay)
     	{
+			this.owner = owner;
     		this.schema = schema;
     		this.assay = assay;
     	}
@@ -88,7 +94,7 @@ public class BrowseEndpoint
 		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
 		createMenuItems();*/
 
-		treeRoot = new TreeItem<Branch>(new Branch());
+		treeRoot = new TreeItem<Branch>(new Branch(this));
 		treeView = new TreeView<Branch>(treeRoot);
 		treeView.setEditable(true);
 		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
@@ -219,154 +225,31 @@ public class BrowseEndpoint
 		
 		for (int n = 0; n < schemaList.length; n++)
 		{
-			TreeItem<Branch> item = new TreeItem<>(new Branch(schemaList[n]));
+			TreeItem<Branch> item = new TreeItem<>(new Branch(this, schemaList[n]));
 			item.setExpanded(true);
 			treeRoot.getChildren().add(item);
 			
 			for (int i = 0; i < schemaList[n].numAssays(); i++)
 			{
 				Schema.Assay assay = schemaList[n].getAssay(i);
-				item.getChildren().add(new TreeItem<Branch>(new Branch(schemaList[n], assay)));
+				item.getChildren().add(new TreeItem<Branch>(new Branch(this, schemaList[n], assay)));
 			}
 		}
 		
 		currentlyRebuilding = false;
 	}
 
-	// convenience for tree selection
-	/*public TreeItem<Branch> currentBranch() {return treeView.getSelectionModel().getSelectedItem();}
+	public TreeItem<Branch> currentBranch() {return treeView.getSelectionModel().getSelectedItem();}
+	public Branch currentBranchValue()
+	{
+		TreeItem<Branch> item = currentBranch();
+		return item == null ? null : item.getValue();
+	}
 	public void setCurrentBranch(TreeItem<Branch> branch) 
 	{
 		treeView.getSelectionModel().select(branch);
 		treeView.scrollTo(treeView.getRow(branch));
 	}
-	public String currentLocatorID()
-	{
-		TreeItem<Branch> branch = currentBranch();
-		return branch == null ? null : branch.getValue().locatorID;
-	}
-	public TreeItem<Branch> locateBranch(String locatorID)
-	{
-		List<TreeItem<Branch>> stack = new ArrayList<>();
-		stack.add(treeRoot);
-		while (stack.size() > 0)
-		{
-			TreeItem<Branch> item = stack.remove(0);
-			String lookID = item.getValue().locatorID;
-			if (lookID != null && lookID.equals(locatorID)) return item;
-			for (TreeItem<Branch> sub : item.getChildren()) stack.add(sub);
-		}
-		return null;
-	}
-	public void clearSelection()
-	{
-		detail.clearContent();
-		treeView.getSelectionModel().clearSelection();
-	}
-
-	// for the given branch, pulls out the content: if any changes have been made, pushes the modified schema onto the stack
-	private void pullDetail() {pullDetail(currentBranch());}
-	private void pullDetail(TreeItem<Branch> item)
-	{
-		if (currentlyRebuilding || item == null) return;
-		Branch branch = item.getValue();
-
-		if (branch.group != null)
-		{
-			// if root, check prefix first
-			String prefix = detail.extractPrefix();
-			if (prefix != null)
-			{
-				prefix = prefix.trim();
-				if (!prefix.endsWith("#")) prefix += "#";
-				if (!stack.peekSchema().getSchemaPrefix().equals(prefix))
-				{
-    				try {new URI(prefix);}
-    				catch (Exception ex)
-    				{
-    					//informMessage("Invalid URI", "Prefix is not a valid URI: " + prefix);
-    					return;
-    				}
-    				Schema schema = stack.getSchema();
-    				schema.setSchemaPrefix(prefix);
-    				stack.setSchema(schema);
-				}
-			}
-			
-			// then handle the group content
-			Schema.Group modGroup = detail.extractGroup();
-			if (modGroup == null) return;
-
-			Schema schema = stack.getSchema();
-			if (branch.group.parent != null)
-			{
-				// reparent the modified group, then swap it out in the parent's child list
-				Schema.Group replGroup = schema.obtainGroup(branch.locatorID);
-				modGroup.parent = replGroup.parent;
-				int idx = replGroup.parent.subGroups.indexOf(replGroup);
-				replGroup.parent.subGroups.set(idx, modGroup);
-			}
-			else schema.setRoot(modGroup);
-			
-			branch.group = modGroup;
-			stack.changeSchema(schema, true);
-			
-			item.setValue(new Branch());
-			item.setValue(branch); // triggers redraw
-		}
-		else if (branch.assignment != null)
-		{
-			Schema.Assignment modAssn = detail.extractAssignment();
-			if (modAssn == null) return;
-			
-			Schema schema = stack.getSchema();
-			
-			// reparent the modified assignment, then swap it out in the parent's child list
-			Schema.Assignment replAssn = schema.obtainAssignment(branch.locatorID);
-			modAssn.parent = replAssn.parent;
-			int idx = replAssn.parent.assignments.indexOf(replAssn);
-			replAssn.parent.assignments.set(idx, modAssn);
-			
-			branch.assignment = modAssn;
-			stack.changeSchema(schema, true);
-			
-			item.setValue(new Branch());
-			item.setValue(branch); // triggers redraw
-		}
-		else if (branch.assay != null)
-		{
-			Schema.Assay modAssay = detail.extractAssay();
-			if (modAssay == null) return;
-			
-			Schema schema = stack.getSchema();
-
-			int idx = schema.indexOfAssay(branch.locatorID);
-			schema.setAssay(idx, modAssay);
-			branch.assay = modAssay;
-			stack.changeSchema(schema, true);
-			
-			item.setValue(new Branch());
-			item.setValue(branch); // triggers redraw
-		}
-	}
-
-	// recreates all the widgets in the detail view, given that the indicated branch has been selected
-	private void pushDetail(TreeItem<Branch> item)
-	{
-		if (currentlyRebuilding || item == null) return;
-		Branch branch = item.getValue();
-
-		if (branch.group != null) detail.setGroup(stack.peekSchema(), branch.group);
-		else if (branch.assignment != null) detail.setAssignment(stack.peekSchema(), branch.assignment);
-		else if (branch.assay != null) detail.setAssay(stack.peekSchema(), branch.assay);
-		else detail.clearContent();
-	}
-
-	// in case the detail has changed, update the main part of the tree
-	private void maybeUpdateTree()
-	{
-		pullDetail();
-	}*/
 	
 	private void changeValue(Branch branch)
 	{
@@ -405,6 +288,36 @@ public class BrowseEndpoint
 	}
 	
 	// ------------ action responses ------------	
-	
 
+	public void actionOpen()
+	{
+		Branch branch = currentBranchValue();
+		if (branch == null || branch.schema == null) return;
+
+		Stage stage = new Stage();
+		EditSchema edit = new EditSchema(stage);
+		edit.loadFile(null, branch.schema);
+		stage.show();
+	}
+	
+	public void actionCopy()
+	{
+		Branch branch = currentBranchValue();
+		if (branch == null || branch.assay == null) return;
+		
+		JSONObject json = ClipboardSchema.composeAssay(branch.assay);
+		
+		String serial = null;
+		try {serial = json.toString(2);}
+		catch (JSONException ex) {return;}
+		
+		ClipboardContent content = new ClipboardContent();
+		content.putString(serial);
+		if (!Clipboard.getSystemClipboard().setContent(content))
+		{
+			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			return;
+		}
+		
+	}
 }
