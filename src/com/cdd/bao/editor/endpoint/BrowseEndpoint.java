@@ -157,7 +157,7 @@ public class BrowseEndpoint
 			if (!confirmClose()) event.consume();
 		});*/
 		
-		new Thread(() -> backgroundLoadTemplates()).run();
+		new Thread(() -> backgroundLoadTemplates()).start();
  	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}

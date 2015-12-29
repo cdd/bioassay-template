@@ -50,6 +50,7 @@ public class EditSchema
     
     private MenuBar menuBar;
     private Menu menuFile, menuEdit, menuValue, menuView;
+    private CheckMenuItem menuViewSummary;
     
     private boolean currentlyRebuilding = false;
     
@@ -342,6 +343,7 @@ public class EditSchema
 		addMenu(menuValue, "_Sort Values", null).setOnAction(event -> actionValueSort());
 		addMenu(menuValue, "_Remove Duplicates", null).setOnAction(event -> actionValueDuplicates());
 
+		(menuViewSummary = addCheckMenu(menuView, "_Summary Values", new KeyCharacterCombination("-", cmd))).setOnAction(event -> actionViewToggleSummary());
     	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
     	addMenu(menuView, "_Assays", new KeyCharacterCombination("2", cmd)).setOnAction(event -> actionViewAssays());
     }
@@ -349,6 +351,13 @@ public class EditSchema
     private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
     {
     	MenuItem item = new MenuItem(title);
+    	parent.getItems().add(item);
+    	if (accel != null) item.setAccelerator(accel);
+    	return item;
+    }
+    private CheckMenuItem addCheckMenu(Menu parent, String title, KeyCombination accel)
+    {
+    	CheckMenuItem item = new CheckMenuItem(title);
     	parent.getItems().add(item);
     	if (accel != null) item.setAccelerator(accel);
     	return item;
@@ -1028,6 +1037,12 @@ public class EditSchema
 		setCurrentBranch(locateBranch(branch.locatorID));
 		
 		Util.informMessage("Remove Duplicate Values", "Number of values removed because of duplicated URI values: " + snippy);
+    }
+    private void actionViewToggleSummary()
+    {
+    	pullDetail();
+    	detail.setSummaryView(!detail.getSummaryView());
+	   	menuViewSummary.setSelected(detail.getSummaryView());
     }
     public void actionViewTemplate()
     {

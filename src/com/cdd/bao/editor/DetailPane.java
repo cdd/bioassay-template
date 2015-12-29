@@ -42,6 +42,8 @@ public class DetailPane extends ScrollPane
 	private Schema.Assignment assignment = null;
 	private Schema.Assay assay = null;
 
+	private boolean isSummaryView;
+
 	private final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
@@ -130,6 +132,14 @@ public class DetailPane extends ScrollPane
 	public boolean isAssignment() {return assignment != null;}
 	public boolean isAssay() {return assay != null;}
 	
+	// summary toggle: displays how views are displayed
+	public boolean getSummaryView() {return isSummaryView;}
+	public void setSummaryView(boolean flag)
+	{
+		isSummaryView = flag;
+		if (isAssignment()) recreateAssignment();
+	}
+	
 	// fetches the current version of the editing prefix (unlike below, does not check for changed)
 	public String extractPrefix()
 	{
@@ -155,11 +165,18 @@ public class DetailPane extends ScrollPane
 		Schema.Assignment mod = new Schema.Assignment(null, fieldName.getText(), fieldURI.getText());
 		mod.descr = fieldDescr.getText();
 		
-		for (ValueWidgets vw : valueList)
+		if (isSummaryView)
 		{
-			Schema.Value val = new Schema.Value(vw.fieldURI.getText(), vw.fieldName.getText());
-			val.descr = vw.fieldDescr.getText();
-			mod.values.add(val);
+			for (Schema.Value val : assignment.values) mod.values.add(val.clone());
+		}
+		else
+		{
+    		for (ValueWidgets vw : valueList)
+    		{
+    			Schema.Value val = new Schema.Value(vw.fieldURI.getText(), vw.fieldName.getText());
+    			val.descr = vw.fieldDescr.getText();
+    			mod.values.add(val);
+    		}
 		}
 		
 		if (assignment.equals(mod)) return null;
@@ -427,6 +444,29 @@ public class DetailPane extends ScrollPane
 		vbox.getChildren().add(heading);		
 
 		valueList.clear();
+		if (isSummaryView) recreateAssignmentSummary(); else recreateAssignmentFull();
+	}
+	private void recreateAssignmentSummary()
+	{
+		for (int n = 0; n < assignment.values.size(); n++)
+		{
+			Schema.Value val = assignment.values.get(n);
+			
+			Label label = new Label(val.name);
+			label.setStyle("-fx-font-style: italic; -fx-padding: 0.1em 0.1em 0.1em 0.1em; -fx-text-fill: black; -fx-border-color: #808080; -fx-background-color: #F0F0F0;");
+
+			String descr = val.uri;
+			if (val.descr.length() > 0) descr += "\n\n" + val.descr;
+            Tooltip tip = new Tooltip(descr);
+            tip.setWrapText(true);
+            tip.setMaxWidth(400);
+			Tooltip.install(label, tip);
+
+			vbox.getChildren().add(label);
+		}
+	}
+	private void recreateAssignmentFull()	
+	{
 		for (int n = 0; n < assignment.values.size(); n++)
 		{
 			Schema.Value val = assignment.values.get(n);
