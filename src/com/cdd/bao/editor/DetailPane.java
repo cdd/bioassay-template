@@ -196,10 +196,24 @@ public class DetailPane extends ScrollPane
 			for (Schema.Annotation annot : aw.sourceAnnot) mod.annotations.add(annot.clone());
 		}
 
+		// this is rather awkward: keep the new annotation order the same as the original, otherwise it causes problems
+		int watermark = assay.annotations.size();
+		Map<Schema.Annotation, Integer> order = new HashMap<>();
+		for (int i = 0; i < mod.annotations.size(); i++)
+		{
+			Schema.Annotation annot = mod.annotations.get(i);
+			int idx = -1;
+			for (int j = 0; j < assay.annotations.size(); j++) if (assay.annotations.get(j).equals(annot)) {idx = j; break;}
+			order.put(annot, idx >= 0 ? idx : watermark++);
+		}
+		mod.annotations.sort((v1, v2) ->
+		{
+			int i1 = order.get(v1), i2 = order.get(v2);
+			if (i1 < i2) return -1; else if (i1 > i2) return 1; else return 0;
+		});
+
 		if (assay.equals(mod)) return null;
-		
-		assay = mod; // (makes sure that the next call will claim nothing happened; is this valid?)
-		
+		//assay = mod; // (makes sure that the next call will claim nothing happened; is this valid?)
 		return mod;
 	}
 
@@ -700,8 +714,19 @@ public class DetailPane extends ScrollPane
 	private void pressedAnnotationButton(Schema.Assignment assn, int idx)
 	{
     	Schema.Assay modAssay = extractAssay();
+    	
+    	/* actually no...
+    	// need to rediscover the index: modAssay is often in a different order
+    	if (idx >= 0 && modAssay != null)
+    	{
+    		int midx = -1;
+    		Schema.Annotation annot = assay.annotations.get(idx);
+    		for (int n = 0; n < modAssay.annotations.size(); n++) if (modAssay.annotations.get(n).equals(annot)) {midx = n; break;}
+    		if (midx >= 0) idx = midx;
+    	}*/
+    	
     	if (modAssay == null) modAssay = assay.clone();
-
+    	
 		// orphan annotations: clicking deletes
 		if (assn == null)
 		{

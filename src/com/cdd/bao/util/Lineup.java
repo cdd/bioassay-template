@@ -184,7 +184,6 @@ public class Lineup extends Pane
 	protected void layoutChildren()
 	{
 		double width = getWidth(), height = getHeight();
-		//Util.writeln("WH:"+w+","+h);
 		
 		int totalStretch = 0, stretchPoints = (int)Math.floor(height - computePrefHeight(width));
 		if (stretchPoints > 0) for (Unit u : content) totalStretch += u.stretchY;
@@ -206,16 +205,20 @@ public class Lineup extends Pane
 				h += extra;
 				residual -= extra;
 			}
+			double baselineLabel = u.label == null ? Double.NEGATIVE_INFINITY : u.label.getBaselineOffset();
+			double baselineWidget = u.widget == null ? Double.NEGATIVE_INFINITY : u.widget.getBaselineOffset();
 			if (u.label != null)
 			{
-				int ly = y;
-				if (u.widget != null && th < wh) ly += (int)(u.widget.getBaselineOffset() - u.label.getBaselineOffset());	
-				layoutInArea(u.label, margin, ly, tw, h, 0, Insets.EMPTY, HPos.LEFT, VPos.TOP);
+				int ty = y;
+				if (Double.isInfinite(baselineWidget)) ty += (int)(0.5f * (h - th));
+				else if (u.widget != null && th < wh) ty += (int)(baselineWidget - baselineLabel);	
+				layoutInArea(u.label, margin, ty, tw, h, 0, Insets.EMPTY, HPos.LEFT, VPos.TOP);
 			}
 			if (u.widget != null)
 			{
 				int wy = y;
-				if (u.label != null && wh < th) wy += (int)(u.label.getBaselineOffset() - u.widget.getBaselineOffset());
+				if (Double.isInfinite(baselineWidget)) wy += (int)(0.5f * (h - wh));
+				else if (u.label != null && wh < th) wy += (int)(baselineLabel - baselineWidget);
 				double w = u.stretchX == 0 ? Math.min(cw, u.widget.prefWidth(h)) : cw;
 				layoutInArea(u.widget, margin + tw, wy, w, h, 0, Insets.EMPTY, HPos.LEFT, VPos.TOP);
 			}
