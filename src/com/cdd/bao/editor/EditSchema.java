@@ -266,8 +266,13 @@ public class EditSchema
 	{
 		if (modAssay == null) return;
 		TreeItem<Branch> item = currentBranch();
-		if (item == null || item.getValue() == null) return;
-		updateBranchAssay(item.getValue(), modAssay);
+		if (item == null) return;
+		Branch branch = item.getValue();
+		if (branch == null) return;
+		updateBranchAssay(branch, modAssay);
+
+		item.setValue(new Branch(this));
+		item.setValue(branch); // triggers redraw
 	}
 	public void updateBranchAssay(Branch branch, Schema.Assay modAssay)
 	{
@@ -952,8 +957,7 @@ public class EditSchema
     {
     	TreeItem<Branch> item = currentBranch();
     	Branch branch = item == null ? null : item.getValue();
-    	// TODO: assay...
-    	if (item == treeRoot || branch == null || (branch.group == null && branch.assignment == null)) return;
+    	if (item == treeRoot || branch == null || (branch.group == null && branch.assignment == null && branch.assay == null)) return;
     	
     	pullDetail();
     	Schema schema = stack.getSchema();
@@ -964,11 +968,17 @@ public class EditSchema
     		schema.moveGroup(group, dir);
     		newLocator = schema.locatorID(group);
     	}
-    	if (branch.assignment != null)
+    	else if (branch.assignment != null)
     	{
     		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
     		schema.moveAssignment(assn, dir);
     		newLocator = schema.locatorID(assn);
+    	}
+    	else if (branch.assay != null)
+    	{
+    		Schema.Assay assay = schema.obtainAssay(branch.locatorID);
+    		schema.moveAssay(assay, dir);
+    		newLocator = schema.locatorID(assay);
     	}
     	stack.changeSchema(schema);
     	rebuildTree();

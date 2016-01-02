@@ -15,10 +15,14 @@ import java.util.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
+/*
+ * 	One off functionality: prepares a schema from externally organised data; used to prepare the starting point, but is no longer part of a workflow.
+*/
+
 public class PrepareTemplate
 {
 	private String cwd = System.getProperty("user.dir");
-	private Map<String,String[]> categories = new TreeMap<String,String[]>(); // category URI -> list of corresponding values
+	private Map<String, String[]> categories = new TreeMap<String, String[]>(); // category URI -> list of corresponding values
 	private Set<String> termsUsed = new HashSet<String>(); // URIs that are covered in priority set
 
 	private Vocabulary vocab = null;

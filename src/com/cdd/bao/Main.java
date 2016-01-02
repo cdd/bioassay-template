@@ -32,6 +32,16 @@ public class Main
 		
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
 		else if (argv[0].equals("prepare")) new PrepareTemplate().exec();
+		else if (argv[0].equals("pubchem")) 
+		{
+			try
+			{
+				PrepareSchemaAnnotations prep = new PrepareSchemaAnnotations(argv[1]);
+				prep.appendPubChemFiles(argv[3]);
+				prep.writeSchema(argv[2]);
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else if (argv[0].equals("edit")) 
 		{
 			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
@@ -49,6 +59,7 @@ public class Main
 		Util.writeln("BioAssay Ontology Annotator Tools");
 		Util.writeln("Options:");
 		Util.writeln("    prepare");
+		Util.writeln("    pubchem {inschema} {outschema} {pubchemdir}");
 		Util.writeln("    edit {files...}");
 	}
 }

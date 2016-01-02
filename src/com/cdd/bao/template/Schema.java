@@ -486,6 +486,24 @@ public class Schema
 			list.set(idx + 1, a1);
 		}
 	}
+	public void moveAssay(Assay assay, int dir)
+	{
+		int idx = assays.indexOf(assay);
+		if (dir < 0)
+		{
+			if (idx == 0) return;
+			Assay a1 = assays.get(idx), a2 = assays.get(idx - 1);
+			assays.set(idx, a2);
+			assays.set(idx - 1, a1);
+		}
+		else if (dir > 0)
+		{
+			if (idx >= assays.size() - 1) return;
+			Assay a1 = assays.get(idx), a2 = assays.get(idx + 1);
+			assays.set(idx, a2);
+			assays.set(idx + 1, a1);
+		}
+	}
 	
 	// returns a set containing every URI mentioned in the template
 	public Set<String> gatherAllURI()
