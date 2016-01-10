@@ -303,6 +303,7 @@ public class EditSchema
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
     	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+    	addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
@@ -628,6 +629,56 @@ public class EditSchema
 			Util.informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
 	}
+	public void actionFileMerge()
+	{
+        FileChooser chooser = new FileChooser();
+    	chooser.setTitle("Merge Schema");
+    	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
+    	
+    	File file = chooser.showOpenDialog(stage);
+		if (file == null) return;
+		
+		Schema addSchema = null;
+		try {addSchema = ModelSchema.deserialise(file);}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
+			Util.informWarning("Merge", "Failed to parse file: is it a valid schema?");
+			return;
+		}
+		
+		List<String> log = new ArrayList<>();
+		Schema merged = ClipboardSchema.mergeSchema(stack.getSchema(), addSchema, log);
+		if (log.size() == 0)
+		{
+			Util.informMessage("Merge", "The merge file is the same: no action.");
+			return;
+		}
+	
+		String text = String.join("\n", log);
+		Dialog<Boolean> confirm = new Dialog<>();
+		confirm.setTitle("Confirm Merge Modifications");
+		
+		TextArea area = new TextArea(text);
+		area.setWrapText(true);
+		area.setPrefWidth(700);
+		area.setPrefHeight(500);
+		confirm.getDialogPane().setContent(area);
+		
+		ButtonType btnApply = new ButtonType("Apply", ButtonBar.ButtonData.OK_DONE);
+		confirm.getDialogPane().getButtonTypes().addAll(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE), btnApply);
+		confirm.setResultConverter(buttonType ->
+		{
+			if (buttonType == btnApply) return true;
+			return null;
+		});
+
+		Optional<Boolean> result = confirm.showAndWait();
+		if (!result.isPresent() || result.get() != true) return;
+
+		stack.changeSchema(merged, true);
+		rebuildTree();
+	}
 	public void actionFilePubChem()
 	{
 		Schema schema = stack.getSchema();
@@ -641,6 +692,7 @@ public class EditSchema
 		schema.appendAssay(newAssay);
 		stack.changeSchema(schema);
 		
+		updateTitle();
 		rebuildTree();
 		setCurrentBranch(locateBranch(schema.locatorID(newAssay)));
 	}

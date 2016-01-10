@@ -7,6 +7,7 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.*;
+import com.cdd.bao.util.*;
 import com.cdd.bao.template.*;
 
 import java.io.*;
@@ -96,6 +97,86 @@ public class ClipboardSchema
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	// starts with schema1, and adds in content from schema2, which includes assignments, values and assays; makes a reasonable effort to avoid duplicating;
+	// returns a new schema that contains the merged content; the log parameter contains a list of strings that describe each modification; if nothing was
+	// added, then no items will be added to the list
+	public static Schema mergeSchema(Schema schema, Schema extra, List<String> log)
+	{
+		schema = schema.clone();
+		
+		List<Schema.Group> stack = new ArrayList<>();
+		stack.add(extra.getRoot());
+		while (stack.size() > 0)
+		{
+			Schema.Group grp = stack.remove(0);
+			for (int n = 0; n < grp.subGroups.size(); n++) stack.add(n, grp.subGroups.get(n));
+			
+			Schema.Group dstgrp = schema.findGroup(grp);
+			if (dstgrp == null)
+			{
+				Schema.Group parent = schema.findGroup(grp.parent);
+				dstgrp = new Schema.Group(parent, grp.name);
+				dstgrp.descr = grp.descr;
+				parent.subGroups.add(dstgrp);
+				log.add("Added new group: [" + grp.name + "]");
+			}
+			
+			for (Schema.Assignment assn : grp.assignments)
+			{
+				Schema.Assignment dstassn = schema.findAssignment(assn);
+				if (dstassn == null)
+				{
+					dstassn = assn.clone();
+					dstassn.parent = dstgrp;
+					dstgrp.assignments.add(dstassn);
+					log.add("Added new assignment: [" + assn.name + "]");
+				}
+				
+				gotval: for (Schema.Value val : assn.values)
+				{
+					for (Schema.Value dstval : dstassn.values) if (val.equals(dstval)) continue gotval;
+					dstassn.values.add(val);
+					
+					if (val.uri.length() > 0) 
+						log.add("Assignment [" + assn.name + "] added new value <" + val.uri + ">: [" + val.name + "]");
+					else
+						log.add("Assignment [" + assn.name + "] added new literal \"" + val.name + "\"");
+				}
+			}
+		}
+		
+		gotassay: for (int n = 0; n < extra.numAssays(); n++)
+		{
+			Schema.Assay assay = extra.getAssay(n);
+			if (assay.annotations.size() == 0) continue;
+			
+			for (int i = 0; i < schema.numAssays(); i++)
+			{
+				Schema.Assay dstass = schema.getAssay(i);
+				if (!assay.name.equals(dstass.name)) continue;
+				if (assay.equals(dstass)) continue gotassay;
+				
+				if (dstass.annotations.size() == 0)
+				{
+					schema.setAssay(i, assay.clone());
+					log.add("Assay [" + assay.name + "]: replaced blank entry");
+					continue gotassay;
+				}
+				else if (!assay.equals(dstass))
+				{
+					schema.insertAssay(i + 1, assay.clone());
+					log.add("Assay [" + assay.name + "]: inserted different version");
+					continue gotassay;
+				}
+			}
+			
+			schema.appendAssay(assay.clone());
+			log.add("Added new assay [" + assay.name + "]");
+		}
+		
+		return schema;
 	}
 	
 	// ------------ private methods ------------	

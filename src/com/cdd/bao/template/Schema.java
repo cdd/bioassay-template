@@ -108,7 +108,7 @@ public class Schema
 	// a "value" consists of a URI (in the case of references to a known resource), and descriptive text; an assignment typically has many of these
 	public static final class Value
 	{
-		public String uri; // mapping to a URI in the BAO or related ontology; if null, is literal
+		public String uri; // mapping to a URI in the BAO or related ontology; if blank, is literal
 		public String name; // short label for the value; if no URI, this is the literal to use
 		public String descr = ""; // longer description
 		
@@ -156,7 +156,12 @@ public class Schema
 		{
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
 			if (annotations.size() != other.annotations.size()) return false;
-			for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
+
+			// doesn't work: sort order is random 
+			//for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
+			Set<String> akeys = new HashSet<>();
+			for (Annotation annot : annotations) akeys.add(annot.keyString());
+			for (Annotation annot : other.annotations) if (!akeys.contains(annot.keyString())) return false;
 			
 			return true;
 		}
@@ -204,6 +209,17 @@ public class Schema
 			else if (value != null && other.value == null) return false;
 			else if (value == null && other.value != null) return false;
 			return value.equals(other.value);
+		}
+		
+		// returns a string that represents the entire content: can be used for uniqueness/sorting (more or less)
+		public String keyString()
+		{
+			StringBuffer buff = new StringBuffer();
+			buff.append(assn.name + "\n");
+			for (Group g = assn.parent; g != null; g = g.parent) buff.append(g.name + "\n");
+			if (value != null) buff.append(value.uri + "\n" + value.name + "\n" + value.descr + "\n");
+			if (literal != null) buff.append(literal + "\n");
+			return buff.toString();
 		}
 		
 		// clones the assignment, and re-manufactures the whole branch, except makes it linear: the parent group sequence will therefore check out, in terms of being able to 
@@ -362,10 +378,46 @@ public class Schema
 		return idx < 0 ? null : assays.get(idx);
 	}
 	
-	// given an annotation, which carries its own cloned "linear branch" as baggage, matches this sequence to the current group hierarchy
+	// given information about the [group -> group -> assignment] sequence, using objects that are taken from some other schema, tries to match
+	// the hierarchy in this schema and returns the matching object, if any
+	public Group findGroup(Group grp)
+	{
+		if (grp.parent == null) return root;
+		
+		List<Group> fakeGroups = new ArrayList<>();
+		for (Group p = grp; p != null && p.parent != null; p = p.parent) fakeGroups.add(0, p);
+
+		// drill down the sequence of groups, until "look" is defined to be the matching group that should contain the assignment; in this way any
+		// assignment that has an exact named hierarchy match is considered to be a hit
+		Group look = root;
+		descend: while (fakeGroups.size() > 0)
+		{
+			Group fake = fakeGroups.remove(0);
+			for (Group g : look.subGroups) if (g.name.equals(fake.name))
+			{
+				look = g;
+				continue descend;
+			}
+			look = null;
+			break;
+		}
+		
+		return look;
+	}
+	public Assignment findAssignment(Assignment assn)
+	{
+		Group grp = findGroup(assn.parent);
+		if (grp == null) return null;
+		for (Assignment look : grp.assignments)
+		{
+			if (assn.name.equals(look.name) && assn.propURI.equals(look.propURI)) return look;
+		}
+		return null;
+	}
+	
 	public Assignment findAssignment(Annotation annot)
 	{
-		Assignment fakeAssn = annot.assn;
+		/*Assignment fakeAssn = annot.assn;
 		List<Group> fakeGroups = new ArrayList<>();
 		for (Group p = fakeAssn.parent; p != null && p.parent != null; p = p.parent) fakeGroups.add(0, p);
 
@@ -389,7 +441,10 @@ public class Schema
 			{
 				if (assn.name.equals(fakeAssn.name) && assn.propURI.equals(fakeAssn.propURI)) return assn;
 			}
-		}
+		}*/
+		
+		Assignment assn = findAssignment(annot.assn);
+		if (assn != null) return assn;
 		
 		// (try other approaches? match anything in the hierarchy?)
 		// maybe: look for a partial match, looking for immediate parents; tolerant of renames, e.g. "foo -> bar -> thing" "fnord -> bar -> thing"

@@ -265,6 +265,7 @@ public class PubChemPanel extends Dialog<Schema.Assay>
 		try
 		{
 			String url = BASE_PUG + "assay/aid/" + aid + "/summary/json";
+			Util.writeln("URL: " + url);
 			String str = makeRequest(url, null);
 			JSONObject json = new JSONObject(new JSONTokener(str));
 			JSONObject summary = json.getJSONObject("AssaySummaries").getJSONArray("AssaySummary").getJSONObject(0);

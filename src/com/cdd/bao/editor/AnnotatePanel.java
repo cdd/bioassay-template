@@ -325,6 +325,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
     {
     	"obo:", "http://purl.obolibrary.org/obo/",
     	"bao:", "http://www.bioassayontology.org/bao#",
+    	"bat:",	"http://www.bioassayontology.org/bat#",
     	"uo:",	"http://purl.org/obo/owl/UO#"
     };
 	private String substitutePrefix(String uri)

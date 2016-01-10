@@ -31,7 +31,22 @@ public class Main
 		}
 		
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
+		else if (argv[0].equals("edit")) 
+		{
+			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
+			new MainApplication().exec(subset);
+		}
 		else if (argv[0].equals("prepare")) new PrepareTemplate().exec();
+		else if (argv[0].equals("geneont"))
+		{
+			try
+			{
+				ImportGeneOntology impgo = new ImportGeneOntology();
+				impgo.load(argv[1]);
+				impgo.save(argv[2]);
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else if (argv[0].equals("pubchem")) 
 		{
 			try
@@ -41,11 +56,6 @@ public class Main
 				prep.writeSchema(argv[2]);
 			}
 			catch (Exception ex) {ex.printStackTrace();}
-		}
-		else if (argv[0].equals("edit")) 
-		{
-			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
-			new MainApplication().exec(subset);
 		}
 		else
 		{
@@ -58,8 +68,9 @@ public class Main
 	{
 		Util.writeln("BioAssay Ontology Annotator Tools");
 		Util.writeln("Options:");
-		Util.writeln("    prepare");
-		Util.writeln("    pubchem {inschema} {outschema} {pubchemdir}");
 		Util.writeln("    edit {files...}");
+		Util.writeln("    prepare");
+		Util.writeln("    geneont {infile} {outfile}");
+		Util.writeln("    pubchem {inschema} {outschema} {pubchemdir}");
 	}
 }

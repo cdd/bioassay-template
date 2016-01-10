@@ -184,7 +184,7 @@ public class ModelSchema
 			model.add(objAssay, usesTemplate, objRoot);
 			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
 			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
-			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI);
+			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI.trim());
 			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
 			
 			for (int i = 0; i < assay.annotations.size(); i++)
@@ -229,7 +229,7 @@ public class ModelSchema
 			model.add(objAssn, rdfLabel, assn.name);
 			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
-			model.add(objAssn, hasProperty, model.createResource(assn.propURI));
+			model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -237,7 +237,7 @@ public class ModelSchema
 				Resource blank = model.createResource();		
 				model.add(objAssn, hasValue, blank);
 				
-				Resource objValue = val.uri == null ? null : model.createResource(val.uri);
+				Resource objValue = val.uri == null ? null : model.createResource(val.uri.trim());
 				if (objValue != null) model.add(blank, mapsTo, objValue);
 				model.add(blank, rdfLabel, model.createLiteral(val.name));
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));

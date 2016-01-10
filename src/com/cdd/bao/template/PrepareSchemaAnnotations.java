@@ -49,14 +49,21 @@ public class PrepareSchemaAnnotations
 			aidText.put(aid, buff.toString());
 		}
 		
-		for (int n = schema.numAssays() - 1; n >= 0; n --) schema.deleteAssay(n);
+		//for (int n = schema.numAssays() - 1; n >= 0; n --) schema.deleteAssay(n);
 		
 		//Util.writeln(aidText.toString());
-		for (int aid : aidText.keySet())
+		skip: for (int aid : aidText.keySet())
 		{
-			Schema.Assay assay = new Schema.Assay("PubChem Assay (ID " + aid + ")");
+			String name = "PubChem Assay (ID " + aid + ")", originURI = "http://pubchem.ncbi.nlm.nih.gov/bioassay/" + aid;
+			for (int n = 0; n < schema.numAssays(); n++) 
+			{
+				Schema.Assay assay = schema.getAssay(n);
+				if (assay.name.equals(name) || assay.originURI.equals(originURI)) continue skip;
+			}
+		
+			Schema.Assay assay = new Schema.Assay(name);
 			assay.para = aidText.get(aid);
-			assay.originURI = "http://pubchem.ncbi.nlm.nih.gov/bioassay/" + aid;
+			assay.originURI = originURI;
 			schema.appendAssay(assay);
 		}
 	}
