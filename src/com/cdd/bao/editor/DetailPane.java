@@ -860,47 +860,6 @@ public class DetailPane extends ScrollPane
 
 		Scene scene = new Scene(root, 500, 500, Color.WHITE);
 		stage.setScene(scene);
-	
-/*
-         stage.setTitle("BioAssay Schema Browser");
-
-		treeRoot = new TreeItem<Branch>(new Branch());
-		treeView = new TreeView<Branch>(treeRoot);
-		treeView.setEditable(true);
-		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
-		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new BrowseTreeCell();}
-        });
-        
-
-		//detail = new DetailPane(this);
-
-		StackPane sp1 = new StackPane(), sp2 = new StackPane();
-		sp1.getChildren().add(treeView);
-		sp2.getChildren().add(new Label("fnord!"));
-		
-		splitter = new SplitPane();
-		splitter.setOrientation(Orientation.HORIZONTAL);
-		splitter.getItems().addAll(sp1, sp2);
-		splitter.setDividerPositions(0.4, 1.0);
-
-		root = new BorderPane();
-		root.setTop(menuBar);
-		root.setCenter(splitter);
-
-		Scene scene = new Scene(root, 700, 600, Color.WHITE);
-
-		stage.setScene(scene);
-		
-		treeView.setShowRoot(false);
-		
-		rebuildTree();
-
-        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
-		
-		new Thread(() -> backgroundLoadTemplates()).run();*/
-
-
 		stage.show();
 	}
 }

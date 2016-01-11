@@ -85,11 +85,25 @@ public class Schema
 			for (Value val : values) dup.values.add(val.clone());
 			return dup;
 		}
+		
+		// determines equality based on the immediate properties of the assignment and its values; does not compare its position in the branch hierarchy
 		public boolean equals(Assignment other)
 		{
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
 			if (values.size() != other.values.size()) return false;
 			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
+			return true;
+		}
+		
+		// returns true if the other assignment has the same branch sequence, i.e. the name is the same, and likewise for the trail of parent groups
+		public boolean sameBranch(Assignment other)
+		{
+			if (!name.equals(other.name)) return false;
+			for (Group g1 = parent, g2 = other.parent; g1 != null || g2 != null; g1 = g1.parent, g2 = g2.parent)
+			{
+				if (g1 == null || g2 == null) return false;
+				if (!g1.name.equals(g2.name)) return false;
+			}
 			return true;
 		}
 		
@@ -180,7 +194,7 @@ public class Schema
 		public Annotation(Assignment assn, Value value)
 		{
 			this.assn = linearBranch(assn);
-			this.value = value.clone();
+			this.value = value == null ? null : value.clone();
 		}
 		public Annotation(Assignment assn, String literal)
 		{
@@ -557,6 +571,21 @@ public class Schema
 			Assay a1 = assays.get(idx), a2 = assays.get(idx + 1);
 			assays.set(idx, a2);
 			assays.set(idx + 1, a1);
+		}
+	}
+	
+	// when an assignment is renamed, it would normally put any referring annotations out of sync
+	public void syncAnnotations(Assignment oldAssn, Assignment newAssn)
+	{
+		if (oldAssn.name.equals(newAssn.name)) return;
+		
+		for (Assay assay : assays) 
+		{
+			for (int n = 0; n < assay.annotations.size(); n++)
+			{
+				Annotation annot = assay.annotations.get(n);
+				if (annot.assn.sameBranch(oldAssn)) assay.annotations.set(n, new Annotation(newAssn, annot.value));
+			}
 		}
 	}
 	

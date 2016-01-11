@@ -256,6 +256,8 @@ public class EditSchema
 		modAssn.parent = replAssn.parent;
 		int idx = replAssn.parent.assignments.indexOf(replAssn);
 		replAssn.parent.assignments.set(idx, modAssn);
+
+		schema.syncAnnotations(replAssn, modAssn);
 		
 		branch.assignment = modAssn;
 		stack.changeSchema(schema, true);
@@ -505,9 +507,22 @@ public class EditSchema
 		if (currentlyRebuilding || item == null) return;
 		Branch branch = item.getValue();
 
-		if (branch.group != null) detail.setGroup(stack.peekSchema(), branch.group, true);
-		else if (branch.assignment != null) detail.setAssignment(stack.peekSchema(), branch.assignment, true);
-		else if (branch.assay != null) detail.setAssay(stack.peekSchema(), branch.assay, true);
+		Schema schema = stack.peekSchema();
+		if (branch.group != null) 
+		{
+			Schema.Group group = schema.obtainGroup(branch.locatorID);
+			detail.setGroup(schema, group, true);
+		}
+		else if (branch.assignment != null) 
+		{
+			Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+			detail.setAssignment(schema, assn, true);
+		}
+		else if (branch.assay != null) 
+		{
+			Schema.Assay assay = schema.obtainAssay(branch.locatorID);
+			detail.setAssay(schema, assay, true);
+		}
 		else detail.clearContent();
 	}
 	
