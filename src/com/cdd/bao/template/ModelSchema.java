@@ -120,7 +120,8 @@ public class ModelSchema
 	{
 		Model model = ModelFactory.createDefaultModel();
 		ModelSchema thing = new ModelSchema(schema, model);
-		thing.exportToModel();
+		try {thing.exportToModel();}
+		catch (Exception ex) {throw new IOException(ex);}
 		
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}

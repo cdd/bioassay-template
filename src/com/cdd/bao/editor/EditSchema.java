@@ -316,7 +316,7 @@ public class EditSchema
     	}
     	Menu menuFileGraphics = new Menu("Graphics");
     	addMenu(menuFileGraphics, "_Template", new KeyCharacterCombination("T", cmd, shift)).setOnAction(event -> actionFileGraphicsTemplate());
-    	addMenu(menuFileGraphics, "_Assay", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionFileGraphicsAssay());
+    	addMenu(menuFileGraphics, "_Assay", new KeyCharacterCombination("Y", cmd, shift)).setOnAction(event -> actionFileGraphicsAssay());
     	addMenu(menuFileGraphics, "_Properties", new KeyCharacterCombination("R", cmd, shift)).setOnAction(event -> actionFileGraphicsProperties());
     	addMenu(menuFileGraphics, "_Values", new KeyCharacterCombination("L", cmd, shift)).setOnAction(event -> actionFileGraphicsValues());
     	menuFile.getItems().add(menuFileGraphics);
@@ -756,7 +756,32 @@ public class EditSchema
     }
     public void actionFileGraphicsAssay()
     {
-    	Util.writeln("!! graphics assay");
+    	// NOTE: stripped down version; upgrade it to let the user pick the filename, or ideally code up a preview panel
+
+        TreeItem<Branch> item = currentBranch();
+        Branch branch = item == null ? null : item.getValue();
+        if (branch == null || branch.assay == null)
+        {
+        	Util.informMessage("Graphics for Assay", "Pick an assay first.");
+        	return;
+        }
+
+    	if (schemaFile == null) return;
+    	RenderSchema render = new RenderSchema(stack.peekSchema());
+    	try
+    	{
+			render.createPageAssay(branch.assay);
+			
+			String fn = schemaFile.getAbsolutePath();
+			int i = fn.lastIndexOf('.');
+			if (i < fn.lastIndexOf('/')) i = -1;
+			if (i >= 0) fn = fn.substring(0, i);
+			fn += "_assay.pdf";
+			render.write(new File(fn));
+			
+			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+    	}
+    	catch (Exception ex) {ex.printStackTrace();}
     }
     public void actionFileGraphicsProperties()
     {

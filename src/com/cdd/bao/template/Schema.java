@@ -584,7 +584,12 @@ public class Schema
 			for (int n = 0; n < assay.annotations.size(); n++)
 			{
 				Annotation annot = assay.annotations.get(n);
-				if (annot.assn.sameBranch(oldAssn)) assay.annotations.set(n, new Annotation(newAssn, annot.value));
+				if (annot.assn.sameBranch(oldAssn)) 
+				{
+					annot = annot.clone();
+					annot.assn = newAssn;
+					assay.annotations.set(n, annot);
+				}
 			}
 		}
 	}

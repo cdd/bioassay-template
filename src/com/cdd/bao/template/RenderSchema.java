@@ -62,6 +62,22 @@ public class RenderSchema
         ctx.stream.close();
 	}
 
+	// creates a page showing the given assay and its annotations
+	public void createPageAssay(Schema.Assay assay) throws IOException
+	{
+		RenderContext ctx = new RenderContext();
+		
+		renderPageTemplate(ctx);
+		if (ctx.width == 0 || ctx.height == 0) return;
+		
+        PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
+        document.addPage(page);
+        
+        ctx.stream = new PDPageContentStream(document, page);
+        renderPageAssay(ctx, assay);
+        ctx.stream.close();
+	}
+	
 	// creates a page showing the property & value hierarchies, respectively	
 	public void createPageProperties() throws IOException
 	{
@@ -122,7 +138,23 @@ public class RenderSchema
 		while (stack.size() > 0)
 		{
 			Schema.Group grp = stack.remove(0);
-			assignments.addAll(grp.assignments);
+			
+			// add each assignment with a sorted & truncated list of values
+			//assignments.addAll(grp.assignments);
+			final int MAX_VALUES = 10;
+			for (Schema.Assignment assn : grp.assignments)
+			{
+				assn = assn.clone();
+				assn.values.sort((v1, v2) -> v1.name.compareToIgnoreCase(v2.name));
+				if (assn.values.size() > MAX_VALUES)
+				{
+					int nkeep = MAX_VALUES - 1, nextra = assn.values.size() - nkeep;
+					while (assn.values.size() > nkeep) assn.values.remove(nkeep);
+					assn.values.add(new Schema.Value("", "(+ " + nextra + " more)"));
+				}
+				assignments.add(assn);
+			}
+			
 			stack.addAll(grp.subGroups);
 		}
 		
@@ -133,7 +165,9 @@ public class RenderSchema
 			Schema.Assignment assn = assignments.get(n);
 			assnW[n] = 0;
 			for (Schema.Value val : assn.values) assnW[n] = Math.max(assnW[n], ctx.measureLine(val.name, 10)[0]);
-			assnW[n] += ctx.measureLine(assn.name, 12)[0] + 50 + 5 * pad;
+			String propLabel = vocab.getLabel(assn.propURI);			
+			float titleW = Math.max(ctx.measureLine(assn.name, 12)[0], ctx.measureLine(propLabel, 8)[0] + 5);
+			assnW[n] += titleW + 50 + 5 * pad;
 			assnH[n] = Math.max(27, assn.values.size() * 12);
 			if (assn.parent.parent != null) assnH[n] += 15;
 		}
@@ -154,18 +188,77 @@ public class RenderSchema
 		}
 	}
 
+    private void renderPageAssay(RenderContext ctx, Schema.Assay assay)
+    {
+		float y = 0;
+		final float pad = 5;
+		
+		float nameW = Math.max(ctx.measureLine(assay.name, 15)[0], ctx.measureLine(assay.originURI, 8)[0]);
+		ctx.drawLine(0, 1, nameW, 1, 0x808080, 0.5f);
+		ctx.drawText(0, y, assay.name, 15, 0x000000, TXTALIGN_LEFT | TXTALIGN_TOP); y += 20;
+		if (assay.originURI.length() > 0)
+		{
+			ctx.drawText(0, y, "Origin: " + assay.originURI, 8, 0x808080, TXTALIGN_LEFT | TXTALIGN_TOP); y += 15;
+		}
+		ctx.drawLine(0, y, nameW, y, 0x808080, 0.5f);
+	
+		y += pad;
+
+		List<Schema.Annotation> pool = new ArrayList<>(assay.annotations);
+		List<Schema.Group> groupList = new ArrayList<>();
+		groupList.add(schema.getRoot());
+		
+		// recursively add all known assignments, in depth order of groups
+		while (groupList.size() > 0)
+		{
+			Schema.Group group = groupList.remove(0);
+
+			for (Schema.Assignment assn : group.assignments)
+			{
+				// insert any annotations that match this assignment; more than one is a possibility that will be reflected (though not necessarily valid); if none
+				// were found, manufacture the unassigned state
+				List<Schema.Annotation> matches = new ArrayList<>();
+				for (int n = 0; n < pool.size(); n++)
+				{
+					Schema.Annotation annot = pool.get(n);
+					if (schema.matchAnnotation(annot, assn))
+					{
+						matches.add(annot);
+						pool.remove(n);
+						n--;
+					}
+				}
+				
+				float[] xy = renderAnnotation(ctx, 0, y, assn, matches.toArray(new Schema.Annotation[matches.size()]));
+				y = xy[1];
+			}
+			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
+		}
+    }
+
 	private void renderPageHierarchy(RenderContext ctx, Vocabulary.Hierarchy hier)
 	{
 		// flatten out the branches, and keep them in order
 		List<Vocabulary.Branch> segments = new ArrayList<>(hier.rootBranches);
+		final int MAX_CHILDREN = 10;
 		for (int n = 0; n < segments.size(); n++)
 		{
 			Vocabulary.Branch branch = segments.get(n);
 			int pos = n + 1;
-			for (Vocabulary.Branch child : branch.children) if (child.children.size() > 0) segments.add(pos++, child);
+			for (Vocabulary.Branch child : branch.children) if (child.children.size() > 0) segments.add(pos++, child.clone());
 		}
 		
-		//for (Vocabulary.Branch branch : flat) Util.writeln(branch.label + " -> children:"+branch.children.size());
+		// sort & truncate as necessary
+		for (Vocabulary.Branch branch : segments)
+		{
+			branch.children.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+			if (branch.children.size() > MAX_CHILDREN)
+			{
+				int nkeep = MAX_CHILDREN - 1, nextra = branch.children.size() - nkeep;
+				while (branch.children.size() > nkeep) branch.children.remove(nkeep);
+				branch.children.add(new Vocabulary.Branch("", "(+ " + nextra + " more)"));
+			}
+		}
 		
 		float y = 0;
 		final float pad = 5;
@@ -216,13 +309,15 @@ public class RenderSchema
 		}
 	
 		float ly = y, ry = y;
+		String propLabel = vocab.getLabel(assn.propURI);
 	
-		float nameW = ctx.measureLine(assn.name, 12)[0], arrowW = 50;
+		float nameW = ctx.measureLine(assn.name, 12)[0];
+		float labelW = Math.max(nameW, ctx.measureLine(propLabel, 8)[0] + pad);
+		float arrowW = Math.max(20, labelW - nameW);
 		ctx.drawText(x + pad, ly, assn.name, 12, 0x000000, TXTALIGN_LEFT | TXTALIGN_TOP); 
 		drawArrow(ctx, x + 2 * pad + nameW, ly + 9, arrowW, 5);
 		ly += 15;
 		
-		String propLabel = vocab.getLabel(assn.propURI);
 		ctx.drawText(x + 2 * pad, ly, propLabel, 8, 0x404040, TXTALIGN_LEFT | TXTALIGN_TOP); 
 		ly += 12;
 		// !! .descr, as paragraph
@@ -243,6 +338,52 @@ public class RenderSchema
 		return new float[]{maxX, Math.max(ly, ry)};
 	}
 
+	private float[] renderAnnotation(RenderContext ctx, float x, float y, Schema.Assignment assn, Schema.Annotation[] annots)
+	{
+		final float pad = 5;
+
+		String assnName = assn.name;
+		for (Schema.Group p = assn.parent; p.parent != null; p = p.parent) assnName = p.name + " \u25BA " + assnName;
+
+		String propLabel = vocab.getLabel(assn.propURI);
+		float nameW = ctx.measureLine(assnName, 12)[0], arrowW = 20, propW = ctx.measureLine(propLabel, 8)[0];
+		arrowW += Math.max(0, 2 * (0.5f * propW - nameW - pad - 0.5f * arrowW));
+		
+		float cx = Math.max(0.5f * propW, nameW + pad + 0.5f * arrowW);
+		
+		ctx.drawText(cx, y, propLabel, 8, 0x808080, TXTALIGN_CENTRE | TXTALIGN_TOP);
+		y += 6;
+		
+		//float nx = Math.max(0, 0.5f * propW - nameW);
+		ctx.drawText(cx - 0.5f * arrowW - pad, y, assnName, 12, 0x000000, TXTALIGN_RIGHT | TXTALIGN_TOP);
+		drawArrow(ctx, cx - 0.5f * arrowW, y + 9, arrowW, 5);
+		
+		float ax = cx + 0.5f * arrowW + pad;
+		for (int n = 0; n < Math.max(1, annots.length); n++)
+		{
+			String label = "(not assigned)";
+			int col = 0x808080;
+			if (annots.length == 0) {}
+			else if (annots[n].literal != null)
+			{
+				label = "\"" + annots[n].literal + "\"";
+				col = 0x804000;
+			}
+			else if (annots[n].value != null)
+			{
+				label = annots[n].value.name;
+				col = 0x000000;
+			}
+			ctx.drawText(ax, y, label, 12, col, TXTALIGN_LEFT | TXTALIGN_TOP);
+			y += 12;
+		}
+
+		y += pad;
+
+		return new float[]{x, y};
+	}
+
+
 	private float[] renderBranch(RenderContext ctx, float x, float y, Vocabulary.Branch branch)
 	{
 		final float pad = 5;
@@ -256,7 +397,6 @@ public class RenderSchema
 
 		drawArrow(ctx, x + 2 * pad + nameW, ly + 9, arrowW, 5);
 		ly += 15;
-		
 		
 		float rightX = x + 3 * pad + nameW + arrowW;
 
@@ -324,7 +464,7 @@ public class RenderSchema
 			unitH = Math.max(unitH, height[n]);
 		}
 		
-		float maxH = Math.max(unitH, (float)Math.sqrt(0.5 * totalArea));
+		float maxH = Math.max(unitH, (float)Math.sqrt(totalArea));
 	
 		List<int[]> blocks = new ArrayList<>();
 		for (int n = 0; n < num; n++) blocks.add(new int[]{n});

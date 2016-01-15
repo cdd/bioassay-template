@@ -92,6 +92,19 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
     			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
     			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+    			
+    			//if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) style += " -fx-font-style: normal;"; else style += " -fx-font-style: italic;";
+    			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
+    			{
+    				style += " -fx-font-style: normal;";
+    			}
+    			else 
+    			{
+    				style += " -fx-font-style: italic;";
+    				label += " *";
+    			}
+    			//String suri = substitutePrefix(branch.uri);
+    			//label += " [" + suri + "]";
             	
             	setText(label);
    				setStyle(style);

@@ -189,10 +189,10 @@ public class RenderContext
 		try
 		{
     		final float[] wad = measureLine(txt, sz);
-    		
+
     		if ((align & TXTALIGN_LEFT) != 0) {}
-    		else if ((align & TXTALIGN_RIGHT) != 0) x = -wad[0];
-    		else /*TXTALIGN_CENTRE*/ x = -0.5f * wad[0];
+    		else if ((align & TXTALIGN_RIGHT) != 0) x -= wad[0];
+    		else /*TXTALIGN_CENTRE*/ x -= 0.5f * wad[0];
     
     		if ((align & TXTALIGN_MIDDLE) != 0) y += 0.5f * wad[1];
     		else if ((align & TXTALIGN_TOP) != 0) y += wad[1];

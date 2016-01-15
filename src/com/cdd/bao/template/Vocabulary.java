@@ -47,6 +47,22 @@ public class Vocabulary
 			this.uri = uri;
 			this.label = label;
 		}
+		
+		// shallow copy: child items are pointers
+		public Branch clone()
+		{
+			Branch dup = new Branch(uri, label);
+			dup.parents.addAll(parents);
+			dup.children.addAll(children);
+			return dup;
+		}
+		public Branch deepClone()
+		{
+			Branch dup = new Branch(uri, label);
+			for (Branch p : parents) dup.parents.add(p.deepClone());
+			for (Branch c : children) dup.children.add(c.deepClone());
+			return dup;
+		}
 	}
 	
 	public static class Hierarchy
