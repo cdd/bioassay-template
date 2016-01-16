@@ -1,7 +1,25 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2015 Collaborative Drug Discovery Inc.
+ * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * All we ask is that proper credit is given for our work, which includes
+ * - but is not limited to - adding the above copyright notice to the beginning
+ * of your source code files, and to any copyright notice that you may distribute
+ * with programs based on this work.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 package com.cdd.bao.editor;
@@ -315,11 +333,12 @@ public class EditSchema
     		addMenu(menuFile, "_Upload Endpoint", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
     	}
     	Menu menuFileGraphics = new Menu("Graphics");
-    	addMenu(menuFileGraphics, "_Template", new KeyCharacterCombination("T", cmd, shift)).setOnAction(event -> actionFileGraphicsTemplate());
-    	addMenu(menuFileGraphics, "_Assay", new KeyCharacterCombination("Y", cmd, shift)).setOnAction(event -> actionFileGraphicsAssay());
-    	addMenu(menuFileGraphics, "_Properties", new KeyCharacterCombination("R", cmd, shift)).setOnAction(event -> actionFileGraphicsProperties());
-    	addMenu(menuFileGraphics, "_Values", new KeyCharacterCombination("L", cmd, shift)).setOnAction(event -> actionFileGraphicsValues());
+    	addMenu(menuFileGraphics, "_Template", null).setOnAction(event -> actionFileGraphicsTemplate());
+    	addMenu(menuFileGraphics, "_Assay", null).setOnAction(event -> actionFileGraphicsAssay());
+    	addMenu(menuFileGraphics, "_Properties", null).setOnAction(event -> actionFileGraphicsProperties());
+    	addMenu(menuFileGraphics, "_Values", null).setOnAction(event -> actionFileGraphicsValues());
     	menuFile.getItems().add(menuFileGraphics);
+    	addMenu(menuFile, "Assay Stats", null).setOnAction(event -> actionFileAssayStats());
 		menuFile.getItems().add(new SeparatorMenuItem());
     	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
     	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -663,7 +682,7 @@ public class EditSchema
 		}
 		
 		List<String> log = new ArrayList<>();
-		Schema merged = ClipboardSchema.mergeSchema(stack.getSchema(), addSchema, log);
+		Schema merged = SchemaUtil.mergeSchema(stack.getSchema(), addSchema, log);
 		if (log.size() == 0)
 		{
 			Util.informMessage("Merge", "The merge file is the same: no action.");
@@ -824,6 +843,24 @@ public class EditSchema
 			Util.informMessage("Saved PDF", "Written to:\n" + fn);
     	}
     	catch (Exception ex) {ex.printStackTrace();}
+    }
+    public void actionFileAssayStats()
+    {
+    	List<String> stats = new ArrayList<>();
+    	SchemaUtil.gatherAssayStats(stack.peekSchema(), stats);
+		String text = String.join("\n", stats);
+		Dialog<Boolean> showdlg = new Dialog<>();
+		showdlg.setTitle("Assay Stats");
+		
+		TextArea area = new TextArea(text);
+		area.setWrapText(true);
+		area.setPrefWidth(700);
+		area.setPrefHeight(500);
+		showdlg.getDialogPane().setContent(area);
+		
+		showdlg.getDialogPane().getButtonTypes().addAll(new ButtonType("OK", ButtonBar.ButtonData.OK_DONE));
+		showdlg.setResultConverter(buttonType -> true);
+		showdlg.showAndWait();
     }
 	public void actionFileClose()
 	{
