@@ -4,7 +4,6 @@ An editor for specifying how the BioAssay Ontology, and other related vocabulari
 
 Primary author: Dr. Alex M. Clark (alex@collaborativedrug.com)
 
-Based on Java 8 using Eclipse, JavaFX and Apache Jena.
+Released under the Gnu Public License 2.0
 
-12/Nov/2015: preliminary skeleton project, with minimal datastructure read/write and editor shell
-31/Dec/2015: largely complete editor for templates and annotations
+Based on Java 8 using Eclipse, JavaFX and Apache Jena.
