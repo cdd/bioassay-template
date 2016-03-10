@@ -287,6 +287,8 @@ public class Vocabulary
 			if (v1.children.size() == 0 && v2.children.size() > 0) return 1;
 			return v1.label.compareTo(v2.label);
 		});
+		
+		//countTripleTypes(model);
 	}
 
 	// looks over the entire class inheritance system, and builds a collection of trees
@@ -342,4 +344,31 @@ public class Vocabulary
 		
 		return hier;
 	}
+	
+	// to be run occasionally for interests' sake
+	private void countTripleTypes(Model model)
+	{
+		int bao = 0, other = 0;
+
+		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		StmtIterator iter = model.listStatements();
+		while (iter.hasNext())
+		{
+			Statement stmt = iter.next();
+			
+			Resource subject = stmt.getSubject();
+			Property predicate = stmt.getPredicate();
+			RDFNode object = stmt.getObject();
+			
+			if (predicate.equals(subClassOf))
+			{
+				String uri = subject.getURI();
+				if (uri.startsWith(ModelSchema.PFX_BAO)) bao++; else other++;
+			}
+		}
+		
+		Util.writeln("Total BAO classes: " + bao);
+		Util.writeln("Other classes:     " + other);
+	}
+
 }
