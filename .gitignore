@@ -13,7 +13,7 @@
 hs_err_pid*
 
 #bin/
-pkg/
+#pkg/
 
 /bin/
 
