@@ -54,7 +54,7 @@ public class PrepareTemplate
 		try
 		{
 			Util.writeln("Loading vocabulary...");
-			vocab = new Vocabulary();
+			vocab = Vocabulary.globalInstance();
 
 			Util.writeln("Examining seed priorities...");
 			examinePriority();

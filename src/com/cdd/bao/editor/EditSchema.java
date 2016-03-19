@@ -616,7 +616,7 @@ public class EditSchema
 		
 		// validity checking
 		if (schemaFile == null) return;
-		if (!schemaFile.getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
+		if (!schemaFile.getAbsoluteFile().getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
 			Util.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
             return;

@@ -94,19 +94,34 @@ public class Vocabulary
 	{
 		synchronized (mutex)
 		{
-			if (singleton == null) singleton = new Vocabulary();
+			if (singleton == null) singleton = new Vocabulary(null);
+			return singleton;
+		}
+	}
+
+	// same as globalInstance, except offers the chance to prespecify the location of the BAO files; only needs to be called the first time -
+	// after that, globalInstance will do fine
+	public static Vocabulary bootstrap(String baoDir) throws IOException
+	{
+		synchronized (mutex)
+		{
+			if (singleton == null) singleton = new Vocabulary(baoDir);
 			return singleton;
 		}
 	}
 
 	// initialises the vocabulary by loading up all the BAO & related terms; note that this is slow, so avoid constructing
 	// this object any more often than necessary
-	public Vocabulary() throws IOException
+	public Vocabulary(String baoDir) throws IOException
 	{
 		// several options for BAO loading configurability; right now it goes for local files first, then looks in the JAR file (if there
 		// is one); loading from an external endpoint might be interesting, too
-		String cwd = System.getProperty("user.dir");
-		try {loadLabels(new File(cwd + "/bao"));}
+		if (baoDir == null)
+		{
+			String cwd = System.getProperty("user.dir");
+			baoDir = cwd + "/bao";
+		}
+		try {loadLabels(new File(baoDir));}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
 	}
 	
@@ -204,6 +219,8 @@ public class Vocabulary
 			Resource subject = stmt.getSubject();
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();
+
+			if (!subject.isURIResource() || !predicate.isURIResource()) continue;
 
 			// separately collect everything that's part of the class/property hierarchy
 			if (predicate.equals(subPropOf) && object.isURIResource())

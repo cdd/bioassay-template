@@ -47,6 +47,7 @@ public class ModelSchema
 	public static final String PFX_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
 	public static final String PFX_XSD = "http://www.w3.org/2001/XMLSchema#";
 	public static final String PFX_OWL = "http://www.w3.org/2002/07/owl#";
+	public static final String PFX_UO = "http://purl.org/obo/owl/UO#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -91,6 +92,43 @@ public class ModelSchema
 
 	private Schema schema;
 	private Model model;
+
+	// ------------ static methods ------------	
+	
+	private static final String[] PREFIX_MAP = new String[]
+	{
+		"bao:", PFX_BAO,
+		"bat:", PFX_BAT,
+		"bas:", PFX_BAS,
+		"obo:", PFX_OBO,
+		"rdf:", PFX_RDF,
+		"rdfs:", PFX_RDFS,
+		"xsd:", PFX_XSD,
+		"owl:", PFX_OWL,
+		"uo:", PFX_UO
+	};
+	
+	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
+	public static String collapsePrefix(String uri)
+	{
+		for (int n = 0; n < PREFIX_MAP.length; n += 2)
+		{
+			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
+			if (uri.startsWith(stem)) return pfx + uri.substring(stem.length());
+		}
+		return uri;
+	}
+	
+	// if the given proto-URI starts with one of the common prefixes, replace it with the actual URI root stem; if none, returns same as input
+	public static String expandPrefix(String uri)
+	{
+		for (int n = 0; n < PREFIX_MAP.length; n += 2)
+		{
+			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
+			if (uri.startsWith(pfx)) return stem + uri.substring(pfx.length());
+		}
+		return uri;
+	}
 
 	// ------------ private data: content ------------	
 
