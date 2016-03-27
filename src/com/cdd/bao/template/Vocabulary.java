@@ -50,6 +50,8 @@ public class Vocabulary
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
 	// URIs that are known to be involved in property & class relationships, respectively
 	private Set<String> uriProperties = new HashSet<>(), uriValues = new HashSet<>();
+	private Map<String, String[]> equivalence = new HashMap<>(); // interchangeable URIs: A->[B] means that all terms [B] are noted as being the same
+	private Set<String> prefParent = new HashSet<>(); // preferred parent URIs: when building the tree, and there's a choice between equivalences
 	
 	public static class Branch
 	{
@@ -61,6 +63,12 @@ public class Vocabulary
 		{
 			this.uri = uri;
 			this.label = label;
+		}
+		
+		// convenience: first parent is special - it's usually the recommended path to trace
+		public Branch firstParent()
+		{
+			return parents.size() == 0 ? null : parents.get(0);
 		}
 		
 		// shallow copy: child items are pointers
@@ -146,6 +154,9 @@ public class Vocabulary
 	public String[] getPropertyURIs() {return uriProperties.toArray(new String[uriProperties.size()]);}
 	public String[] getValueURIs() {return uriValues.toArray(new String[uriValues.size()]);}
 	
+	// for a given URI, returns a list of URIs that are registered as being equivalent to it, or null if none
+	public String[] equivalentURIs(String uri) {return equivalence.get(uri);}
+	
 	/*
 	// fetches a specific root branch, if there is one
 	public Branch getBranch(String uri) {return uri == null || uri.length() == 0 ? null : uriToBranch.get(uri);}
@@ -211,8 +222,7 @@ public class Vocabulary
 		Set<String> anyProp = new HashSet<>(), anyValue = new HashSet<>();
 
 		// iterate over the list looking for label definitions
-		StmtIterator iter = model.listStatements();
-		while (iter.hasNext())
+		for (StmtIterator iter = model.listStatements(); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
 			
@@ -259,6 +269,26 @@ public class Vocabulary
 			{
 				uriToDescr.put(uri, label);
 			}
+		}
+		
+		// pull out the equivalences
+		Property owlEquivalence = model.createProperty(ModelSchema.PFX_OWL + "equivalentClass");
+		for (StmtIterator iter = model.listStatements(null, owlEquivalence, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			String uri1 = stmt.getSubject().getURI(), uri2 = stmt.getObject().asResource().getURI();
+			if (uri1 == null || uri2 == null) continue;
+			addEquivalence(uri1, uri2);
+			addEquivalence(uri2, uri1);
+		}
+		
+		// pull in the "preferred parent" indicators from the corrections list
+		Resource batPref = model.createResource(ModelSchema.PFX_BAT + "preferredParent");
+		for (StmtIterator iter = model.listStatements(null, rdfType, batPref); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			String uri = stmt.getSubject().getURI();
+			prefParent.add(uri);
 		}
 
 		// go over the label-to-URI list and whenever there are multiple cases, try to favour the BAO version first (expect a few to
@@ -313,6 +343,7 @@ public class Vocabulary
 	{
 		Hierarchy hier = new Hierarchy();
 		
+		// build the tree
 		for (int pass = 0; pass < 2; pass++) // want to do BAO first
 		{
     		for (StmtIterator it = model.listStatements(null, verb, (RDFNode)null); it.hasNext();)
@@ -344,6 +375,47 @@ public class Vocabulary
     			parent.children.add(child);
     			child.parents.add(parent);
     		}
+		}
+		
+		// do child/branch reparenting whenever there is a "preferred" parent opportunity
+		Map<String, String> remapTo = new HashMap<>();
+		for (String prefURI : prefParent)
+		{
+			String[] others = equivalence.get(prefURI);
+			if (others != null) for (String badURI : others) remapTo.put(badURI, prefURI);
+		}
+		for (Branch branch : hier.uriToBranch.values())
+		{
+			while (true)
+			{
+				boolean anything = false;
+				outer: for (int i = 0; i < branch.children.size(); i++)
+				{
+					Branch brFrom = branch.children.get(i);
+					String toURI = remapTo.get(brFrom.uri);
+					if (toURI == null) continue;
+					for (int j = 0; j < branch.children.size(); j++) if (i != j)
+					{
+						Branch brTo = branch.children.get(j);
+						if (!brTo.uri.equals(toURI)) continue;
+						
+						brTo.children.addAll(brFrom.children);
+						branch.children.remove(i);
+						
+						// remove every reference to the parent that is being taken out
+						for (Branch cull : hier.uriToBranch.values()) 
+						{
+							for (int n = 0; n < cull.parents.size(); n++) if (cull.parents.get(n) == brFrom) cull.parents.set(n, brTo);
+							// (may leave duplicates as stains: is this OK?)
+						}
+						
+						anything = true;
+						break outer;
+					}
+				}
+				
+				if (!anything) break;
+			}
 		}
 
 		// anything with zero parents is a "root": this is all that is needed
@@ -388,4 +460,17 @@ public class Vocabulary
 		Util.writeln("Other classes:     " + other);
 	}
 
+	// note that two URIs are equivalent to each other; should be called twice, with (A,B) and (B,A)
+	private void addEquivalence(String uri1, String uri2)
+	{
+		String[] other = equivalence.get(uri1);
+		if (other != null)
+		{
+    		for (String look : other) if (look.equals(uri2)) return;
+    		other = Arrays.copyOf(other, other.length + 1);
+    		other[other.length - 1] = uri2;
+    		equivalence.put(uri1, other);
+		}
+		else equivalence.put(uri1, new String[]{uri2});
+	}
 }

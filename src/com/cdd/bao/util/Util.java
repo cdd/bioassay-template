@@ -1065,4 +1065,15 @@ public class Util
         alert.setContentText(msg);
         alert.showAndWait();
 	}
+
+	/**
+	 * Increments the value corresponding to a mapped key: if the value does not currently exist or is null, will set it to 1.
+	 */	
+	public static <T> int incr(Map<T, Integer> counts, T key)
+	{
+		Integer v = counts.get(key);
+		if (v == null) {counts.put(key, 1); return 1;}
+		counts.put(key, v + 1);
+		return v + 1;
+	}	
 }
