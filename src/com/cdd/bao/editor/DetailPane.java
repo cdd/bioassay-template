@@ -73,6 +73,7 @@ public class DetailPane extends ScrollPane
 		Lineup line;
 		Schema.Value sourceVal;
 		TextField fieldURI, fieldName;
+		CheckBox chkWhole;
 		TextArea fieldDescr;
 	}
 	private List<ValueWidgets> valueList = new ArrayList<>();
@@ -190,6 +191,7 @@ public class DetailPane extends ScrollPane
     		{
     			Schema.Value val = new Schema.Value(vw.fieldURI.getText(), vw.fieldName.getText());
     			val.descr = vw.fieldDescr.getText();
+    			val.wholeBranch = vw.chkWhole.isSelected();
     			mod.values.add(val);
     		}
 		}
@@ -519,6 +521,12 @@ public class DetailPane extends ScrollPane
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			vw.line.add(vw.fieldName, "Name:", 1, 0);
 			
+			vw.chkWhole = new CheckBox("Whole Branch");
+			vw.chkWhole.setSelected(val.wholeBranch);
+			observeFocus(vw.chkWhole, n);
+			Tooltip.install(vw.chkWhole, new Tooltip("Whether to include all children of the indicated term."));
+			vw.line.add(vw.chkWhole, "", 1, 0);
+			
 			vw.fieldDescr = new TextArea(val.descr);
 			vw.fieldDescr.setPrefRowCount(5);
 			vw.fieldDescr.setPrefWidth(350);
@@ -779,7 +787,7 @@ public class DetailPane extends ScrollPane
 	}
 
 	// respond to focus so that one of the blocks gets a highlight
-	private void observeFocus(TextInputControl field, final int idx)
+	private void observeFocus(Control field, final int idx)
 	{
 		field.focusedProperty().addListener((val, oldValue, newValue) -> 
 		{

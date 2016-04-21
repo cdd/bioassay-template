@@ -139,6 +139,7 @@ public class Schema
 		public String uri; // mapping to a URI in the BAO or related ontology; if blank, is literal
 		public String name; // short label for the value; if no URI, this is the literal to use
 		public String descr = ""; // longer description
+		public boolean wholeBranch = false; // if true, anything descended from this should also be considered
 		
 		public Value(String uri, String name)
 		{
@@ -149,11 +150,12 @@ public class Schema
 		{
 			Value dup = new Value(uri, name);
 			dup.descr = descr;
+			dup.wholeBranch = wholeBranch;
 			return dup;
 		}
 		public boolean equals(Value other)
 		{
-			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr);
+			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && wholeBranch == other.wholeBranch;
 		}
 	}
 

@@ -253,6 +253,8 @@ public class EndpointSchema
 			"ORDER BY ?order"
 		});
 
+		// !! todo: add the 'isWholeBranch' optional query...
+
 		try
 		{
     		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);

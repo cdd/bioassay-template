@@ -72,6 +72,7 @@ public class ModelSchema
 	public static final String HAS_ANNOTATION = "hasAnnotation"; // connecting an annotation to an assay
 	public static final String IS_ASSIGNMENT = "isAssignment"; // connecting an annotation to an assignment
 	public static final String HAS_LITERAL = "hasLiteral"; // used for annotations
+	public static final String IS_WHOLEBRANCH = "isWholeBranch"; // indicates a value refers to an entire branch, not just one term
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -83,7 +84,7 @@ public class ModelSchema
 	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
-	private Property hasAnnotation, isAssignment, hasLiteral;
+	private Property hasAnnotation, isAssignment, hasLiteral, isWholeBranch;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -211,6 +212,7 @@ public class ModelSchema
 		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
 		isAssignment = model.createProperty(PFX_BAT + IS_ASSIGNMENT);
 		hasLiteral = model.createProperty(PFX_BAT + HAS_LITERAL);
+		isWholeBranch = model.createProperty(PFX_BAT + IS_WHOLEBRANCH);
 		
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
@@ -295,6 +297,7 @@ public class ModelSchema
 				if (objValue != null) model.add(blank, mapsTo, objValue);
 				model.add(blank, rdfLabel, model.createLiteral(val.name));
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
+				if (val.wholeBranch) model.add(blank, isWholeBranch, model.createTypedLiteral(true));
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
 			
@@ -407,6 +410,7 @@ public class ModelSchema
 					
 			Value val = new Value(findAsString(blank, mapsTo), findString(blank, rdfLabel));
 			val.descr = findString(blank, hasDescription);
+			val.wholeBranch = findBoolean(blank, isWholeBranch);
 
 			assn.values.add(val);
 			order.put(val, findInteger(blank, inOrder));
@@ -528,7 +532,22 @@ public class ModelSchema
 		}
 		return 0;
 	}
-	
+
+	// looks for an explicitly typed boolean; returns false if not found	
+	private boolean findBoolean(Resource subj, Property prop)
+	{
+		for (StmtIterator it = model.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
+		{
+			RDFNode obj = it.next().getObject();
+			if (obj.isLiteral())
+			{
+				Literal lit = obj.asLiteral();
+				if (lit.getValue() instanceof Object) return lit.getBoolean();
+			}
+		}
+		return false;
+	}
+
 	// look for a URI node; returns null if none
 	private Resource findResource(Resource subj, Property prop)
 	{

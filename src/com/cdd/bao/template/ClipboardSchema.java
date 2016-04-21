@@ -150,6 +150,7 @@ public class ClipboardSchema
 			obj.put("uri", val.uri);
 			obj.put("name", val.name);
 			obj.put("descr", val.descr);
+			if (val.wholeBranch) obj.put("wholeBranch", true);
 			jvalues.put(obj);
 		}
 		json.put("values", jvalues);
@@ -226,6 +227,7 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.getString("uri"), obj.getString("name"));
 			val.descr = obj.getString("descr");
+			val.wholeBranch = obj.optBoolean("wholeBranch", false);
 			assn.values.add(val);
 		}
 		
