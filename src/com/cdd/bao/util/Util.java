@@ -1076,4 +1076,14 @@ public class Util
 		counts.put(key, v + 1);
 		return v + 1;
 	}	
+
+	/**
+	 * Swaps two entries in a list.
+	 */
+	public static <T> void swap(List<T> list, int i1, int i2)
+	{
+		T v1 = list.get(i1), v2 = list.get(i2);
+		list.set(i1, v2);
+		list.set(i2, v1);
+	}	
 }
