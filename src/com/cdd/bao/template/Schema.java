@@ -482,6 +482,21 @@ public class Schema
 		return null;
 	}
 	
+	// returns all of the assignments that match the given property URI, or empty list if none
+	public Assignment[] findAssignmentByProperty(String propURI)
+	{
+		List<Assignment> matches = new ArrayList<>();
+		List<Group> stack = new ArrayList<>();
+		stack.add(root);
+		while (stack.size() > 0)
+		{
+			Group grp = stack.remove(0);
+			for (Assignment assn : grp.assignments) if (assn.propURI.equals(propURI)) matches.add(assn);
+			stack.addAll(grp.subGroups);
+		}
+		return matches.toArray(new Assignment[matches.size()]);
+	}
+	
 	// returns true if the annotation is considered to belong to the assignment, i.e. the assignment heading and group hierarchies both match
 	public boolean matchAnnotation(Annotation annot, Assignment assn)
 	{
