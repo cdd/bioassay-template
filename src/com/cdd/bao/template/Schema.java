@@ -133,13 +133,23 @@ public class Schema
 		}
 	}
 
+	// used within values: indicates the scope of what's being specified by the URL (if given); note that the default state is "opt-in", so excluding is only
+	// necessary when a large branch has been included, but some parts are not wanted
+	public enum Specify
+	{
+		ITEM, // the term specified by the URL is explicitly whitelisted
+		EXCLUDE, // explicitly blacklist the term (i.e. exclude it from a branch within which it was previously included)
+		WHOLEBRANCH, // incline the term specified and everything descended from it
+		EXCLUDEBRANCH // exclude a whole branch that had previously been included
+	}
+
 	// a "value" consists of a URI (in the case of references to a known resource), and descriptive text; an assignment typically has many of these
 	public static final class Value
 	{
 		public String uri; // mapping to a URI in the BAO or related ontology; if blank, is literal
 		public String name; // short label for the value; if no URI, this is the literal to use
 		public String descr = ""; // longer description
-		public boolean wholeBranch = false; // if true, anything descended from this should also be considered
+		public Specify spec = Specify.ITEM;
 		
 		public Value(String uri, String name)
 		{
@@ -150,12 +160,12 @@ public class Schema
 		{
 			Value dup = new Value(uri, name);
 			dup.descr = descr;
-			dup.wholeBranch = wholeBranch;
+			dup.spec = spec;
 			return dup;
 		}
 		public boolean equals(Value other)
 		{
-			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && wholeBranch == other.wholeBranch;
+			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && spec == other.spec;
 		}
 	}
 

@@ -150,7 +150,9 @@ public class ClipboardSchema
 			obj.put("uri", val.uri);
 			obj.put("name", val.name);
 			obj.put("descr", val.descr);
-			if (val.wholeBranch) obj.put("wholeBranch", true);
+			if (val.spec == Schema.Specify.EXCLUDE) obj.put("exclude", true);
+			else if (val.spec == Schema.Specify.WHOLEBRANCH) obj.put("wholeBranch", true);
+			else if (val.spec == Schema.Specify.EXCLUDEBRANCH) obj.put("excludeBranch", true);
 			jvalues.put(obj);
 		}
 		json.put("values", jvalues);
@@ -227,7 +229,9 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.getString("uri"), obj.getString("name"));
 			val.descr = obj.getString("descr");
-			val.wholeBranch = obj.optBoolean("wholeBranch", false);
+			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
+			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
+			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
 			assn.values.add(val);
 		}
 		

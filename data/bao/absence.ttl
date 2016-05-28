@@ -18,6 +18,12 @@ bat:NotDetermined
   obo:IAO_0000115 "The measurement was not made." 
   .
 
+bat:NotApplicable
+  rdfs:label "not applicable" ;
+  rdfs:subClassOf bat:Absence ;
+  obo:IAO_0000115 "None of these values apply to the assignment." 
+  .
+
 bat:Unknown
   rdfs:label "unknown" ;
   rdfs:subClassOf bat:Absence ;
