@@ -53,7 +53,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	private Vocabulary vocab = null;
 	private Vocabulary.Hierarchy hier = null;
 	private boolean isProperty; // false = value lookup, true = property lookup
-	private Set<String> usedURI;
+	private Set<String> usedURI, exclURI;
 	private boolean multi;
 
 	public static final class Resource
@@ -107,8 +107,8 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
     			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
     			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+    			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
     			
-    			//if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) style += " -fx-font-style: normal;"; else style += " -fx-font-style: italic;";
     			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
     			{
     				style += " -fx-font-style: normal;";
@@ -118,8 +118,6 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
     				style += " -fx-font-style: italic;";
     				label += " *";
     			}
-    			//String suri = substitutePrefix(branch.uri);
-    			//label += " [" + suri + "]";
             	
             	setText(label);
    				setStyle(style);
@@ -137,12 +135,13 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
        
 	// ------------ public methods ------------
 
-	public LookupPanel(boolean isProperty, String searchText, Set<String> usedURI, boolean multi)
+	public LookupPanel(boolean isProperty, String searchText, Set<String> usedURI, Set<String> exclURI, boolean multi)
 	{
 		super();
 		
 		this.isProperty = isProperty;
 		this.usedURI = usedURI;
+		this.exclURI = exclURI;
 		this.multi = multi;
 		
 		loadResources();

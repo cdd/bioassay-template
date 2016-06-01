@@ -257,7 +257,7 @@ public class DetailPane extends ScrollPane
     {
     	if (assignment == null) return;
 
-		LookupPanel lookup = new LookupPanel(false, "", listValueURI(), true);
+		LookupPanel lookup = new LookupPanel(false, "", listValueURI(), listExcludedURI(), true);
 		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
 		if (!result.isPresent()) return;
 		LookupPanel.Resource[] resList = result.get();
@@ -342,7 +342,7 @@ public class DetailPane extends ScrollPane
     	{
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
-    		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), false);
+    		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), listExcludedURI(), false);
     		lookup.setInitialURI(vw.fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
@@ -358,7 +358,7 @@ public class DetailPane extends ScrollPane
     	}
     	else if (assignment != null)
     	{
-    		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), false);
+    		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
     		lookup.setInitialURI(fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
@@ -856,17 +856,30 @@ public class DetailPane extends ScrollPane
 		}
 	}
 	
-	// make a list of the URIs currently being used for values
+	// make a list of the URIs currently being used for values (of the inclusionary variety)
 	private Set<String> listValueURI()
 	{
 		Set<String> used = new HashSet<>();
 		for (ValueWidgets vw : valueList)
 		{
 			String uri = vw.fieldURI.getText();
-			if (uri.length() > 0) used.add(uri);
+			if (uri.length() > 0 && vw.dropSpec.getSelectionModel().getSelectedIndex() <= 1) used.add(uri);
 		}
 		return used;
 	}
+	
+	// make a list of URIs currently, which are set to exclude
+	private Set<String> listExcludedURI()
+	{
+		Set<String> excl = new HashSet<>();
+		for (ValueWidgets vw : valueList)
+		{
+			String uri = vw.fieldURI.getText();
+			if (uri.length() > 0 && vw.dropSpec.getSelectionModel().getSelectedIndex() >= 2) excl.add(uri);
+		}
+		return excl;
+	}
+	
 	
 	// brings up a popup window to show the paragraph text, which is handy for annotating
 	private void popupViewPara()
