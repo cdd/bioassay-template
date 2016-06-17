@@ -21,13 +21,13 @@ bat:NotDetermined
 bat:NotApplicable
   rdfs:label "not applicable" ;
   rdfs:subClassOf bat:Absence ;
-  obo:IAO_0000115 "None of these values apply to the assignment." 
+  obo:IAO_0000115 "This property does not apply to this assay." 
   .
 
 bat:Unknown
   rdfs:label "unknown" ;
   rdfs:subClassOf bat:Absence ;
-  obo:IAO_0000115 "The value should be known, but is not." 
+  obo:IAO_0000115 "There should be a term assigned to this property but the value was not specified in the source information." 
   .
    
 bat:Ambiguous
