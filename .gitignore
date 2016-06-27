@@ -16,6 +16,7 @@ hs_err_pid*
 #pkg/
 
 /bin/
+run.sh
 
 # data stuff to skip
 data/bao/bad.zip
