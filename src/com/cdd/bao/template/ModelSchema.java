@@ -49,6 +49,7 @@ public class ModelSchema
 	public static final String PFX_OWL = "http://www.w3.org/2002/07/owl#";
 	public static final String PFX_UO = "http://purl.org/obo/owl/UO#";
 	public static final String PFX_DTO = "http://www.drugtargetontology.org/dto/";
+	public static final String PFX_GENEID = "http://www.bioassayontology.org/geneid#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -110,7 +111,8 @@ public class ModelSchema
 		"xsd:", PFX_XSD,
 		"owl:", PFX_OWL,
 		"uo:", PFX_UO,
-		"dto:", PFX_DTO
+		"dto:", PFX_DTO,
+		"geneid:", PFX_GENEID
 	};
 	
 	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
@@ -188,14 +190,14 @@ public class ModelSchema
 
 	private void setupResources()
 	{
-		model.setNsPrefix("bao", ModelSchema.PFX_BAO);
-		model.setNsPrefix("bat", ModelSchema.PFX_BAT);
+		model.setNsPrefix("bao", PFX_BAO);
+		model.setNsPrefix("bat", PFX_BAT);
 		model.setNsPrefix("bas", schema.getSchemaPrefix());
-		model.setNsPrefix("obo", ModelSchema.PFX_OBO);
-		model.setNsPrefix("rdfs", ModelSchema.PFX_RDFS);
-		model.setNsPrefix("xsd", ModelSchema.PFX_XSD);
-		model.setNsPrefix("rdf", ModelSchema.PFX_RDF);
-		model.setNsPrefix("dto", ModelSchema.PFX_DTO);
+		model.setNsPrefix("obo", PFX_OBO);
+		model.setNsPrefix("rdfs", PFX_RDFS);
+		model.setNsPrefix("xsd", PFX_XSD);
+		model.setNsPrefix("rdf", PFX_RDF);
+		model.setNsPrefix("dto", PFX_DTO);
 
 		rdfLabel = model.createProperty(PFX_RDFS + "label");
 		rdfType = model.createProperty(PFX_RDF + "type");
