@@ -114,7 +114,9 @@ public class ModelSchema
 		"owl:", PFX_OWL,
 		"uo:", PFX_UO,
 		"dto:", PFX_DTO,
-		"geneid:", PFX_GENEID
+		"geneid:", PFX_GENEID,
+		"taxon:", PFX_TAXON,
+		"protein:", PFX_PROTEIN
 	};
 	
 	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
