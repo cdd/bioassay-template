@@ -50,6 +50,8 @@ public class ModelSchema
 	public static final String PFX_UO = "http://purl.org/obo/owl/UO#";
 	public static final String PFX_DTO = "http://www.drugtargetontology.org/dto/";
 	public static final String PFX_GENEID = "http://www.bioassayontology.org/geneid#";
+	public static final String PFX_TAXON = "http://www.bioassayontology.org/taxon#";
+	public static final String PFX_PROTEIN = "http://www.bioassayontology.org/protein#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
