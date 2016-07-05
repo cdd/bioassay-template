@@ -119,6 +119,14 @@ public class ModelSchema
 		"protein:", PFX_PROTEIN
 	};
 	
+	// in case the caller needs to know what htye are
+	public static Map<String, String> getPrefixes()
+	{
+		Map<String, String> map = new LinkedHashMap<>();
+		for (int n = 0; n < PREFIX_MAP.length; n += 2) map.put(PREFIX_MAP[n], PREFIX_MAP[n + 1]);
+		return map;
+	}
+	
 	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
 	public static String collapsePrefix(String uri)
 	{
