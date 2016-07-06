@@ -99,6 +99,7 @@ public class ModelSchema
 
 	private Schema schema;
 	private Model model;
+	private String rootURI = null; // set after a serialisation: this is the top level URI within the model
 
 	// ------------ static methods ------------	
 	
@@ -198,6 +199,15 @@ public class ModelSchema
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
 	
+	// writes the 
+	public static String serialiseToModel(Schema schema, Model model) throws IOException
+	{
+		ModelSchema thing = new ModelSchema(schema, model);
+		try {thing.exportToModel();}
+		catch (Exception ex) {throw new IOException(ex);}
+		return thing.rootURI;
+	}
+	
 	// ------------ private methods ------------	
 
 	private void setupResources()
@@ -244,7 +254,8 @@ public class ModelSchema
 		Group root = schema.getRoot();
 		String pfx = schema.getSchemaPrefix();
 	
-		Resource objRoot = model.createResource(pfx + turnLabelIntoName(root.name));
+		rootURI = pfx + turnLabelIntoName(root.name);
+		Resource objRoot = model.createResource(rootURI);
 		model.add(objRoot, rdfType, batRoot);
 		model.add(objRoot, rdfType, batGroup);
 		model.add(objRoot, rdfLabel, root.name);
@@ -326,7 +337,7 @@ public class ModelSchema
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
 			
-			assignmentToResource.put(assn,  objAssn); // for subsequent retrieval
+			assignmentToResource.put(assn, objAssn); // for subsequent retrieval
 		}
 		
 		// recursively emit any subgroups
