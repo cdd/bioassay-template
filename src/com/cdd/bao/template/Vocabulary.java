@@ -133,6 +133,11 @@ public class Vocabulary
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
 	}
 	
+	// creates a dummy object with nothing in it (rare use cases)
+	public Vocabulary()
+	{
+	}
+	
 	// fetches the label/description for a given URI; if there is none, returns null
 	public String getLabel(String uri) {return uriToLabel.get(uri);}
 	public String getDescr(String uri) {return uriToDescr.get(uri);}
