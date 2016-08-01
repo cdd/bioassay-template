@@ -129,7 +129,17 @@ public class Vocabulary
 			String cwd = System.getProperty("user.dir");
 			baoDir = cwd + "/bao";
 		}
-		try {loadLabels(new File(baoDir));}
+		try {loadLabels(new File(baoDir), new File[0]);}
+		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
+	}
+	
+	// modified use case which takes an optional directory + optional list of files, which will be combined together (with duplicates
+	// excised); provides a way to conveniently supplement a directory'o'stuff with additional content
+	public Vocabulary(String ontoDir, String[] extraFiles) throws IOException
+	{
+		File[] extra = new File[extraFiles == null ? 0 : extraFiles.length];
+		for (int n = 0; n < extra.length; n++) extra[n] = new File(extraFiles[n]);
+		try {loadLabels(new File(ontoDir), extra);}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
 	}
 	
@@ -176,7 +186,7 @@ public class Vocabulary
 	
 	// ------------ private methods ------------
 
-	private void loadLabels(File baseDir) throws IOException
+	private void loadLabels(File baseDir, File[] extra) throws IOException
 	{
 		Model model = ModelFactory.createDefaultModel();
 
@@ -195,7 +205,7 @@ public class Vocabulary
                 if (path.startsWith("data/bao/") && (path.endsWith(".owl") || path.endsWith(".ttl")))
                 {
                 	InputStream res = getClass().getResourceAsStream("/" + path);
-                	try {RDFDataMgr.read(model, res, path.endsWith(".owl") ? Lang.RDFXML : Lang.TURTLE);}
+                	try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
                 	catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
                 	res.close();
                 }
@@ -206,15 +216,25 @@ public class Vocabulary
 
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
+		Set<String> already = new HashSet<>();
 		if (baseDir != null && baseDir.isDirectory()) for (File f : baseDir.listFiles())
 		{
 			String fn = f.getName();
 			if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
-			//Util.writeln("Loading: " + f.getPath());
-			try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".owl") ? Lang.RDFXML : Lang.TURTLE);}
+			try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
 			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
+			already.add(f.getAbsolutePath());
 		}
-		//Util.writeln("Done.");
+
+		// if extra files are requested, add them in
+		for (File f : extra)
+		{
+			String fn = f.getAbsolutePath();
+			if (already.contains(fn)) continue;
+			try {RDFDataMgr.read(model, fn, fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
+			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
+			already.add(fn);
+		}
 	
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
 		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");

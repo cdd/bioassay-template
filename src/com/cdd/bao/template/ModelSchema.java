@@ -166,10 +166,14 @@ public class ModelSchema
 	// load in previously saved file
 	public static Schema deserialise(File file) throws IOException
 	{
-		FileInputStream istr = new FileInputStream(file);
-		Schema schema = deserialise(istr);
-		istr.close();
-		return schema;
+		try
+		{
+			FileInputStream istr = new FileInputStream(file);
+			Schema schema = deserialise(istr);
+			istr.close();
+			return schema;
+		}
+		catch (IOException ex) {throw new IOException("Loading schema file failed [" + file.getAbsolutePath() + "].", ex);}
 	}
 	public static Schema deserialise(InputStream istr) throws IOException
 	{
