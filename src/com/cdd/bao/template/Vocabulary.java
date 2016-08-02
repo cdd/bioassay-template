@@ -128,6 +128,7 @@ public class Vocabulary
 		{
 			String cwd = System.getProperty("user.dir");
 			baoDir = cwd + "/bao";
+			if (!new File(baoDir).exists()) baoDir = cwd + "/data/bao";
 		}
 		try {loadLabels(new File(baoDir), new File[0]);}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
