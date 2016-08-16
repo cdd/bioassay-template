@@ -26,6 +26,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
+import java.net.*;
 import javafx.scene.control.*;
 
 /*
@@ -1086,4 +1087,53 @@ public class Util
 		list.set(i1, v2);
 		list.set(i2, v1);
 	}
+	
+	/*
+		Issues an HTTP request, with an optional URL-encoded form post.
+	*/
+	public static String makeRequest(String url, String post) throws IOException
+	{
+		java.net.HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
+		conn.setDoOutput(true);
+		if (post == null) conn.setRequestMethod("GET");
+		else
+		{
+    		conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+    	}
+		int cutoff = 300000; // 5 minutes
+		conn.setConnectTimeout(cutoff);
+		conn.setReadTimeout(cutoff);
+		conn.connect();
+		
+		if (post != null)
+		{
+			BufferedWriter send = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(),Util.UTF8));
+    		send.append(post);
+    		send.flush();
+    		send.close();
+    	}
+    	
+		int respCode = conn.getResponseCode();
+		if (respCode >= 400) return null; // this is OK, just means no molecule found
+		if (respCode != 200) throw new IOException("HTTP response code " + respCode);
+		
+		// read the raw bytes into memory; abort if it's too long or too slow
+		BufferedInputStream istr = new BufferedInputStream(conn.getInputStream());
+		ByteArrayOutputStream buff = new ByteArrayOutputStream();
+		final int DOWNLOAD_LIMIT = 100 * 1024 * 1024; // within reason
+		while (true)
+		{
+			int b = -1;
+			try {b = istr.read();} catch (SocketTimeoutException ex) {throw new IOException(ex);}
+			if (b < 0) break;
+			if (buff.size() >= DOWNLOAD_LIMIT) 
+				throw new IOException("Download size limit exceeded (max=" + DOWNLOAD_LIMIT + " bytes) for URL: " + url);
+			buff.write(b);
+		}
+		istr.close();
+		
+		return new String(buff.toByteArray(), Util.UTF8);
+	}
+	
 }
