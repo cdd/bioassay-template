@@ -1088,8 +1088,18 @@ public class Util
 		list.set(i2, v1);
 	}
 	
-	/*
-		Issues an HTTP request, with an optional URL-encoded form post.
+	/**
+	* Issues an HTTP request, with an optional URL-encoded form post; makes a optional number of re-requests before
+	* ultimately failing.
+	*/
+	public static String makeRequest(String url, String post, int rerequests) throws IOException
+	{
+		for (int n = 0; n < rerequests - 1; n++) try {return makeRequest(url, post);} catch (Exception ex) {}
+		return makeRequest(url, post);
+	}
+
+	/**
+	* Issues an HTTP request, with an optional URL-encoded form post.
 	*/
 	public static String makeRequest(String url, String post) throws IOException
 	{
@@ -1115,8 +1125,8 @@ public class Util
     	}
     	
 		int respCode = conn.getResponseCode();
-		if (respCode >= 400) return null; // this is OK, just means no molecule found
-		if (respCode != 200) throw new IOException("HTTP response code " + respCode);
+		//if (respCode >= 400) return null; // this is OK, just means no molecule found
+		if (respCode != 200) throw new IOException("HTTP response code " + respCode + " for URL [" + url + "]");
 		
 		// read the raw bytes into memory; abort if it's too long or too slow
 		BufferedInputStream istr = new BufferedInputStream(conn.getInputStream());
