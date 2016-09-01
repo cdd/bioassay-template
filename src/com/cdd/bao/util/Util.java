@@ -1099,7 +1099,8 @@ public class Util
 	}
 
 	/**
-	* Issues an HTTP request, with an optional URL-encoded form post.
+	* Issues an HTTP request, with an optional URL-encoded form post. A return value of null implies a relatively graceful
+	* not found error (usually 404).
 	*/
 	public static String makeRequest(String url, String post) throws IOException
 	{
@@ -1125,7 +1126,7 @@ public class Util
     	}
     	
 		int respCode = conn.getResponseCode();
-		//if (respCode >= 400) return null; // this is OK, just means no molecule found
+		if (respCode >= 400) return null; // this is relatively graceful
 		if (respCode != 200) throw new IOException("HTTP response code " + respCode + " for URL [" + url + "]");
 		
 		// read the raw bytes into memory; abort if it's too long or too slow
