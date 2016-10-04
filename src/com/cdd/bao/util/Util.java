@@ -1104,7 +1104,7 @@ public class Util
 	*/
 	public static String makeRequest(String url, String post) throws IOException
 	{
-		java.net.HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
+		HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
 		conn.setDoOutput(true);
 		if (post == null) conn.setRequestMethod("GET");
 		else
