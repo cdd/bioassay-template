@@ -42,6 +42,16 @@ public class JSONUtil
     }
 
     /**
+     * Assuming that a JSONArray contains a sequence of integers, returns a primitive Java array with the values.
+     */
+    public static long[] longArray(JSONArray arr) throws JSONException
+    {
+		long[] ret = new long[arr.length()];
+		for (int n = 0; n < ret.length; n++) ret[n] = arr.getLong(n);
+		return ret;
+    }
+
+    /**
      * Assuming that a JSONArray contains a sequence of floating point numbers, returns a primitive Java array with the values.
      */
     public static float[] floatArray(JSONArray arr) throws JSONException
