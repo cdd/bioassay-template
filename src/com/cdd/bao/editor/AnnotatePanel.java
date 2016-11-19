@@ -367,8 +367,8 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		List<Schema.Value> subset = new ArrayList<>();
 		for (Schema.Value val : options)
 		{
-			if (val.name.toLowerCase().indexOf(searchLC) >= 0 || val.uri.toLowerCase().indexOf(searchLC) >= 0 ||
-				val.descr.toLowerCase().indexOf(searchLC) >= 0) subset.add(val);
+			if (val.name.toLowerCase().contains(searchLC) || val.uri.toLowerCase().contains(searchLC) ||
+				val.descr.toLowerCase().contains(searchLC)) subset.add(val);
 		}
 		return subset;
 	}	

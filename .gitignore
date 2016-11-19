@@ -27,3 +27,5 @@ data/template/funky.ttl
 data/template/*.pdf
 data/old_ontology.zip
 data/template/schema.bak
+/nbproject/private/
+/build/

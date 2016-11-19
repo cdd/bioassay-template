@@ -30,8 +30,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import javax.sql.rowset.Joinable;
-
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.stage.*;
