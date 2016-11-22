@@ -23,8 +23,6 @@ package com.cdd.bao;
 
 import java.util.*;
 
-import org.apache.commons.logging.Log;
-
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.editor.*;
