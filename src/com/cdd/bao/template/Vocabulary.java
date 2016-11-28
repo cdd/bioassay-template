@@ -218,13 +218,18 @@ public class Vocabulary
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
 		Set<String> already = new HashSet<>();
-		if (baseDir != null && baseDir.isDirectory()) for (File f : baseDir.listFiles())
+		if (baseDir != null && baseDir.isDirectory()) 
 		{
-			String fn = f.getName();
-			if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
-			try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
-			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
-			already.add(f.getAbsolutePath());
+			File[] list = baseDir.listFiles();
+			Arrays.sort(list);
+			for (File f : list)
+			{
+				String fn = f.getName();
+				if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
+				try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
+				catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
+				already.add(f.getAbsolutePath());
+			}
 		}
 
 		// if extra files are requested, add them in
