@@ -365,7 +365,7 @@ public class Vocabulary
 			if (v1.children.size() == 0 && v2.children.size() > 0) return 1;
 			return v1.label.compareTo(v2.label);
 		});
-		
+				
 		//countTripleTypes(model);
 	}
 
@@ -381,6 +381,8 @@ public class Vocabulary
     		{
     			Statement st = it.next();
     			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+    			
+    			if (uriChild.equals(uriParent)) continue; // yes this really does happen (ontology bug)
     
     			String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
     			if (labelChild == null || labelParent == null) continue;

@@ -7,52 +7,28 @@
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
 @prefix dto:   <http://www.drugtargetontology.org/dto/> .
 
-bas:AssayDesignMethod
+bas:BiologicalProcess
         a                   bat:Assignment ;
-        rdfs:label          "assay design method" ;
-        bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
-        bat:hasProperty     bao:BAX_0000003 ;
-        bat:hasValue        [ rdfs:label           "assay supporting method" ;
-                              bat:hasDescription   "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
-                              bat:inOrder          "5"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0002429
-                            ] ;
+        rdfs:label          "biological process" ;
+        bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO). For annotated BioAssays, Biological Process is the process that is being (or is presumed to be) affected by an entity with a perturbagen role in the assay." ;
+        bat:hasProperty     bao:BAX_0000004 ;
         bat:hasValue        [ rdfs:label          "not determined" ;
                               bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "3"^^xsd:int ;
+                              bat:inOrder         "4"^^xsd:int ;
                               bat:isExclude       true ;
                               bat:mapsTo          bat:NotDetermined
                             ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:hasValue        [ rdfs:label          "biological process" ;
+                              bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO)." ;
                               bat:inOrder         "2"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:hasValue        [ rdfs:label          "assay design method" ;
-                              bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
-                              bat:inOrder         "1"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0002202
-                            ] ;
-        bat:inOrder         "3"^^xsd:int .
-
-bas:GOTerms  a              bat:Assignment ;
-        rdfs:label          "GO terms" ;
-        bat:hasDescription  "Functions of the target gene, selected from the Gene Ontology hierarchy." ;
-        bat:hasProperty     bao:BAX_0000009 ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "6"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
+                              bat:mapsTo          obo:GO_0008150
                             ] ;
         bat:hasValue        [ rdfs:label          "molecular function" ;
                               bat:hasDescription  "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions." ;
@@ -60,31 +36,91 @@ bas:GOTerms  a              bat:Assignment ;
                               bat:isWholeBranch   true ;
                               bat:mapsTo          obo:GO_0003674
                             ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "5"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label          "cellular component" ;
-                              bat:hasDescription  "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          obo:GO_0005575
-                            ] ;
         bat:hasValue        [ rdfs:label          "absence" ;
                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "4"^^xsd:int ;
+                              bat:inOrder         "1"^^xsd:int ;
                               bat:isWholeBranch   true ;
                               bat:mapsTo          bat:Absence
                             ] ;
-        bat:hasValue        [ rdfs:label          "biological process" ;
-                              bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end." ;
+        bat:inOrder         "7"^^xsd:int .
+
+bas:Organism  a             bat:Assignment ;
+        rdfs:label          "organism" ;
+        bat:hasDescription  "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
+        bat:hasProperty     bao:BAO_0002921 ;
+        bat:hasValue        [ rdfs:label          "organism" ;
+                              bat:hasDescription  "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bao:BAO_0000551
+                            ] ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "2"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                               bat:inOrder         "1"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          obo:GO_0008150
+                              bat:mapsTo          bat:Absence
                             ] ;
-        bat:inOrder         "21"^^xsd:int .
+        bat:inOrder         "6"^^xsd:int .
+
+bas:CommonAssayTemplate
+        a                   bat:BioAssayTemplate , bat:Group ;
+        rdfs:label          "common assay template" ;
+        bat:hasAssignment   bas:Result , bas:AssayDesignMethod , bas:AssayFormat , bas:MeasurementUnit , bas:BioassayType , bas:AssayFootprint , bas:ProteinIdentity , bas:AssayKit , bas:Target , bas:Organism , bas:PerturbagenType , bas:GOTerms , bas:AssayCellLine , bas:PhysicalDetectionMethod , bas:AppliesToDisease , bas:GeneIdentity , bas:ScreeningCampaignStage , bas:BiologicalProcess , bas:AssaySupportingMethod , bas:DetectionInstrument , bas:AssayModeOfAction ;
+        bat:hasDescription  "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening." .
+
+bas:ProteinIdentity  a      bat:Assignment ;
+        rdfs:label          "protein identity" ;
+        bat:hasDescription  "Protein identity, from the NCBI reference set." ;
+        bat:hasProperty     bao:BAX_0000012 ;
+        bat:hasValue        [ rdfs:label          "Faux ProteinID" ;
+                              bat:hasDescription  "Temporary ontology terms for NCBI Protein GI" ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          <http://www.bioassayontology.org/taxon#Root>
+                            ] ;
+        bat:inOrder         "19"^^xsd:int .
+
+bas:AssayKit  a             bat:Assignment ;
+        rdfs:label          "assay kit" ;
+        bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
+        bat:hasProperty     bao:BAO_0002663 ;
+        bat:hasValue        [ rdfs:label          "assay kit" ;
+                              bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bao:BAO_0000248
+                            ] ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "2"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:inOrder         "15"^^xsd:int .
 
 bas:AssayFormat  a          bat:Assignment ;
         rdfs:label          "assay format" ;
@@ -116,92 +152,10 @@ bas:AssayFormat  a          bat:Assignment ;
                             ] ;
         bat:inOrder         "2"^^xsd:int .
 
-bas:BioassayType  a         bat:Assignment ;
-        rdfs:label          "bioassay type" ;
-        bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, binding, etc.; as well as the general class of bioassay (enyzme activity, gene expression...)" ;
-        bat:hasProperty     bao:BAX_0000002 ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:hasValue        [ rdfs:label     "experimental specification" ;
-                              bat:inOrder    "7"^^xsd:int ;
-                              bat:isExclude  true ;
-                              bat:mapsTo     bao:BAO_0002933
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label          "measure group" ;
-                              bat:hasDescription  "Measure group is used to group and link multiple (different) sets of experimental results to one bioassay. Measure groups thus facilitate the description of multiparametric (or multiplexed) assays, that measure more than one effect of the perturbagen on the system that is screened. It also facilitate the definition of panel and profiling assays, e.g. assays that test compounds against multiple (protein) targets.\nCompare definition of bioassay.\nMeasure group links to those classes that can vary among different measurements of a panel assay, profiling assay, multiparametric assay, e.g. target, assay design method, physical detection method, endpoint. Measure group is also used to define derived endpoints, for example concentration-response endpoints obtained by curve fitting a set of results from the same compound tested in the same assay at different concentrations." ;
-                              bat:inOrder         "9"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bao:BAO_0000040
-                            ] ;
-        bat:hasValue        [ rdfs:label          "assay kit" ;
-                              bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
-                              bat:inOrder         "6"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bao:BAO_0000248
-                            ] ;
-        bat:hasValue        [ rdfs:label          "bioassay specification" ;
-                              bat:hasDescription  "Description of an experiment carried out for the purpose of screening a perturbing agent in a biological system, measuring the effect of the agents using specified technology, and arriving at endpoints that satisfy particular criteria." ;
-                              bat:inOrder         "8"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bao:BAO_0000026
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "5"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:hasValue        [ rdfs:label          "measure group specification" ;
-                              bat:hasDescription  "An abstract concept to group one or more assay readout and allow description of an assay that measures one or more effect of a perturbagen on the biological entity.  This does not define the physical readout method itself, which is captured in assay design, but rather classifies the data being generated by those readouts." ;
-                              bat:inOrder         "10"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bao:BAO_0002185
-                            ] ;
-        bat:hasValue        [ rdfs:label          "bioassay type" ;
-                              bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000008
-                            ] ;
-        bat:hasValue        [ rdfs:label          "bioassay" ;
-                              bat:hasDescription  "A set of instructions, methodology, operations, required reagents, instruments to carrie out experiments for the purpose of testing the effect of a perturbing agent in a biological model system, measuring one or multiple effect(s) of the agent facilitated by an assay design method translate the perturbation into a detectable signal to arrive at one or multiple endpoint(s) that quantify or qualify the extent of the perturbation.  Bioassay is described by multiple bioassay components: assay format, biology (biological participants in various role and processes), design method, physical detection method / technology, screened entity, and endpoint. Bioassay includes one or multiple measure groups to describe panel, profiling, multiparametric (or multiplexed) assays (assays that measure more than one effect of the perturbagen on the system that is screened)." ;
-                              bat:inOrder         "1"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000015
-                            ] ;
-        bat:inOrder         "1"^^xsd:int .
-
 bas:Target  a               bat:Assignment ;
         rdfs:label          "target" ;
         bat:hasDescription  "The molecular entity (e.g., protein, carbohydrate, nucleic acid, or other) that is the presumed subject of the assay and whose activity is being effected by an entity with a perturbagen role in the assay. Can encompass the TYPE of biological macromolecule (e.g., enzyme, chaperone, GPCR, etc.) as well as the specific molecular target (e.g., gene name or geneid). An assay can have zero (e.g., if unknown as in assays for cytotoxic compounds) or multiple targets." ;
         bat:hasProperty     bao:BAX_0000005 ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "5"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label         "biological macromolecule" ;
-                              bat:inOrder        "1"^^xsd:int ;
-                              bat:isWholeBranch  true ;
-                              bat:mapsTo         bao:BAO_0003111
-                            ] ;
         bat:hasValue        [ rdfs:label         "Gene" ;
                               bat:inOrder        "2"^^xsd:int ;
                               bat:isWholeBranch  true ;
@@ -212,19 +166,24 @@ bas:Target  a               bat:Assignment ;
                               bat:isWholeBranch  true ;
                               bat:mapsTo         dto:DTO_00100000
                             ] ;
-        bat:inOrder         "8"^^xsd:int .
-
-bas:GeneIdentity  a         bat:Assignment ;
-        rdfs:label          "gene identity" ;
-        bat:hasDescription  "Gene identity, from the NCBI reference set." ;
-        bat:hasProperty     bao:BAX_0000011 ;
-        bat:hasValue        [ rdfs:label          "Faux GeneID" ;
-                              bat:hasDescription  "Temporary ontology terms for NCBI Gene ID" ;
-                              bat:inOrder         "1"^^xsd:int ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "4"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          <http://www.bioassayontology.org/geneid#Root>
+                              bat:mapsTo          bat:Absence
                             ] ;
-        bat:inOrder         "20"^^xsd:int .
+        bat:hasValue        [ rdfs:label         "biological macromolecule" ;
+                              bat:inOrder        "1"^^xsd:int ;
+                              bat:isWholeBranch  true ;
+                              bat:mapsTo         bao:BAO_0003111
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:inOrder         "8"^^xsd:int .
 
 bas:AssayFootprint  a       bat:Assignment ;
         rdfs:label          "assay footprint" ;
@@ -287,6 +246,41 @@ bas:ScreeningCampaignStage
                             ] ;
         bat:inOrder         "13"^^xsd:int .
 
+bas:AppliesToDisease  a     bat:Assignment ;
+        rdfs:label          "applies to disease" ;
+        bat:hasDescription  "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target." ;
+        bat:hasProperty     bao:BAX_0000010 ;
+        bat:hasValue        [ rdfs:label     "assay biology component" ;
+                              bat:inOrder    "2"^^xsd:int ;
+                              bat:isExclude  true ;
+                              bat:mapsTo     bao:BAO_0003114
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:hasValue        [ rdfs:label          "Disease" ;
+                              bat:hasDescription  "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\n" ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          obo:DOID_4
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:inOrder         "9"^^xsd:int .
+
 bas:Result  a               bat:Assignment ;
         rdfs:label          "result" ;
         bat:hasDescription  "The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a \"closed\" model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay." ;
@@ -317,40 +311,35 @@ bas:Result  a               bat:Assignment ;
                             ] ;
         bat:inOrder         "11"^^xsd:int .
 
-bas:AppliesToDisease  a     bat:Assignment ;
-        rdfs:label          "applies to disease" ;
-        bat:hasDescription  "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target." ;
-        bat:hasProperty     bao:BAX_0000010 ;
-        bat:hasValue        [ rdfs:label          "Disease" ;
-                              bat:hasDescription  "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\n" ;
-                              bat:inOrder         "1"^^xsd:int ;
+bas:MeasurementUnit  a      bat:Assignment ;
+        rdfs:label          "measurement unit" ;
+        bat:hasDescription  "Units for the resulting measurements (e.g. IC50, EC50, etc.)" ;
+        bat:hasProperty     bao:BAX_0000007 ;
+        bat:hasValue        [ rdfs:label          "unit of measurement" ;
+                              bat:hasDescription  "It is the definite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it." ;
+                              bat:inOrder         "4"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          obo:DOID_4
+                              bat:mapsTo          bao:BAO_0000077
                             ] ;
         bat:hasValue        [ rdfs:label          "see Gene ID" ;
                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "5"^^xsd:int ;
+                              bat:inOrder         "3"^^xsd:int ;
                               bat:isExclude       true ;
                               bat:mapsTo          bat:SeeGeneID
                             ] ;
-        bat:hasValue        [ rdfs:label     "assay biology component" ;
-                              bat:inOrder    "2"^^xsd:int ;
-                              bat:isExclude  true ;
-                              bat:mapsTo     bao:BAO_0003114
-                            ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
         bat:hasValue        [ rdfs:label          "not determined" ;
                               bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "4"^^xsd:int ;
+                              bat:inOrder         "2"^^xsd:int ;
                               bat:isExclude       true ;
                               bat:mapsTo          bat:NotDetermined
                             ] ;
-        bat:inOrder         "9"^^xsd:int .
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:inOrder         "12"^^xsd:int .
 
 bas:AssayModeOfAction
         a                   bat:Assignment ;
@@ -383,17 +372,76 @@ bas:AssayModeOfAction
                             ] ;
         bat:inOrder         "10"^^xsd:int .
 
+bas:BioassayType  a         bat:Assignment ;
+        rdfs:label          "bioassay type" ;
+        bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, binding, etc.; as well as the general class of bioassay (enyzme activity, gene expression...)" ;
+        bat:hasProperty     bao:BAX_0000002 ;
+        bat:hasValue        [ rdfs:label          "bioassay" ;
+                              bat:hasDescription  "A set of instructions, methodology, operations, required reagents, instruments to carrie out experiments for the purpose of testing the effect of a perturbing agent in a biological model system, measuring one or multiple effect(s) of the agent facilitated by an assay design method translate the perturbation into a detectable signal to arrive at one or multiple endpoint(s) that quantify or qualify the extent of the perturbation.  Bioassay is described by multiple bioassay components: assay format, biology (biological participants in various role and processes), design method, physical detection method / technology, screened entity, and endpoint. Bioassay includes one or multiple measure groups to describe panel, profiling, multiparametric (or multiplexed) assays (assays that measure more than one effect of the perturbagen on the system that is screened)." ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bao:BAO_0000015
+                            ] ;
+        bat:hasValue        [ rdfs:label          "measure group" ;
+                              bat:hasDescription  "Measure group is used to group and link multiple (different) sets of experimental results to one bioassay. Measure groups thus facilitate the description of multiparametric (or multiplexed) assays, that measure more than one effect of the perturbagen on the system that is screened. It also facilitate the definition of panel and profiling assays, e.g. assays that test compounds against multiple (protein) targets.\nCompare definition of bioassay.\nMeasure group links to those classes that can vary among different measurements of a panel assay, profiling assay, multiparametric assay, e.g. target, assay design method, physical detection method, endpoint. Measure group is also used to define derived endpoints, for example concentration-response endpoints obtained by curve fitting a set of results from the same compound tested in the same assay at different concentrations." ;
+                              bat:inOrder         "9"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bao:BAO_0000040
+                            ] ;
+        bat:hasValue        [ rdfs:label          "measure group specification" ;
+                              bat:hasDescription  "An abstract concept to group one or more assay readout and allow description of an assay that measures one or more effect of a perturbagen on the biological entity.  This does not define the physical readout method itself, which is captured in assay design, but rather classifies the data being generated by those readouts." ;
+                              bat:inOrder         "10"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bao:BAO_0002185
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:hasValue        [ rdfs:label          "assay kit" ;
+                              bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
+                              bat:inOrder         "6"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bao:BAO_0000248
+                            ] ;
+        bat:hasValue        [ rdfs:label          "bioassay specification" ;
+                              bat:hasDescription  "Description of an experiment carried out for the purpose of screening a perturbing agent in a biological system, measuring the effect of the agents using specified technology, and arriving at endpoints that satisfy particular criteria." ;
+                              bat:inOrder         "8"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bao:BAO_0000026
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:hasValue        [ rdfs:label     "experimental specification" ;
+                              bat:inOrder    "7"^^xsd:int ;
+                              bat:isExclude  true ;
+                              bat:mapsTo     bao:BAO_0002933
+                            ] ;
+        bat:hasValue        [ rdfs:label          "bioassay type" ;
+                              bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc." ;
+                              bat:inOrder         "2"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bao:BAO_0000008
+                            ] ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:inOrder         "1"^^xsd:int .
+
 bas:AssaySupportingMethod
         a                   bat:Assignment ;
         rdfs:label          "assay supporting method" ;
         bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process. Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
         bat:hasProperty     bao:BAX_0000013 ;
-        bat:hasValue        [ rdfs:label           "assay design method" ;
-                              bat:hasDescription   "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
-                              bat:inOrder          "2"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0002202
-                            ] ;
         bat:hasValue        [ rdfs:label          "assay supporting method" ;
                               bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
                               bat:inOrder         "1"^^xsd:int ;
@@ -406,485 +454,67 @@ bas:AssaySupportingMethod
                               bat:isExclude       true ;
                               bat:mapsTo          bat:SeeGeneID
                             ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "4"^^xsd:int ;
+        bat:hasValue        [ rdfs:label          "assay design method" ;
+                              bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
+                              bat:inOrder         "2"^^xsd:int ;
                               bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
+                              bat:mapsTo          bao:BAO_0002202
                             ] ;
         bat:hasValue        [ rdfs:label          "absence" ;
                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                               bat:inOrder         "3"^^xsd:int ;
                               bat:isWholeBranch   true ;
                               bat:mapsTo          bat:Absence
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
                             ] ;
         bat:inOrder         "4"^^xsd:int .
 
-bas:DetectionInstrument
-        a                   bat:Assignment ;
-        rdfs:label          "detection instrument" ;
-        bat:hasDescription  "The names of equipment used for measurement/readout from an assay, e.g. FLIPR, ViewLux plate reader, PHERAstar, etc." ;
-        bat:hasProperty     bao:BAO_0002865 ;
-        bat:hasValue        [ rdfs:label          "detection instrument" ;
-                              bat:hasDescription  "The names of equipment used for measurement/readout from an assay, e.g. FLIPR, ViewLux plate reader, PHERAstar, etc." ;
+bas:GOTerms  a              bat:Assignment ;
+        rdfs:label          "GO terms" ;
+        bat:hasDescription  "Functions of the target gene, selected from the Gene Ontology hierarchy." ;
+        bat:hasProperty     bao:BAX_0000009 ;
+        bat:hasValue        [ rdfs:label          "molecular function" ;
+                              bat:hasDescription  "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          obo:GO_0003674
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                               bat:inOrder         "4"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000697
+                              bat:mapsTo          bat:Absence
                             ] ;
         bat:hasValue        [ rdfs:label          "see Gene ID" ;
                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "3"^^xsd:int ;
+                              bat:inOrder         "6"^^xsd:int ;
                               bat:isExclude       true ;
                               bat:mapsTo          bat:SeeGeneID
                             ] ;
         bat:hasValue        [ rdfs:label          "not determined" ;
                               bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "1"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:inOrder         "17"^^xsd:int .
-
-bas:MeasurementUnit  a      bat:Assignment ;
-        rdfs:label          "measurement unit" ;
-        bat:hasDescription  "Units for the resulting measurements (e.g. IC50, EC50, etc.)" ;
-        bat:hasProperty     bao:BAX_0000007 ;
-        bat:hasValue        [ rdfs:label          "unit of measurement" ;
-                              bat:hasDescription  "It is the definite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000077
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "1"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:inOrder         "12"^^xsd:int .
-
-bas:BiologicalProcess
-        a                   bat:Assignment ;
-        rdfs:label          "biological process" ;
-        bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO). For annotated BioAssays, Biological Process is the process that is being (or is presumed to be) affected by an entity with a perturbagen role in the assay." ;
-        bat:hasProperty     bao:BAX_0000004 ;
-        bat:hasValue        [ rdfs:label          "regulation of cell migration" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of cell migration." ;
-                              bat:inOrder         "32"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0030334
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of molecular function" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of a molecular function, an elemental biological activity occurring at the molecular level, such as catalysis or binding." ;
-                              bat:inOrder         "36"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0065009
-                            ] ;
-        bat:hasValue        [ rdfs:label          "GABA receptor activity" ;
-                              bat:hasDescription  "Combining with gamma-aminobutyric acid (GABA), and transmitting the signal from one side of the membrane to the other to initiate a change in cell activity. (GABA, 4-aminobutyrate) is an amino acid which acts as a neurotransmitter in some organisms. See also the molecular function term 'neurotransmitter receptor activity ; GO:0030594'." ;
-                              bat:inOrder         "19"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0016917
-                            ] ;
-        bat:hasValue        [ rdfs:label          "biofilm formation" ;
-                              bat:hasDescription  "A process in which microorganisms irreversibly attach to and grow on a surface and produce extracellular polymers that facilitate attachment and matrix formation, resulting in an alteration in the phenotype of the organisms with respect to growth rate and gene transcription." ;
-                              bat:inOrder         "5"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0042710
-                            ] ;
-        bat:hasValue        [ rdfs:label          "drug metabolism" ;
-                              bat:hasDescription  "The chemical reactions and pathways involving a drug, a substance used in the diagnosis, treatment or prevention of a disease." ;
-                              bat:inOrder         "14"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0017144
-                            ] ;
-        bat:hasValue        [ rdfs:label          "autophagy" ;
-                              bat:hasDescription  "The process in which cells digest parts of their own cytoplasm; allows for both recycling of macromolecular constituents under conditions of cellular stress and remodeling the intracellular structure for cell differentiation." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006914
-                            ] ;
-        bat:hasValue        [ rdfs:label          "neutrophil activation" ;
-                              bat:hasDescription  "The change in morphology and behavior of a neutrophil resulting from exposure to a  cytokine, chemokine, cellular ligand, or soluble factor." ;
-                              bat:inOrder         "25"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0042119
-                            ] ;
-        bat:hasValue        [ rdfs:label           "cellular_component" ;
-                              bat:hasDescription   "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together." ;
-                              bat:inOrder          "61"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           obo:GO_0005575
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "65"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:hasValue        [ rdfs:label          "RNA interference" ;
-                              bat:hasDescription  "The process in which double-stranded RNAs silence cognate genes. Involves posttranscriptional gene inactivation ('silencing') both of transgenes or dsRNA introduced into a germline, and of the host gene(s) homologous to the transgenes or dsRNA. This silencing is triggered by the introduction of transgenes or double-stranded RNA (dsRNA), and can occur through a specific decrease in the level of mRNA, or by negative regulation of translation, of both host genes and transgenes." ;
-                              bat:inOrder         "48"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0016246
-                            ] ;
-        bat:hasValue        [ rdfs:label          "response to hypoxia" ;
-                              bat:hasDescription  "Any process that results in a change in state or activity of a cell or an organism (in terms of movement, secretion, enzyme production, gene expression, etc.) as a result of a stimulus indicating lowered oxygen tension. Hypoxia, defined as a decline in O2 levels below normoxic levels of 20.8 - 20.95%, results in metabolic adaptation at both the cellular and organismal level." ;
-                              bat:inOrder         "45"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0001666
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of acute inflammatory response" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate, or extent of an acute inflammatory response." ;
-                              bat:inOrder         "30"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0002673
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "64"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label          "response to drug" ;
-                              bat:hasDescription  "Any process that results in a change in state or activity of a cell or an organism (in terms of movement, secretion, enzyme production, gene expression, etc.) as a result of a drug stimulus. A drug is a substance used in the diagnosis, treatment or prevention of a disease." ;
-                              bat:inOrder         "44"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0042493
-                            ] ;
-        bat:hasValue        [ rdfs:label          "viral process" ;
-                              bat:hasDescription  "A multi-organism process in which a virus is a participant. The other participant is the host. Includes infection of a host cell, replication of the viral genome, and assembly of progeny virus particles. In some cases the viral genetic material may integrate into the host genome and only subsequently, under particular circumstances, 'complete' its life cycle." ;
-                              bat:inOrder         "53"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0016032
-                            ] ;
-        bat:hasValue        [ rdfs:label           "biological macromolecule" ;
-                              bat:inOrder          "57"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0003111
-                            ] ;
-        bat:hasValue        [ rdfs:label          "quorum sensing" ;
-                              bat:hasDescription  "The process in which single-celled organisms monitor their population density by detecting the concentration of small, diffusible signal molecules produced by the cells themselves." ;
-                              bat:inOrder         "29"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0009372
-                            ] ;
-        bat:hasValue        [ rdfs:label          "alternative mRNA splicing, via spliceosome" ;
-                              bat:hasDescription  "The process of generating multiple mRNA molecules from a given set of exons by differential use of exons from the primary transcript(s) to form multiple mature mRNAs that vary in their exon composition." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0000380
-                            ] ;
-        bat:hasValue        [ rdfs:label          "cell cycle phase" ;
-                              bat:hasDescription  "One of the distinct periods or stages into which the cell cycle is divided. Each phase is characterized by the occurrence of specific biochemical and morphological events." ;
-                              bat:inOrder         "9"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0022403
-                            ] ;
-        bat:hasValue        [ rdfs:label          "protein stabilization" ;
-                              bat:hasDescription  "Any process involved in maintaining the structure and integrity of a protein and preventing it from degradation or aggregation." ;
-                              bat:inOrder         "28"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0050821
-                            ] ;
-        bat:hasValue        [ rdfs:label          "cell cycle" ;
-                              bat:hasDescription  "The progression of biochemical and morphological phases and events that occur in a cell during successive cell replication or nuclear replication events. Canonically, the cell cycle comprises the replication and segregation of genetic material followed by the division of the cell, but in endocycles or syncytial cells nuclear replication or nuclear division may not be followed by cell division." ;
-                              bat:inOrder         "8"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0007049
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of gene silencing by miRNA" ;
-                              bat:hasDescription  "Any process that modulates the rate, frequency, or extent of the downregulation of gene expression through the action of microRNAs (miRNAs), endogenous 21-24 nucleotide small RNAs processed from stem-loop RNA precursors (pre-miRNAs). Once incorporated into a RNA-induced silencing complex (RISC), miRNAs can downregulate gene expression by either of two posttranscriptional mechanisms: mRNA cleavage or translational repression." ;
-                              bat:inOrder         "35"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0060964
-                            ] ;
-        bat:hasValue        [ rdfs:label   "G-protein coupled receptor signaling pathway_BAO" ;
-                              bat:inOrder  "18"^^xsd:int ;
-                              bat:mapsTo   bao:BAO_0002890
-                            ] ;
-        bat:hasValue        [ rdfs:label          "production of miRNAs involved in gene silencing by miRNA" ;
-                              bat:hasDescription  "Cleavage of stem-loop RNA precursors into microRNAs (miRNAs), a class of small RNAs that primarily silence genes by blocking the translation of mRNA transcripts into protein." ;
-                              bat:inOrder         "27"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0035196
-                            ] ;
-        bat:hasValue        [ rdfs:label          "DNA repair" ;
-                              bat:hasDescription  "The process of restoring DNA after damage. Genomes are subject to damage by chemical and physical agents in the environment (e.g. UV and ionizing radiations, chemical mutagens, fungal and bacterial toxins, etc.) and by free radicals or alkylating agents endogenously generated in metabolism. DNA is also damaged because of errors during its replication. A variety of different DNA repair pathways have been reported that include direct reversal, base excision repair, nucleotide excision repair, photoreactivation, bypass, double-strand break repair pathway, and mismatch repair pathway." ;
-                              bat:inOrder         "13"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006281
-                            ] ;
-        bat:hasValue        [ rdfs:label          "G-protein coupled receptor signaling pathway" ;
-                              bat:hasDescription  "A series of molecular signals that proceeds with an activated receptor promoting the exchange of GDP for GTP on the alpha-subunit of an associated heterotrimeric G-protein complex. The GTP-bound activated alpha-G-protein then dissociates from the beta- and gamma-subunits to further transmit the signal within the cell. The pathway begins with receptor-ligand interaction, or for basal GPCR signaling the pathway begins with the receptor activating its G protein in the absence of an agonist, and ends with regulation of a downstream cellular process, e.g. transcription." ;
-                              bat:inOrder         "17"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0007186
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of transcription, DNA-dependent" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of cellular DNA-dependent transcription." ;
-                              bat:inOrder         "41"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006355
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of steroid hormone receptor signaling pathway" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of the activity of any steroid hormone receptor signaling pathway." ;
-                              bat:inOrder         "40"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0033143
-                            ] ;
-        bat:hasValue        [ rdfs:label          "lytic viral release" ;
-                              bat:hasDescription  "Disruption of host cellular membranes, leading to cell death and the release of cytoplasmic compounds, including cytoplasmic viral particles, into the extracellular space." ;
-                              bat:inOrder         "23"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0019077
-                            ] ;
-        bat:hasValue        [ rdfs:label          "apoptotic process" ;
-                              bat:hasDescription  "A programmed cell death process which begins when a cell receives an internal (e.g. DNA damage) or external signal (e.g. an extracellular death ligand), and proceeds through a series of biochemical events (signaling pathways) which typically lead to rounding-up of the cell, retraction of pseudopodes, reduction of cellular volume (pyknosis), chromatin condensation, nuclear fragmentation (karyorrhexis), plasma membrane blebbing and fragmentation of the cell into apoptotic bodies. The process ends when the cell has died. The process is divided into a signaling pathway phase, and an execution phase, which is triggered by the former." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006915
-                            ] ;
-        bat:hasValue        [ rdfs:label          "necrotic cell death" ;
-                              bat:hasDescription  "A cell death process that is morphologically characterized by a gain in cell volume (oncosis), swelling of organelles, plasma membrane rupture and subsequent loss of intracellular contents." ;
-                              bat:inOrder         "24"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0070265
-                            ] ;
-        bat:hasValue        [ rdfs:label          "circadian rhythm" ;
-                              bat:hasDescription  "Any biological process in an organism that recurs with a regularity of approximately 24 hours." ;
-                              bat:inOrder         "12"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0007623
-                            ] ;
-        bat:hasValue        [ rdfs:label           "cell phenotype" ;
-                              bat:inOrder          "60"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0002542
-                            ] ;
-        bat:hasValue        [ rdfs:label           "cell line cell" ;
-                              bat:inOrder          "59"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           obo:CLO_0000001
-                            ] ;
-        bat:hasValue        [ rdfs:label           "DNA region" ;
-                              bat:hasDescription   "The categorization of different functional or non-functional elements in DNA." ;
-                              bat:inOrder          "63"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0003018
-                            ] ;
-        bat:hasValue        [ rdfs:label          "viral genome replication" ;
-                              bat:hasDescription  "Any process involved directly in viral genome replication, including viral nucleotide metabolism." ;
-                              bat:inOrder         "52"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0019079
-                            ] ;
-        bat:hasValue        [ rdfs:label           "binding site" ;
-                              bat:inOrder          "56"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0003016
-                            ] ;
-        bat:hasValue        [ rdfs:label          "viral entry into host cell" ;
-                              bat:hasDescription  "The process that occurs after viral attachment by which a virion, or viral nucleic acid, breaches the plasma membrane or cell envelope and enters the host cell. The process ends when the viral nucleic acid is released into the host cell cytoplasm." ;
-                              bat:inOrder         "51"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0046718
-                            ] ;
-        bat:hasValue        [ rdfs:label           "anatomical entity" ;
-                              bat:inOrder          "55"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0002930
-                            ] ;
-        bat:hasValue        [ rdfs:label          "drug transport" ;
-                              bat:hasDescription  "The directed movement of a drug, a substance used in the diagnosis, treatment or prevention of a disease, into, out of or within a cell, or between cells, by means of some agent such as a transporter or pore." ;
-                              bat:inOrder         "15"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0015893
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of gene expression, epigenetic" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of gene expression; the process is mitotically or meiotically heritable, or is stably self-propagated in the cytoplasm of a resting cell, and does not entail a change in DNA sequence." ;
-                              bat:inOrder         "34"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0040029
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of RNA splicing" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of RNA splicing, the process of removing sections of the primary RNA transcript to remove sequences not present in the mature form of the RNA and joining the remaining sections to form the mature form of the RNA." ;
-                              bat:inOrder         "38"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0043484
-                            ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "1"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:hasValue        [ rdfs:label          "cell death" ;
-                              bat:hasDescription  "Any biological process that results in permanent cessation of all vital functions of a cell. A cell should be considered dead when any one of the following molecular or morphological criteria is met: (1) the cell has lost the integrity of its plasma membrane; (2) the cell, including its nucleus, has undergone complete fragmentation into discrete bodies (frequently referred to as \"apoptotic bodies\"); and/or (3) its corpse (or its fragments) have been engulfed by an adjacent cell in vivo." ;
-                              bat:inOrder         "10"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0008219
-                            ] ;
-        bat:hasValue        [ rdfs:label   "calcium-mediated signaling using intracellular calcium source_bao" ;
-                              bat:inOrder  "6"^^xsd:int ;
-                              bat:mapsTo   bao:BAO_0002889
-                            ] ;
-        bat:hasValue        [ rdfs:label   "cAMP-mediated signaling_BAO" ;
-                              bat:inOrder  "7"^^xsd:int ;
-                              bat:mapsTo   bao:BAO_0002891
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of ubiquitin-protein ligase activity" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of ubiquitin ligase activity, the catalysis of the reaction: ATP + ubiquitin + protein lysine = AMP + diphosphate + protein N-ubiquityllysine." ;
-                              bat:inOrder         "43"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0051438
-                            ] ;
-        bat:hasValue        [ rdfs:label          "response to stress" ;
-                              bat:hasDescription  "Any process that results in a change in state or activity of a cell or an organism (in terms of movement, secretion, enzyme production, gene expression, etc.) as a result of a disturbance in organismal or cellular homeostasis, usually, but not necessarily, exogenous (e.g. temperature, humidity, ionizing radiation)." ;
-                              bat:inOrder         "47"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006950
-                            ] ;
-        bat:hasValue        [ rdfs:label          "platelet activation" ;
-                              bat:hasDescription  "A series of progressive, overlapping events triggered by exposure of the platelets to subendothelial tissue. These events include shape change, adhesiveness, aggregation, and release reactions. When carried through to completion, these events lead to the formation of a stable hemostatic plug." ;
-                              bat:inOrder         "26"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0030168
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of translation" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of the chemical reactions and pathways resulting in the formation of proteins by the translation of mRNA." ;
-                              bat:inOrder         "42"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006417
-                            ] ;
-        bat:hasValue        [ rdfs:label          "T-cell activation" ;
-                              bat:hasDescription  "The change in morphology and behavior of a mature or immature T cell resulting from exposure to a mitogen, cytokine, chemokine, cellular ligand, or an antigen for which it is specific." ;
-                              bat:inOrder         "49"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0042110
-                            ] ;
-        bat:hasValue        [ rdfs:label          "response to reactive oxygen species" ;
-                              bat:hasDescription  "Any process that results in a change in state or activity of a cell or an organism (in terms of movement, secretion, enzyme production, gene expression, etc.) as a result of a reactive oxygen species stimulus. Reactive oxygen species include singlet oxygen, superoxide, and oxygen free radicals." ;
-                              bat:inOrder         "46"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0000302
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of sequence-specific DNA binding transcription factor activity" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of the activity of a transcription factor, any factor involved in the initiation or regulation of transcription." ;
-                              bat:inOrder         "39"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0051090
-                            ] ;
-        bat:hasValue        [ rdfs:label          "inflammatory response" ;
-                              bat:hasDescription  "The immediate defensive reaction (by vertebrate tissue) to infection or injury caused by chemical or physical agents. The process is characterized by local vasodilation, extravasation of plasma into intercellular spaces and accumulation of white blood cells and macrophages." ;
-                              bat:inOrder         "22"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006954
-                            ] ;
-        bat:hasValue        [ rdfs:label   "regulation of catalytic activity" ;
-                              bat:inOrder  "31"^^xsd:int ;
-                              bat:mapsTo   bao:BAO_0002737
-                            ] ;
-        bat:hasValue        [ rdfs:label          "cell proliferation" ;
-                              bat:hasDescription  "The multiplication or reproduction of cells, resulting in the expansion of a cell population." ;
-                              bat:inOrder         "11"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0008283
-                            ] ;
-        bat:hasValue        [ rdfs:label          "Glycosylation" ;
-                              bat:hasDescription  "The covalent attachment and further modification of carbohydrate residues to a substrate molecule." ;
-                              bat:inOrder         "21"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0070085
-                            ] ;
-        bat:hasValue        [ rdfs:label           "cell line" ;
-                              bat:inOrder          "58"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           obo:CLO_0000031
-                            ] ;
-        bat:hasValue        [ rdfs:label           "organism" ;
-                              bat:hasDescription   "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
-                              bat:inOrder          "62"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           bao:BAO_0000551
-                            ] ;
-        bat:hasValue        [ rdfs:label          "T-cell differentiation" ;
-                              bat:hasDescription  "The process in which a precursor cell type acquires characteristics of a more mature T-cell. A T cell is a type of lymphocyte whose definin characteristic is the expression of a T cell receptor complex." ;
-                              bat:inOrder         "50"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0030217
-                            ] ;
-        bat:hasValue        [ rdfs:label           "anatomical entity" ;
-                              bat:hasDescription   "Biological entity that is either an individual member of a biological species or constitutes the structural organization of an individual member of a biological species." ;
-                              bat:inOrder          "54"^^xsd:int ;
-                              bat:isExcludeBranch  true ;
-                              bat:mapsTo           obo:UBERON_0001062
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of gene expression" ;
-                              bat:hasDescription  "Any process that modulates the frequency, rate or extent of gene expression. Gene expression is the process in which a gene's coding sequence is converted into a mature gene product or products (proteins or RNA). This includes the production of an RNA transcript as well as any processing to produce a mature RNA product or an mRNA (for protein-coding genes) and the translation of that mRNA into protein. Some protein processing events may be included when they are required to form an active form of a product from an inactive precursor form." ;
-                              bat:inOrder         "33"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0010468
-                            ] ;
-        bat:hasValue        [ rdfs:label          "Estrogen receptor signaling pathway" ;
-                              bat:hasDescription  "Any series of molecular signals generated as a consequence of an estrogen binding to its receptor." ;
-                              bat:inOrder         "16"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0030520
-                            ] ;
-        bat:hasValue        [ rdfs:label          "regulation of proteasomal protein catabolic process" ;
-                              bat:hasDescription  "Any process that modulates the rate, frequency, or extent of the chemical reactions and pathways resulting in the breakdown of a protein or peptide by hydrolysis of its peptide bonds that is mediated by the proteasome." ;
-                              bat:inOrder         "37"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0061136
-                            ] ;
-        bat:hasValue        [ rdfs:label          "glycolytic process" ;
-                              bat:hasDescription  "The chemical reactions and pathways resulting in the breakdown of a carbohydrate into pyruvate, with the concomitant production of a small amount of ATP and the reduction of NAD(P) to NAD(P)H. Glycolysis begins with the metabolism of a carbohydrate to generate products that can enter the pathway and ends with the production of pyruvate. Pyruvate may be converted to acetyl-coenzyme A, ethanol, lactate, or other small molecules." ;
-                              bat:inOrder         "20"^^xsd:int ;
-                              bat:mapsTo          obo:GO_0006096
-                            ] ;
-        bat:inOrder         "7"^^xsd:int .
-
-bas:AssayCellLine  a        bat:Assignment ;
-        rdfs:label          "assay cell line" ;
-        bat:hasDescription  "An assay cell line refers to the source of the cells or cell line used in the assay. This may be from primary cells (as annotated) or, more frequently, from an immortal cell line. Due to the continued passaging of immortal cell lines, users must be aware that spontaneous mutations can, and often do, arise in sub-populations, such that the actual cells used in the individual assay may differ from the original source." ;
-        bat:hasProperty     bao:BAO_0002800 ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:NotDetermined
-                            ] ;
-        bat:hasValue        [ rdfs:label         "cell line cell" ;
-                              bat:inOrder        "2"^^xsd:int ;
-                              bat:isWholeBranch  true ;
-                              bat:mapsTo         obo:CLO_0000001
-                            ] ;
-        bat:hasValue        [ rdfs:label         "BRENDA tissues and cell lines" ;
-                              bat:inOrder        "1"^^xsd:int ;
-                              bat:isWholeBranch  true ;
-                              bat:mapsTo         <http://dto.org/DTO/DTO_000>
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                               bat:inOrder         "5"^^xsd:int ;
                               bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:inOrder         "5"^^xsd:int .
-
-bas:Organism  a             bat:Assignment ;
-        rdfs:label          "organism" ;
-        bat:hasDescription  "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
-        bat:hasProperty     bao:BAO_0002921 ;
-        bat:hasValue        [ rdfs:label          "organism" ;
-                              bat:hasDescription  "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
-                              bat:inOrder         "4"^^xsd:int ;
-                              bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000551
-                            ] ;
-        bat:hasValue        [ rdfs:label          "see Gene ID" ;
-                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                              bat:inOrder         "3"^^xsd:int ;
-                              bat:isExclude       true ;
-                              bat:mapsTo          bat:SeeGeneID
-                            ] ;
-        bat:hasValue        [ rdfs:label          "not determined" ;
-                              bat:hasDescription  "The measurement was not made." ;
-                              bat:inOrder         "2"^^xsd:int ;
-                              bat:isExclude       true ;
                               bat:mapsTo          bat:NotDetermined
                             ] ;
-        bat:hasValue        [ rdfs:label          "absence" ;
-                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+        bat:hasValue        [ rdfs:label          "biological process" ;
+                              bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end." ;
                               bat:inOrder         "1"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          bat:Absence
+                              bat:mapsTo          obo:GO_0008150
                             ] ;
-        bat:inOrder         "6"^^xsd:int .
-
-bas:CommonAssayTemplate
-        a                   bat:BioAssayTemplate , bat:Group ;
-        rdfs:label          "common assay template" ;
-        bat:hasAssignment   bas:Result , bas:AssayDesignMethod , bas:AssayFormat , bas:MeasurementUnit , bas:BioassayType , bas:AssayFootprint , bas:ProteinIdentity , bas:AssayKit , bas:Target , bas:Organism , bas:PerturbagenType , bas:GOTerms , bas:AssayCellLine , bas:PhysicalDetectionMethod , bas:AppliesToDisease , bas:GeneIdentity , bas:ScreeningCampaignStage , bas:BiologicalProcess , bas:AssaySupportingMethod , bas:DetectionInstrument , bas:AssayModeOfAction ;
-        bat:hasDescription  "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening." .
+        bat:hasValue        [ rdfs:label          "cellular component" ;
+                              bat:hasDescription  "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together." ;
+                              bat:inOrder         "2"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          obo:GO_0005575
+                            ] ;
+        bat:inOrder         "21"^^xsd:int .
 
 bas:PhysicalDetectionMethod
         a                   bat:Assignment ;
@@ -917,15 +547,16 @@ bas:PhysicalDetectionMethod
                             ] ;
         bat:inOrder         "16"^^xsd:int .
 
-bas:AssayKit  a             bat:Assignment ;
-        rdfs:label          "assay kit" ;
-        bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
-        bat:hasProperty     bao:BAO_0002663 ;
-        bat:hasValue        [ rdfs:label          "assay kit" ;
-                              bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
+bas:DetectionInstrument
+        a                   bat:Assignment ;
+        rdfs:label          "detection instrument" ;
+        bat:hasDescription  "The names of equipment used for measurement/readout from an assay, e.g. FLIPR, ViewLux plate reader, PHERAstar, etc." ;
+        bat:hasProperty     bao:BAO_0002865 ;
+        bat:hasValue        [ rdfs:label          "detection instrument" ;
+                              bat:hasDescription  "The names of equipment used for measurement/readout from an assay, e.g. FLIPR, ViewLux plate reader, PHERAstar, etc." ;
                               bat:inOrder         "4"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000248
+                              bat:mapsTo          bao:BAO_0000697
                             ] ;
         bat:hasValue        [ rdfs:label          "see Gene ID" ;
                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
@@ -945,35 +576,105 @@ bas:AssayKit  a             bat:Assignment ;
                               bat:isWholeBranch   true ;
                               bat:mapsTo          bat:Absence
                             ] ;
-        bat:inOrder         "15"^^xsd:int .
+        bat:inOrder         "17"^^xsd:int .
 
-bas:ProteinIdentity  a      bat:Assignment ;
-        rdfs:label          "protein identity" ;
-        bat:hasDescription  "Protein identity, from the NCBI reference set." ;
-        bat:hasProperty     bao:BAX_0000012 ;
-        bat:hasValue        [ rdfs:label          "Faux ProteinID" ;
-                              bat:hasDescription  "Temporary ontology terms for NCBI Protein GI" ;
+bas:AssayDesignMethod
+        a                   bat:Assignment ;
+        rdfs:label          "assay design method" ;
+        bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
+        bat:hasProperty     bao:BAX_0000003 ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "2"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:hasValue        [ rdfs:label          "assay design method" ;
+                              bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
                               bat:inOrder         "1"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          <http://www.bioassayontology.org/taxon#Root>
+                              bat:mapsTo          bao:BAO_0002202
                             ] ;
-        bat:inOrder         "19"^^xsd:int .
+        bat:hasValue        [ rdfs:label          "assay supporting method" ;
+                              bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bao:BAO_0002429
+                            ] ;
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
+                            ] ;
+        bat:inOrder         "3"^^xsd:int .
 
 bas:PerturbagenType  a      bat:Assignment ;
         rdfs:label          "perturbagen type" ;
         bat:hasDescription  "Compounds or other perturbagens that modulate diverse biological targets." ;
         bat:hasProperty     bao:BAO_0000185 ;
+        bat:hasValue        [ rdfs:label          "perturbagen library" ;
+                              bat:hasDescription  "It is a collection of perturbagens, e.g., compound, siRNA, miRNA, etc, which are sold by different vendors, or generated in academic institutions." ;
+                              bat:inOrder         "1"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bao:BAO_0000661
+                            ] ;
         bat:hasValue        [ rdfs:label          "see Gene ID" ;
                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                               bat:inOrder         "5"^^xsd:int ;
                               bat:isExclude       true ;
                               bat:mapsTo          bat:SeeGeneID
                             ] ;
-        bat:hasValue        [ rdfs:label          "perturbagen library" ;
-                              bat:hasDescription  "It is a collection of perturbagens, e.g., compound, siRNA, miRNA, etc, which are sold by different vendors, or generated in academic institutions." ;
+        bat:hasValue        [ rdfs:label         "screened entity" ;
+                              bat:inOrder        "2"^^xsd:int ;
+                              bat:isWholeBranch  true ;
+                              bat:mapsTo         bao:BAO_0000076
+                            ] ;
+        bat:hasValue        [ rdfs:label          "absence" ;
+                              bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                              bat:inOrder         "3"^^xsd:int ;
+                              bat:isWholeBranch   true ;
+                              bat:mapsTo          bat:Absence
+                            ] ;
+        bat:hasValue        [ rdfs:label          "not determined" ;
+                              bat:hasDescription  "The measurement was not made." ;
+                              bat:inOrder         "4"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:NotDetermined
+                            ] ;
+        bat:inOrder         "18"^^xsd:int .
+
+bas:GeneIdentity  a         bat:Assignment ;
+        rdfs:label          "gene identity" ;
+        bat:hasDescription  "Gene identity, from the NCBI reference set." ;
+        bat:hasProperty     bao:BAX_0000011 ;
+        bat:hasValue        [ rdfs:label          "Faux GeneID" ;
+                              bat:hasDescription  "Temporary ontology terms for NCBI Gene ID" ;
                               bat:inOrder         "1"^^xsd:int ;
                               bat:isWholeBranch   true ;
-                              bat:mapsTo          bao:BAO_0000661
+                              bat:mapsTo          <http://www.bioassayontology.org/geneid#Root>
+                            ] ;
+        bat:inOrder         "20"^^xsd:int .
+
+bas:AssayCellLine  a        bat:Assignment ;
+        rdfs:label          "assay cell line" ;
+        bat:hasDescription  "An assay cell line refers to the source of the cells or cell line used in the assay. This may be from primary cells (as annotated) or, more frequently, from an immortal cell line. Due to the continued passaging of immortal cell lines, users must be aware that spontaneous mutations can, and often do, arise in sub-populations, such that the actual cells used in the individual assay may differ from the original source." ;
+        bat:hasProperty     bao:BAO_0002800 ;
+        bat:hasValue        [ rdfs:label         "cell line cell" ;
+                              bat:inOrder        "2"^^xsd:int ;
+                              bat:isWholeBranch  true ;
+                              bat:mapsTo         obo:CLO_0000001
+                            ] ;
+        bat:hasValue        [ rdfs:label         "BRENDA tissues and cell lines" ;
+                              bat:inOrder        "1"^^xsd:int ;
+                              bat:isWholeBranch  true ;
+                              bat:mapsTo         <http://dto.org/DTO/DTO_000>
                             ] ;
         bat:hasValue        [ rdfs:label          "not determined" ;
                               bat:hasDescription  "The measurement was not made." ;
@@ -987,9 +688,10 @@ bas:PerturbagenType  a      bat:Assignment ;
                               bat:isWholeBranch   true ;
                               bat:mapsTo          bat:Absence
                             ] ;
-        bat:hasValue        [ rdfs:label         "screened entity" ;
-                              bat:inOrder        "2"^^xsd:int ;
-                              bat:isWholeBranch  true ;
-                              bat:mapsTo         bao:BAO_0000076
+        bat:hasValue        [ rdfs:label          "see Gene ID" ;
+                              bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                              bat:inOrder         "5"^^xsd:int ;
+                              bat:isExclude       true ;
+                              bat:mapsTo          bat:SeeGeneID
                             ] ;
-        bat:inOrder         "18"^^xsd:int .
+        bat:inOrder         "5"^^xsd:int .
