@@ -1,0 +1,29 @@
+# post-factum corrections to the underlying ontologies
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+# the 'bat:preferredParent' indicates that when two 'owl:equivalentClass' terms could be placed analogously
+# in a hierarchy, the preferred one is used as the branch master; this occurs frequently when the BAO borrows
+# terms from other ontologies (such as GO), which can get a bit messy
+
+# biological process
+obo:GO_0008150 a bat:preferredParent .
+
+# cellular component
+obo:GO_0005575 a bat:preferredParent .
+
+# disease
+obo:DOID_4 a bat:preferredParent .
+
+# molecular function
+obo:GO_0003674 a bat:preferredParent .
+
+# cell line cell
+obo:CLO_0000001 a bat:preferredParent .
+obo:CLO_0000001 owl:equivalentClass bao:BAO_0002931 .

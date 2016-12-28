@@ -67,6 +67,8 @@ public class EditSchema
     private Menu menuFile, menuEdit, menuValue, menuView;
     private CheckMenuItem menuViewSummary;
     
+    private ProgressBar progBar;
+    
     private boolean currentlyRebuilding = false;
     
     // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
@@ -165,10 +167,14 @@ public class EditSchema
 		splitter.setOrientation(Orientation.HORIZONTAL);
 		splitter.getItems().addAll(sp1, sp2);
 		splitter.setDividerPositions(0.4, 1.0);
+		
+		progBar = new ProgressBar();
+		progBar.setMaxWidth(Double.MAX_VALUE);
 
 		root = new BorderPane();
 		root.setTop(menuBar);
 		root.setCenter(splitter);
+		root.setBottom(progBar);
 
 		Scene scene = new Scene(root, 900, 800, Color.WHITE);
 
@@ -191,12 +197,23 @@ public class EditSchema
 		
 		updateTitle();
 		
-		// instantiate vocabulary in a background thread: we don't need it immediately, but prevent blocking later
-		new Thread(() -> 
+		// loading begins in a background thread, and is updated with a status bar
+		Vocabulary.Listener listener = new Vocabulary.Listener()
 		{
-			try {Vocabulary.globalInstance();} 
-			catch (IOException ex) {ex.printStackTrace();}}
-		).start();
+			public void vocabLoadingProgress(Vocabulary vocab, float progress)
+			{
+				Platform.runLater(() ->
+				{
+					progBar.setProgress(progress);
+					if (vocab.isLoaded()) root.getChildren().remove(progBar);
+				});
+			}
+			public void vocabLoadingException(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		};		
+		Vocabulary.globalInstance(listener);
  	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}

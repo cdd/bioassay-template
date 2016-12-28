@@ -25,7 +25,7 @@ data/template/schema_bak?.ttl
 data/template/schema_template.pdf
 data/template/funky.ttl
 data/template/*.pdf
-data/old_ontology.zip
+data/old_ontology*
 data/template/schema.bak
 /nbproject/private/
 /build/

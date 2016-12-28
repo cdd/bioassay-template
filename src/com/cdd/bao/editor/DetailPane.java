@@ -256,6 +256,7 @@ public class DetailPane extends ScrollPane
     public void actionValueMultiAdd()
     {
     	if (assignment == null) return;
+    	if (!Vocabulary.globalInstance().isLoaded()) return;
 
 		LookupPanel lookup = new LookupPanel(false, "", listValueURI(), listExcludedURI(), true);
 		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
@@ -327,9 +328,7 @@ public class DetailPane extends ScrollPane
     	String uri = vw.fieldURI.getText();
     	if (uri.length() == 0) {actionLookupName(); return;}
     
-		Vocabulary vocab = null;
-		try {vocab = Vocabulary.globalInstance();}
-		catch (IOException ex) {ex.printStackTrace(); return;}
+		Vocabulary vocab = Vocabulary.globalInstance();
 		
 		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
 		if (label == null) {actionLookupName(); return;}
@@ -340,6 +339,7 @@ public class DetailPane extends ScrollPane
     {
     	if (focusIndex >= 0)
     	{
+	    	if (!Vocabulary.globalInstance().isLoaded()) return;
     		ValueWidgets vw = valueList.get(focusIndex);
     		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
     		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), listExcludedURI(), false);
@@ -358,6 +358,7 @@ public class DetailPane extends ScrollPane
     	}
     	else if (assignment != null)
     	{
+	    	if (!Vocabulary.globalInstance().isLoaded()) return;
     		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
     		lookup.setInitialURI(fieldURI.getText());
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();

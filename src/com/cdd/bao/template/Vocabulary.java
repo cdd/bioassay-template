@@ -45,6 +45,7 @@ public class Vocabulary
 	private static String mutex = new String("!");
 	private static Vocabulary singleton = null;
 
+	private boolean loadingComplete = false;
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
 	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
@@ -94,59 +95,106 @@ public class Vocabulary
 		public List<Branch> rootBranches = new ArrayList<>();
 	}
 	private Hierarchy properties = null, values = null;
+	
+	public interface Listener
+	{
+		public void vocabLoadingProgress(Vocabulary vocab, float progress);		
+		public void vocabLoadingException(Exception ex);
+	}
+	private Set<Listener> listeners = new HashSet<>();
 
 	// ------------ public methods ------------
 
-	// accesses a single instance: if not loaded already, will block; may fail if the files are not found; threadsafe
-	public static Vocabulary globalInstance() throws IOException
+	// accesses a single instance: generally returns instantly; if this is not the first invocation, it will spawn a thread to load
+	// the ontologies in the background, and return a partially loaded instance; subsequent calls will return the same instance, 
+	// which may or may not have finished loading; the caller may optionally provide a listener, which will receive progress updates 
+	// and error messages
+	public static Vocabulary globalInstance() {return globalInstance(null);}
+	public static Vocabulary globalInstance(Listener listener)
 	{
 		synchronized (mutex)
 		{
-			if (singleton == null) singleton = new Vocabulary(null);
+			if (singleton != null) 
+			{
+				singleton.addListener(listener);
+				return singleton;
+			}
+			
+			// create a new one; note that the listener is added before the loading begins, so that exceptions can be sent
+			// to the right place
+			singleton = new Vocabulary();
+			singleton.addListener(listener);
+			new Thread(() -> 
+			{
+				try {singleton.load(null, null);}
+				catch (Exception ex)
+				{
+					synchronized (singleton.listeners) {for (Listener l : singleton.listeners) l.vocabLoadingException(ex);}
+				}
+				
+			}).start();
 			return singleton;
 		}
 	}
 
-	// same as globalInstance, except offers the chance to prespecify the location of the BAO files; only needs to be called the first time -
-	// after that, globalInstance will do fine
-	public static Vocabulary bootstrap(String baoDir) throws IOException
+	// creates an instance, which needs to be loaded subsequently (this is how the global singleton method gets it rolling)
+	public Vocabulary()
 	{
-		synchronized (mutex)
-		{
-			if (singleton == null) singleton = new Vocabulary(baoDir);
-			return singleton;
-		}
+	}
+	
+	// direct constructor: use this for cases where the lifecycle is managed more explicitly
+	public Vocabulary(String ontoDir, String[] extraFiles) throws IOException
+	{
+		load(ontoDir, extraFiles);
 	}
 
 	// initialises the vocabulary by loading up all the BAO & related terms; note that this is slow, so avoid constructing
 	// this object any more often than necessary
-	public Vocabulary(String baoDir) throws IOException
+	public void load(String ontoDir, String[] extraFiles) throws IOException
 	{
+		File[] extra = new File[extraFiles == null ? 0 : extraFiles.length];
+		for (int n = 0; n < extra.length; n++) extra[n] = new File(extraFiles[n]);
+
 		// several options for BAO loading configurability; right now it goes for local files first, then looks in the JAR file (if there
 		// is one); loading from an external endpoint might be interesting, too
-		if (baoDir == null)
+		if (ontoDir == null)
 		{
 			String cwd = System.getProperty("user.dir");
-			baoDir = cwd + "/bao";
-			if (!new File(baoDir).exists()) baoDir = cwd + "/data/bao";
+			ontoDir = cwd + "/ontology";
+			if (!new File(ontoDir).exists()) ontoDir = cwd + "/data/ontology";
 		}
-		try {loadLabels(new File(baoDir), new File[0]);}
+		try {loadLabels(new File(ontoDir), extra);}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
+		finally 
+		{
+			loadingComplete = true;
+        	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
+		}
 	}
 	
 	// modified use case which takes an optional directory + optional list of files, which will be combined together (with duplicates
 	// excised); provides a way to conveniently supplement a directory'o'stuff with additional content
-	public Vocabulary(String ontoDir, String[] extraFiles) throws IOException
+	/*public load(String ontoDir, String[] extraFiles) throws IOException
 	{
 		File[] extra = new File[extraFiles == null ? 0 : extraFiles.length];
 		for (int n = 0; n < extra.length; n++) extra[n] = new File(extraFiles[n]);
 		try {loadLabels(new File(ontoDir), extra);}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
-	}
+		finally {loadingComplete = true;}
+	}*/
 	
-	// creates a dummy object with nothing in it (rare use cases)
-	public Vocabulary()
+	// false if the vocabulary is being loaded (usually in a different thread)
+	public boolean isLoaded() {return loadingComplete;}
+	
+	// add/remove listener, for monitoring progress toward loading of the ontologies
+	public void addListener(Listener listener) 
 	{
+		if (listener == null) return;
+		synchronized (listeners) {listeners.add(listener);}
+	}
+	public void removeListener(Listener listener) 
+	{
+		synchronized (listeners) {listeners.remove(listener);}
 	}
 	
 	// fetches the label/description for a given URI; if there is none, returns null
@@ -191,24 +239,63 @@ public class Vocabulary
 	{
 		Model model = ModelFactory.createDefaultModel();
 
-		// first step: load files from the packaged JAR-file, if there is one
+		// preliminary analysis: done now in order to estimate the total size of the files needing to be loaded
 		CodeSource jarsrc = getClass().getProtectionDomain().getCodeSource();
+		Set<String> allFiles = new HashSet<>();
+		if (baseDir != null && baseDir.isDirectory()) 
+		{
+			File[] list = baseDir.listFiles();
+			for (File f : list)
+			{
+				String fn = f.getAbsolutePath();
+				if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
+			}
+		}
+		for (File f : extra)
+		{
+			String fn = f.getAbsolutePath();
+			if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
+		}		
+		List<File> files = new ArrayList<>();
+        long progressSize = 0, totalSize = 0;
+		for (String fn : allFiles) 
+		{
+			File f = new File(fn);
+			totalSize += f.length();
+			files.add(f);
+		}
+
+		// first step: load files from the packaged JAR-file, if there is one
 		if (jarsrc != null)
 		{
             URL jar = jarsrc.getLocation();
 
+			// first pass: figure out how many bytes we're talking about
         	ZipInputStream zip = new ZipInputStream(jar.openStream());
             ZipEntry ze = null;
+            while ((ze = zip.getNextEntry()) != null) 
+            {
+                String path = ze.getName();
+                if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl"))) totalSize += ze.getSize();
+            }
+
+			// second pass: read it in
+        	zip = new ZipInputStream(jar.openStream());
+            ze = null;
         
             while ((ze = zip.getNextEntry()) != null) 
             {
                 String path = ze.getName();
-                if (path.startsWith("data/bao/") && (path.endsWith(".owl") || path.endsWith(".ttl")))
+                if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl")))
                 {
+                	progressSize += ze.getSize();
                 	InputStream res = getClass().getResourceAsStream("/" + path);
                 	try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
                 	catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
                 	res.close();
+
+					float progress = (float)progressSize / totalSize;
+                	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
                 }
             }
             
@@ -217,29 +304,15 @@ public class Vocabulary
 
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
-		Set<String> already = new HashSet<>();
-		if (baseDir != null && baseDir.isDirectory()) 
+		files.sort((f1, f2) -> (int)(f1.length() - f2.length()));
+		for (File f : files)
 		{
-			File[] list = baseDir.listFiles();
-			Arrays.sort(list);
-			for (File f : list)
-			{
-				String fn = f.getName();
-				if (!fn.endsWith(".owl") && !fn.endsWith(".ttl")) continue;
-				try {RDFDataMgr.read(model, f.getPath(), fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
-				catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
-				already.add(f.getAbsolutePath());
-			}
-		}
-
-		// if extra files are requested, add them in
-		for (File f : extra)
-		{
-			String fn = f.getAbsolutePath();
-			if (already.contains(fn)) continue;
-			try {RDFDataMgr.read(model, fn, fn.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
+			try {RDFDataMgr.read(model, f.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
 			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
-			already.add(fn);
+
+			progressSize += f.length();
+			float progress = (float)progressSize / totalSize;
+        	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
 		}
 	
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");

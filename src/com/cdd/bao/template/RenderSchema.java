@@ -56,9 +56,7 @@ public class RenderSchema
 	public RenderSchema(Schema schema)
 	{
 		this.schema = schema;
-
-		try {vocab = Vocabulary.globalInstance();}
-		catch (IOException ex) {}
+		vocab = Vocabulary.globalInstance();
 	}
 
 	// creates a new page and crams the template onto it

@@ -213,12 +213,8 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
 	private void loadResources()
 	{
-		try 
-		{
-			vocab = Vocabulary.globalInstance();
-			hier = isProperty ? vocab.getPropertyHierarchy() : vocab.getValueHierarchy();
-		}
-		catch (IOException ex) {ex.printStackTrace(); return;}
+		vocab = Vocabulary.globalInstance();
+		hier = isProperty ? vocab.getPropertyHierarchy() : vocab.getValueHierarchy();
 		
 		String[] source = isProperty ? vocab.getPropertyURIs() : vocab.getValueURIs();
 		for (String uri : source)
