@@ -41,6 +41,7 @@ public class ModelSchema
 	public static final String PFX_BAO = "http://www.bioassayontology.org/bao#"; // BioAssay Ontology
 	public static final String PFX_BAT = "http://www.bioassayontology.org/bat#"; // BioAssay Template
 	public static final String PFX_BAS = "http://www.bioassayontology.org/bas#"; // BioAssay Schema (used as the default)
+	public static final String PFX_BAE = "http://www.bioassayexpress.org/bae#"; // BioAssay Express (for provisional terms)
 	
 	public static final String PFX_OBO = "http://purl.obolibrary.org/obo/";
 	public static final String PFX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -108,6 +109,7 @@ public class ModelSchema
 		"bao:", PFX_BAO,
 		"bat:", PFX_BAT,
 		"bas:", PFX_BAS,
+		"bae:", PFX_BAE,
 		"obo:", PFX_OBO,
 		"rdf:", PFX_RDF,
 		"rdfs:", PFX_RDFS,

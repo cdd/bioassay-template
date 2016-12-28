@@ -111,7 +111,7 @@ public class PreviewTreePanel
 			TreeItem<SchemaTree.Node> parent = idx < 0 ? treeRoot : items.get(idx);
 			TreeItem<SchemaTree.Node> item = items.get(n);
 			parent.getChildren().add(item);
-			if (flat[n].depth <= 1) item.setExpanded(true);
+			if (flat[n].depth == 0) item.setExpanded(true);
 		}
 	}
 	

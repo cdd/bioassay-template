@@ -14,16 +14,30 @@
 
 # biological process
 obo:GO_0008150 a bat:preferredParent .
+obo:GO_0008150 bat:finalLabel "biological process" .
 
 # cellular component
 obo:GO_0005575 a bat:preferredParent .
+obo:GO_0005575 bat:finalLabel "cellular component" .
+
+# molecular function
+obo:GO_0003674 a bat:preferredParent .
+obo:GO_0003674 bat:finalLabel "molecular function" .
 
 # disease
 obo:DOID_4 a bat:preferredParent .
 
-# molecular function
-obo:GO_0003674 a bat:preferredParent .
-
 # cell line cell
 obo:CLO_0000001 a bat:preferredParent .
 obo:CLO_0000001 owl:equivalentClass bao:BAO_0002931 .
+
+# subclass breaking: the 'notSubClass' directive overrides a subclass that has been specified in one of the
+# source ontologies, i.e. makes it as if it were not so, regardless of the order in which the ontologies were
+# processed
+
+# molecular function: subclassed from a weird singleton, for no apparent reason
+# (but: it's rather difficult to disentangle because the BAO is rewriting a lot of it)
+#obo:GO_0003674 rdfs:subClassOf bao:BAO_0003114 .
+#obo:GO_0003674 bat:notSubClass bao:BAO_0003117 .
+#bao:BAO_0003075 bat:notSubClass bao:BAO_0003117 .
+#bao:BAO_0003117 bat:notSubClass bao:BAO_0003114 .

@@ -433,36 +433,6 @@ public class RenderSchema
 		float[] py = new float[]{y, y - 0.5f * sz, y + 0.5f * sz};
 		ctx.drawPoly(px, py, NOCOLOUR, 0, 0x000000, true);
 	}
-
-	/*private float renderGroup(RenderContext ctx, float y, Schema.Group group)
-	{
-		String label = group.name;
-		for (Schema.Group look = group.parent; look.parent != null; look = look.parent) label = look.name + "\u25BA" + label;
-		ctx.drawText(0, y, label, 15, 0x000000, TXTALIGN_LEFT | TXTALIGN_TOP); y += 20;
-		
-		for (Schema.Assignment assn : group.assignments) y = renderAssignment(ctx, y, assn) + 5;
-		for (Schema.Group subGroup : group.subGroups) y = renderGroup(ctx, y, subGroup) + 5;
-
-		return y;
-	}*/
-	
-	/*private void renderNonsense(RenderContext ctx) throws IOException
-	{
-		ctx.drawRect(50, 250, 400, 200, 0xC0C0C0, 1, 0xF0F0F0);
-		ctx.drawRect(5, 5, 490, 490, 0x008000, 2, RenderContext.NOCOLOUR);
-		ctx.drawLine(0, 0, 500, 500, 0xFF0000, 2);
-		ctx.drawLine(0, 250, 500, 250, 0x0000FF, 10);
-
-		ctx.drawPoly(new float[]{100,150,100}, new float[]{100,150,200}, 0xFFFF00, 1, 0x800000, true);
-		ctx.drawCurve(new float[]{100,150,200}, new float[]{300,250,300}, new boolean[]{false,true,false}, 0x00FFFF, 1, 0x808000, false);
-		//ctx.drawCurve(new float[]{100,130,170,200}, new float[]{300,250,250,300}, new boolean[]{false,true,true,false}, 0x00FFFF, 1, 0x808000, false);
-		
-		float[] wad = ctx.measureFont("gfnordy", 20);
-		ctx.drawLine(10, 10, 10 + wad[0], 10, 0x0000FF, 0.5f);
-		ctx.drawLine(10, 10 + wad[1], 10 + wad[0], 10 + wad[1], 0x0000FF, 0.5f);
-		ctx.drawLine(10, 10 + wad[1] + wad[2], 10 + wad[0], 10 + wad[1] + wad[2], 0x0000FF, 0.5f);
-		ctx.drawText(10, 10, "gfnordy", 20, 0x000000, RenderContext.TXTALIGN_TOP | RenderContext.TXTALIGN_LEFT);
-	}*/
 	
 	// given a series of objects of a certain height, returns a collection of blocks that represent an attempt to arrange them with columns
 	// of an even height; not an exact science, but it's better than random
