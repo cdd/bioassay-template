@@ -99,45 +99,10 @@ public class BrowseEndpoint
 
         stage.setTitle("BioAssay Schema Browser");
 
-		/*menuBar = new MenuBar();
-		menuBar.setUseSystemMenuBar(true);
-		menuBar.getMenus().add(menuFile = new Menu("_File"));
-		menuBar.getMenus().add(menuEdit = new Menu("_Edit"));
-		menuBar.getMenus().add(menuValue = new Menu("_Value"));
-		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
-		createMenuItems();*/
-
 		treeRoot = new TreeItem<>(new Branch(this));
 		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
-		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
-		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new BrowseTreeCell();}
-        });
-        /*treeview.setOnMouseClicked(new EventHandler<MouseEvent>()
-        {
-            public void handle(MouseEvent event)
-            {            
-				if (event.getClickCount() == 2) treeDoubleClick(event);
-            }
-        });
-        treeview.setOnMousePressed(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (event.getButton().equals(MouseButton.SECONDARY) || event.isControlDown()) treeRightClick(event);
-			}
-		});*/
-		/*treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
-		{
-	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
-	        {
-	        	if (oldVal != null) pullDetail(oldVal);
-	        	if (newVal != null) pushDetail(newVal);
-            }
-		});	
-		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
-		*/
+        treeView.setCellFactory(p -> new BrowseTreeCell());
 		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldval, newval) -> {changeValue(newval.getValue());});
 
 		display = new DisplaySchema();
@@ -165,70 +130,12 @@ public class BrowseEndpoint
 
         Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
-		/*stage.setOnCloseRequest(event -> 
-		{
-			if (!confirmClose()) event.consume();
-		});*/
-		
 		new Thread(() -> backgroundLoadTemplates()).start();
  	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}
-	//public DetailPane getDetailView() {return detail;}
 
 	// ------------ private methods ------------	
-
-/*
-	private void createMenuItems()
-    {
-    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN;
-    
-    	addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
-    	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
-    	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
-    	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
-		menuFile.getItems().add(new SeparatorMenuItem());
-		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
-		addMenu(menuFile, "_Browse Triples", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
-		addMenu(menuFile, "_Upload Triples", new KeyCharacterCombination("U", cmd, shift)).setOnAction(event -> actionFileUpload());
-		menuFile.getItems().add(new SeparatorMenuItem());
-    	addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
-    	addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
-    	
-		addMenu(menuEdit, "Add _Group", new KeyCharacterCombination("G", cmd, shift)).setOnAction(event -> actionGroupAdd());
-		addMenu(menuEdit, "Add _Assignment", new KeyCharacterCombination("A", cmd, shift)).setOnAction(event -> actionAssignmentAdd());
-		addMenu(menuEdit, "Add Assa_y", new KeyCharacterCombination("Y", cmd, shift)).setOnAction(event -> actionAssayAdd());
-		menuEdit.getItems().add(new SeparatorMenuItem());
-		addMenu(menuEdit, "Cu_t", new KeyCharacterCombination("X", cmd)).setOnAction(event -> actionEditCopy(true));
-		addMenu(menuEdit, "_Copy", new KeyCharacterCombination("C", cmd)).setOnAction(event -> actionEditCopy(false));
-		addMenu(menuEdit, "_Paste", new KeyCharacterCombination("V", cmd)).setOnAction(event -> actionEditPaste());
-		menuEdit.getItems().add(new SeparatorMenuItem());
-    	addMenu(menuEdit, "_Delete", new KeyCodeCombination(KeyCode.DELETE, cmd, shift)).setOnAction(event -> actionEditDelete());
-    	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
-    	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditRedo());
-		menuEdit.getItems().add(new SeparatorMenuItem());
-		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
-		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));
-
-		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> detail.actionValueAdd());
-		addMenu(menuValue, "_Delete Value", new KeyCodeCombination(KeyCode.DELETE, cmd)).setOnAction(event -> detail.actionValueDelete());
-		addMenu(menuValue, "Move _Up", new KeyCodeCombination(KeyCode.UP, cmd)).setOnAction(event -> detail.actionValueMove(-1));
-		addMenu(menuValue, "Move _Down", new KeyCodeCombination(KeyCode.DOWN, cmd)).setOnAction(event -> detail.actionValueMove(1));
-		menuValue.getItems().add(new SeparatorMenuItem());
-		addMenu(menuValue, "_Lookup URI", new KeyCharacterCombination("U", cmd)).setOnAction(event -> detail.actionLookupURI());
-		addMenu(menuValue, "Lookup _Name", new KeyCharacterCombination("L", cmd)).setOnAction(event -> detail.actionLookupName());
-
-    	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
-    	addMenu(menuView, "_Assays", new KeyCharacterCombination("2", cmd)).setOnAction(event -> actionViewAssays());
-    }
-    
-    private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
-    {
-    	MenuItem item = new MenuItem(title);
-    	parent.getItems().add(item);
-    	if (accel != null) item.setAccelerator(accel);
-    	return item;
-    }*/
 
 	private void rebuildTree()
 	{

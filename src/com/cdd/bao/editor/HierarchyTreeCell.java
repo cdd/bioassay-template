@@ -40,7 +40,7 @@ import javafx.beans.value.*;
 import javafx.util.*;
 
 /*
-	Display functionality for the schema tree shown on the left hand side.
+	Display functionality for the schema tree shown on the left hand side of the main window (i.e. EditSchema).
 */
 
 public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
@@ -52,24 +52,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
     public HierarchyTreeCell()
     {
     }
- 
-    /*public void startEdit() 
-    {
-    	Util.writeln("EDIT START!");
-        super.startEdit();
-        if (textField == null) createTextField();
-        setText(null);
-        setGraphic(textField);
-        textField.selectAll();
-    }
- 
-    public void cancelEdit()
-    {
-    	Util.writeln("EDIT STOP!");
-        super.cancelEdit();
-        setText((String) getItem());
-        setGraphic(getTreeItem().getGraphic());
-    }*/
  
     public void updateItem(EditSchema.Branch branch, boolean empty)
     {
@@ -97,17 +79,10 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             				   branch.assignment != null ? branch.assignment.name : 
             				   branch.assay != null ? branch.assay.name : "?";
 
-				//style += setStyle(label.length() == 0 ? "-fx-text-fill: red;" : "-fx-text-fill: black");
             	if (label.length() == 0)
             	{
             		label = "unnamed";
-            		//style += "-fx-font-style: italic;"; (doesn't work, not sure why)
             		style += "-fx-text-fill: #800000;";
-            	}
-            	else
-            	{
-            		//style += "-fx-font-style: normal;";
-            		//style += "-fx-text-fill: #404040;";
             	}
 
     			if (branch.heading != null || branch.group != null) style += "-fx-font-weight: bold;";
@@ -154,22 +129,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
     	return item;
     }
 
-    /*private void createTextField() 
-    {
-        textField = new TextField(getString());
-        textField.setOnKeyReleased(new EventHandler<KeyEvent>()
-        {
-            @Override
-            public void handle(KeyEvent t) {
-                if (t.getCode() == KeyCode.ENTER) {
-                    commitEdit(textField.getText());
-                } else if (t.getCode() == KeyCode.ESCAPE) {
-                    cancelEdit();
-                }
-            }
-        });  
-    }*/
-     
 	private String getString() 
     {
         return getItem() == null ? "" : getItem().toString();

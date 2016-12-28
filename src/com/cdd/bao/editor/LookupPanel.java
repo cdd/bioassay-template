@@ -125,10 +125,6 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
     	    }
     	    
         }
-    	/*private String getString() 
-        {
-            return getItem() == null ? "" : getItem().toString();
-        }*/
     }
 
     private final int PADDING = 2;
@@ -289,22 +285,6 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
         pane.setCenter(treeView);
         
         tabTree.setContent(pane);
-	
-/*
-		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
-		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
-        });
-		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
-		{
-	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
-	        {
-	        	if (oldVal != null) pullDetail(oldVal);
-	        	if (newVal != null) pushDetail(newVal);
-            }
-		});	
-		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));*/	
-	
 	}
 	
 	// recursively add a new branch into the tree

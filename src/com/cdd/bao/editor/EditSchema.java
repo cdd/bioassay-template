@@ -25,7 +25,6 @@ import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.editor.endpoint.*;
-import com.cdd.bao.editor.fetch.*;
 
 import java.io.*;
 import java.net.*;
@@ -129,32 +128,12 @@ public class EditSchema
 		treeRoot = new TreeItem<>(new Branch(this));
 		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
-		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
+        treeView.setCellFactory(p -> new HierarchyTreeCell());
+		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) ->
 		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
-        });
-        /*treeview.setOnMouseClicked(new EventHandler<MouseEvent>()
-        {
-            public void handle(MouseEvent event)
-            {            
-				if (event.getClickCount() == 2) treeDoubleClick(event);
-            }
-        });
-        treeview.setOnMousePressed(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (event.getButton().equals(MouseButton.SECONDARY) || event.isControlDown()) treeRightClick(event);
-			}
-		});*/
-		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
-		{
-	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
-	        {
-	        	if (oldVal != null) pullDetail(oldVal);
-	        	if (newVal != null) pushDetail(newVal);
-            }
-		});	
+        	if (oldVal != null) pullDetail(oldVal);
+        	if (newVal != null) pushDetail(newVal);
+		});
 		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));
 
 		detail = new DetailPane(this);
@@ -342,7 +321,6 @@ public class EditSchema
     	addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
     	addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
 		menuFile.getItems().add(new SeparatorMenuItem());
-		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
 		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
     	if (false)
@@ -585,28 +563,6 @@ public class EditSchema
         return result.get() == ButtonType.OK;
 	}
 
-	/*private void treeDoubleClick(MouseEvent event)
-	{
-        TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-        System.out.println("DOUBLE CLICK : " + item.getValue());
-	}        
-	private void treeRightClick(MouseEvent event)
-	{
-        MenuItem addMenuItem = new MenuItem("Fnord!");
-        ContextMenu ctx = new ContextMenu();
-        ctx.getItems().add(addMenuItem);
-        addMenuItem.setOnAction(new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent t)
-            {
-            	Util.writeln("--> FNORD!");
-            }
-        });
-        
-        TreeItem<String> item = treeview.getSelectionModel().getSelectedItem();
-		Util.writeln("RIGHT CLICK");
-	}*/
-
 	// ------------ action responses ------------	
 	
 	public void actionFileNew()
@@ -765,23 +721,6 @@ public class EditSchema
 
 		stack.changeSchema(merged, true);
 		rebuildTree();
-	}
-	public void actionFilePubChem()
-	{
-		Schema schema = stack.getSchema();
-
-		PubChemPanel pubchem = new PubChemPanel(schema);
-		Optional<Schema.Assay> result = pubchem.showAndWait();
-		if (!result.isPresent()) return;
-		Schema.Assay newAssay = result.get();
-		if (newAssay == null) return;
-		
-		schema.appendAssay(newAssay);
-		stack.changeSchema(schema);
-		
-		updateTitle();
-		rebuildTree();
-		setCurrentBranch(locateBranch(schema.locatorID(newAssay)));
 	}
     public void actionFileConfigure()
     {
@@ -1047,19 +986,14 @@ public class EditSchema
 		
 		if (group != null)
 		{
-			//Util.writeln("PASTEGROUP:"+group.name);
-			//Util.writeln(ClipboardSchema.composeGroup(group).toString());
 			schema.appendGroup(schema.obtainGroup(branch.locatorID), group);
 		}
 		else if (assn != null)
 		{
-			//Util.writeln("PASTEASSN:"+assn.name);
-			//Util.writeln(ClipboardSchema.composeAssignment(assn).toString());
 			schema.appendAssignment(schema.obtainGroup(branch.locatorID), assn);
 		}
 		else if (assay != null)
 		{
-			// !! this would be a good place to do some reconciliation of assignment branches, if necessary
 			schema.appendAssay(assay);
 		}
 		

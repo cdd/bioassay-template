@@ -132,7 +132,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
  
         TableColumn<Schema.Value, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-        colURI.setCellValueFactory(value -> {return new SimpleStringProperty(substitutePrefix(value.getValue().uri));});
+        colURI.setCellValueFactory(value -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(value.getValue().uri));});
          
         TableColumn<Schema.Value, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
@@ -268,7 +268,6 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		{
 			int idx = table.getSelectionModel().getSelectedIndex();
 			if (idx < 0) return null;
-			//Schema.Value val = options.get(idx);
 			Schema.Value val = table.getSelectionModel().getSelectedItem();
 			return new Schema.Annotation(assn, val);
 		}
@@ -293,50 +292,9 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	{
 		return new Schema.Annotation();
 	}
-
-	/*private void loadResources(Set<String> usedURI)
-	{
-		Vocabulary vocab = null;
-		try {vocab = Vocabulary.globalInstance();}
-		catch (IOException ex) {ex.printStackTrace(); return;}
-		
-		for (String uri : vocab.getAllURIs())
-		{
-			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
-			res.beingUsed = usedURI.contains(uri);
-			resources.add(res);
-		}
-	}*/
-
-/*
-	// manufactures a value from the selected item
-	private Schema.Value composeCurrentValue()
-	{
-		Resource res = table.getSelectionModel().getSelectedItem();
-		if (res == null) return null;
-	
-		Schema.Value val = new Schema.Value(res.uri, res.label);
-		val.descr = res.descr;
-		return val;
-	}
-*/	
-	// returns a subset of the resources which matches the search text (or all if blank)
-	/*private List<Resource> searchedSubset(String searchText)
-	{
-		if (searchText.length() == 0) return resources;
-		
-		String searchLC = searchText.toLowerCase();
-		
-		List<Resource> subset = new ArrayList<>();
-		for (Resource res : resources)
-		{
-			if (res.label.toLowerCase().indexOf(searchLC) >= 0 || res.uri.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
-		}
-		return subset;
-	}*/
 	
 	// switches shorter prefixes for display convenience
-	private final String[] SUBST = 
+	/*private final String[] SUBST = 
     {
     	"obo:", "http://purl.obolibrary.org/obo/",
     	"bao:", "http://www.bioassayontology.org/bao#",
@@ -350,7 +308,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 			if (uri.startsWith(SUBST[n + 1])) return SUBST[n] + uri.substring(SUBST[n + 1].length());
 		}
 		return uri;
-	}
+	}*/
 	
 	private String cleanupDescription(String descr)
 	{

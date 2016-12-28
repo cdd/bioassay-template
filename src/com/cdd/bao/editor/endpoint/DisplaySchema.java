@@ -56,32 +56,6 @@ public class DisplaySchema extends ScrollPane
 	private final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
-/*	private TextField fieldPrefix = null;
-	private TextField fieldName = null;
-	private TextArea fieldDescr = null;
-	private TextField fieldURI = null;
-	private TextArea fieldPara = null;
-	
-	private final class ValueWidgets
-	{
-		Lineup line;
-		Schema.Value sourceVal;
-		TextField fieldURI, fieldName;
-		TextArea fieldDescr;
-	}
-	private List<ValueWidgets> valueList = new ArrayList<>();
-	
-	private final class AnnotWidgets
-	{
-		Lineup line;
-		Schema.Assignment sourceAssn;
-		Schema.Annotation[] sourceAnnot;
-		Button[] buttonShow;
-		Button buttonAdd;
-	}
-	private List<AnnotWidgets> annotList = new ArrayList<>();
-	
-	private int focusIndex = -1; // which "group of widgets" has the focus*/
 
 	// ------------ public methods ------------	
 

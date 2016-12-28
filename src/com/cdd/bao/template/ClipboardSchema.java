@@ -36,15 +36,8 @@ import org.json.*;
 
 public class ClipboardSchema
 {
-	//private Schema schema;
-
 	// ------------ public methods ------------	
 
-	/*public ClipboardSchema(Schema schema)
-	{
-		this.schema = schema;
-	}*/
-	
 	// turns a group/assignment/assay into a JSON object which can be conveniently unpacked later
 	public static JSONObject composeGroup(Schema.Group group)
 	{
