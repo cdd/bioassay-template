@@ -337,6 +337,7 @@ public class EditSchema
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
     	addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
     	addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+    	addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
     	addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Lookup _PubChem", new KeyCharacterCombination("P", cmd, shift)).setOnAction(event -> actionFilePubChem());
@@ -676,6 +677,41 @@ public class EditSchema
 			ex.printStackTrace();
 			Util.informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
+	}
+	public void actionFileExportDump()
+	{
+		if (!Vocabulary.globalInstance().isLoaded()) return;
+		
+		pullDetail();
+		
+        FileChooser chooser = new FileChooser();
+    	chooser.setTitle("Export Schema Dump");
+    	if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
+    	chooser.setInitialFileName("vocab.dump");
+    	
+    	File file = chooser.showSaveDialog(stage);
+		if (file == null) return;
+		
+		if (!file.getName().endsWith(".dump")) file = new File(file.getAbsolutePath() + ".dump");
+
+		// NOTE: interactive functionality can only do one schema at a time, which is a very real deficiency
+		Schema[] schemaList = new Schema[]{stack.getSchema()};
+		SchemaVocab sv = new SchemaVocab(Vocabulary.globalInstance(), schemaList);
+		
+		Util.writeln("-------------------------");
+		sv.debugSummary();
+		Util.writeln("-------------------------");
+		
+		try
+		{
+			OutputStream ostr = new FileOutputStream(file);
+			sv.serialise(ostr);
+			ostr.close();
+		}
+		catch (IOException ex) {ex.printStackTrace();}
+		
+		String msg = "Written to [" + file.getAbsolutePath() + "]. Size: " + file.length();
+		Util.informWarning("Export", msg);
 	}
 	public void actionFileMerge()
 	{

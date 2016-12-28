@@ -43,6 +43,9 @@ public class Main
 			return;
 		}
 		
+		// TODO: add option to read in multiple schema files and export them to a single "vocab.dump"
+		// TODO: read in an RDF/TTL file and export only the relevant predicates in minimal TTL (to reduce file sizes)
+		
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
 		else if (argv[0].equals("edit")) 
 		{
