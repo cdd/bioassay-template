@@ -35,6 +35,8 @@ import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.stage.*;
+import javafx.scene.*;
 import javafx.application.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
@@ -44,51 +46,28 @@ import javafx.geometry.*;
 import javafx.util.*;
 
 /*
-	Lookup panel: takes a partially specified schema value and opens up the vocabulary list, to make it easy to pick URI/label/description
-	combinations.
+	Preview: shows what the fully processed tree view will look like for an assignment.
 */
 
-public class LookupPanel extends Dialog<LookupPanel.Resource[]>
+public class PreviewTreePanel
 {
-	private Vocabulary vocab = null;
-	private Vocabulary.Hierarchy hier = null;
-	private boolean isProperty; // false = value lookup, true = property lookup
-	private Set<String> usedURI, exclURI;
-	private boolean multi;
+	private SchemaTree tree;
+	private Schema.Assignment assn;
+	private Vocabulary vocab = Vocabulary.globalInstance();
 
-	public static final class Resource
-	{
-		public String uri, label, descr;
-		public boolean beingUsed;
-		
-		public Resource(String uri, String label, String descr)
-		{
-			this.uri = uri;
-			this.label = label == null ? "" : label;
-			this.descr = descr == null ? "" : descr;
-		}
-	};
-	private List<Resource> resources = new ArrayList<>();
+    private TreeItem<SchemaTree.Node> treeRoot = new TreeItem<>(new SchemaTree.Node());
+    private TreeView<SchemaTree.Node> treeView = new TreeView<>(treeRoot);
 
-	private TabPane tabber = new TabPane();
-	private Tab tabList = new Tab("List"), tabTree = new Tab("Hierarchy");
-
-	private TextField fieldSearch = new TextField();
-	private TableView<Resource> tableList = new TableView<>();
-
-    private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<>(new Vocabulary.Branch(null, null));
-    private TreeView<Vocabulary.Branch> treeView = new TreeView<>(treeRoot);
-
-    private final class HierarchyTreeCell extends TreeCell<Vocabulary.Branch>
+    private final class HierarchyTreeCell extends TreeCell<SchemaTree.Node>
     {
-        public void updateItem(Vocabulary.Branch branch, boolean empty)
+        public void updateItem(SchemaTree.Node node, boolean empty)
         {
-            super.updateItem(branch, empty);
+            super.updateItem(node, empty);
             
-            if (branch != null)
+            if (node != null)
             {
-                String text = "URI <" + branch.uri + ">";
-    			String descr = vocab.getDescr(branch.uri);
+                String text = "URI <" + node.uri + ">";
+    			String descr = vocab.getDescr(node.uri);
                 if (descr != null && descr.length() > 0) text += "\n\n" + descr;
                 Tooltip tip = new Tooltip(text);
                 tip.setWrapText(true);
@@ -103,13 +82,13 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             }
             else 
             {
-            	String label = branch.label;
+            	String label = node.label;
 
     			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
-    			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
-    			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
+    			//if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+    			//else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
     			
-    			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
+    			/*if (node.uri.startsWith(ModelSchema.PFX_BAO) || node.uri.startsWith(ModelSchema.PFX_BAT)) 
     			{
     				style += " -fx-font-style: normal;";
     			}
@@ -117,27 +96,52 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
     			{
     				style += " -fx-font-style: italic;";
     				label += " *";
-    			}
+    			}*/
             	
             	setText(label);
    				setStyle(style);
                 setGraphic(getTreeItem().getGraphic());
     	    }
-    	    
         }
-    	/*private String getString() 
-        {
-            return getItem() == null ? "" : getItem().toString();
-        }*/
     }
 
     private final int PADDING = 2;
        
 	// ------------ public methods ------------
 
-	public LookupPanel(boolean isProperty, String searchText, Set<String> usedURI, Set<String> exclURI, boolean multi)
+	public PreviewTreePanel(SchemaTree tree, Schema.Assignment assn)
 	{
-		super();
+		this.tree = tree;
+		this.assn = assn;
+		
+		treeView.setShowRoot(false);
+		treeView.setCellFactory((p) -> new HierarchyTreeCell());
+		
+		SchemaTree.Node[] flat = tree.getFlat();
+		List<TreeItem<SchemaTree.Node>> items = new ArrayList<>();
+		for (SchemaTree.Node node : flat) items.add(new TreeItem<>(node));
+		for (int n = 0; n < flat.length; n++)
+		{
+			int idx = flat[n].parentIndex;
+			TreeItem<SchemaTree.Node> parent = idx < 0 ? treeRoot : items.get(idx);
+			TreeItem<SchemaTree.Node> item = items.get(n);
+			parent.getChildren().add(item);
+			if (flat[n].depth <= 1) item.setExpanded(true);
+		}
+	}
+	
+	public void show()
+	{
+		Stage stage = new Stage();
+        stage.setTitle("Tree: " + assn.name);
+
+		BorderPane root = new BorderPane();
+		root.setCenter(treeView);
+        
+        stage.setScene(new Scene(root, 700, 700));
+        stage.show();
+	}
+/*		super();
 		
 		this.isProperty = isProperty;
 		this.usedURI = usedURI;
@@ -207,11 +211,11 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			tableList.getSelectionModel().clearAndSelect(n);
 			return;
 		}
-	}
+	}*/
 	
 	// ------------ private methods ------------
 
-	private void loadResources()
+	/*private void loadResources()
 	{
 		vocab = Vocabulary.globalInstance();
 		hier = isProperty ? vocab.getPropertyHierarchy() : vocab.getValueHierarchy();
@@ -289,22 +293,6 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
         pane.setCenter(treeView);
         
         tabTree.setContent(pane);
-	
-/*
-		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
-		{
-            public TreeCell<Branch> call(TreeView<Branch> p) {return new HierarchyTreeCell();}
-        });
-		treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Branch>>()
-		{
-	        public void changed(ObservableValue<? extends TreeItem<Branch>> observable, TreeItem<Branch> oldVal, TreeItem<Branch> newVal) 
-	        {
-	        	if (oldVal != null) pullDetail(oldVal);
-	        	if (newVal != null) pushDetail(newVal);
-            }
-		});	
-		treeView.focusedProperty().addListener((val, oldValue, newValue) -> Platform.runLater(() -> maybeUpdateTree()));*/	
-	
 	}
 	
 	// recursively add a new branch into the tree
@@ -328,18 +316,18 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	}
 	
 	// manufactures a value from the selected items
-	private LookupPanel.Resource[] composeCurrentValue()
+	private PreviewTreePanel.Resource[] composeCurrentValue()
 	{
 		if (tabber.getSelectionModel().getSelectedItem() == tabList)
 		{
-			List<LookupPanel.Resource> list = tableList.getSelectionModel().getSelectedItems();
-			return list.toArray(new LookupPanel.Resource[list.size()]);
+			List<PreviewTreePanel.Resource> list = tableList.getSelectionModel().getSelectedItems();
+			return list.toArray(new PreviewTreePanel.Resource[list.size()]);
 		}
 		else if (tabber.getSelectionModel().getSelectedItem() == tabTree)
 		{
 			List<TreeItem<Vocabulary.Branch>> list = treeView.getSelectionModel().getSelectedItems();
 			
-			List<LookupPanel.Resource> ret = new ArrayList<>();
+			List<PreviewTreePanel.Resource> ret = new ArrayList<>();
 			for (int n = 0; n < list.size(); n++)
 			{
 				Vocabulary.Branch branch = list.get(n).getValue();
@@ -348,7 +336,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 				
 				ret.add(new Resource(branch.uri, branch.label, vocab.getDescr(branch.uri)));
 			}
-			return ret.toArray(new LookupPanel.Resource[ret.size()]);
+			return ret.toArray(new PreviewTreePanel.Resource[ret.size()]);
 		}
 		return null;
 	}
@@ -447,5 +435,5 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	private String cleanupDescription(String descr)
 	{
 		return descr.replaceAll("\n", " ");
-	}
+	}*/
 }

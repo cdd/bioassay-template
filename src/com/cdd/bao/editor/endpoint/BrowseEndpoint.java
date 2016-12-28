@@ -107,8 +107,8 @@ public class BrowseEndpoint
 		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
 		createMenuItems();*/
 
-		treeRoot = new TreeItem<Branch>(new Branch(this));
-		treeView = new TreeView<Branch>(treeRoot);
+		treeRoot = new TreeItem<>(new Branch(this));
+		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
 		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{

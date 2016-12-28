@@ -238,7 +238,7 @@ public class DetailPane extends ScrollPane
 	// menu-driven action events
     public void actionValueAdd()
     {
-    	if (assignment == null) return;	
+    	if (assignment == null) return;
     	
     	Schema.Assignment modAssn = extractAssignment();
     	if (modAssn == null) modAssn = assignment;
@@ -374,6 +374,18 @@ public class DetailPane extends ScrollPane
     		}
     	}
     }
+	public void actionShowTree()
+	{
+		if (!Vocabulary.globalInstance().isLoaded()) return;
+	
+    	if (assignment == null) return;
+    	
+    	Schema.Assignment modAssn = extractAssignment();
+    	if (modAssn == null) modAssn = assignment;
+
+		SchemaTree tree = new SchemaTree(modAssn, Vocabulary.globalInstance());
+		new PreviewTreePanel(tree, modAssn).show();
+	}
 
 	// ------------ private methods ------------	
 
@@ -441,10 +453,20 @@ public class DetailPane extends ScrollPane
 		vbox.setFillWidth(true);
 		vbox.setMaxWidth(Double.MAX_VALUE);
 
+		HBox titleLine = new HBox();
+		titleLine.setSpacing(5);
 		Label heading = new Label("Assignment");
 		heading.setTextAlignment(TextAlignment.CENTER);
 		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
-		vbox.getChildren().add(heading);
+		titleLine.getChildren().add(heading);
+		Node padding = new Pane();
+		titleLine.getChildren().add(padding);
+		HBox.setHgrow(padding, Priority.ALWAYS);
+		Button btnAdd = new Button("Add Values"), btnTree = new Button("Show Tree");
+		btnAdd.setOnAction(event -> actionValueMultiAdd());
+		btnTree.setOnAction(event -> actionShowTree());
+		titleLine.getChildren().addAll(btnAdd, btnTree);
+		vbox.getChildren().add(titleLine);
 
 		Lineup line = new Lineup(PADDING);
 		

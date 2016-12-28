@@ -126,8 +126,8 @@ public class EditSchema
 		menuBar.getMenus().add(menuView = new Menu("Vie_w"));
 		createMenuItems();
 
-		treeRoot = new TreeItem<Branch>(new Branch(this));
-		treeView = new TreeView<Branch>(treeRoot);
+		treeRoot = new TreeItem<>(new Branch(this));
+		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
 		treeView.setCellFactory(new Callback<TreeView<Branch>, TreeCell<Branch>>()
 		{
@@ -176,13 +176,15 @@ public class EditSchema
 		root.setCenter(splitter);
 		root.setBottom(progBar);
 
+		BorderPane.setMargin(progBar, new Insets(2, 2, 2, 2));
+
 		Scene scene = new Scene(root, 900, 800, Color.WHITE);
 
 		stage.setScene(scene);
 		
 		treeView.setShowRoot(false);
-		treeRoot.getChildren().add(treeTemplate = new TreeItem<Branch>(new Branch(this, "Template")));
-		treeRoot.getChildren().add(treeAssays = new TreeItem<Branch>(new Branch(this, "Assays")));
+		treeRoot.getChildren().add(treeTemplate = new TreeItem<>(new Branch(this, "Template")));
+		treeRoot.getChildren().add(treeAssays = new TreeItem<>(new Branch(this, "Assays")));
 		treeTemplate.setExpanded(true);
 		treeAssays.setExpanded(true);
 		
@@ -388,6 +390,7 @@ public class EditSchema
 		(menuViewSummary = addCheckMenu(menuView, "_Summary Values", new KeyCharacterCombination("-", cmd))).setOnAction(event -> actionViewToggleSummary());
     	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
     	addMenu(menuView, "_Assays", new KeyCharacterCombination("2", cmd)).setOnAction(event -> actionViewAssays());
+    	addMenu(menuView, "_Derived Tree", new KeyCharacterCombination("3", cmd)).setOnAction(event -> detail.actionShowTree());
     }
     
     private MenuItem addMenu(Menu parent, String title, KeyCombination accel)
