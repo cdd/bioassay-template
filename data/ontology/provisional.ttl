@@ -1,0 +1,31 @@
+# provisional additions to the ontologies that are used by the BioAssay Express: each of these terms should
+# be considered long term temporary, i.e. it should eventually find a home within the appropriate official
+# ontology (BAO, DTO, CLO, GO, etc.) and all references to it should be updated to point to the new term
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix bae:   <http://www.bioassayexpress.org/bae#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+bae:BAE_0000001
+  rdfs:label "viral titer assay" ;
+  rdfs:subClassOf bao:BAO_0000015 ;
+  obo:IAO_0000115 "A titer (or titre) is a measure of concentration. A viral titer assay is any method to quantify the number of viruses in a specific volume. Common methods include a plaque formation assay (PFA), focus forming assay (FFA), which yield results of plaque or focus forming units per ml (pfu or ffu/ ml), or endpoint dilution assay (TCID50, which measures the amount of virus needed to kill 50% 0of infected hosts or cells).  TCID50 and pfu/ml results are not equivalent." 
+  .
+
+bae:BAE_0000002
+  rdfs:label "Am2.2-beta2AR cell" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to the extracellular N-terminus of the human β2AR gene  (thus, 'AM2.2-beta2AR'). See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000003
+  rdfs:label "Ebola virus" ;
+  rdfs:subClassOf bao:BAO_0000232 ;
+  .
+
+  
