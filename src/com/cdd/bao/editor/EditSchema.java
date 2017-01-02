@@ -649,11 +649,17 @@ public class EditSchema
     	chooser.setInitialFileName("vocab.dump");
     	
     	File file = chooser.showSaveDialog(stage);
-		if (file == null) return;
-		
-		if (!file.getName().endsWith(".dump")) file = new File(file.getAbsolutePath() + ".dump");
+    	if (file == null) return;
 
-		// NOTE: interactive functionality can only do one schema at a time, which is a very real deficiency
+		// when overwriting a file, bring up a preview that shows the differences between before & after, and asks for
+		// confirmation before replacing it
+		if (file.exists())
+		{
+			try {new CompareVocabTree(file, stack.getSchema()).show();}
+			catch (Exception ex) {ex.printStackTrace();}
+			return;
+		}
+
 		Schema[] schemaList = new Schema[]{stack.getSchema()};
 		SchemaVocab sv = new SchemaVocab(Vocabulary.globalInstance(), schemaList);
 		
