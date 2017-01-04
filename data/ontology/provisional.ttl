@@ -28,4 +28,63 @@ bae:BAE_0000003
   rdfs:subClassOf bao:BAO_0000232 ;
   .
 
+bae:BAE_0000004
+  rdfs:label "Am2.2-beta2AR/MG13-CCR5 dual cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing both the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to the extracellular N-terminus of the human β2AR (AM2.2-beta2AR) and the surface displayed fusion protein of FAP MG13 to the extracellular N-terminus of the murine CCR5 . See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000005
+  rdfs:label "MG13-mCCRF cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) MG13 to the extracellular N-terminus of murine CCRF. See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000006
+  rdfs:label "AM2.2-GPR32 cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to GPR32. See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000007
+  rdfs:label "Abeta-arrestin clustering (aka 'Transfluor') assay" ;
+  rdfs:subClassOf bao:BAO_0002663 ;
+  obo:IAO_0000115 "The Transfluor assay employs a a beta-arrestin-GFP fusion protein to detect activation of GPCRs: Upon ligand binding the GPCR, cytosolic arrestin-GFP quickly translocates to the cell membrane and then to endocytic vesicles, where it 'clusters' and can be detected by fluorescent image analysis. (Developed / commercialized by Norak, then Molecular Devices)"
+  .
+
+bae:BAE_0000008
+  rdfs:label "DNA-small molecule interaction assay" ;
+  rdfs:subClassOf bao:BAO_0002989 ;
+  obo:IAO_0000115 "An interaction between DNA (single- or double-stranded) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
+
+bae:BAE_0000009
+  rdfs:label "RNA-small molecule interaction assay" ;
+  rdfs:subClassOf bao:BAO_0002989 ;
+  obo:IAO_0000115 "An interaction between any RNA (such as mRNA, tRNA, rRNA, miRNA, lincRNA, synthetic RNA) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
   
+bae:BAE_0000010
+  rdfs:label "protein profiling assay" ;
+  rdfs:subClassOf bao:BAO_0000015 ;
+  obo:IAO_0000115 "An interaction between any RNA (such as mRNA, tRNA, rRNA, miRNA, lincRNA, synthetic RNA) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
+    
+bae:BAE_0000011
+  rdfs:label "parallel artificial membrane permeability assay" ;
+  rdfs:subClassOf bao:BAO_0002182 ;
+  obo:IAO_0000115 "PAMPA (parallel artificial membrane permeability assay) is a method which determines the permeability of substances from a donor compartment, through a lipid-infused artificial membrane into an acceptor compartment. It is used as an in vitro model of passive, transcellular permeation to predict oral absorption. PAMPA is an alternative to the cell-based Caco-2 permeability assay: Caco-2 uses compartments of different volumes separated by a monolayer of cells grown on a filter. PAMPA, however, uses chambers of the same size, separated by a filter coated with lipid in organic solvent."
+  .
+
+bae:BAE_0000012
+  rdfs:label "SILAC" ;
+  rdfs:subClassOf bao:BAO_0040014 ;
+  obo:IAO_0000115 "SILAC (Stable Isotope Labeling by/with Amino acids in Cell culture) is a technique based on mass spectrometry that detects differences in protein abundance among samples using non-radioactive isotopic labeling. It is a popular method for quantitative proteomics."
+  .
+
+bae:BAE_0000013
+  rdfs:label "total cellular lipids format" ;
+  rdfs:subClassOf bao:BAO_0000220 ;
+  obo:IAO_0000115 "SILAC (Stable Isotope Labeling by/with Amino acids in Cell culture) is a technique based on mass spectrometry that detects differences in protein abundance among samples using non-radioactive isotopic labeling. It is a popular method for quantitative proteomics."
+  .
+
