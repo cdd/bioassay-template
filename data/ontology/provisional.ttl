@@ -48,7 +48,7 @@ bae:BAE_0000006
 
 bae:BAE_0000007
   rdfs:label "Abeta-arrestin clustering (aka 'Transfluor') assay" ;
-  rdfs:subClassOf bao:BAO_0002663 ;
+  rdfs:subClassOf bao:BAO_0002989;
   obo:IAO_0000115 "The Transfluor assay employs a a beta-arrestin-GFP fusion protein to detect activation of GPCRs: Upon ligand binding the GPCR, cytosolic arrestin-GFP quickly translocates to the cell membrane and then to endocytic vesicles, where it 'clusters' and can be detected by fluorescent image analysis. (Developed / commercialized by Norak, then Molecular Devices)"
   .
 
@@ -85,6 +85,4 @@ bae:BAE_0000012
 bae:BAE_0000013
   rdfs:label "total cellular lipids format" ;
   rdfs:subClassOf bao:BAO_0000220 ;
-  obo:IAO_0000115 "SILAC (Stable Isotope Labeling by/with Amino acids in Cell culture) is a technique based on mass spectrometry that detects differences in protein abundance among samples using non-radioactive isotopic labeling. It is a popular method for quantitative proteomics."
   .
-
