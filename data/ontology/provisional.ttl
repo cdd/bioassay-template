@@ -47,8 +47,8 @@ bae:BAE_0000006
   .
 
 bae:BAE_0000007
-  rdfs:label "Abeta-arrestin clustering (aka 'Transfluor') assay" ;
-  rdfs:subClassOf bao:BAO_0002989;
+  rdfs:label "beta-arrestin clustering (aka 'Transfluor') assay" ;
+  rdfs:subClassOf bao:BAO_0000248;
   obo:IAO_0000115 "The Transfluor assay employs a a beta-arrestin-GFP fusion protein to detect activation of GPCRs: Upon ligand binding the GPCR, cytosolic arrestin-GFP quickly translocates to the cell membrane and then to endocytic vesicles, where it 'clusters' and can be detected by fluorescent image analysis. (Developed / commercialized by Norak, then Molecular Devices)"
   .
 
