@@ -229,12 +229,14 @@ public class SchemaVocab
 	}
 	public String getLabel(String uri)
 	{
+		if (uri == null) return null;
 		int idx = termLookup.getOrDefault(uri, -1);
 		if (idx < 0) return null;
 		return termList[idx].label;
 	}
 	public String getDescr(String uri)
 	{
+		if (uri == null) return null;
 		int idx = termLookup.getOrDefault(uri, -1);
 		if (idx < 0) return null;
 		return termList[idx].descr;
