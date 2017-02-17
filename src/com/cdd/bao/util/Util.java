@@ -1128,7 +1128,7 @@ public class Util
 		int respCode = conn.getResponseCode();
 		if (respCode >= 400) return null; // this is relatively graceful
 		if (respCode != 200) throw new IOException("HTTP response code " + respCode + " for URL [" + url + "]");
-		
+
 		// read the raw bytes into memory; abort if it's too long or too slow
 		BufferedInputStream istr = new BufferedInputStream(conn.getInputStream());
 		ByteArrayOutputStream buff = new ByteArrayOutputStream();
