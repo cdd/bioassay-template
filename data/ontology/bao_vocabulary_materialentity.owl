@@ -13,45 +13,24 @@
 
 <rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_vocabulary_materialentity.owl#"
      xml:base="http://www.bioassayontology.org/bao/bao_vocabulary_materialentity.owl"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:obo="http://purl.obolibrary.org/obo/"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:obo="http://purl.obolibrary.org/obo/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
     <owl:Ontology rdf:about="http://www.bioassayontology.org/bao/bao_vocabulary_materialentity.owl">
-        <rdfs:label>bioassay ontology</rdfs:label>
-        <dc:relation>Uma Vempati, Hande Küçük, Ubbo Visser, Saminda Abeyruwan, Kunie Sakurai, Vance Lemmon, Stephan Schurer*</dc:relation>
+        <rdfs:label>BioAssay Ontology</rdfs:label>
         <rdfs:comment>There is a one-to-one correspondance with rdf:label value and concept descriptions. Concept description starts with the prefix BAO_. 
 
 contact: Stephan Schurer:  stephan dot schurer at gmail dot com</rdfs:comment>
-        <dc:date>06/01/2013</dc:date>
-        <owl:versionInfo>2.1</owl:versionInfo>
+        <dc:date>Jan 30th 2017</dc:date>
+        <owl:versionInfo>2.3.1</owl:versionInfo>
+        <rdfs:comment>Created by:
+Hande Küçük McGinty, Janice Kranz, Joseph Ostrow, Alex Clark, Yu Lin, Saminda Abeyruwan, Uma Vempati, Kunie Sakurai, Vance Lemmon, Ubbo Visser, John Turner, Stephan Schurer*</rdfs:comment>
         <dc:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
         <owl:imports rdf:resource="http://www.bioassayontology.org/bao/bao_metadata.owl"/>
     </owl:Ontology>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
     
 
 
@@ -200,8 +179,8 @@ peptides and proteins. Peptoids are resistant to proteolysis and not typically d
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000495">
         <rdfs:label>DNA aptamer</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
-        <obo:IAO_0000115>Aptamers are synthetic affinity probes. DNA aptamers are oligonucleotides that bind to a specific target molecule, such as small molecules, proteins, nucleic acids and cells. They are created by selecting them from a large random sequence pool through repeated rounds of in vitro selection.</obo:IAO_0000115>
         <obo:IAO_0000118>deoxyribonucleic acid aptamer</obo:IAO_0000118>
+        <obo:IAO_0000115>Aptamers are synthetic affinity probes. DNA aptamers are oligonucleotides that bind to a specific target molecule, such as small molecules, proteins, nucleic acids and cells. They are created by selecting them from a large random sequence pool through repeated rounds of in vitro selection.</obo:IAO_0000115>
     </owl:Class>
     
 
@@ -823,8 +802,8 @@ A potent 5-ht1E/1F receptor agonist</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000886">
         <rdfs:label>inositol-1-phosphate</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
-        <obo:IAO_0000118>IP1</obo:IAO_0000118>
         <obo:IAO_0000118>inositol monophosphate</obo:IAO_0000118>
+        <obo:IAO_0000118>IP1</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1121,8 +1100,8 @@ Selective group III metabotropic glutamate receptor agonist.</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0000987">
         <rdfs:label>para-nitrophenylphosphate</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
-        <obo:IAO_0000118>PNPP</obo:IAO_0000118>
         <rdfs:comment>para-Nitrophenylphosphate (pNPP) is a chromogenic substrate for acid and alkaline phosphatase in ELISA assays. Under their influence the decay to yellow para-nitrophenol is catalysed. This product can be measured with a 405 nm spectrophotometer.</rdfs:comment>
+        <obo:IAO_0000118>PNPP</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1451,6 +1430,116 @@ Proc Amer Assoc Cancer Res, Volume 47, 2006</obo:IAO_0000115>
     
 
 
+    <!-- http://www.bioassayontology.org/bao#BAO_0001213 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001213">
+        <rdfs:label>Fluormone PL Far Red</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001215 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001215">
+        <rdfs:label>Fluormone ES2 Green</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001216 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001216">
+        <rdfs:label>Fluorescein</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001217 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001217">
+        <rdfs:label>Amplex red reagent</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001218 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001218">
+        <rdfs:label>Atto 495</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001220 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001220">
+        <rdfs:label>QuantaBlu</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001221 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001221">
+        <rdfs:label>Sytox Orange</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001222 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001222">
+        <rdfs:label>Ellman and apos&apos;s reagent</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001223 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001223">
+        <rdfs:label>3H</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001224 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001224">
+        <rdfs:label>35S</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0001234 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0001234">
+        <rdfs:label>ACP-tag</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
+        <rdfs:comment>IRI prefix change from BAO_02000 to BAO_00012 in January 2017</rdfs:comment>
+    </owl:Class>
+    
+
+
     <!-- http://www.bioassayontology.org/bao#BAO_0002149 -->
 
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002149">
@@ -1587,8 +1676,8 @@ Proc Amer Assoc Cancer Res, Volume 47, 2006</obo:IAO_0000115>
     <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0002781">
         <rdfs:label xml:lang="en">inositol 1,4,5-trisphosphate</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003043"/>
-        <obo:IAO_0000118>inositol trisphosphate</obo:IAO_0000118>
         <obo:IAO_0000118>IP3</obo:IAO_0000118>
+        <obo:IAO_0000118>inositol trisphosphate</obo:IAO_0000118>
     </owl:Class>
     
 
@@ -1694,5 +1783,5 @@ Proc Amer Assoc Cancer Res, Volume 47, 2006</obo:IAO_0000115>
 
 
 
-<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
 

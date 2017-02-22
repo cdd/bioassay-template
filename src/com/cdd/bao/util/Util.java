@@ -58,6 +58,11 @@ public class Util
     public static void writeFlush() {System.out.flush();}
     
     /**
+     * Write text to output console, and flush immediately afterward.
+     */
+    public static void writeFlush(String str) {System.out.print(str); System.out.flush();}
+
+    /**
      * Writes an error message to the console, with a formulated warning. In some environments, may later be swapped
      * out to show a dialog box instead.
      * @param msg message to show
