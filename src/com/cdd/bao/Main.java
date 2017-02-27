@@ -80,6 +80,11 @@ public class Main
 			try {diffVocab(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("compile"))
+		{
+			try {compileSchema(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
@@ -95,6 +100,7 @@ public class Main
 		Util.writeln("    geneont {infile} {outfile}");
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
+		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
@@ -146,4 +152,36 @@ public class Main
 		}
 	}      
 	
+	// compiles one-or-more schema files into a single vocabulary dump
+	private static void compileSchema(String[] options) throws Exception
+	{
+		List<String> inputFiles = new ArrayList<>();
+		for (int n = 0; n < options.length - 1; n++) inputFiles.add(Util.expandFileHome(options[n]));
+		String outputFile = Util.expandFileHome(options[options.length - 1]);
+		Util.writeln("Compiling schema files:");
+		for (int n = 0; n < inputFiles.size(); n++) Util.writeln("    " + inputFiles.get(n));
+		Util.writeln("Output to:");
+		Util.writeln("    " + outputFile);
+		
+		//loadupVocab();
+		Vocabulary vocab = new Vocabulary();
+		Util.writeFlush("Loading ontologies ");
+		vocab.addListener(new Vocabulary.Listener()
+		{
+			public void vocabLoadingProgress(Vocabulary vocab, float progress) {Util.writeFlush(".");}
+			public void vocabLoadingException(Exception ex) {ex.printStackTrace();}
+		});
+		vocab.load(null, null);
+		Util.writeln();
+		
+		Schema[] schemata = new Schema[inputFiles.size()];
+		for (int n = 0; n < schemata.length; n++) schemata[n] = ModelSchema.deserialise(new File(inputFiles.get(n)));
+		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
+		
+		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
+		OutputStream ostr = new FileOutputStream(outputFile);
+		schvoc.serialise(ostr);
+		ostr.close();
+		Util.writeln("Done.");
+	}
 }

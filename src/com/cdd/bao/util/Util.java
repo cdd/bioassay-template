@@ -1151,5 +1151,15 @@ public class Util
 		
 		return new String(buff.toByteArray(), Util.UTF8);
 	}
-	
+
+	/**
+     * Returns the filename that has the "~" prefix expanded out to the full path of the home directory. Valid prefixes are
+     * of the form "~/something" or "~". Other users' directories are not expanded out, i.e. "~username" is not handled.
+     */
+    public static String expandFileHome(String fn)
+    {
+        if (isBlank(fn) || fn.charAt(0) != '~') return fn;
+        String home = System.getProperty("user.home");
+        return home + fn.substring(1);
+    }	
 }

@@ -73,9 +73,10 @@ public class CompareVocabTree
             super.updateItem(item, empty);
             
             if (item == null) return;
-            
+                        
             if (item.direction == 0)
             {
+            	setStyle("-fx-text-fill: black;");
             	setText(item.assn.name);
             }
             else
