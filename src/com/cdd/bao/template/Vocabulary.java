@@ -129,6 +129,7 @@ public class Vocabulary
 			if (singleton != null) 
 			{
 				singleton.addListener(listener);
+				synchronized (singleton.listeners) {for (Listener l : singleton.listeners) l.vocabLoadingProgress(singleton, 1);}
 				return singleton;
 			}
 			
