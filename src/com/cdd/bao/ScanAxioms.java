@@ -56,7 +56,7 @@ public class ScanAxioms
 	  	{
 	  		List<File> files = new ArrayList<>();
 	  		for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-	  		for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+	  		//for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
 	  		Util.writeln("# files to read: " + files.size());
 
    			ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF); 
@@ -94,26 +94,25 @@ public class ScanAxioms
 		}
 		Util.writeln("    total triples inferred: " + numTriples);
 		
-		com.cdd.bao.util.Bag triples = new com.cdd.bao.util.Bag();
+		Map<String, List<String>> triples = new LinkedHashMap<>();
 
 		Util.writeln("Extracting class labels...");
 		
 		int numClasses = 0;
 		timeThen = new Date().getTime();
-		for (ExtendedIterator<OntClass> it = ontology.listClasses(); it.hasNext();)
+		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
 			OntClass ontClass = it.next();
 			numClasses++;
 			long timeNow = new Date().getTime();
 			if (timeNow > timeThen + 2000) {Util.writeln("    so far: " + numClasses); timeThen = timeNow;}
 
-			NodeIterator labels = ontClass.listPropertyValues(RDFS.label);
-			while (labels.hasNext())
+			for (NodeIterator labels = ontClass.listPropertyValues(RDFS.label); labels.hasNext();)
 			{
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
 				uriToLabel.put(ontClass.getURI(), label.toString());
-			} 
+			}
 		}
 		
 		Util.writeln("    number of classes: " + numClasses);
@@ -122,7 +121,7 @@ public class ScanAxioms
 
 		int numProperties = 0;
 		timeThen = new Date().getTime();
-		for (ExtendedIterator<OntProperty> it = ontology.listOntProperties(); it.hasNext();)
+		for (Iterator<OntProperty> it = ontology.listOntProperties(); it.hasNext();)
 		{
 			OntProperty ontProp = it.next();
 			numProperties++;
@@ -131,8 +130,7 @@ public class ScanAxioms
 
 			if (ontProp.hasInverse()) hasInverseCounter++;
 
-			NodeIterator labels = ontProp.listPropertyValues(RDFS.label);
-			while (labels.hasNext())
+			for (NodeIterator labels = ontProp.listPropertyValues(RDFS.label); labels.hasNext();)
 			{
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
@@ -143,12 +141,14 @@ public class ScanAxioms
 		Util.writeln("    number of properties: " + numProperties);
 		
 		Util.writeln("Total labels: " + uriToLabel.size());
+		
+		Util.writeln("---- Main Iteration ----");
 
-		for (ExtendedIterator<OntClass> it = ontology.listClasses(); it.hasNext();)
+		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
 			OntClass ontClass1 = it.next();
 			
-			for(Iterator<OntClass> i = ontClass1.listSuperClasses();i.hasNext();)
+			for(Iterator<OntClass> i = ontClass1.listSuperClasses(); i.hasNext();)
 			{
 				OntClass c = i.next();
 				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
@@ -161,13 +161,19 @@ public class ScanAxioms
 						OntClass c3 = (OntClass)av.getAllValuesFrom();
 						if (uriToLabel.get(p.getURI()) != null && c3.getURI() != null)
 						{
-							triples.put("\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI()), " \n" +" on property " + uriToLabel.get(p.getURI()) + "\n "
-								+ " all values from class " +  uriToLabel.get(c3.getURI()) +"\n");
+							String key = "\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI());
+							String val = " \n" +" on property " + uriToLabel.get(p.getURI()) + "\n "
+								+ " all values from class " +  uriToLabel.get(c3.getURI()) +"\n";
+							putAdd(triples, key, val);
+
 						  	forAllCounter++;
 						}
 						else if (uriToLabel.get(p.getURI()) == null || c3.getURI() == null)
 						{
-						  	triples.put("\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI()), " \n" +" on property " + p.getURI() + "\n "+ " all values from class " +  c3.getURI() +"\n");
+							String key = "\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI());
+							String val = " \n" +" on property " + p.getURI() + "\n "+ " all values from class " +  c3.getURI() +"\n";
+							putAdd(triples, key, val);
+
 						  	forAllCounter++;
 						}
 						 // System.out.println("All values from class" + av.getAllValuesFrom().getURI() + "on property" + av.getOnProperty().getURI());
@@ -190,9 +196,10 @@ public class ScanAxioms
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 						
-						triples.put("class " + uriToLabel.get(ontClass1.getURI()), 
-									 "on property " + uriToLabel.get(p.getURI())+ 
-									  "\n");
+						String key = "class " + uriToLabel.get(ontClass1.getURI());
+						String val = "on property " + uriToLabel.get(p.getURI())+ "\n";
+						putAdd(triples, key, val);
+									  
 						maxCardinalityCounter++;
 					}
 					else if (r.isMinCardinalityRestriction())
@@ -200,9 +207,10 @@ public class ScanAxioms
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 
-						triples.put("class " + uriToLabel.get(ontClass1.getURI()), 
-									"on property " + uriToLabel.get(p.getURI())+ 
-										  "\n");
+						String key = "class " + uriToLabel.get(ontClass1.getURI());
+						String val = "on property " + uriToLabel.get(p.getURI())+ "\n";
+						putAdd(triples, key, val);
+										  
 						minCardinalityCounter++;
 								 
 							 
@@ -214,10 +222,13 @@ public class ScanAxioms
 						// OntClass c2 = (OntResoure)av.getCardinality(p);
 						int cardinality = av.getCardinality();
 						// if(c2.getURI() != null){
-							 triples.put("class " + uriToLabel.get(ontClass1.getURI()), 
-									 "on property " + uriToLabel.get(p.getURI())+ 
-									 /*" some values from class " + uriToLabel2.get(c2.getURI()) + */ "\n");
-							 cardinalityCounter++;
+						String key = "class " + uriToLabel.get(ontClass1.getURI());
+						String val = "on property " + uriToLabel.get(p.getURI())+ 
+									 /*" some values from class " + uriToLabel2.get(c2.getURI()) + */ "\n";
+						putAdd(triples, key, val);
+						
+						cardinalityCounter++;
+
 						// }
 						 /*triples.put("class " + ontClass1.getURI(), 
 								 "on property " + p.getLocalName()+ 
@@ -243,11 +254,10 @@ public class ScanAxioms
 		    writer.println("" + triples.toString());
 
 			//writer.println("the triples: " + triples.toString());
-		    Iterator<?> axiomIter = triples.keySetIter();
-		    while(axiomIter.hasNext())
-		    {
-		    	String key = (String)axiomIter.next();
-		    	writer.println("\n" +"\t"+ key + "\n\n" + (triples.getValues(key)).toString()+"\n");
+			for (String key : triples.keySet())
+			{
+				List<String> values = triples.get(key);
+		    	writer.println("\n" +"\t"+ key + "\n\n" + values.toString()+"\n");
 		    }
 			writer.println("for all axioms: " + forAllCounter);
 			writer.println("for some axioms: " + forSomeCounter);
@@ -263,4 +273,14 @@ public class ScanAxioms
 		   // do something
 		}
 	}
+	
+	// adds a value to a list-within-map
+	private static void putAdd(Map<String, List<String>> map, String key, String val)
+	{
+		List<String> values = map.get(key);
+		if (values == null) values = new ArrayList<>();
+		values.add(val);
+		map.put(key, values);
+	}
+	
 }
