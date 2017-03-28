@@ -151,54 +151,43 @@ public class ScanAxioms
 			{
 				OntClass c = i.next();
 				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
-				{ 
+				{ //uriToLabel.getOrDefault(uri, ModelSchema.collapsePrefix(uri));
 					Restriction r = c.asRestriction(); //restriction == axiom
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{ 
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 						OntClass c3 = (OntClass)av.getAllValuesFrom();
-						if (uriToLabel.get(p.getURI()) != null && c3.getURI() != null)
-						{
-							String key = "\n" + "class " + uriToLabel.get(ontClass1.getURI());
-							String val =  " on property " + uriToLabel.get(p.getURI())  + "\t"
-								+ " all values from class " +  uriToLabel.get(c3.getURI()) +"\n";
-							putAdd(triples, key + "\n", val);
-
-						  	forAllCounter++;
-						}
-						else if (uriToLabel.get(p.getURI()) == null || c3.getURI() == null)
-						{
-							String key = "\n" + "class " + uriToLabel.get(ontClass1.getURI());
-							String val = " on property " + p.getURI() + "\t"
-							     + " all values from class " +  c3.getURI() +"\n";
-							putAdd(triples, key +"\n", val);
-
-						  	forAllCounter++;
-						}
-						 // System.out.println("All values from class" + av.getAllValuesFrom().getURI() + "on property" + av.getOnProperty().getURI());
+						
+						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
+						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t"
+								+ " all values from class " +  uriToLabel.getOrDefault(c3.getURI(), ModelSchema.collapsePrefix(c3.getURI())) +"\n";
+						putAdd(triples, key + "\n", val);
+						forAllCounter++;
+						
+					
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 						OntClass c2 = (OntClass)av.getSomeValuesFrom();
-						if (c2.getURI() != null)
-						{
-							/* triples.put("class " + uriToLabel2.get(ontClass1.getURI()), 
-									 "on property " + uriToLabel2.get(p.getURI())+ 
-									 " some values from class " + uriToLabel2.get(c2.getURI()) + "\n");*/
+						
+							/* String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
+						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t"
+								+ " some values from class " +  uriToLabel.getOrDefault(c2.getURI(), ModelSchema.collapsePrefix(c2.getURI())) +"\n";*/
 							forSomeCounter++;
-					    }
+					   
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 						
-						String key = "class " + uriToLabel.get(ontClass1.getURI());
-						String val = "on property " + uriToLabel.get(p.getURI())+ "\n";
-						putAdd(triples, key, val);
+						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
+						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t";
+								
+						putAdd(triples, key + "\n", val);
 									  
 						maxCardinalityCounter++;
 					}
@@ -207,8 +196,8 @@ public class ScanAxioms
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
 
-						String key = "class " + uriToLabel.get(ontClass1.getURI());
-						String val = "on property " + uriToLabel.get(p.getURI())+ "\n";
+						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
+						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t";
 						putAdd(triples, key +"\n", val);
 										  
 						minCardinalityCounter++;
