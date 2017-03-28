@@ -25,18 +25,16 @@ import com.cdd.bao.editor.*;
 
 public class ScanAxioms 
 {
-	public static void ontologyReader() throws OntologyException 
+	private OntModel ontology; 
+	private Map<String, String> uriToLabel = new HashMap<String, String>();
+
+	public ScanAxioms()
+	{
+	}
+
+	public void exec() throws OntologyException 
 	{ 
-		OntModel ontology; 
-		String baseURI; 
-		InputStream in = null;
-		Restriction restriction = null;
-		int forAllCounter = 0;
-		int forSomeCounter = 0;
-		int cardinalityCounter = 0;
-		int maxCardinalityCounter = 0;
-		int minCardinalityCounter = 0;
-		int hasInverseCounter = 0;
+		/*
 		//assayKit, bioassay, bioassaySpecification, biologicalProcess, modeOfAction, molecular function
 		String irrelevantIRIs[] = 
 		{
@@ -47,10 +45,8 @@ public class ScanAxioms
 			"http://www.bioassayontology.org/bao#BAO_0000074",
 			"http://www.bioassayontology.org/bao#BAO_0002202",
 			"http://www.bioassayontology.org/bao#BAO_0003075"
-		};
-
-	 	Map<String, String> uriToLabel = new HashMap<String, String>();
-			 
+		};*/
+					 
 	 	try 
 	  	{
 	  		List<File> files = new ArrayList<>();
@@ -93,7 +89,7 @@ public class ScanAxioms
 		}
 		Util.writeln("    total triples inferred: " + numTriples);
 		
-		Map<String, List<String>> triples = new LinkedHashMap<>();
+		Map<String, List<String>> axioms = new TreeMap<>();
 
 		Util.writeln("Extracting class labels...");
 		
@@ -110,7 +106,7 @@ public class ScanAxioms
 			{
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
-				uriToLabel.put(ontClass.getURI(), label.toString());
+				uriToLabel.put(ontClass.getURI(), label.getString());
 			}
 		}
 		
@@ -119,6 +115,7 @@ public class ScanAxioms
 		Util.writeln("Extracting property labels...");
 
 		int numProperties = 0;
+		int hasInverseCounter = 0;
 		timeThen = new Date().getTime();
 		for (Iterator<OntProperty> it = ontology.listOntProperties(); it.hasNext();)
 		{
@@ -133,8 +130,18 @@ public class ScanAxioms
 			{
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
-				uriToLabel.put(ontProp.getURI(), label.toString());
+				uriToLabel.put(ontProp.getURI(), label.getString());
 			}
+		}
+		
+		// fill in missing labels (this probably shouldn't be necessary, but...)
+		Property propLabel = ontology.createProperty(ModelSchema.PFX_RDFS + "label");
+		for (StmtIterator iter = ontology.listStatements(null, propLabel, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			Resource subject = stmt.getSubject();
+			RDFNode object = stmt.getObject();
+			if (subject.isURIResource() && object.isLiteral()) uriToLabel.put(subject.getURI(), object.asLiteral().getString());
 		}
 		
 		Util.writeln("    number of properties: " + numProperties);
@@ -143,11 +150,23 @@ public class ScanAxioms
 		
 		Util.writeln("---- Main Iteration ----");
 
+		int forAllCounter = 0;
+		int forSomeCounter = 0;
+		int cardinalityCounter = 0;
+		int maxCardinalityCounter = 0;
+		int minCardinalityCounter = 0;
+
 		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
-			OntClass ontClass1 = it.next();
+			// pull out the ontology sequence for this axiom:
+			//    o = class of interest
+			//    c = the parent class inditing it
+			//    p = the property containing the axiom
+			//    v = value required by the axiom
+		
+			OntClass o = it.next();
 			
-			for(Iterator<OntClass> i = ontClass1.listSuperClasses(); i.hasNext();)
+			for (Iterator<OntClass> i = o.listSuperClasses(); i.hasNext();)
 			{
 				OntClass c = i.next();
 				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
@@ -157,119 +176,116 @@ public class ScanAxioms
 					{ 
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
-						OntClass c3 = (OntClass)av.getAllValuesFrom();
+						OntClass v = (OntClass)av.getAllValuesFrom();
 						
-						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
-						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t"
-								+ " all values from class " +  uriToLabel.getOrDefault(c3.getURI(), ModelSchema.collapsePrefix(c3.getURI())) +"\n";
-						putAdd(triples, key + "\n", val);
+						String key = nameNode(o);
+						String val = "ALL: property=[" + nameNode(p) + "] value=[" + nameNode(v) + "]";
+						putAdd(axioms, key, val);
 						forAllCounter++;
-						
-					
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
-						OntClass c2 = (OntClass)av.getSomeValuesFrom();
-						
-							/* String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
-						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t"
-								+ " some values from class " +  uriToLabel.getOrDefault(c2.getURI(), ModelSchema.collapsePrefix(c2.getURI())) +"\n";*/
-							forSomeCounter++;
-					   
+						OntClass v = (OntClass)av.getSomeValuesFrom();
+
+						String key = nameNode(o);
+						String val = "SOME: property=[" + nameNode(p) + "] value=[" + nameNode(v) + "]";
+						putAdd(axioms, key, val);
+						forSomeCounter++;
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
+						int maximum = av.getMaxCardinality();
 						
-						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
-						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t";
-								
-						putAdd(triples, key + "\n", val);
-									  
+						String key = nameNode(o);
+						String val = "MAX: property=[" + nameNode(p) + "] maximum=" + maximum;
+						putAdd(axioms, key, val);
 						maxCardinalityCounter++;
 					}
 					else if (r.isMinCardinalityRestriction())
 					{
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
+						int minimum = av.getMinCardinality();
 
-						String key = "\n" + "class " + uriToLabel.getOrDefault(ontClass1.getURI(), ModelSchema.collapsePrefix(ontClass1.getURI()));
-						String val =  " on property " + uriToLabel.getOrDefault(p.getURI(), ModelSchema.collapsePrefix(p.getURI()))  + "\t";
-						putAdd(triples, key +"\n", val);
-										  
+						String key = nameNode(o);
+						String val = "MIN: property=[" + nameNode(p) + "] minimum=" + minimum;
+						putAdd(axioms, key, val);
 						minCardinalityCounter++;
-								 
-							 
 					}
 					else if (r.isCardinalityRestriction())
 					{
 						CardinalityRestriction av = r.asCardinalityRestriction();
 						OntProperty p = (OntProperty)av.getOnProperty();
-						// OntClass c2 = (OntResoure)av.getCardinality(p);
 						int cardinality = av.getCardinality();
-						// if(c2.getURI() != null){
-						String key = "class " + uriToLabel.get(ontClass1.getURI());
-						String val = "on property " + uriToLabel.get(p.getURI())+ 
-									 /*" some values from class " + uriToLabel2.get(c2.getURI()) + */ "\n";
-						putAdd(triples, key + "\n", val);
-						
-						cardinalityCounter++;
 
-						// }
-						 /*triples.put("class " + ontClass1.getURI(), 
-								 "on property " + p.getLocalName()+ 
-								 " some values from class " + c2.getLocalName() + "\n");*/
-						// System.out.println("Some values from class" + av.getSomeValuesFrom().getURI() + "on property" + av.getOnProperty().getURI());
+						String key = nameNode(o);
+						String val = "EQ: property=[" + nameNode(p) + "] cardinarlity=" + cardinality;
+						putAdd(axioms, key, val);
+						cardinalityCounter++;
 					}
 				}
 			}
 		}
-			 
-		Util.writeln("" + triples.toString());
-
-		Util.writeln("the triples: " + triples.toString());
+		
+		Util.writeln("\n---- Category Counts ----");
+		Util.writeln("total axioms: " + axioms.size());
 		Util.writeln("for all axioms: " + forAllCounter);
 		Util.writeln("for some axioms: " + forSomeCounter);
 		Util.writeln("for max axioms: " + maxCardinalityCounter);
 		Util.writeln("for min axioms: " + minCardinalityCounter);
 		Util.writeln("for exactly axioms: " + cardinalityCounter);
 		Util.writeln("properties with inverse: " + hasInverseCounter);
+		
+		File f = new File("/tmp/axioms.txt");
+		Util.writeln("\nWriting whole output to: " + f.getPath());
+		
 		try
 		{
-			PrintWriter writer = new PrintWriter("axiomsAndCounts.txt", "UTF-8");
-		    writer.println("" + triples.toString());
-
-			//writer.println("the triples: " + triples.toString());
-			for (String key : triples.keySet())
+			PrintWriter wtr = new PrintWriter(f);
+		
+			for (String key : axioms.keySet())
 			{
-				List<String> values = triples.get(key);
-		    	writer.println( key + "\n" + values.toString() +"\n");
-		    }
-			writer.println("for all axioms: " + forAllCounter);
-			writer.println("for some axioms: " + forSomeCounter);
-			writer.println("for max axioms: " + maxCardinalityCounter);
-			writer.println("for min axioms: " + minCardinalityCounter);
-			writer.println("for exactly axioms: " + cardinalityCounter);
-			writer.println("properties with inverse: " + hasInverseCounter);
-		    
-		    writer.close();
+				wtr.println("[" + key + "]:");
+				List<String> values = axioms.get(key);
+				Collections.sort(values);
+				for (String val : values) wtr.println("    " + val);
+			}
+
+		    wtr.close();
 		}
-		catch (IOException e) 
-		{
-		   // do something
-		}
+		catch (IOException e) {throw new OntologyException(e.getMessage());}
+		
+		Util.writeln("Done.");
 	}
 	
 	// adds a value to a list-within-map
-	private static void putAdd(Map<String, List<String>> map, String key, String val)
+	private void putAdd(Map<String, List<String>> map, String key, String val)
 	{
 		List<String> values = map.get(key);
 		if (values == null) values = new ArrayList<>();
 		values.add(val);
 		map.put(key, values);
+	}
+	
+	// turns a URI into a readable name, which includes the label if available
+	private String nameURI(String uri)
+	{
+		if (uri == null) throw new NullPointerException();
+		String label = uriToLabel.get(uri), abbrev = ModelSchema.collapsePrefix(uri);
+		String name = label == null ? "" : label + " ";
+		return name + "<" + abbrev + ">";
+	}
+	private String nameNode(RDFNode node)
+	{
+		if (node == null) return "{null}";
+		if (node.isLiteral()) return "\"" + node.asLiteral().getLexicalForm() + "\"";
+		if (node.isAnon()) return "{anon}";
+		if (node.isURIResource()) return nameURI(node.asResource().getURI());
+		return "{???}";
 	}
 	
 }

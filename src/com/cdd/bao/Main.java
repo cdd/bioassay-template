@@ -85,7 +85,7 @@ public class Main
 		}
 		else if (argv[0].equals("scanaxioms"))
 		{
-			try {ScanAxioms.ontologyReader();}
+			try {new ScanAxioms().exec();}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
 		else
