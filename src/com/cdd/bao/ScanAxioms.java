@@ -21,7 +21,6 @@ import com.cdd.bao.editor.*;
     after this class is used, we should be able to get the value (from annotations) 
     based on that value, get the key , i.e. class , and get all the other values in the set
     in order to predict the rest for the annotations.
-	      
 */
 
 public class ScanAxioms 
