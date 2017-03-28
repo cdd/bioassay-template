@@ -29,6 +29,7 @@ import org.apache.commons.lang3.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.editor.*;
+import com.cdd.bao.importer.*;
 
 /*
 	Entrypoint for all command line functionality: delegates to the appropriate corner.
@@ -85,6 +86,11 @@ public class Main
 			try {compileSchema(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("import"))
+		{
+			try {importKeywords(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
@@ -101,6 +107,7 @@ public class Main
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
+		Util.writeln("    import {cfg.json}");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
@@ -183,5 +190,18 @@ public class Main
 		schvoc.serialise(ostr);
 		ostr.close();
 		Util.writeln("Done.");
+	}
+	
+	// initiates the importing of keywords from controlled vocabulary
+	private static void importKeywords(String[] options) throws Exception
+	{
+		if (options.length == 0)
+		{
+			Util.writeln("Must provide the import configuration filename.");
+			return;
+		}
+		String cfgFN = options[0];
+		ImportControlledVocab imp = new ImportControlledVocab(cfgFN);
+		// ...
 	}
 }
