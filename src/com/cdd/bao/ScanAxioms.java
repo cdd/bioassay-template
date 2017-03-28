@@ -161,18 +161,19 @@ public class ScanAxioms
 						OntClass c3 = (OntClass)av.getAllValuesFrom();
 						if (uriToLabel.get(p.getURI()) != null && c3.getURI() != null)
 						{
-							String key = "\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI());
-							String val = " \n" +" on property " + uriToLabel.get(p.getURI()) + "\n "
+							String key = "\n" + "class " + uriToLabel.get(ontClass1.getURI());
+							String val =  " on property " + uriToLabel.get(p.getURI())  + "\t"
 								+ " all values from class " +  uriToLabel.get(c3.getURI()) +"\n";
-							putAdd(triples, key, val);
+							putAdd(triples, key + "\n", val);
 
 						  	forAllCounter++;
 						}
 						else if (uriToLabel.get(p.getURI()) == null || c3.getURI() == null)
 						{
-							String key = "\n"+"\t " +"class " + uriToLabel.get(ontClass1.getURI());
-							String val = " \n" +" on property " + p.getURI() + "\n "+ " all values from class " +  c3.getURI() +"\n";
-							putAdd(triples, key, val);
+							String key = "\n" + "class " + uriToLabel.get(ontClass1.getURI());
+							String val = " on property " + p.getURI() + "\t"
+							     + " all values from class " +  c3.getURI() +"\n";
+							putAdd(triples, key +"\n", val);
 
 						  	forAllCounter++;
 						}
@@ -209,7 +210,7 @@ public class ScanAxioms
 
 						String key = "class " + uriToLabel.get(ontClass1.getURI());
 						String val = "on property " + uriToLabel.get(p.getURI())+ "\n";
-						putAdd(triples, key, val);
+						putAdd(triples, key +"\n", val);
 										  
 						minCardinalityCounter++;
 								 
@@ -225,7 +226,7 @@ public class ScanAxioms
 						String key = "class " + uriToLabel.get(ontClass1.getURI());
 						String val = "on property " + uriToLabel.get(p.getURI())+ 
 									 /*" some values from class " + uriToLabel2.get(c2.getURI()) + */ "\n";
-						putAdd(triples, key, val);
+						putAdd(triples, key + "\n", val);
 						
 						cardinalityCounter++;
 
@@ -257,7 +258,7 @@ public class ScanAxioms
 			for (String key : triples.keySet())
 			{
 				List<String> values = triples.get(key);
-		    	writer.println("\n" +"\t"+ key + "\n\n" + values.toString()+"\n");
+		    	writer.println( key + "\n" + values.toString() +"\n");
 		    }
 			writer.println("for all axioms: " + forAllCounter);
 			writer.println("for some axioms: " + forSomeCounter);
