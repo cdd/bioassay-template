@@ -83,12 +83,16 @@ public class Main
 			try {compileSchema(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("scanaxioms"))
+		{
+			try {ScanAxioms.ontologyReader();}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else
-	{
-		Util.writeln("Unknown option '" + argv[0] + "'");
+		{
+			Util.writeln("Unknown option '" + argv[0] + "'");
 			printHelp();
-	}
-		ScanAxioms.ontologyReader();
+		}
 	}
 	
 	public static void printHelp()
@@ -100,6 +104,7 @@ public class Main
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
+		Util.writeln("    scanaxioms");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
