@@ -29,6 +29,7 @@ public class ScanAxioms
 	private Schema schema;
 	private SchemaVocab schvoc;
 	private Map<String, String> uriToLabel = new HashMap<String, String>();
+	private Map<String, List<Statement>> anonStatements = new HashMap<>();
 
 	public ScanAxioms()
 	{
@@ -71,15 +72,19 @@ public class ScanAxioms
 		Util.writeln("Read complete: counting triples...");
 		long timeThen = new Date().getTime();
 		int numTriples = 0;
-		for (StmtIterator iter = ontology.listStatements(); iter.hasNext(); iter.next()) 
+		for (StmtIterator iter = ontology.listStatements(); iter.hasNext();) 
 		{
+			Statement stmt = iter.next();
 			numTriples++;
 			long timeNow = new Date().getTime();
 			if (timeNow > timeThen + 2000) {Util.writeln("    so far: " + numTriples); timeThen = timeNow;}
+			
+			Resource subj = stmt.getSubject();
+			if (subj.isAnon()) putAdd(anonStatements, subj.toString(), stmt);
 		}
 		Util.writeln("    total triples inferred: " + numTriples);
 		
-		Map<String, List<String>> axioms = new TreeMap<>();
+		Map<String, Set<String>> axioms = new TreeMap<>();
 
 		Util.writeln("Extracting class labels...");
 		
@@ -184,7 +189,7 @@ public class ScanAxioms
 						if (sequence.length == 0) val += "{nothing}";
 						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 						
-						putAdd(axioms, key, val);
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						forAllCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 					}
@@ -205,7 +210,7 @@ public class ScanAxioms
 						if (sequence.length == 0) val += "{nothing}";
 						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 
-						putAdd(axioms, key, val);
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						forSomeCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 					}
@@ -218,7 +223,7 @@ public class ScanAxioms
 						
 						String key = nameNode(o);
 						String val = "MAX: property=[" + pname + "] maximum=" + maximum;
-						putAdd(axioms, key, val);
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						maxCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 					}
@@ -231,7 +236,7 @@ public class ScanAxioms
 
 						String key = nameNode(o);
 						String val = "MIN: property=[" + pname + "] minimum=" + minimum;
-						putAdd(axioms, key, val);
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						minCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 					}
@@ -244,7 +249,7 @@ public class ScanAxioms
 
 						String key = nameNode(o);
 						String val = "EQ: property=[" + pname + "] cardinality=" + cardinality;
-						putAdd(axioms, key, val);
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						cardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 					}
@@ -274,15 +279,37 @@ public class ScanAxioms
 			wtr.println("---- Property Counts ----");
 			for (String key : propTypeCount.keySet()) wtr.println("[" + key + "] count=" + propTypeCount.get(key));
 
-			wtr.println("\n---- Axioms ----");		
-			for (String key : axioms.keySet())
+			wtr.println("\n==== Axioms ====");
+			
+			List<Schema.Group> stack = new ArrayList<>();
+			stack.add(schema.getRoot());
+			while (stack.size() > 0)
 			{
-				wtr.println("[" + key + "]:");
-				List<String> values = axioms.get(key);
-				Collections.sort(values);
-				for (String val : values) wtr.println("    " + val);
-			}
+				Schema.Group group = stack.remove(0);
+				
+				for (Schema.Assignment assn : group.assignments)
+				{
+					wtr.println("\n---- " + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + "> ----");
+					Set<String> wantURI = new HashSet<>();
+					for (SchemaVocab.StoredTree stored : schvoc.getTrees()) if (stored.assignment.propURI.equals(assn.propURI))
+						for (SchemaTree.Node node : stored.tree.getFlat()) wantURI.add(node.uri);
 
+					for (String key : axioms.keySet())
+					{
+						String[] bits = key.split("::");
+						String uri = bits[0], name = bits[1];
+						if (!wantURI.contains(uri)) continue;
+					
+						wtr.println("[" + name + "]:");
+						List<String> values = new ArrayList<>(axioms.get(key));
+						Collections.sort(values);
+						for (String val : values) wtr.println("    " + val);
+					}
+				}
+				
+				stack.addAll(group.subGroups);
+			}
+				
 		    wtr.close();
 		}
 		catch (IOException e) {throw new OntologyException(e.getMessage());}
@@ -291,12 +318,19 @@ public class ScanAxioms
 	}
 	
 	// adds a value to a list-within-map
-	private void putAdd(Map<String, List<String>> map, String key, String val)
+	private boolean putAdd(Map<String, Set<String>> map, String key, String val)
 	{
-		List<String> values = map.get(key);
-		if (values == null) values = new ArrayList<>();
+		Set<String> values = map.get(key);
+		if (values == null) map.put(key, values = new HashSet<>());
+		if (values.contains(val)) return false;
 		values.add(val);
-		map.put(key, values);
+		return true;
+	}
+	private void putAdd(Map<String, List<Statement>> map, String key, Statement stmt)
+	{
+		List<Statement> values = map.get(key);
+		if (values == null) map.put(key, values = new ArrayList<>());
+		values.add(stmt);
 	}
 	
 	// turns a URI into a readable name, which includes the label if available
@@ -326,9 +360,9 @@ public class ScanAxioms
 		anonymous.add(v);
 		while (anonymous.size() > 0)
 		{
-			for (StmtIterator iter = ontology.listStatements(anonymous.remove(0), null, (RDFNode)null); iter.hasNext();)
+			List<Statement> statements = anonStatements.get(anonymous.remove(0).toString());
+			if (statements != null) for (Statement stmt : statements)
 			{
-				Statement stmt = iter.next();
 				Property prop = stmt.getPredicate();
 				if (prop.equals(rdfType)) continue;
 				RDFNode object = stmt.getObject();
