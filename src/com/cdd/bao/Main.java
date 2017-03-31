@@ -45,16 +45,14 @@ public class Main
 		{
 			printHelp();
 			return;
-		}
-		
-		// TODO: add option to read in multiple schema files and export them to a single "vocab.dump"
-		// TODO: read in an RDF/TTL file and export only the relevant predicates in minimal TTL (to reduce file sizes)
-		
+		}		
+//		// TODO: add option to read in multiple schema files and export them to a single "vocab.dump"
+//		// TODO: read in an RDF/TTL file and export only the relevant predicates in minimal TTL (to reduce file sizes)
+//		
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
 		else if (argv[0].equals("edit")) 
-		{
-			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
-			new MainApplication().exec(subset);
+		{			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
+		new MainApplication().exec(subset);
 		}
 		else if (argv[0].equals("geneont"))
 		{
@@ -91,6 +89,11 @@ public class Main
 			try {importKeywords(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("scanaxioms"))
+		{
+			try {new ScanAxioms().exec();}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
@@ -108,6 +111,7 @@ public class Main
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
 		Util.writeln("    import {cfg.json}");
+		Util.writeln("    scanaxioms");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
