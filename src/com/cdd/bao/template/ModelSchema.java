@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -81,6 +81,10 @@ public class ModelSchema
 	public static final String IS_EXCLUDE = "isExclude"; // indicates a value refers to something to exclude
 	public static final String IS_WHOLEBRANCH = "isWholeBranch"; // indicates a value refers to an entire branch, not just one term
 	public static final String IS_EXCLUDEBRANCH = "isExcludeBranch"; // indicates a value refers to an entire branch to exclude
+	
+	public static final String SUGGESTIONS_FULL = "suggestionsFull"; // normal state: all suggestion modelling options enabled
+	public static final String SUGGESTIONS_DISABLED = "suggestionsDisabled"; // do not use for suggestion models (neither input nor output)
+	public static final String SUGGESTIONS_FIELD = "suggestionsField"; // suggestions based on auxiliary field names, not URIs
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -93,6 +97,7 @@ public class ModelSchema
 	private Property hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
+	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -251,6 +256,9 @@ public class ModelSchema
 		isExclude = model.createProperty(PFX_BAT + IS_EXCLUDE);
 		isWholeBranch = model.createProperty(PFX_BAT + IS_WHOLEBRANCH);
 		isExcludeBranch = model.createProperty(PFX_BAT + IS_EXCLUDEBRANCH);
+		suggestionsFull = model.createProperty(PFX_BAT + SUGGESTIONS_FULL);
+		suggestionsDisabled = model.createProperty(PFX_BAT + SUGGESTIONS_DISABLED);
+		suggestionsField = model.createProperty(PFX_BAT + SUGGESTIONS_FIELD);
 		
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
@@ -325,6 +333,10 @@ public class ModelSchema
 			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
 			model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
+			
+			if (assn.suggestions == Schema.Suggestions.FULL) model.add(objAssn, suggestionsFull, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.DISABLED) model.add(objAssn, suggestionsDisabled, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.FIELD) model.add(objAssn, suggestionsField, model.createTypedLiteral(true));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -444,6 +456,10 @@ public class ModelSchema
 	{
 		Assignment assn = new Assignment(group, findString(objAssn, rdfLabel), findAsString(objAssn, hasProperty));
 		assn.descr = findString(objAssn, hasDescription);
+		
+		assn.suggestions = findBoolean(objAssn, suggestionsFull) ? Schema.Suggestions.FULL :
+						   findBoolean(objAssn, suggestionsDisabled) ? Schema.Suggestions.DISABLED :
+						   findBoolean(objAssn, suggestionsField) ? Schema.Suggestions.FIELD : Schema.Suggestions.FULL;
 		
 		Map<Object, Integer> order = new HashMap<>();
 

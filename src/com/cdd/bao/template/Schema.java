@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -76,6 +76,14 @@ public class Schema
 		}
 	};
 
+	// used within assignments: used to indicate how building of models to make suggestions is handled
+	public enum Suggestions
+	{
+		FULL, // (default) use all of the available methods for guestimating appropriate term suggestions
+		DISABLED, // do not use the underlying terms as either inputs or outputs for suggestion models
+		FIELD // the assignment should be mapped to an auxiliary compound field rather than a URI
+	}
+
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure
 	// has a unique property URI, and a list of applicable values
 	public static final class Assignment
@@ -84,6 +92,7 @@ public class Schema
 		public String name, descr = "";
 		public String propURI;
 		public List<Value> values = new ArrayList<>();
+		public Suggestions suggestions = Suggestions.FULL;
 		
 		public Assignment(Group parent, String name, String propURI) 
 		{
@@ -97,6 +106,7 @@ public class Schema
 			Assignment dup = new Assignment(parent, name, propURI);
 			dup.descr = descr;
 			for (Value val : values) dup.values.add(val.clone());
+			dup.suggestions = suggestions;
 			return dup;
 		}
 		
@@ -104,6 +114,7 @@ public class Schema
 		public boolean equals(Assignment other)
 		{
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
+			if (suggestions != other.suggestions) return false;
 			if (values.size() != other.values.size()) return false;
 			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
 			return true;

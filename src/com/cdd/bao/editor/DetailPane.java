@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -67,6 +67,7 @@ public class DetailPane extends ScrollPane
 	private TextArea fieldDescr = null;
 	private TextField fieldURI = null;
 	private TextArea fieldPara = null;
+	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
 	
 	private final class ValueWidgets
 	{
@@ -180,6 +181,9 @@ public class DetailPane extends ScrollPane
 		
 		Schema.Assignment mod = new Schema.Assignment(null, fieldName.getText(), fieldURI.getText());
 		mod.descr = fieldDescr.getText();
+		if (suggestionsFull.isSelected()) mod.suggestions = Schema.Suggestions.FULL;
+		else if (suggestionsDisabled.isSelected()) mod.suggestions = Schema.Suggestions.DISABLED;
+		else if (suggestionsField.isSelected()) mod.suggestions = Schema.Suggestions.FIELD;
 		
 		if (isSummaryView)
 		{
@@ -454,6 +458,8 @@ public class DetailPane extends ScrollPane
 		vbox.setFillWidth(true);
 		vbox.setMaxWidth(Double.MAX_VALUE);
 
+		// assignment properties
+
 		HBox titleLine = new HBox();
 		titleLine.setSpacing(5);
 		Label heading = new Label("Assignment");
@@ -492,7 +498,27 @@ public class DetailPane extends ScrollPane
 		Tooltip.install(fieldURI, new Tooltip("The property URI used to link the assay to the assignment"));
 		line.add(fieldURI, "URI:", 1, 0);
 
+		ToggleGroup fieldSuggestions = new ToggleGroup();
+		HBox suggestionsLine = new HBox();
+		suggestionsLine.setSpacing(10);
+		suggestionsFull = new RadioButton("Full");
+		suggestionsDisabled = new RadioButton("Disabled");
+		suggestionsField = new RadioButton("Field");
+		suggestionsFull.setToggleGroup(fieldSuggestions);
+		suggestionsDisabled.setToggleGroup(fieldSuggestions);
+		suggestionsField.setToggleGroup(fieldSuggestions);
+		Tooltip.install(suggestionsFull, new Tooltip("Use suggestion models for the assignment"));
+		Tooltip.install(suggestionsDisabled, new Tooltip("Don't use suggestion models for the assignment"));
+		Tooltip.install(suggestionsField, new Tooltip("Connect assignment value to structure-activity fields"));
+		suggestionsFull.setSelected(assignment.suggestions == Schema.Suggestions.FULL);
+		suggestionsDisabled.setSelected(assignment.suggestions == Schema.Suggestions.DISABLED);
+		suggestionsField.setSelected(assignment.suggestions == Schema.Suggestions.FIELD);
+		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField);
+		line.add(suggestionsLine, "Suggestions:", 1, 0);
+
 		vbox.getChildren().add(line);
+	
+		// constituent values
 		
 		heading = new Label("Values");
 		heading.setTextAlignment(TextAlignment.CENTER);
@@ -767,16 +793,6 @@ public class DetailPane extends ScrollPane
 	private void pressedAnnotationButton(Schema.Assignment assn, int idx)
 	{
     	Schema.Assay modAssay = extractAssay();
-    	
-    	/* actually no...
-    	// need to rediscover the index: modAssay is often in a different order
-    	if (idx >= 0 && modAssay != null)
-    	{
-    		int midx = -1;
-    		Schema.Annotation annot = assay.annotations.get(idx);
-    		for (int n = 0; n < modAssay.annotations.size(); n++) if (modAssay.annotations.get(n).equals(annot)) {midx = n; break;}
-    		if (midx >= 0) idx = midx;
-    	}*/
     	
     	if (modAssay == null) modAssay = assay.clone();
     	
