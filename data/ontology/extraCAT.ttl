@@ -6,58 +6,83 @@
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
 
 bao:BAX_0000002
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has bioassay type" ;
   obo:IAO_0000115 "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, binding, etc.; as well as the general class of bioassay (enyzme activity, gene expression...)"
   .
 
 bao:BAX_0000003
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has assay design method" ;
   obo:IAO_0000115 "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest."
   .
 
 bao:BAX_0000013
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has assay supporting method" ;
   obo:IAO_0000115 "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process. Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)."
   .
 
 bao:BAX_0000004
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has biological process" ;
   obo:IAO_0000115 "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO). For annotated BioAssays, Biological Process is the process that is being (or is presumed to be) affected by an entity with a perturbagen role in the assay."
   .
 
 bao:BAX_0000005
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has target" ;
   obo:IAO_0000115 "The molecular entity (e.g., protein, carbohydrate, nucleic acid, or other) that is the presumed subject of the assay and whose activity is being effected by an entity with a perturbagen role in the assay. Can encompass the TYPE of biological macromolecule (e.g., enzyme, chaperone, GPCR, etc.) as well as the specific molecular target (e.g., gene name or geneid). An assay can have zero (e.g., if unknown as in assays for cytotoxic compounds) or multiple targets."
   .
 
 bao:BAX_0000010
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "applies to disease" ;
   obo:IAO_0000115 "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target."
   .
 
 bao:BAX_0000006
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has result" ;
   obo:IAO_0000115 "The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a \"closed\" model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay."
   .
 
 bao:BAX_0000007
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has measurement unit" ;
   obo:IAO_0000115 "Units for the resulting measurements (e.g. IC50, EC50, etc.)"
   .
 
 bao:BAX_0000012
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has protein identity" ;
   obo:IAO_0000115 "Protein identity, from the NCBI reference set."
   .
 
 bao:BAX_0000011
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has gene identity" ;
   obo:IAO_0000115 "Gene identity, from the NCBI reference set."
   .
 
 bao:BAX_0000009
+  rdf:type owl:DatatypeProperty ;
   rdfs:label "has gene term" ;
   obo:IAO_0000115 "Functions of the target gene, selected from the Gene Ontology hierarchy."
   .
+
+bao:BAX_0000015
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has activity field" ;
+  obo:IAO_0000115 "Defines the field which supplies the activity measurement."
+  .
+
+bao:BAX_0000016
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has activity operator" ;
+  obo:IAO_0000115 "Defines the cutoff relationship for active/inactive"
+  .
+
