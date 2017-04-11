@@ -54,11 +54,13 @@ public class ImportControlledVocab
 
 	public ImportControlledVocab(String cfgFN) throws IOException, JSONException
 	{
-		File f = new File(cfgFN);
+		File f = new File(cfgFN).getCanonicalFile();
 		if (!f.exists()) throw new IOException("File not found: " + f);
 		cwd = f.getCanonicalFile().getParent();
 		Reader rdr = new FileReader(f);
-		JSONObject json = new JSONObject(new JSONTokener(rdr));
+		JSONObject json = null;
+		try {json = new JSONObject(new JSONTokener(rdr));}
+		catch (JSONException ex) {throw new IOException("Failed to read file: " + f.getPath(), ex);}
 		rdr.close();
 		
 		inputSubstrate = json.getString("inputSubstrate");
