@@ -67,6 +67,7 @@ public class ModelSchema
 	public static final String HAS_DESCRIPTION = "hasDescription"; // longwinded version of rdf:label
 	public static final String IN_ORDER = "inOrder"; // each group/assignment can have one of these
 	
+	public static final String HAS_GROUPURI = "hasGroupURI"; // maps to identifier property (one per assignment)
 	public static final String HAS_PROPERTY = "hasProperty"; // maps to predicate (one per assignment)
 	public static final String HAS_VALUE = "hasValue"; // contains a value option (many per assignment)	
 	public static final String MAPS_TO = "mapsTo";
@@ -94,7 +95,7 @@ public class ModelSchema
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
 	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
-	private Property hasProperty, hasValue;
+	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
 	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
@@ -211,7 +212,7 @@ public class ModelSchema
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
 	
-	// writes the 
+	// writes the schema into a Jena triple collection
 	public static String serialiseToModel(Schema schema, Model model) throws IOException
 	{
 		ModelSchema thing = new ModelSchema(schema, model);
@@ -244,6 +245,7 @@ public class ModelSchema
 		hasAssignment = model.createProperty(PFX_BAT + HAS_ASSIGNMENT);
 		hasDescription = model.createProperty(PFX_BAT + HAS_DESCRIPTION);
 		inOrder = model.createProperty(PFX_BAT + IN_ORDER);
+		hasGroupURI = model.createProperty(PFX_BAT + HAS_GROUPURI);
 		hasProperty = model.createProperty(PFX_BAT + HAS_PROPERTY);
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
@@ -369,6 +371,7 @@ public class ModelSchema
     		model.add(objGroup, rdfLabel, subgrp.name);
     		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
+			model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
     		
     		formulateGroup(objGroup, subgrp);
 		}
@@ -441,7 +444,7 @@ public class ModelSchema
 			Statement st = it.next();
 			Resource objGroup = (Resource)st.getObject();
 			
-    		Group subgrp = new Group(group, findString(objGroup, rdfLabel));
+    		Group subgrp = new Group(group, findString(objGroup, rdfLabel), findAsString(objGroup, hasGroupURI));
     		subgrp.descr = findString(objGroup, hasDescription);
     		
     		group.subGroups.add(subgrp);

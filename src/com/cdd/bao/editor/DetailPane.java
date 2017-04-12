@@ -168,11 +168,13 @@ public class DetailPane extends ScrollPane
 	{
 		if (group == null) return null;
 	
-		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText())) return null;
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && 
+			group.groupURI.equals(fieldURI.getText())) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
+		mod.groupURI = fieldURI.getText();
 		return mod;
 	}
 	public Schema.Assignment extractAssignment()
@@ -361,7 +363,7 @@ public class DetailPane extends ScrollPane
 				}
     		}
     	}
-    	else if (assignment != null)
+    	else if (assignment != null || group != null)
     	{
 	    	if (!Vocabulary.globalInstance().isLoaded()) return;
     		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
@@ -446,6 +448,12 @@ public class DetailPane extends ScrollPane
 		passthroughTab(fieldDescr);
 		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph explaining what the group represents"));
 		line.add(fieldDescr, "Description:", 1, 0);
+
+		fieldURI = new TextField(group.groupURI);
+		fieldURI.setPrefWidth(350);
+		observeFocus(fieldURI, -1);
+		Tooltip.install(fieldURI, new Tooltip("The group URI used to disambiguate this group"));
+		line.add(fieldURI, "URI:", 1, 0);
 
 		vbox.getChildren().add(line);
 	}

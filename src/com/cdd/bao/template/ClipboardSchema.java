@@ -114,6 +114,7 @@ public class ClipboardSchema
 		JSONObject json = new JSONObject();
 		json.put("name", group.name);
 		json.put("descr", group.descr);
+		json.put("groupURI", group.groupURI);
 		
 		JSONArray jassignments = new JSONArray(), jsubgroups = new JSONArray();
 		for (Schema.Assignment assn : group.assignments)
@@ -135,6 +136,10 @@ public class ClipboardSchema
 		json.put("name", assn.name);
 		json.put("descr", assn.descr);
 		json.put("propURI", assn.propURI);
+
+		if (assn.suggestions == Schema.Suggestions.FULL) json.put("suggestionsFull", true);
+		else if (assn.suggestions == Schema.Suggestions.DISABLED) json.put("suggestionsDisabled", true);
+		else if (assn.suggestions == Schema.Suggestions.FIELD) json.put("suggestionsField", true);
 		
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
@@ -196,6 +201,7 @@ public class ClipboardSchema
 	{
 		Schema.Group group = new Schema.Group(parent, json.getString("name"));
 		group.descr = json.getString("descr");
+		group.groupURI = json.optString("groupURI", "");
 		
 		JSONArray jassignments = json.getJSONArray("assignments"), jsubgroups = json.getJSONArray("subGroups");
 		for (int n = 0; n < jassignments.length(); n++)
@@ -216,7 +222,11 @@ public class ClipboardSchema
 		Schema.Assignment assn = new Schema.Assignment(parent, json.getString("name"), json.getString("propURI"));
 		assn.descr = json.getString("descr");
 		
-		JSONArray jvalues =  json.getJSONArray("values");
+		if (json.optBoolean("suggestionsFull", false)) assn.suggestions = Schema.Suggestions.FULL;
+		else if (json.optBoolean("suggestionsDisabled", false)) assn.suggestions = Schema.Suggestions.DISABLED;
+		else if (json.optBoolean("suggestionsField", false)) assn.suggestions = Schema.Suggestions.FIELD;
+		
+		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)
 		{
 			JSONObject obj = jvalues.getJSONObject(n);

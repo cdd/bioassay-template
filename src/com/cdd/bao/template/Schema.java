@@ -41,6 +41,7 @@ public class Schema
 	{
 		public Group parent;
 		public String name, descr = "";
+		public String groupURI = "";
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
 		
@@ -49,10 +50,16 @@ public class Schema
 			this.parent = parent;
 			this.name = name == null ? "" : name;
 		}
+		public Group(Group parent, String name, String groupURI) 
+		{
+			this.parent = parent;
+			this.name = name == null ? "" : name;
+			this.groupURI = groupURI == null ? "" : groupURI;
+		}
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
-			Group dup = new Group(parent, name);
+			Group dup = new Group(parent, name, groupURI);
 			dup.descr = descr;
 			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
@@ -60,7 +67,7 @@ public class Schema
 		}
 		public boolean equals(Group other)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr)) return false;
+			if (!name.equals(other.name) || !descr.equals(other.descr) || !groupURI.equals(other.groupURI)) return false;
 			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
 			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
 			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
@@ -70,7 +77,7 @@ public class Schema
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("[" + name + "] (" + descr + ")\n");
+			buff.append("[" + name + "] <" + groupURI + "> (" + descr + ")\n");
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
@@ -280,7 +287,7 @@ public class Schema
 		public static Assignment linearBranch(Assignment assn)
 		{
 			Group par = assn.parent;
-			Group dup = new Group(null, par.name);
+			Group dup = new Group(null, par.name, par.groupURI);
 			dup.descr = par.descr;
 			dup.assignments.add(assn);
 
@@ -288,7 +295,7 @@ public class Schema
 
 			while (par.parent != null)
 			{
-				dup.parent = new Group(null, par.parent.name);
+				dup.parent = new Group(null, par.parent.name, par.parent.groupURI);
 				dup.parent.descr = par.parent.descr;
 				dup.parent.subGroups.add(dup);
 				

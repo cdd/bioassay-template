@@ -20,12 +20,6 @@ bao:BAX_0000003
   obo:IAO_0000115 "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest."
   .
 
-bao:BAX_0000013
-  rdf:type owl:DatatypeProperty ;
-  rdfs:label "has assay supporting method" ;
-  obo:IAO_0000115 "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process. Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)."
-  .
-
 bao:BAX_0000004
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has biological process" ;
@@ -36,12 +30,6 @@ bao:BAX_0000005
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has target" ;
   obo:IAO_0000115 "The molecular entity (e.g., protein, carbohydrate, nucleic acid, or other) that is the presumed subject of the assay and whose activity is being effected by an entity with a perturbagen role in the assay. Can encompass the TYPE of biological macromolecule (e.g., enzyme, chaperone, GPCR, etc.) as well as the specific molecular target (e.g., gene name or geneid). An assay can have zero (e.g., if unknown as in assays for cytotoxic compounds) or multiple targets."
-  .
-
-bao:BAX_0000010
-  rdf:type owl:DatatypeProperty ;
-  rdfs:label "applies to disease" ;
-  obo:IAO_0000115 "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target."
   .
 
 bao:BAX_0000006
@@ -56,10 +44,16 @@ bao:BAX_0000007
   obo:IAO_0000115 "Units for the resulting measurements (e.g. IC50, EC50, etc.)"
   .
 
-bao:BAX_0000012
+bao:BAX_0000009
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "has protein identity" ;
-  obo:IAO_0000115 "Protein identity, from the NCBI reference set."
+  rdfs:label "has gene term" ;
+  obo:IAO_0000115 "Functions of the target gene, selected from the Gene Ontology hierarchy."
+  .
+
+bao:BAX_0000010
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "applies to disease" ;
+  obo:IAO_0000115 "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target."
   .
 
 bao:BAX_0000011
@@ -68,10 +62,16 @@ bao:BAX_0000011
   obo:IAO_0000115 "Gene identity, from the NCBI reference set."
   .
 
-bao:BAX_0000009
+bao:BAX_0000012
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "has gene term" ;
-  obo:IAO_0000115 "Functions of the target gene, selected from the Gene Ontology hierarchy."
+  rdfs:label "has protein identity" ;
+  obo:IAO_0000115 "Protein identity, from the NCBI reference set."
+  .
+
+bao:BAX_0000013
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay supporting method" ;
+  obo:IAO_0000115 "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process. Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)."
   .
 
 bao:BAX_0000015
@@ -86,3 +86,8 @@ bao:BAX_0000016
   obo:IAO_0000115 "Defines the cutoff relationship for active/inactive"
   .
 
+bao:BAX_0000017
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has measurement" ;
+  obo:IAO_0000115 "Describes activity measurements for accompanying structure-activity data"
+  .
