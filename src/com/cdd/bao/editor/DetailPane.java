@@ -449,11 +449,14 @@ public class DetailPane extends ScrollPane
 		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph explaining what the group represents"));
 		line.add(fieldDescr, "Description:", 1, 0);
 
-		fieldURI = new TextField(group.groupURI);
-		fieldURI.setPrefWidth(350);
-		observeFocus(fieldURI, -1);
-		Tooltip.install(fieldURI, new Tooltip("The group URI used to disambiguate this group"));
-		line.add(fieldURI, "URI:", 1, 0);
+		if (group.parent != null)
+		{
+			fieldURI = new TextField(group.groupURI);
+			fieldURI.setPrefWidth(350);
+			observeFocus(fieldURI, -1);
+			Tooltip.install(fieldURI, new Tooltip("The group URI used to disambiguate this group"));
+			line.add(fieldURI, "URI:", 1, 0);
+		}
 
 		vbox.getChildren().add(line);
 	}

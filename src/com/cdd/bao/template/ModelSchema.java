@@ -334,7 +334,7 @@ public class ModelSchema
 			model.add(objAssn, rdfLabel, assn.name);
 			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
-			model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
+			if (Util.notBlank(assn.propURI)) model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
 			
 			if (assn.suggestions == Schema.Suggestions.FULL) model.add(objAssn, suggestionsFull, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.DISABLED) model.add(objAssn, suggestionsDisabled, model.createTypedLiteral(true));
@@ -371,7 +371,7 @@ public class ModelSchema
     		model.add(objGroup, rdfLabel, subgrp.name);
     		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
-			model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
+			if (Util.notBlank(subgrp.groupURI)) model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
     		
     		formulateGroup(objGroup, subgrp);
 		}
