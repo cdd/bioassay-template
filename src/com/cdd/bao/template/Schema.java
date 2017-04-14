@@ -88,7 +88,10 @@ public class Schema
 	{
 		FULL, // (default) use all of the available methods for guestimating appropriate term suggestions
 		DISABLED, // do not use the underlying terms as either inputs or outputs for suggestion models
-		FIELD // the assignment should be mapped to an auxiliary compound field rather than a URI
+		FIELD, // the assignment should be mapped to an auxiliary compound field rather than a URI
+		STRING, // preferred value type is string literals, of arbitrary format
+		NUMBER, // preferred value type is numeric iterals of arbitrary precision
+		INTEGER // preferred value type is literals that evaluate to an integer
 	}
 
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure

@@ -23,6 +23,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -86,10 +87,10 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             	}
 
     			if (branch.heading != null || branch.group != null) style += "-fx-font-weight: bold;";
-    			else if (branch.assignment != null) style += "-fx-font-weight: normal;";
-    			
+    			else /*if (branch.assignment != null)*/ style += "-fx-font-weight: normal;";
+
     			boolean grey = branch.assay != null && branch.assay.annotations.size() == 0;
-    			if (grey) style += "-fx-text-fill: #808080;"; else style += "-fx-text-fill: black;";
+    			if (grey) style += " -fx-text-fill: #808080;"; else style += " -fx-text-fill: black;";
 				
 				setStyle(style);
                 setText(label);

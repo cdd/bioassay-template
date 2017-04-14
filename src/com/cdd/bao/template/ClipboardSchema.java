@@ -140,6 +140,9 @@ public class ClipboardSchema
 		if (assn.suggestions == Schema.Suggestions.FULL) json.put("suggestionsFull", true);
 		else if (assn.suggestions == Schema.Suggestions.DISABLED) json.put("suggestionsDisabled", true);
 		else if (assn.suggestions == Schema.Suggestions.FIELD) json.put("suggestionsField", true);
+		else if (assn.suggestions == Schema.Suggestions.STRING) json.put("suggestionsString", true);
+		else if (assn.suggestions == Schema.Suggestions.NUMBER) json.put("suggestionsNumber", true);
+		else if (assn.suggestions == Schema.Suggestions.INTEGER) json.put("suggestionsInteger", true);
 		
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
@@ -200,7 +203,7 @@ public class ClipboardSchema
 	private static Schema.Group parseGroup(JSONObject json, Schema.Group parent) throws JSONException
 	{
 		Schema.Group group = new Schema.Group(parent, json.getString("name"));
-		group.descr = json.getString("descr");
+		group.descr = json.optString("descr", "");
 		group.groupURI = json.optString("groupURI", "");
 		
 		JSONArray jassignments = json.getJSONArray("assignments"), jsubgroups = json.getJSONArray("subGroups");
@@ -220,18 +223,21 @@ public class ClipboardSchema
 	private static Schema.Assignment parseAssignment(JSONObject json, Schema.Group parent) throws JSONException
 	{
 		Schema.Assignment assn = new Schema.Assignment(parent, json.getString("name"), json.getString("propURI"));
-		assn.descr = json.getString("descr");
+		assn.descr = json.optString("descr", "");
 		
 		if (json.optBoolean("suggestionsFull", false)) assn.suggestions = Schema.Suggestions.FULL;
 		else if (json.optBoolean("suggestionsDisabled", false)) assn.suggestions = Schema.Suggestions.DISABLED;
 		else if (json.optBoolean("suggestionsField", false)) assn.suggestions = Schema.Suggestions.FIELD;
+		else if (json.optBoolean("suggestionsString", false)) assn.suggestions = Schema.Suggestions.STRING;
+		else if (json.optBoolean("suggestionsNumber", false)) assn.suggestions = Schema.Suggestions.NUMBER;
+		else if (json.optBoolean("suggestionsInteger", false)) assn.suggestions = Schema.Suggestions.INTEGER;
 		
 		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)
 		{
 			JSONObject obj = jvalues.getJSONObject(n);
-			Schema.Value val = new Schema.Value(obj.getString("uri"), obj.getString("name"));
-			val.descr = obj.getString("descr");
+			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
+			val.descr = obj.optString("descr", "");
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
 			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
 			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;

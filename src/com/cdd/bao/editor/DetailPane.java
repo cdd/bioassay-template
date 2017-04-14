@@ -68,6 +68,7 @@ public class DetailPane extends ScrollPane
 	private TextField fieldURI = null;
 	private TextArea fieldPara = null;
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
+	private RadioButton suggestionsString = null, suggestionsNumber = null, suggestionsInteger = null;
 	
 	private final class ValueWidgets
 	{
@@ -169,7 +170,7 @@ public class DetailPane extends ScrollPane
 		if (group == null) return null;
 	
 		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && 
-			group.groupURI.equals(fieldURI.getText())) return null;
+			group.groupURI.equals(fieldURI == null ? "" : fieldURI.getText())) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
@@ -186,6 +187,9 @@ public class DetailPane extends ScrollPane
 		if (suggestionsFull.isSelected()) mod.suggestions = Schema.Suggestions.FULL;
 		else if (suggestionsDisabled.isSelected()) mod.suggestions = Schema.Suggestions.DISABLED;
 		else if (suggestionsField.isSelected()) mod.suggestions = Schema.Suggestions.FIELD;
+		else if (suggestionsString.isSelected()) mod.suggestions = Schema.Suggestions.STRING;
+		else if (suggestionsNumber.isSelected()) mod.suggestions = Schema.Suggestions.NUMBER;
+		else if (suggestionsInteger.isSelected()) mod.suggestions = Schema.Suggestions.INTEGER;
 		
 		if (isSummaryView)
 		{
@@ -515,16 +519,28 @@ public class DetailPane extends ScrollPane
 		suggestionsFull = new RadioButton("Full");
 		suggestionsDisabled = new RadioButton("Disabled");
 		suggestionsField = new RadioButton("Field");
+		suggestionsString = new RadioButton("String");
+		suggestionsNumber = new RadioButton("Number");
+		suggestionsInteger = new RadioButton("Integer");
 		suggestionsFull.setToggleGroup(fieldSuggestions);
 		suggestionsDisabled.setToggleGroup(fieldSuggestions);
 		suggestionsField.setToggleGroup(fieldSuggestions);
+		suggestionsString.setToggleGroup(fieldSuggestions);
+		suggestionsNumber.setToggleGroup(fieldSuggestions);
+		suggestionsInteger.setToggleGroup(fieldSuggestions);
 		Tooltip.install(suggestionsFull, new Tooltip("Use suggestion models for the assignment"));
 		Tooltip.install(suggestionsDisabled, new Tooltip("Don't use suggestion models for the assignment"));
 		Tooltip.install(suggestionsField, new Tooltip("Connect assignment value to structure-activity fields"));
+		Tooltip.install(suggestionsString, new Tooltip("Assignment should be free text"));
+		Tooltip.install(suggestionsNumber, new Tooltip("Assignment should be numeric (any precision)"));
+		Tooltip.install(suggestionsInteger, new Tooltip("Assignment should be an integer"));
 		suggestionsFull.setSelected(assignment.suggestions == Schema.Suggestions.FULL);
 		suggestionsDisabled.setSelected(assignment.suggestions == Schema.Suggestions.DISABLED);
 		suggestionsField.setSelected(assignment.suggestions == Schema.Suggestions.FIELD);
-		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField);
+		suggestionsString.setSelected(assignment.suggestions == Schema.Suggestions.STRING);
+		suggestionsNumber.setSelected(assignment.suggestions == Schema.Suggestions.NUMBER);
+		suggestionsInteger.setSelected(assignment.suggestions == Schema.Suggestions.INTEGER);
+		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, suggestionsNumber, suggestionsInteger);
 		line.add(suggestionsLine, "Suggestions:", 1, 0);
 
 		vbox.getChildren().add(line);

@@ -86,6 +86,9 @@ public class ModelSchema
 	public static final String SUGGESTIONS_FULL = "suggestionsFull"; // normal state: all suggestion modelling options enabled
 	public static final String SUGGESTIONS_DISABLED = "suggestionsDisabled"; // do not use for suggestion models (neither input nor output)
 	public static final String SUGGESTIONS_FIELD = "suggestionsField"; // suggestions based on auxiliary field names, not URIs
+	public static final String SUGGESTIONS_STRING = "suggestionsString"; // use string literals
+	public static final String SUGGESTIONS_NUMBER = "suggestionsNumber"; // use number-formatted literals
+	public static final String SUGGESTIONS_INTEGER = "suggestionsInteger"; // use integer-formatted literals
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -98,7 +101,7 @@ public class ModelSchema
 	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
-	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
+	private Property suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, suggestionsNumber, suggestionsInteger;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -261,7 +264,10 @@ public class ModelSchema
 		suggestionsFull = model.createProperty(PFX_BAT + SUGGESTIONS_FULL);
 		suggestionsDisabled = model.createProperty(PFX_BAT + SUGGESTIONS_DISABLED);
 		suggestionsField = model.createProperty(PFX_BAT + SUGGESTIONS_FIELD);
-		
+		suggestionsString = model.createProperty(PFX_BAT + SUGGESTIONS_STRING);
+		suggestionsNumber = model.createProperty(PFX_BAT + SUGGESTIONS_NUMBER);
+		suggestionsInteger = model.createProperty(PFX_BAT + SUGGESTIONS_INTEGER);
+
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
 	}
@@ -339,6 +345,9 @@ public class ModelSchema
 			if (assn.suggestions == Schema.Suggestions.FULL) model.add(objAssn, suggestionsFull, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.DISABLED) model.add(objAssn, suggestionsDisabled, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.FIELD) model.add(objAssn, suggestionsField, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.STRING) model.add(objAssn, suggestionsString, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.NUMBER) model.add(objAssn, suggestionsNumber, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.INTEGER) model.add(objAssn, suggestionsInteger, model.createTypedLiteral(true));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -462,7 +471,10 @@ public class ModelSchema
 		
 		assn.suggestions = findBoolean(objAssn, suggestionsFull) ? Schema.Suggestions.FULL :
 						   findBoolean(objAssn, suggestionsDisabled) ? Schema.Suggestions.DISABLED :
-						   findBoolean(objAssn, suggestionsField) ? Schema.Suggestions.FIELD : Schema.Suggestions.FULL;
+						   findBoolean(objAssn, suggestionsField) ? Schema.Suggestions.FIELD : 
+						   findBoolean(objAssn, suggestionsString) ? Schema.Suggestions.STRING : 
+						   findBoolean(objAssn, suggestionsNumber) ? Schema.Suggestions.NUMBER : 
+						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : Schema.Suggestions.FULL;
 		
 		Map<Object, Integer> order = new HashMap<>();
 
