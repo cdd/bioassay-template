@@ -141,6 +141,15 @@ public class Schema
 			}
 			return true;
 		}
+
+		// returns a list of group URIs leading up to this one, which can be used to disambiguate beyond just the propURI
+		public String[] groupNest()
+		{
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
+			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
+			return nest.toArray(new String[nest.size()]);
+		}
 		
 		private void outputAsString(StringBuffer buff, int indent)
 		{
