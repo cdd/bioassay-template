@@ -83,7 +83,7 @@ public class PreviewTreePanel
             else 
             {
             	String label = node.label;
-    			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
+    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
             	
             	setText(label);
    				setStyle(style);

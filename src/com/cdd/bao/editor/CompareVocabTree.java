@@ -82,6 +82,7 @@ public class CompareVocabTree
             else
             {
     			String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
+    			style += "-fx-font-family: arial;";
     			String label = item.direction < 0 ? "Removed: " : "Added: ";
     			label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
             

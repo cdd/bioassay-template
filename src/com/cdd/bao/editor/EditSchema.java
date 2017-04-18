@@ -157,7 +157,7 @@ public class EditSchema
 
 		BorderPane.setMargin(progBar, new Insets(2, 2, 2, 2));
 
-		Scene scene = new Scene(root, 900, 800, Color.WHITE);
+		Scene scene = new Scene(root, 1000, 800, Color.WHITE);
 
 		stage.setScene(scene);
 		

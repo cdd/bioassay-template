@@ -105,7 +105,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             {
             	String label = branch.label;
 
-    			String style = "-fx-text-fill: black; -fx-font-weight: normal;";
+    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
     			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
     			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
     			

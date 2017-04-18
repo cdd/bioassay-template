@@ -36,6 +36,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.text.*;
 import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.util.*;
@@ -73,7 +74,8 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             }
             else
             {
-				String style = "";
+				String style = "-fx-font-family: arial;"; // note: using "Arial" because Mac system font (or sans) cannot match bold or
+														  // italic for some reason; working around this bug
 
             	String label = branch.heading != null ? branch.heading : 
             				   branch.group != null ? branch.group.name : 
@@ -86,8 +88,14 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
             		style += "-fx-text-fill: #800000;";
             	}
 
-    			if (branch.heading != null || branch.group != null) style += "-fx-font-weight: bold;";
-    			else /*if (branch.assignment != null)*/ style += "-fx-font-weight: normal;";
+    			if (branch.heading != null || branch.group != null) 
+    			{
+    				style += "-fx-font-weight: bold;";
+    			}
+    			else /*if (branch.assignment != null)*/ 
+    			{
+    				style += "-fx-font-weight: normal;";
+    			}
 
     			boolean grey = branch.assay != null && branch.assay.annotations.size() == 0;
     			if (grey) style += " -fx-text-fill: #808080;"; else style += " -fx-text-fill: black;";
