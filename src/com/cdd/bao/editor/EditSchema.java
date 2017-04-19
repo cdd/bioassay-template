@@ -364,6 +364,7 @@ public class EditSchema
 		menuValue.getItems().add(new SeparatorMenuItem());
 		addMenu(menuValue, "_Sort Values", null).setOnAction(event -> actionValueSort());
 		addMenu(menuValue, "_Remove Duplicates", null).setOnAction(event -> actionValueDuplicates());
+		addMenu(menuValue, "Cleanup Values", null).setOnAction(event -> actionValueCleanup());
 
 		(menuViewSummary = addCheckMenu(menuView, "_Summary Values", new KeyCharacterCombination("-", cmd))).setOnAction(event -> actionViewToggleSummary());
     	addMenu(menuView, "_Template", new KeyCharacterCombination("1", cmd)).setOnAction(event -> actionViewTemplate());
@@ -1169,6 +1170,43 @@ public class EditSchema
 		setCurrentBranch(locateBranch(branch.locatorID));
 		
 		Util.informMessage("Remove Duplicate Values", "Number of values removed because of duplicated URI values: " + snippy);
+    }
+    private void actionValueCleanup()
+    {
+    	TreeItem<Branch> item = currentBranch();
+    	Branch branch = item == null ? null : item.getValue();
+    	if (branch == null || branch.assignment == null)
+    	{
+    		Util.informMessage("Cleanup Values", "Select an assignment in order to remove non-URI values.");
+    		return;
+    	}
+
+    	pullDetail();
+    	
+		Schema schema = stack.getSchema();
+		Schema.Assignment assn = schema.obtainAssignment(branch.locatorID);
+		
+		int snippy = 0;
+		for (int n = assn.values.size() - 1; n >= 0; n--)
+		{
+			Schema.Value v = assn.values.get(n);
+			if (!v.uri.startsWith("http://") && !v.uri.startsWith("https://")) 
+			{
+				snippy++;
+				assn.values.remove(n);
+			}
+		}
+		
+		if (snippy == 0)
+		{
+			Util.informMessage("Cleanup Values", "No values were removed.");
+			return;
+		}
+		stack.changeSchema(schema);
+		rebuildTree();
+		setCurrentBranch(locateBranch(branch.locatorID));
+		
+		Util.informMessage("Cleanup Values", "Number of values removed on account of not having a proper URI: " + snippy);    
     }
     private void actionViewToggleSummary()
     {

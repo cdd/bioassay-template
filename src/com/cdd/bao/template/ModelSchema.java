@@ -467,6 +467,7 @@ public class ModelSchema
 	private Assignment parseAssignment(Group group, Resource objAssn) throws IOException
 	{
 		Assignment assn = new Assignment(group, findString(objAssn, rdfLabel), findAsString(objAssn, hasProperty));
+		if (assn.propURI.startsWith("file://")) assn.propURI = "";
 		assn.descr = findString(objAssn, hasDescription);
 		
 		assn.suggestions = findBoolean(objAssn, suggestionsFull) ? Schema.Suggestions.FULL :
@@ -483,6 +484,7 @@ public class ModelSchema
 			Resource blank = (Resource)it.next().getObject();
 					
 			Value val = new Value(findAsString(blank, mapsTo), findString(blank, rdfLabel));
+			if (val.uri.startsWith("file://")) val.uri = "";
 			val.descr = findString(blank, hasDescription);
 			val.spec = findBoolean(blank, isExclude) ? Schema.Specify.EXCLUDE :
 					   findBoolean(blank, isWholeBranch) ? Schema.Specify.WHOLEBRANCH :
