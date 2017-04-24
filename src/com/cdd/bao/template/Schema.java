@@ -349,6 +349,7 @@ public class Schema
 	public Schema clone()
 	{
 		Schema dup = new Schema();
+		dup.schemaPrefix = schemaPrefix;
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
