@@ -23,6 +23,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.template.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,6 +31,7 @@ import java.util.*;
 import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.image.*;
+import org.apache.commons.lang3.*;
 
 /*
 	BioAssay Ontology Tools: entrypoint with command line parameters.
@@ -59,9 +61,32 @@ public class MainApplication extends Application
 	
 	public void start(Stage primaryStage)
 	{
-		EditSchema edit = new EditSchema(primaryStage);
+		// perform any extra processing on command line arguments
+		List<String> params = new ArrayList<>(getParameters().getUnnamed());
+		String[] extraOnto = null;
+		for (int n = 0; n < params.size();)
+		{
+			String p = params.get(n);
+			if (p.startsWith("--"))
+			{
+				if (p.equals("--onto"))
+				{
+					n++;
+					for (; n < params.size() && !params.get(n).startsWith("-"); n++) extraOnto = ArrayUtils.add(extraOnto, params.get(n));
+				}
+				else
+				{
+					Util.writeln("Unexpected command line parameter: " + p);
+					return;
+				}
+			}
+			else n++;
+		}
+		Vocabulary.setExtraOntology(extraOnto);
 		
-		for (String fn : getParameters().getUnnamed())
+		// open a main window: either a new schema or an existing one
+		EditSchema edit = new EditSchema(primaryStage);
+		for (String fn : params)
 		{
 			File f = new File(fn);
 			if (!f.exists())

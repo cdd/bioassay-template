@@ -44,6 +44,7 @@ public class Vocabulary
 {
 	private static String mutex = new String("!");
 	private static Vocabulary singleton = null;
+	private static String[] ontoExtraFiles = null;
 
 	private boolean loadingComplete = false;
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
@@ -117,6 +118,13 @@ public class Vocabulary
 
 	// ------------ public methods ------------
 
+	// optionally call this before initialisation to specify a list of files that should also be included in the ontologies to load;
+	// this is useful for supplementing the default list with custom files
+	public static void setExtraOntology(String[] ontoExtraFiles)
+	{
+		Vocabulary.ontoExtraFiles = ontoExtraFiles;
+	}
+
 	// accesses a single instance: generally returns instantly; if this is not the first invocation, it will spawn a thread to load
 	// the ontologies in the background, and return a partially loaded instance; subsequent calls will return the same instance, 
 	// which may or may not have finished loading; the caller may optionally provide a listener, which will receive progress updates 
@@ -165,8 +173,9 @@ public class Vocabulary
 	// this object any more often than necessary
 	public void load(String ontoDir, String[] extraFiles) throws IOException
 	{
-		File[] extra = new File[extraFiles == null ? 0 : extraFiles.length];
-		for (int n = 0; n < extra.length; n++) extra[n] = new File(extraFiles[n]);
+		List<File> extra = new ArrayList<>();
+		if (extraFiles != null) for (String fn : extraFiles) extra.add(new File(fn));
+		if (ontoExtraFiles != null) for (String fn : ontoExtraFiles) extra.add(new File(fn).getCanonicalFile());
 
 		// several options for BAO loading configurability; right now it goes for local files first, then looks in the JAR file (if there
 		// is one); loading from an external endpoint might be interesting, too
@@ -176,7 +185,7 @@ public class Vocabulary
 			ontoDir = cwd + "/ontology";
 			if (!new File(ontoDir).exists()) ontoDir = cwd + "/data/ontology";
 		}
-		try {loadLabels(new File(ontoDir), extra);}
+		try {loadLabels(new File(ontoDir), extra.toArray(new File[extra.size()]));}
 		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
 		finally 
 		{
