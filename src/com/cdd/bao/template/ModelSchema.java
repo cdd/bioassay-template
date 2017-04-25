@@ -340,7 +340,7 @@ public class ModelSchema
 			model.add(objAssn, rdfLabel, assn.name);
 			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
-			if (Util.notBlank(assn.propURI)) model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
+			if (isURI(assn.propURI)) model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
 			
 			if (assn.suggestions == Schema.Suggestions.FULL) model.add(objAssn, suggestionsFull, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.DISABLED) model.add(objAssn, suggestionsDisabled, model.createTypedLiteral(true));
@@ -355,7 +355,7 @@ public class ModelSchema
 				Resource blank = model.createResource();		
 				model.add(objAssn, hasValue, blank);
 				
-				Resource objValue = val.uri == null ? null : model.createResource(val.uri.trim());
+				Resource objValue = isURI(val.uri) ? model.createResource(val.uri.trim()) : null;
 				if (objValue != null) model.add(blank, mapsTo, objValue);
 				model.add(blank, rdfLabel, model.createLiteral(val.name));
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
@@ -380,7 +380,7 @@ public class ModelSchema
     		model.add(objGroup, rdfLabel, subgrp.name);
     		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
-			if (Util.notBlank(subgrp.groupURI)) model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
+			if (isURI(subgrp.groupURI)) model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
     		
     		formulateGroup(objGroup, subgrp);
 		}
@@ -634,6 +634,14 @@ public class ModelSchema
 			if (obj.isResource()) return obj.asResource();
 		}
 		return null;
+	}
+	
+	// returns true if the string can be reasonably interpreted as a URI
+	private boolean isURI(String uri)
+	{
+		if (uri == null) return false;
+		uri = uri.trim();
+		return uri.startsWith("http://") || uri.startsWith("https://");
 	}
 }
 

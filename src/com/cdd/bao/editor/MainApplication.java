@@ -61,32 +61,9 @@ public class MainApplication extends Application
 	
 	public void start(Stage primaryStage)
 	{
-		// perform any extra processing on command line arguments
-		List<String> params = new ArrayList<>(getParameters().getUnnamed());
-		String[] extraOnto = null;
-		for (int n = 0; n < params.size();)
-		{
-			String p = params.get(n);
-			if (p.startsWith("--"))
-			{
-				if (p.equals("--onto"))
-				{
-					n++;
-					for (; n < params.size() && !params.get(n).startsWith("-"); n++) extraOnto = ArrayUtils.add(extraOnto, params.get(n));
-				}
-				else
-				{
-					Util.writeln("Unexpected command line parameter: " + p);
-					return;
-				}
-			}
-			else n++;
-		}
-		Vocabulary.setExtraOntology(extraOnto);
-		
 		// open a main window: either a new schema or an existing one
 		EditSchema edit = new EditSchema(primaryStage);
-		for (String fn : params)
+		for (String fn : getParameters().getUnnamed())
 		{
 			File f = new File(fn);
 			if (!f.exists())

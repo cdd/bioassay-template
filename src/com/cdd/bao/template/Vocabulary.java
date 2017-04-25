@@ -236,6 +236,12 @@ public class Vocabulary
 	// grab all of the URIs
 	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
 	
+	// test for existence
+	public int numProperties() {return uriProperties.size();}
+	public int numValues() {return uriValues.size();}
+	public boolean hasPropertyURI(String uri) {return uriProperties.contains(uri);}
+	public boolean hasValueURI(String uri) {return uriValues.contains(uri);}
+	
 	// just the URIs involved in a property/class hierarchy
 	public String[] getPropertyURIs() {return uriProperties.toArray(new String[uriProperties.size()]);}
 	public String[] getValueURIs() {return uriValues.toArray(new String[uriValues.size()]);}

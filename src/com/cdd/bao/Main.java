@@ -45,8 +45,27 @@ public class Main
 		{
 			printHelp();
 			return;
-		}		
+		}
+		
+		// look for additional options that affect overall state
+		String[] extraOnto = null;
+		for (int n = 0; n < argv.length;)
+		{
+			if (argv[n].startsWith("--onto"))
+			{
+				argv = ArrayUtils.remove(argv, n);
+				while (n < argv.length)
+				{
+					if (argv[n].startsWith("-")) break;
+					extraOnto = ArrayUtils.add(extraOnto, argv[n]);
+					argv = ArrayUtils.remove(argv, n);
+				}
+			}
+			else n++;
+		}
+		Vocabulary.setExtraOntology(extraOnto);
 
+		// main command-induced functionality
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
 		else if (argv[0].equals("edit")) 
 		{			
@@ -83,6 +102,11 @@ public class Main
 			try {compileSchema(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("check"))
+		{
+			try {checkTemplate(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else if (argv[0].equals("import"))
 		{
 			try {importKeywords(ArrayUtils.remove(argv, 0));}
@@ -109,8 +133,10 @@ public class Main
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
+		Util.writeln("    check {schema.ttl}");
 		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
+		Util.writeln("    --onto {files...}");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
@@ -193,6 +219,19 @@ public class Main
 		schvoc.serialise(ostr);
 		ostr.close();
 		Util.writeln("Done.");
+	}
+
+	// evaluates a schema template, looking for obvious shortcomings
+	private static void checkTemplate(String[] options) throws Exception
+	{
+		if (options.length == 0)
+		{
+			Util.writeln("Must provide the schema filename to check filename.");
+			return;
+		}
+		String fn = options[0];
+		TemplateChecker chk = new TemplateChecker(fn);
+		chk.perform();
 	}
 	
 	// initiates the importing of keywords from controlled vocabulary
