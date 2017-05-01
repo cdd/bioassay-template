@@ -48,7 +48,7 @@ public class Main
 		}
 		
 		// look for additional options that affect overall state
-		String[] extraOnto = null;
+		String[] extraOnto = null, exclOnto = null;
 		for (int n = 0; n < argv.length;)
 		{
 			if (argv[n].startsWith("--onto"))
@@ -61,9 +61,20 @@ public class Main
 					argv = ArrayUtils.remove(argv, n);
 				}
 			}
+			else if (argv[n].startsWith("--excl"))
+			{
+				argv = ArrayUtils.remove(argv, n);
+				while (n < argv.length)
+				{
+					if (argv[n].startsWith("-")) break;
+					exclOnto = ArrayUtils.add(exclOnto, argv[n]);
+					argv = ArrayUtils.remove(argv, n);
+				}
+			}
 			else n++;
 		}
 		Vocabulary.setExtraOntology(extraOnto);
+		Vocabulary.setExclOntology(exclOnto);
 
 		// main command-induced functionality
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
@@ -137,6 +148,7 @@ public class Main
 		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
 		Util.writeln("    --onto {files...}");
+		Util.writeln("    --excl {files...}");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
