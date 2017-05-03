@@ -36,6 +36,7 @@ public class JSONUtil
      */
     public static int[] intArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		int[] ret = new int[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getInt(n);
 		return ret;
@@ -46,6 +47,7 @@ public class JSONUtil
      */
     public static long[] longArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		long[] ret = new long[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getLong(n);
 		return ret;
@@ -56,6 +58,7 @@ public class JSONUtil
      */
     public static float[] floatArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		float[] ret = new float[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = (float)arr.getDouble(n);
 		return ret;
@@ -66,6 +69,7 @@ public class JSONUtil
      */
     public static double[] doubleArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		double[] ret = new double[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getDouble(n);
 		return ret;
@@ -76,6 +80,7 @@ public class JSONUtil
      */
     public static String[] stringArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		String[] ret = new String[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getString(n);
 		return ret;
@@ -86,6 +91,7 @@ public class JSONUtil
 	 */
     public static JSONObject[] objectArray(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		JSONObject[] ret = new JSONObject[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getJSONObject(n);
 		return ret;
@@ -96,6 +102,7 @@ public class JSONUtil
 	 */
     public static JSONArray[] arrayOfArrays(JSONArray arr) throws JSONException
     {
+    	if (arr == null) return null;
 		JSONArray[] ret = new JSONArray[arr.length()];
 		for (int n = 0; n < ret.length; n++) ret[n] = arr.getJSONArray(n);
 		return ret;

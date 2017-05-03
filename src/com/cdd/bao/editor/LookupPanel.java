@@ -235,7 +235,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
         TableColumn<Resource, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-        colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(substitutePrefix(resource.getValue().uri));});
+        colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri));});
          
         TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
@@ -408,7 +408,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	}
 			
 	// switches shorter prefixes for display convenience
-	private final String[] SUBST = 
+	/*private final String[] SUBST = 
     {
     	"obo:", "http://purl.obolibrary.org/obo/",
     	"bao:", "http://www.bioassayontology.org/bao#",
@@ -422,7 +422,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			if (uri.startsWith(SUBST[n + 1])) return SUBST[n] + uri.substring(SUBST[n + 1].length());
 		}
 		return uri;
-	}
+	}*/
 	
 	private String cleanupDescription(String descr)
 	{

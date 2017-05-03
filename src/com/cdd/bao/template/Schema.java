@@ -523,16 +523,26 @@ public class Schema
 		return null;
 	}
 	
-	// returns all of the assignments that match the given property URI, or empty list if none
-	public Assignment[] findAssignmentByProperty(String propURI)
+	// returns all of the assignments that match the given property URI, or empty list if none; if the groupNest parameter is given, it will
+	// make sure that the nested hierarchy of groupURIs match the parameter (otherwise it will be ignored)
+	public Assignment[] findAssignmentByProperty(String propURI) {return findAssignmentByProperty(propURI, null);}
+	public Assignment[] findAssignmentByProperty(String propURI, String[] groupNest)
 	{
+		int gsz = Util.length(groupNest);
 		List<Assignment> matches = new ArrayList<>();
 		List<Group> stack = new ArrayList<>();
 		stack.add(root);
 		while (stack.size() > 0)
 		{
 			Group grp = stack.remove(0);
-			for (Assignment assn : grp.assignments) if (assn.propURI.equals(propURI)) matches.add(assn);
+			skip: for (Assignment assn : grp.assignments) if (assn.propURI.equals(propURI)) 
+			{
+				Group look = assn.parent;
+				for (int n = 0; n < gsz && look != null; n++, look = look.parent)
+					if (!groupNest[n].equals(look.groupURI)) continue skip;
+				
+				matches.add(assn);
+			}
 			stack.addAll(grp.subGroups);
 		}
 		return matches.toArray(new Assignment[matches.size()]);
