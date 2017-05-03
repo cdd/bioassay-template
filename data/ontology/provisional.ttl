@@ -122,7 +122,7 @@ bae:BAE_0000020
   .
 
 bae:BAE_0000021
-  rdfs:label "0.1% Charcoal Dextran Stripped FCS " ;
+  rdfs:label "0.1% Charcoal Dextran Stripped FCS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
@@ -132,7 +132,7 @@ bae:BAE_0000022
   .
 
 bae:BAE_0000023
-  rdfs:label "0.5% FBS Dialyzed " ;
+  rdfs:label "0.5% FBS Dialyzed" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
@@ -147,7 +147,7 @@ bae:BAE_0000025
   .
 
 bae:BAE_0000026
-  rdfs:label "10% FBS " ;
+  rdfs:label "10% FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
@@ -157,12 +157,12 @@ bae:BAE_0000027
   .
 
 bae:BAE_0000028
-  rdfs:label "10% FBS Dialyzed " ;
+  rdfs:label "10% FBS Dialyzed" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
 bae:BAE_0000029
-  rdfs:label "10% FCS " ;
+  rdfs:label "10% FCS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
@@ -182,7 +182,7 @@ bae:BAE_0000032
   .
 
 bae:BAE_0000033
-  rdfs:label "10% Heat-Inactivated Fetal bovine serum " ;
+  rdfs:label "10% Heat-inactivated Fetal bovine serum" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
@@ -197,7 +197,7 @@ bae:BAE_0000035
   .
 
 bae:BAE_0000036
-  rdfs:label "100% warm FBS " ;
+  rdfs:label "100% warm FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   .
 
