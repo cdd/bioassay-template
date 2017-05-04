@@ -14,7 +14,7 @@
 bae:BAE_0000001
   rdfs:label "viral titer assay" ;
   rdfs:subClassOf bao:BAO_0000015 ;
-  obo:IAO_0000115 "A titer (or titre) is a measure of concentration. A viral titer assay is any method to quantify the number of viruses in a specific volume. Common methods include a plaque formation assay (PFA), focus forming assay (FFA), which yield results of plaque or focus forming units per ml (pfu or ffu/ ml), or endpoint dilution assay (TCID50, which measures the amount of virus needed to kill 50% 0of infected hosts or cells).  TCID50 and pfu/ml results are not equivalent." 
+  obo:IAO_0000115 "A titer (or titre) is a measure of concentration. A viral titer assay is any method to quantify the number of viruses in a specific volume. Common methods include a plaque formation assay (PFA), focus forming assay (FFA), which yield results of plaque or focus forming units per ml (pfu or ffu/ ml), or endpoint dilution assay (TCID50, which measures the amount of virus needed to kill 50% 0of infected hosts or cells). TCID50 and pfu/ml results are not equivalent." 
   .
 
 bae:BAE_0000002
@@ -118,213 +118,224 @@ bae:BAE_0000019
   .
 
 bae:BAE_0000020
-  rdfs:label "serum" ;
+  rdfs:label "serum supplement" ;
+  obo:IAO_0000115 "Serum is the blood fraction remaining after the natural coagulation of blood, followed by centrifugation to remove any remaining red blood cells. Serum is thought to provide basic elements required for cell culture, including growth factors, attachment factors, iron transporters, vitamins, amino acids, lipids, carbohydrates, hormones, and trace elements. Fetal bovine serum (FBS), also called fetal calf serum (FCS), comes from the blood drawn from a bovine (cow) fetus via a closed system of collection at the slaughterhouse. FBS/FCS is the most widely used serum-supplement for the in vitro cell culture of eukaryotic cells. This is due to it having a very low level of antibodies and containing more growth factors, allowing for versatility in many different cell culture applications. Serum contains many factors that are not controlled for, which can have a direct or indirect effect on the cells in culture, thus creating significant variability between suppliers and lots from a single supplier. Different methods, such as heat inactivation or dialysis, are sometimes used to eliminate undesired components (such as labile growth factors, vitamins, etc. or the complement system). Some suppliers test serum for the presence of other factors such as tetracylcine or mycoplasma." ;
   .
 
 bae:BAE_0000021
-  rdfs:label "0.1% Charcoal Dextran Stripped FCS" ;
+  rdfs:label "0.1% Charcoal Dextran Stripped FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000022
-  rdfs:label "0.1% FCS" ;
+  rdfs:label "0.1% FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000023
-  rdfs:label "0.5% FBS Dialyzed" ;
+  rdfs:label "0.5% FBS (Dialyzed)" ;
   rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000024
-  rdfs:label "1% FCS" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000025
   rdfs:label "1% FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000026
   rdfs:label "10% FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000027
   rdfs:label "10% FBS (Tet free)" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000028
-  rdfs:label "10% FBS Dialyzed" ;
+  rdfs:label "10% FBS (Dialyzed)" ;
   rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000029
-  rdfs:label "10% FCS" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000030
-  rdfs:label "10% FCS (Hyclone)" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000031
-  rdfs:label "10% FCS (PAA)" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000032
-  rdfs:label "10% FCS or heat-inactivated horse serum" ;
+  rdfs:label "10% heat-inactivated horse serum" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000033
-  rdfs:label "10% Heat-inactivated Fetal bovine serum" ;
+  rdfs:label "10% heat-inactivated FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000034
-  rdfs:label "10% Hyclone serum" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000035
-  rdfs:label "10% FetalBovineSerum Dialyzed" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000036
   rdfs:label "100% warm FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000037
-  rdfs:label "20% FCS" ;
+  rdfs:label "20% FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000038
   rdfs:label "FBS" ;
   rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note:  Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
   .
 
 bae:BAE_0000039
-  rdfs:label "FBS C/D treated 1%" ;
+  rdfs:label "FBS Charcoal/Dextran treated 1%" ;
   rdfs:subClassOf bae:BAE_0000020 ;
-  .
-
-bae:BAE_0000040
-  rdfs:label "FCS" ;
-  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS). Note: 'Charcoal Dextran treated' sometimes abbreviated as 'C/D'." ;
   .
 
 bae:BAE_0000041
   rdfs:label "IgG1" ;
   rdfs:subClassOf bao:BAO_0002609 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000042
   rdfs:label "IgG2" ;
   rdfs:subClassOf bao:BAO_0002609 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000043
   rdfs:label "125I" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000044
   rdfs:label "Alexa Fluor" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000045
   rdfs:label "Alexa488" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000046
   rdfs:label "Alexa594" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000047
   rdfs:label "Alexa647" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000048
   rdfs:label "AMC" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "AMC is an abbreviation for 7-Amino-4-methylcoumarin, is a chromophore for enzyme substrates. A synonym is coumarin 120" ;
   .
 
 bae:BAE_0000049
   rdfs:label "calcium-3" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000050
   rdfs:label "edans" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "EDANS (5-((2-Aminoethyl)amino)naphthalene-1-sulfonic acid) is a common donor for developing FRET-based nucleic acid probes and protease substrates. EDANS is often paired with DABCYL or DABSYL." ;
   .
 
 bae:BAE_0000051
   rdfs:label "Europium; APC" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000052
   rdfs:label "FAM/TAMRA" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000053
   rdfs:label "MCA" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "MCA is an abbreviation for methoxycoumarin, or 7-Methoxycoumarin-4-acetic acid, commonly used as a fluorescent label for peptides." ;
   .
 
 bae:BAE_0000054
   rdfs:label "MDC" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "MDC is an abbreviation for monodansyl cadaverine (aka dansylcadaverine), an autofluorescent dye commonly used to monitor autophagy" ;
   .
 
 bae:BAE_0000055
   rdfs:label "Ribogreen" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000056
   rdfs:label "SYBR green" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000057
   rdfs:label "TAM/DABCYL" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000058
   rdfs:label "ThioGlo" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000059
   rdfs:label "GFP tag" ;
   rdfs:subClassOf bao:BAO_0000325 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000060
   rdfs:label "biotin tag" ;
   rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
   .
 
 bae:BAE_0000061
   rdfs:label "cells per well" ;
   rdfs:subClassOf obo:UO_0000200 ;
+  obo:IAO_0000115 "" ;
   .
 
+bae:BAE_0000062
+  rdfs:label "endpoint correction present" ;
+  rdfs:subClassOf bao:BAO_0000419 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000063
+  rdfs:label "endpoint correction absent" ;
+  rdfs:subClassOf bao:BAO_0000419 ;
+  obo:IAO_0000115 "" ;
+  .
 
 
