@@ -81,6 +81,21 @@ public class Schema
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
+		
+		// makes a list of all the assignments that occur within this group and its subgroups, in order of occurrence
+		public Assignment[] flattenedAssignments()
+		{
+			List<Assignment> list = new ArrayList<>();
+			List<Group> stack = new ArrayList<>();
+			stack.add(this);
+			while (stack.size() > 0)
+			{
+				Group g = stack.remove(0);
+				list.addAll(g.assignments);
+				stack.addAll(g.subGroups);
+			}
+			return list.toArray(new Assignment[list.size()]);
+		}
 	};
 
 	// used within assignments: used to indicate how building of models to make suggestions is handled
