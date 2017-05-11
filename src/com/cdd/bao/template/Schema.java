@@ -334,7 +334,7 @@ public class Schema
 		}
 	}
 	
-	// ------------ private methods ------------	
+	// ------------ private members ------------	
 	
 	// template root: the schema definition resides within here
 	private Group root = new Group(null, "common assay template");
@@ -503,32 +503,6 @@ public class Schema
 	
 	public Assignment findAssignment(Annotation annot)
 	{
-		/*Assignment fakeAssn = annot.assn;
-		List<Group> fakeGroups = new ArrayList<>();
-		for (Group p = fakeAssn.parent; p != null && p.parent != null; p = p.parent) fakeGroups.add(0, p);
-
-		// drill down the sequence of groups, until "look" is defined to be the matching group that should contain the assignment; in this way any
-		// assignment that has an exact named hierarchy match is considered to be a hit
-		Group look = root;
-		descend: while (fakeGroups.size() > 0)
-		{
-			Group fake = fakeGroups.remove(0);
-			for (Group g : look.subGroups) if (g.name.equals(fake.name))
-			{
-				look = g;
-				continue descend;
-			}
-			look = null;
-			break;
-		}
-		if (look != null)
-		{
-			for (Assignment assn : look.assignments)
-			{
-				if (assn.name.equals(fakeAssn.name) && assn.propURI.equals(fakeAssn.propURI)) return assn;
-			}
-		}*/
-		
 		Assignment assn = findAssignment(annot.assn);
 		if (assn != null) return assn;
 		
@@ -582,6 +556,32 @@ public class Schema
 		}
 		
 		return true;
+	}
+	
+	// convenience methods for comparing property/groupNest; for "same", the group nesting has to be equivalent (usually the right
+	// call for matching within the same template); "compatible" means that only the defined parts of the group nesting are compared,
+	// which is often useful for inter-template annotation comparisons; note that all of these methods treat groupNests of null & empty
+	// array as the same
+	public static boolean sameGroupNest(String[] groupNest1, String[] groupNest2)
+	{
+		int sz1 = Util.length(groupNest1), sz2 = Util.length(groupNest2);
+		if (sz1 != sz2) return false;
+		for (int n = 0; n < sz1; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		return true;
+	}
+	public static boolean compatibleGroupNest(String[] groupNest1, String[] groupNest2)
+	{
+		int sz = Math.min(Util.length(groupNest1), Util.length(groupNest2));
+		for (int n = 0; n < sz; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		return true;
+	}
+	public static boolean samePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	{
+		return propURI1.equals(propURI2) && sameGroupNest(groupNest1, groupNest2);
+	}
+	public static boolean compatiblePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	{
+		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
 	}
 	
 	// adding of content
