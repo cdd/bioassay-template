@@ -87,35 +87,35 @@ bae:BAE_0000013
   rdfs:subClassOf bao:BAO_0000220 ;
   .
 
-bae:BAE_0000014
-  rdfs:label "threshold comparisons" ;
-  rdfs:subClassOf bao:BAO_0002140 ;
-  .
+#bae:BAE_0000014
+#  rdfs:label "threshold comparisons" ;
+#  rdfs:subClassOf bao:BAO_0002140 ;
+#  .
 
-bae:BAE_0000015
-  rdfs:label "greater than (>)" ;
-  rdfs:subClassOf bae:BAE_0000014 ;
-  .
+#bae:BAE_0000015
+#  rdfs:label "greater than (>)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
 
-bae:BAE_0000016
-  rdfs:label "less than (<)" ;
-  rdfs:subClassOf bae:BAE_0000014 ;
-  .
+#bae:BAE_0000016
+#  rdfs:label "less than (<)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
 
-bae:BAE_0000017
-  rdfs:label "greater than or equal (≥)" ;
-  rdfs:subClassOf bae:BAE_0000014 ;
-  .
+#bae:BAE_0000017
+#  rdfs:label "greater than or equal (≥)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
 
-bae:BAE_0000018
-  rdfs:label "less than or equal (≤)" ;
-  rdfs:subClassOf bae:BAE_0000014 ;
-  .
+#bae:BAE_0000018
+#  rdfs:label "less than or equal (≤)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
 
-bae:BAE_0000019
-  rdfs:label "equal to (=)" ;
-  rdfs:subClassOf bae:BAE_0000014 ;
-  .
+#bae:BAE_0000019
+#  rdfs:label "equal to (=)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
 
 bae:BAE_0000020
   rdfs:label "serum supplement" ;
