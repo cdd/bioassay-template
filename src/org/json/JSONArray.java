@@ -417,7 +417,7 @@ public class JSONArray implements Iterable<Object>
 		for (int n = 0; n < ret.length; n++)
 		{
 			Object object = get(n);
-			if (object == JSONObject.NULL) ;
+			if (object == JSONObject.NULL) {}
 			else if (object instanceof JSONArray || object instanceof JSONObject) throw new JSONException("JSONArray must be flat (i.e. primitive or null entries).");
 			else ret[n] = String.valueOf(object);
 		}
@@ -437,6 +437,41 @@ public class JSONArray implements Iterable<Object>
 			Object object = get(n);
 			if (object == JSONObject.NULL || !(object instanceof Number)) throw new JSONException("JSONArray must be purely numeric.");
 			ret[n] = ((Number)object).intValue();
+		}
+		return ret;
+	}
+
+	/**
+	 * Return as a primitive array of long integers. Entries must be numeric and non-null; floating point numbers will be rounded.
+	 * @return Long integer array of content.
+	 * @throws JSONException If any non-numeric types.
+	 */
+	public long[] toLongArray() throws JSONException
+	{
+		long[] ret = new long[length()];
+		for (int n = 0; n < ret.length; n++)
+		{
+			Object object = get(n);
+			if (object == JSONObject.NULL || !(object instanceof Number)) throw new JSONException("JSONArray must be purely numeric.");
+			ret[n] = ((Number)object).longValue();
+		}
+		return ret;
+	}
+
+	/**
+	 * Return as a primitive array of floats. Entries must be numeric; nulls will be converted to NaN.
+	 * @return floats array of content.
+	 * @throws JSONException If any non-numeric types.
+	 */
+	public float[] toFloatArray() throws JSONException
+	{
+		float[] ret = new float[length()];
+		for (int n = 0; n < ret.length; n++)
+		{
+			Object object = get(n);
+			if (object == JSONObject.NULL) ret[n] = Float.NaN;
+			else if (!(object instanceof Number)) throw new JSONException("JSONArray must be purely numeric.");
+			else ret[n] = ((Number)object).floatValue();
 		}
 		return ret;
 	}
@@ -472,6 +507,42 @@ public class JSONArray implements Iterable<Object>
 			Object object = get(n);
 			if (object instanceof Boolean) ret[n] = (Boolean)object;
 			else throw new JSONException("JSONArray must be purely boolean.");
+		}
+		return ret;
+	}
+	
+	/**
+	 * Return as an array of JSONObjects. Nulls are allowed.
+	 * @return Object array of content.
+	 * @throws JSONException If any entries are neither object nor null.
+	 */
+	public JSONObject[] toObjectArray() throws JSONException
+	{
+		JSONObject[] ret = new JSONObject[length()];
+		for (int n = 0; n < ret.length; n++)
+		{
+			Object object = get(n);
+			if (object == JSONObject.NULL) {}
+			else if (object instanceof JSONObject) ret[n] = (JSONObject)object;
+			else throw new JSONException("JSONArray must be all JSONObjects.");
+		}
+		return ret;
+	}
+
+	/**
+	 * Return as an array of JSONArrays. Nulls are allowed.
+	 * @return Object array of content.
+	 * @throws JSONException If any entries are neither array nor null.
+	 */
+	public JSONArray[] toArrayOfArrays() throws JSONException
+	{
+		JSONArray[] ret = new JSONArray[length()];
+		for (int n = 0; n < ret.length; n++)
+		{
+			Object object = get(n);
+			if (object == JSONObject.NULL) {}
+			else if (object instanceof JSONArray) ret[n] = (JSONArray)object;
+			else throw new JSONException("JSONArray must be all JSONArrays.");
 		}
 		return ret;
 	}

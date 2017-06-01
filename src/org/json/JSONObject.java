@@ -1081,6 +1081,21 @@ public class JSONObject
 	}
 
 	/**
+	 * Get an optional JSONArray associated with a key. It returns a new empty array if there
+	 * is no such key.
+	 *
+	 * @param key
+	 *            A key string.
+	 * @return A JSONArray which is the value.
+	 */
+	public JSONArray optJSONArrayEmpty(String key)
+	{
+		Object o = opt(key);
+		if (o instanceof JSONArray) return (JSONArray)o;
+		return new JSONArray();
+	}
+
+	/**
 	 * Get an optional JSONObject associated with a key. It returns null if
 	 * there is no such key, or if its value is not a JSONObject.
 	 *
@@ -1090,8 +1105,23 @@ public class JSONObject
 	 */
 	public JSONObject optJSONObject(String key)
 	{
-		Object object = opt(key);
-		return object instanceof JSONObject ? (JSONObject)object : null;
+		Object o = opt(key);
+		return o instanceof JSONObject ? (JSONObject)o : null;
+	}
+
+	/**
+	 * Get an optional JSONObject associated with a key. It returns a new empty object
+	 * if there is no such key.
+	 *
+	 * @param key
+	 *            A key string.
+	 * @return A JSONObject which is the value.
+	 */
+	public JSONObject optJSONObjectEmpty(String key)
+	{
+		Object o = opt(key);
+		if (o instanceof JSONObject) return (JSONObject)o;
+		return new JSONObject();
 	}
 
 	/**
