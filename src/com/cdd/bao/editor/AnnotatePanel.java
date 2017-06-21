@@ -144,7 +144,9 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 
 		table.setMinHeight(450);        
         table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        table.getColumns().addAll(colURI, colLabel, colDescr);
+        table.getColumns().add(colURI);
+        table.getColumns().add(colLabel);
+        table.getColumns().add(colDescr);
         table.setItems(FXCollections.observableArrayList(options));
  
 		Lineup line = new Lineup(PADDING);

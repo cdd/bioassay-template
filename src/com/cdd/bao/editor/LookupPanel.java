@@ -247,7 +247,10 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
 		tableList.setMinHeight(450);        
         tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        tableList.getColumns().addAll(colUsed, colURI, colLabel, colDescr);
+        tableList.getColumns().add(colUsed);
+        tableList.getColumns().add(colURI);
+        tableList.getColumns().add(colLabel);
+        tableList.getColumns().add(colDescr);
         tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
 
         BorderPane pane = new BorderPane();
