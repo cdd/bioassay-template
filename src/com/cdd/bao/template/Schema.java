@@ -166,6 +166,14 @@ public class Schema
 			return nest.toArray(new String[nest.size()]);
 		}
 		
+		// as above, except compiles the labels rather than URIs
+		public String[] groupLabel()
+		{
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.name == null ? "" : look.name);
+			return nest.toArray(new String[nest.size()]);
+		}
+		
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
