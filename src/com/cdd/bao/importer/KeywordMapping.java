@@ -43,18 +43,39 @@ public class KeywordMapping
 	{
 		public String regex; // there must be at least one group, e.g. "ACME(.*)"
 		public String prefix; // must correspond to an identifier prefix for the output, e.g. "acmeID:"
+
+		public static Identity create(String name, String prefix)
+		{
+			Identity id = new Identity();
+			id.regex = Pattern.quote(name);
+			id.prefix = prefix;
+			return id;
+		}
 	}
 	
+	public static final class TextBlock
+	{
+		public String regex; // column to match
+		public String title; // preceding title to use when compiling the text section
+
+		public static TextBlock create(String name, String title)
+		{
+			TextBlock txt = new TextBlock();
+			txt.regex = Pattern.quote(name);
+			txt.title = title;
+			return txt;
+		}
+	}
+
 	public static class MapAssn
 	{
+		public String regex; // anything that matches this expression is included in this assignment
 		public String propURI; // URI of the assignment to match to (must be in template, or null)
 		public String[] groupNest; // groupNest disambiguation
 	}
 	
 	public static final class Property extends MapAssn
-	{
-		public String regex; // anything that matches this expression is included in this assignment
-		
+	{		
 		public static Property create(String name, String propURI, String[] groupNest)
 		{
 			Property prop = new Property();
@@ -67,7 +88,6 @@ public class KeywordMapping
 	
 	public static final class Value extends MapAssn
 	{
-		public String regex; // anything that matches this expression is mapped to this value term
 		public String valueURI; // URI of value to match to (must occur in hierarchy of corresponding assignment)
 
 		public static Value create(String name, String valueURI, String propURI, String[] groupNest)
@@ -83,8 +103,6 @@ public class KeywordMapping
 	
 	public static final class Literal extends MapAssn
 	{
-		public String regex; // anything that matches this expression is passed through as a literal
-
 		public static Literal create(String name, String propURI, String[] groupNest)
 		{
 			Literal lit = new Literal();
@@ -96,6 +114,7 @@ public class KeywordMapping
 	}
 	
 	public List<Identity> identities = new ArrayList<>();
+	public List<TextBlock> textBlocks = new ArrayList<>();
 	public List<Property> properties = new ArrayList<>();
 	public List<Value> values = new ArrayList<>();
 	public List<Literal> literals = new ArrayList<>();
@@ -128,6 +147,13 @@ public class KeywordMapping
 				id.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
 				id.prefix = obj.optString("prefix");
 				identities.add(id);
+			}
+			for (JSONObject obj : json.optJSONArrayEmpty("textBlocks").toObjectArray())
+			{
+				TextBlock txt = new TextBlock();
+				txt.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
+				txt.title = obj.optString("title");
+				textBlocks.add(txt);
 			}
 			for (JSONObject obj : json.optJSONArrayEmpty("properties").toObjectArray())
 			{
@@ -167,7 +193,7 @@ public class KeywordMapping
 	public void save() throws IOException
 	{
 		JSONObject json = new JSONObject();
-		JSONArray listID = new JSONArray(), listProp = new JSONArray(), listVal = new JSONArray(), listLit = new JSONArray();
+		JSONArray listID = new JSONArray(), listText = new JSONArray(), listProp = new JSONArray(), listVal = new JSONArray(), listLit = new JSONArray();
 
 		for (Identity id : identities)
 		{
@@ -175,6 +201,13 @@ public class KeywordMapping
 			obj.put("regex", id.regex);
 			obj.put("prefix", id.prefix);
 			listID.put(obj);
+		}
+		for (TextBlock txt : textBlocks)
+		{
+			JSONObject obj = new JSONObject();
+			obj.put("regex", txt.regex);
+			obj.put("title", txt.title);
+			listText.put(obj);
 		}
 		for (Property prop : properties)
 		{
@@ -203,6 +236,7 @@ public class KeywordMapping
 		}
 		
 		json.put("identities", listID);
+		json.put("textBlocks", listText);
 		json.put("properties", listProp);
 		json.put("values", listVal);
 		json.put("literals", listLit);
@@ -210,6 +244,28 @@ public class KeywordMapping
 		Writer wtr = new FileWriter(file);
 		wtr.write(json.toString(2));
 		wtr.close();
+	}
+	
+	// searches for an identifier for which the name matches its regex
+	public Identity findIdentity(String name)
+	{
+		for (Identity id : identities)
+		{
+			Pattern p = getPattern(id.regex);
+			if (p.matcher(name).matches()) return id;
+		}
+		return null;
+	}
+
+	// searches for a text block for which the name matches its regex
+	public TextBlock findTextBlock(String name)
+	{
+		for (TextBlock txt : textBlocks)
+		{
+			Pattern p = getPattern(txt.regex);
+			if (p.matcher(name).matches()) return txt;
+		}
+		return null;
 	}
 	
 	// searches for a property for which the name matches its regex
@@ -222,6 +278,28 @@ public class KeywordMapping
 		}
 		return null;
 	}
+	
+	// searches for a value for which the name matches its regex
+	public Value findValue(String name)
+	{
+		for (Value val : values)
+		{
+			Pattern p = getPattern(val.regex);
+			if (p.matcher(name).matches()) return val;
+		}
+		return null;
+	}
+	
+	// searches for a literal for which the name matches its regex
+	public Literal findLiteral(String name)
+	{
+		for (Literal lit : literals)
+		{
+			Pattern p = getPattern(lit.regex);
+			if (p.matcher(name).matches()) return lit;
+		}
+		return null;
+	}	
 	
 	// collapses all the prefixes in the list
 	public static String[] collapsePrefixes(String[] uriList)

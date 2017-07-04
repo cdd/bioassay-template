@@ -88,6 +88,7 @@ public class ImportControlledVocab
 		map = new KeywordMapping(mapFN);
 		Util.writeln("Mapping file:");
 		Util.writeln("    # identities = " + map.identities.size());
+		Util.writeln("    # textblocks = " + map.textBlocks.size());
 		Util.writeln("    # properties = " + map.properties.size());
 		Util.writeln("    # values = " + map.values.size());
 		Util.writeln("    # literals = " + map.literals.size());
@@ -147,7 +148,10 @@ public class ImportControlledVocab
 	{
 		if (Util.isBlank(colName)) throw new IOException("Blank column name in source: this needs to be fixed.");
 		
-		if (map.findProperty(colName) != null) return; // anything found, assume it's OK
+		// anything found, assume it's OK
+		if (map.findIdentity(colName) != null) return;
+		if (map.findProperty(colName) != null) return; 
+		if (map.findTextBlock(colName) != null) return;
 		
 		int[] assnidx = mostSimilarAssignments(colName);
 
@@ -168,11 +172,11 @@ public class ImportControlledVocab
 		{
 			Schema.Assignment assn = assignments[assnidx[n]];
 			Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
-			String[] groups = assignments[assnidx[n]].groupLabel();
+			String[] groups = assn.groupLabel();
 			for (int i = groups.length - 1; i >= 0; i--) Util.write(" / " + groups[i]);
 			Util.writeln();
 		}
-		Util.writeln("  or: enter a URI or abbreviation");
+		Util.writeln("  or: enter a URI or abbreviation, or ;title to map to text");
 		
 		String choice = getChoice(Math.min(assnidx.length, 9));
 		
@@ -188,6 +192,8 @@ public class ImportControlledVocab
 			map.save();
 			return;
 		}
+		
+		// map to a given property
 		if (num > 0 && num <= assnidx.length)
 		{
 			Schema.Assignment assn = assignments[assnidx[num - 1]];
@@ -199,6 +205,61 @@ public class ImportControlledVocab
 			map.properties.add(prop);
 			map.save();
 			return;
+		}
+		
+		// add a text mapping directive
+		if (choice.startsWith(";"))
+		{
+			map.textBlocks.add(TextBlock.create(colName, choice.substring(1)));
+			map.save();
+			return;
+		}
+		
+		// it's a URI: track it down to an actual assignment, or continue forever until it happens
+		while (Util.notBlank(choice))
+		{
+			String abbrev = ModelSchema.collapsePrefix(choice), uri = ModelSchema.expandPrefix(choice);
+			Util.writeln("Entered property URI: <" + abbrev + ">");
+		
+			List<Schema.Assignment> assnList = new ArrayList<>();
+			for (Schema.Assignment assn : assignments) if (assn.propURI.equals(uri)) assnList.add(assn);
+			
+			if (assnList.size() == 1)
+			{
+				Schema.Assignment assn = assnList.get(0);
+				Util.writeln("Matched exactly one assignment: [" + assn.name + "]");
+				map.properties.add(Property.create(assn.name, assn.propURI, assn.groupNest()));
+				map.save();
+				return;
+			}
+			
+			if (assnList.size() == 0)
+			{
+				Util.writeln("The URI does not match any of the assignments; try again");
+				choice = getChoice(0);
+			}
+			else
+			{
+				Util.writeln("The URI matched more than one assignment:");
+				for (int n = 0; n < assnList.size(); n++)
+				{
+					Schema.Assignment assn = assnList.get(n);
+					Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
+					String[] groups = assn.groupLabel();
+					for (int i = groups.length - 1; i >= 0; i--) Util.write(" / " + groups[i]);
+					Util.writeln();
+				}
+				choice = getChoice(assnList.size());
+				num = Util.safeInt(choice);
+				if (num > 0 && num <= assnList.size())
+				{
+					Schema.Assignment assn = assnList.get(num - 1);
+					Util.writeln("Adding assignment mapping.");
+					map.properties.add(Property.create(assn.name, assn.propURI, assn.groupNest()));
+					map.save();
+					return;
+				}
+			}
 		}
 	}
 	
@@ -213,6 +274,7 @@ public class ImportControlledVocab
 			int num = Util.safeInt(choice, -1);
 			if (Util.isBlank(choice) || num >= 0 && num <= highNum) break;
 			if (ModelSchema.expandPrefix(choice).startsWith("http://")) break;
+			if (choice.startsWith(";")) break;
 			Util.write("Invalid; try again: ");
 		}
 		return choice;
