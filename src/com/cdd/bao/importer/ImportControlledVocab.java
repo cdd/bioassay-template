@@ -145,9 +145,18 @@ public class ImportControlledVocab
 		if (map.findProperty(colName) != null) return; // anything found, assume it's OK
 		
 		int[] assnidx = mostSimilarAssignments(colName);
-		
-		// insist
+
+		// display column and some representative examples		
 		Util.writeln("Unmapped column: [" + colName + "]");
+		for (int n = 0, ncases = 0; n < srcRows.length() && ncases < 5; n++)
+		{
+			String val = srcRows.getJSONObject(n).optString(colName);
+			if (val == null) continue;
+			Util.writeln("    value example #" + (++ncases) + ": [" + val + "]");
+		}
+
+
+		// require something be done with it
 		Util.writeln("  [ENTER] = ignore temporarily");
 		Util.writeln("  [0] = ignore permanently");
 		for (int n = 0; n < 9 && n < assnidx.length; n++)
