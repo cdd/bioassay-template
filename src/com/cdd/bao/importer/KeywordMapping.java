@@ -202,7 +202,7 @@ public class KeywordMapping
 			listLit.put(obj);
 		}
 		
-		json.put("identifiers", listID);
+		json.put("identities", listID);
 		json.put("properties", listProp);
 		json.put("values", listVal);
 		json.put("literals", listLit);

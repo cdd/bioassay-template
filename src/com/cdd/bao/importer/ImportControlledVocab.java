@@ -86,6 +86,11 @@ public class ImportControlledVocab
 		srcRows = json.getJSONArray("rows");
 		
 		map = new KeywordMapping(mapFN);
+		Util.writeln("Mapping file:");
+		Util.writeln("    # identities = " + map.identities.size());
+		Util.writeln("    # properties = " + map.properties.size());
+		Util.writeln("    # values = " + map.values.size());
+		Util.writeln("    # literals = " + map.literals.size());
 		
 		schema = ModelSchema.deserialise(new File(schemaFN));
 		assignments = schema.getRoot().flattenedAssignments();
