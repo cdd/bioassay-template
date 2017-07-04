@@ -30,8 +30,7 @@ import java.security.*;
 import java.util.*;
 import java.util.zip.*;
 
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.DatasetFactory;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
@@ -284,13 +283,13 @@ public class Vocabulary
 			File[] list = baseDir.listFiles();
 			for (File f : list)
 			{
-				String fn = f.getAbsolutePath();
+				String fn = f.getCanonicalPath();
 				if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
 			}
 		}
 		for (File f : extra)
 		{
-			String fn = f.getAbsolutePath();
+			String fn = f.getCanonicalPath();
 			if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
 		}		
 		List<File> files = new ArrayList<>();

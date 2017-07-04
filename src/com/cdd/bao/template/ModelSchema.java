@@ -146,6 +146,7 @@ public class ModelSchema
 	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
 	public static String collapsePrefix(String uri)
 	{
+		if (uri == null) return null;
 		for (int n = 0; n < PREFIX_MAP.length; n += 2)
 		{
 			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
@@ -157,6 +158,7 @@ public class ModelSchema
 	// if the given proto-URI starts with one of the common prefixes, replace it with the actual URI root stem; if none, returns same as input
 	public static String expandPrefix(String uri)
 	{
+		if (uri == null) return null;
 		for (int n = 0; n < PREFIX_MAP.length; n += 2)
 		{
 			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];

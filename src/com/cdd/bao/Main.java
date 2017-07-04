@@ -249,13 +249,17 @@ public class Main
 	// initiates the importing of keywords from controlled vocabulary
 	private static void importKeywords(String[] options) throws Exception
 	{
-		if (options.length == 0)
+		if (options.length < 5)
 		{
-			Util.writeln("Must provide the import configuration filename.");
+			Util.writeln("Importing syntax: {src} {map} {dst} {schema} {vocab}");
+			Util.writeln("    where {src} is the JSON-formatted pre-import data");
+			Util.writeln("          {map} contains the mapping instructions");
+			Util.writeln("          {dst} is an import-ready ZIP file");
+			Util.writeln("          {schema} is the template to conform to");
+			Util.writeln("          {vocab} is the processed vocabulary dump");
 			return;
 		}
-		String cfgFN = options[0];
-		ImportControlledVocab imp = new ImportControlledVocab(cfgFN);
-		// ...
+		ImportControlledVocab imp = new ImportControlledVocab(options[0], options[1], options[2], options[3], options[4]);
+		imp.exec();
 	}
 }
