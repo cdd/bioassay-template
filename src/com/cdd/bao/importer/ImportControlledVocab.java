@@ -156,7 +156,7 @@ public class ImportControlledVocab
 		int[] assnidx = mostSimilarAssignments(colName);
 
 		// display column and some representative examples		
-		Util.writeln("Unmapped column: [" + colName + "]");
+		Util.writeln("\nUnmapped column: [" + colName + "]");
 		for (int n = 0, ncases = 0; n < srcRows.length() && ncases < 5; n++)
 		{
 			String val = srcRows.getJSONObject(n).optString(colName);
@@ -197,7 +197,7 @@ public class ImportControlledVocab
 		if (num > 0 && num <= assnidx.length)
 		{
 			Schema.Assignment assn = assignments[assnidx[num - 1]];
-			Property prop = Property.create(assn.name, assn.propURI, assn.groupNest());
+			Property prop = Property.create(colName, assn.propURI, assn.groupNest());
 			Util.writeln("Mapping property to: [" + assn.name + "] <" + assn.propURI + ">");
 			String[] groupLabel = assn.groupLabel();
 			for (int n = prop.groupNest.length - 1; n >= 0; n--)
@@ -228,7 +228,7 @@ public class ImportControlledVocab
 			{
 				Schema.Assignment assn = assnList.get(0);
 				Util.writeln("Matched exactly one assignment: [" + assn.name + "]");
-				map.properties.add(Property.create(assn.name, assn.propURI, assn.groupNest()));
+				map.properties.add(Property.create(colName, assn.propURI, assn.groupNest()));
 				map.save();
 				return;
 			}
@@ -255,7 +255,7 @@ public class ImportControlledVocab
 				{
 					Schema.Assignment assn = assnList.get(num - 1);
 					Util.writeln("Adding assignment mapping.");
-					map.properties.add(Property.create(assn.name, assn.propURI, assn.groupNest()));
+					map.properties.add(Property.create(colName, assn.propURI, assn.groupNest()));
 					map.save();
 					return;
 				}
