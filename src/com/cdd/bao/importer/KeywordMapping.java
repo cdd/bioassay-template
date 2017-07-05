@@ -88,12 +88,14 @@ public class KeywordMapping
 	
 	public static final class Value extends MapAssn
 	{
+		public String valueRegex; // which values to match
 		public String valueURI; // URI of value to match to (must occur in hierarchy of corresponding assignment)
 
-		public static Value create(String name, String valueURI, String propURI, String[] groupNest)
+		public static Value create(String name, String value, String valueURI, String propURI, String[] groupNest)
 		{
 			Value val = new Value();
 			val.regex = Pattern.quote(name);
+			val.valueRegex = Pattern.quote(value);
 			val.valueURI = ModelSchema.collapsePrefix(valueURI);
 			val.propURI = ModelSchema.collapsePrefix(propURI);
 			val.groupNest = collapsePrefixes(groupNest);
@@ -103,10 +105,13 @@ public class KeywordMapping
 	
 	public static final class Literal extends MapAssn
 	{
-		public static Literal create(String name, String propURI, String[] groupNest)
+		public String valueRegex; // which values to pass through as literals
+
+		public static Literal create(String name, String value, String propURI, String[] groupNest)
 		{
 			Literal lit = new Literal();
 			lit.regex = Pattern.quote(name);
+			lit.valueRegex = Util.isBlank(value) ? ".*" : Pattern.quote(value);
 			lit.propURI = ModelSchema.collapsePrefix(propURI);
 			lit.groupNest = collapsePrefixes(groupNest);
 			return lit;
@@ -167,6 +172,7 @@ public class KeywordMapping
 			{
 				Value val = new Value();
 				val.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
+				val.valueRegex = regexOrName(obj.optString("valueRegex"), obj.optString("valueName"));
 				val.valueURI = obj.optString("valueURI");
 				val.propURI = obj.optString("propURI");
 				val.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
@@ -176,6 +182,7 @@ public class KeywordMapping
 			{
 				Literal lit = new Literal();
 				lit.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
+				lit.valueRegex = regexOrName(obj.optString("valueRegex"), obj.optString("valueName"));
 				lit.propURI = obj.optString("propURI");
 				lit.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
 				literals.add(lit);
@@ -221,6 +228,7 @@ public class KeywordMapping
 		{
 			JSONObject obj = new JSONObject();
 			obj.put("regex", val.regex);
+			obj.put("valueRegex", val.valueRegex);
 			obj.put("valueURI", val.valueURI);
 			obj.put("propURI", val.propURI);
 			obj.put("groupNest", val.groupNest);
@@ -230,6 +238,7 @@ public class KeywordMapping
 		{
 			JSONObject obj = new JSONObject();
 			obj.put("regex", lit.regex);
+			obj.put("valueRegex", lit.valueRegex);
 			obj.put("propURI", lit.propURI);
 			obj.put("groupNest", lit.groupNest);
 			listLit.put(obj);
@@ -280,33 +289,44 @@ public class KeywordMapping
 	}
 	
 	// searches for a value for which the name matches its regex
-	public Value findValue(String name)
+	public Value findValue(String key, String value)
 	{
 		for (Value val : values)
 		{
 			Pattern p = getPattern(val.regex);
-			if (p.matcher(name).matches()) return val;
+			if (!p.matcher(key).matches()) continue;
+			p = getPattern(val.valueRegex);
+			if (p.matcher(value).matches()) return val;
 		}
 		return null;
 	}
 	
 	// searches for a literal for which the name matches its regex
-	public Literal findLiteral(String name)
+	public Literal findLiteral(String key, String value)
 	{
 		for (Literal lit : literals)
 		{
 			Pattern p = getPattern(lit.regex);
-			if (p.matcher(name).matches()) return lit;
+			if (!p.matcher(key).matches()) continue;
+			p = getPattern(lit.valueRegex);
+			if (p.matcher(value).matches()) return lit;
 		}
 		return null;
 	}	
 	
-	// collapses all the prefixes in the list
+	// collapses/expands all the prefixes in the list
 	public static String[] collapsePrefixes(String[] uriList)
 	{
 		if (uriList == null || uriList.length == 0) return null;
 		String[] ret = new String[uriList.length];
 		for (int n = 0; n < ret.length; n++) ret[n] = ModelSchema.collapsePrefix(uriList[n]);
+		return ret;
+	}
+	public static String[] expandPrefixes(String[] uriList)
+	{
+		if (uriList == null || uriList.length == 0) return null;
+		String[] ret = new String[uriList.length];
+		for (int n = 0; n < ret.length; n++) ret[n] = ModelSchema.expandPrefix(uriList[n]);
 		return ret;
 	}
 

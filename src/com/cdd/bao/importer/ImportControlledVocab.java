@@ -52,6 +52,7 @@ public class ImportControlledVocab
 	private Schema schema;
 	private Schema.Assignment[] assignments; // flattened
 	private SchemaVocab schvoc;
+	private Map<Schema.Assignment, SchemaTree> treeCache = new HashMap<>();
 	
 	private enum Directive
 	{
@@ -100,9 +101,22 @@ public class ImportControlledVocab
 		schvoc = SchemaVocab.deserialise(istr, new Schema[]{schema});
 		istr.close();
 		
+		for (SchemaVocab.StoredTree stored : schvoc.getTrees()) treeCache.put(stored.assignment, stored.tree);
+		
 		checkMappingProperties();
 		for (int n = 0; n < srcColumns.length(); n++) matchColumn(srcColumns.getString(n));
-		// !! matchRows()
+		for (int n = 0; n < srcRows.length(); n++)
+		{
+			JSONObject row = srcRows.getJSONObject(n);
+			for (String key : row.keySet())
+			{
+				Property prop = map.findProperty(key);
+				if (prop == null || Util.isBlank(prop.propURI)) continue; // passed on the opportunity to map
+				String val = row.optString(key, "");
+				if (map.findValue(key, val) != null || map.findLiteral(key, val) != null) continue; // already mapped
+				matchValue(prop, key, val);
+			}
+		}
 		
 		Util.writeln("Saving mapping file...");
 		map.save();
@@ -164,7 +178,6 @@ public class ImportControlledVocab
 			Util.writeln("    value example #" + (++ncases) + ": [" + val + "]");
 		}
 
-
 		// require something be done with it
 		Util.writeln("  [ENTER] = ignore temporarily");
 		Util.writeln("  [0] = ignore permanently");
@@ -173,12 +186,12 @@ public class ImportControlledVocab
 			Schema.Assignment assn = assignments[assnidx[n]];
 			Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
 			String[] groups = assn.groupLabel();
-			for (int i = groups.length - 1; i >= 0; i--) Util.write(" / " + groups[i]);
+			for (int i = 0; i < groups.length; i++) Util.write(" / " + groups[i]);
 			Util.writeln();
 		}
 		Util.writeln("  or: enter a URI or abbreviation, or ;title to map to text");
 		
-		String choice = getChoice(Math.min(assnidx.length, 9));
+		String choice = getChoice(Math.min(assnidx.length, 9), false);
 		
 		if (Util.isBlank(choice)) return; // temporary skip: do nothing
 	
@@ -198,9 +211,9 @@ public class ImportControlledVocab
 		{
 			Schema.Assignment assn = assignments[assnidx[num - 1]];
 			Property prop = Property.create(colName, assn.propURI, assn.groupNest());
-			Util.writeln("Mapping property to: [" + assn.name + "] <" + assn.propURI + ">");
+			Util.writeln("Mapping property to: [" + assn.name + "] <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
 			String[] groupLabel = assn.groupLabel();
-			for (int n = prop.groupNest.length - 1; n >= 0; n--)
+			for (int n = 0; n < prop.groupNest.length; n++)
 				Util.writeln("                    / " + groupLabel[n] + " <" + prop.groupNest[n] + ">");
 			map.properties.add(prop);
 			map.save();
@@ -236,7 +249,7 @@ public class ImportControlledVocab
 			if (assnList.size() == 0)
 			{
 				Util.writeln("The URI does not match any of the assignments; try again");
-				choice = getChoice(0);
+				choice = getChoice(0, false);
 			}
 			else
 			{
@@ -246,10 +259,10 @@ public class ImportControlledVocab
 					Schema.Assignment assn = assnList.get(n);
 					Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
 					String[] groups = assn.groupLabel();
-					for (int i = groups.length - 1; i >= 0; i--) Util.write(" / " + groups[i]);
+					for (int i = 0; i < groups.length; i++) Util.write(" / " + groups[i]);
 					Util.writeln();
 				}
-				choice = getChoice(assnList.size());
+				choice = getChoice(assnList.size(), false);
 				num = Util.safeInt(choice);
 				if (num > 0 && num <= assnList.size())
 				{
@@ -263,8 +276,97 @@ public class ImportControlledVocab
 		}
 	}
 	
+	// ensures that a value gets a chance to be mapped to a URI or marked as a literal
+	private void matchValue(Property prop, String key, String value) throws IOException
+	{
+		String[] groupNest = KeywordMapping.expandPrefixes(prop.groupNest);
+		Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(prop.propURI), groupNest);
+		if (assnList.length == 0) return;
+		Schema.Assignment assn = assnList[0];
+	
+		Util.writeln();
+		Util.writeln("Value: column [" + key + "]");
+		Util.writeln("       value  [" + value + "]");
+		Util.writeln("Assignment: [" + assn.name + "] <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
+		String[] groupLabel = assn.groupLabel();
+		for (int n = 0; n < prop.groupNest.length; n++)
+		Util.writeln("           / " + groupLabel[n] + " <" + prop.groupNest[n] + ">");
+
+		SchemaTree.Node[] nodes = mostSimilarTerms(assn, value);
+
+		// require something be done with it
+		Util.writeln("  [ENTER] = ignore temporarily");
+		Util.writeln("  [0] = ignore permanently");
+		for (int n = 0; n < 9 && n < nodes.length; n++)
+		{
+			Util.writeln("  [" + (n + 1) + "] = {" + nodes[n].label + " <" + ModelSchema.collapsePrefix(nodes[n].uri) + ">}");
+			for (SchemaTree.Node look = nodes[n].parent; look != null; look = look.parent)
+				Util.writeln("       / " + look.label + " <" + ModelSchema.collapsePrefix(look.uri) + ">");
+		}
+		Util.writeln("  [;] = pass this value through as literal");
+		Util.writeln("  [*] = pass the whole assignment as literal");
+		Util.writeln("  or: enter a URI or abbreviation");
+		
+		String choice = getChoice(Math.min(nodes.length, 9), true);
+
+		if (Util.isBlank(choice)) return; // temporary skip: do nothing
+		if (choice.equals(";"))
+		{
+			Util.writeln("Marking value [" + key + "]:[" + value + "] as a literal.");
+			map.literals.add(Literal.create(key, value, prop.propURI, prop.groupNest));
+			map.save();
+			return;
+		}
+		if (choice.equals("*"))
+		{
+			Util.writeln("Marking value [" + key + "]:[" + value + "] as a literal.");
+			map.literals.add(Literal.create(key, null, prop.propURI, prop.groupNest));
+			map.save();
+			return;
+		}
+
+		int num = Util.safeInt(choice, -1);
+
+		// create a skip-this-always
+		if (num == 0)
+		{
+			Util.writeln("Permanently excluding value [" + key + "]:[" + value + "] from mapping.");
+			map.values.add(Value.create(key, value, null, prop.propURI, prop.groupNest));
+			map.save();
+			return;
+		}
+
+		// map to a given term
+		if (num > 0 && num <= nodes.length)
+		{
+			SchemaTree.Node node = nodes[num - 1];
+			Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + " <" + ModelSchema.collapsePrefix(node.uri) + ">}");
+			map.values.add(Value.create(key, value, node.uri, prop.propURI, prop.groupNest));
+			map.save();
+			return;
+		}
+		
+		// it's a URI: track it down to an actual assignment, or continue forever until it happens
+		while (Util.notBlank(choice))
+		{
+			String abbrev = ModelSchema.collapsePrefix(choice), uri = ModelSchema.expandPrefix(choice);
+			Util.writeln("Entered property URI: <" + abbrev + ">");
+			
+			for (SchemaTree.Node node : nodes) if (node.uri.equals(uri))
+			{
+				Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + " <" + ModelSchema.collapsePrefix(node.uri) + ">}");
+				map.values.add(Value.create(key, value, node.uri, prop.propURI, prop.groupNest));
+				map.save();
+				return;
+			}
+		
+			Util.writeln("The URI does not match any of the terms in the tree; try again");
+			choice = getChoice(0, false);
+		}		
+	}
+	
 	// requires that the user picks something, which is either blank, a number (from 0..highNum) or a URI
-	private String getChoice(int highNum) throws IOException
+	private String getChoice(int highNum, boolean allowStar) throws IOException
 	{
 		String choice = null;
 		while (true)
@@ -275,6 +377,7 @@ public class ImportControlledVocab
 			if (Util.isBlank(choice) || num >= 0 && num <= highNum) break;
 			if (ModelSchema.expandPrefix(choice).startsWith("http://")) break;
 			if (choice.startsWith(";")) break;
+			if (allowStar && choice.equals("*")) break;
 			Util.write("Invalid; try again: ");
 		}
 		return choice;
@@ -295,6 +398,23 @@ public class ImportControlledVocab
 			Util.writeln("sim="+sim[idx[n]]+" : [" + assignments[idx[n]].name + "]");*/
 		
 		return ArrayUtils.toPrimitive(idx);
+	}
+	
+	// given an assignment and a name, pull out the branch and rank the contents in terms of similarity to the name
+	private SchemaTree.Node[] mostSimilarTerms(Schema.Assignment assn, String name)
+	{
+		SchemaTree.Node[] nodes = treeCache.get(assn).getFlat();
+		
+		int[] sim = new int[nodes.length];
+		for (int n = 0; n < nodes.length; n++) sim[n] = stringSimilarity(name, nodes[n].label);
+
+		Integer[] idx = new Integer[nodes.length];
+		for (int n = 0; n < nodes.length; n++) idx[n] = n;
+		Arrays.sort(idx, (i1, i2) -> sim[i1] - sim[i2]);
+
+		SchemaTree.Node[] ret = new SchemaTree.Node[nodes.length];
+		for (int n = 0; n < nodes.length; n++) ret[n] = nodes[idx[n]];
+		return ret;		
 	}
 	
 	// returns a measure of string similarity, used to pair controlled vocabulary names with ontology terms; 0=perfect
