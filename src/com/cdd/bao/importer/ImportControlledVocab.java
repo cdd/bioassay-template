@@ -110,6 +110,7 @@ public class ImportControlledVocab
 			JSONObject row = srcRows.getJSONObject(n);
 			for (String key : row.keySet())
 			{
+				if (map.findIdentity(key) != null) continue;
 				Property prop = map.findProperty(key);
 				if (prop == null || Util.isBlank(prop.propURI)) continue; // passed on the opportunity to map
 				String val = row.optString(key, "");
