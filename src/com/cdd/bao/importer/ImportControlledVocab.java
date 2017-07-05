@@ -160,7 +160,7 @@ public class ImportControlledVocab
 		for (int n = 0, ncases = 0; n < srcRows.length() && ncases < 5; n++)
 		{
 			String val = srcRows.getJSONObject(n).optString(colName);
-			if (val == null) continue;
+			if (Util.isBlank(val)) continue;
 			Util.writeln("    value example #" + (++ncases) + ": [" + val + "]");
 		}
 
