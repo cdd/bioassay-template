@@ -107,6 +107,7 @@ public class ImportControlledVocab
 		for (int n = 0; n < srcColumns.length(); n++) matchColumn(srcColumns.getString(n));
 		for (int n = 0; n < srcRows.length(); n++)
 		{
+			Util.writeln("---- Row#" + (n + 1) + " ----");
 			JSONObject row = srcRows.getJSONObject(n);
 			for (String key : row.keySet())
 			{
@@ -185,7 +186,7 @@ public class ImportControlledVocab
 		for (int n = 0; n < 9 && n < assnidx.length; n++)
 		{
 			Schema.Assignment assn = assignments[assnidx[n]];
-			Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
+			Util.write("  [" + (n + 1) + "] = {" + assn.name + "} <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
 			String[] groups = assn.groupLabel();
 			for (int i = 0; i < groups.length; i++) Util.write(" / " + groups[i]);
 			Util.writeln();
@@ -258,7 +259,7 @@ public class ImportControlledVocab
 				for (int n = 0; n < assnList.size(); n++)
 				{
 					Schema.Assignment assn = assnList.get(n);
-					Util.write("  [" + (n + 1) + "] = {" + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + ">}");
+					Util.write("  [" + (n + 1) + "] = {" + assn.name + "} <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
 					String[] groups = assn.groupLabel();
 					for (int i = 0; i < groups.length; i++) Util.write(" / " + groups[i]);
 					Util.writeln();
@@ -300,7 +301,7 @@ public class ImportControlledVocab
 		Util.writeln("  [0] = ignore permanently");
 		for (int n = 0; n < 9 && n < nodes.length; n++)
 		{
-			Util.writeln("  [" + (n + 1) + "] = {" + nodes[n].label + " <" + ModelSchema.collapsePrefix(nodes[n].uri) + ">}");
+			Util.writeln("  [" + (n + 1) + "] = {" + nodes[n].label + "} <" + ModelSchema.collapsePrefix(nodes[n].uri) + ">");
 			for (SchemaTree.Node look = nodes[n].parent; look != null; look = look.parent)
 				Util.writeln("       / " + look.label + " <" + ModelSchema.collapsePrefix(look.uri) + ">");
 		}
@@ -341,7 +342,7 @@ public class ImportControlledVocab
 		if (num > 0 && num <= nodes.length)
 		{
 			SchemaTree.Node node = nodes[num - 1];
-			Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + " <" + ModelSchema.collapsePrefix(node.uri) + ">}");
+			Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + "} <" + ModelSchema.collapsePrefix(node.uri) + ">");
 			map.values.add(Value.create(key, value, node.uri, prop.propURI, prop.groupNest));
 			map.save();
 			return;
@@ -355,7 +356,7 @@ public class ImportControlledVocab
 			
 			for (SchemaTree.Node node : nodes) if (node.uri.equals(uri))
 			{
-				Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + " <" + ModelSchema.collapsePrefix(node.uri) + ">}");
+				Util.writeln("Mapping value [" + key + "]:[" + value + "] to {" + node.label + "} <" + ModelSchema.collapsePrefix(node.uri) + ">");
 				map.values.add(Value.create(key, value, node.uri, prop.propURI, prop.groupNest));
 				map.save();
 				return;
