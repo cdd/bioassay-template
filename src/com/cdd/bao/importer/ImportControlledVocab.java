@@ -470,6 +470,12 @@ public class ImportControlledVocab
 			try {json = map.createAssay(srcRows.getJSONObject(n), schema);}
 			catch (Exception ex) {zip.close(); throw new IOException("Failed to translate assay at row #" + (n + 1), ex);}
 			
+			if (!json.has("uniqueID"))
+			{
+				Util.writeln("** Row#" + (n + 1) + " is missing an identifier: cannot proceed.");
+				break;
+			}
+			
 			String fn = "assay_";
 			for (char ch : json.getString("uniqueID").toCharArray())
 			{
