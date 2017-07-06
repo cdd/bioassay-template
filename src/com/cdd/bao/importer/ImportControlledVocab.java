@@ -476,7 +476,7 @@ public class ImportControlledVocab
 				break;
 			}
 			
-			String fn = "assay_";
+			String fn = "assay_" + (n + 1) + "_";
 			for (char ch : json.getString("uniqueID").toCharArray())
 			{
 				if (ch == ' ') fn += ' ';
