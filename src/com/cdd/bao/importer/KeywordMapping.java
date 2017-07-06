@@ -289,30 +289,117 @@ public class KeywordMapping
 	}
 	
 	// searches for a value for which the name matches its regex
-	public Value findValue(String key, String value)
+	public Value findValue(String key, String data)
 	{
 		for (Value val : values)
 		{
 			Pattern p = getPattern(val.regex);
 			if (!p.matcher(key).matches()) continue;
 			p = getPattern(val.valueRegex);
-			if (p.matcher(value).matches()) return val;
+			if (p.matcher(data).matches()) return val;
 		}
 		return null;
 	}
 	
 	// searches for a literal for which the name matches its regex
-	public Literal findLiteral(String key, String value)
+	public Literal findLiteral(String key, String data)
 	{
 		for (Literal lit : literals)
 		{
 			Pattern p = getPattern(lit.regex);
 			if (!p.matcher(key).matches()) continue;
 			p = getPattern(lit.valueRegex);
-			if (p.matcher(value).matches()) return lit;
+			if (p.matcher(data).matches()) return lit;
 		}
 		return null;
 	}	
+	
+	// takes an assay instance and applies all of the mappings, to turn it into an assay object, which is compatible with the
+	// BioAssay Express import format; complains loudly and rudely if something didn't quite work
+	public JSONObject createAssay(JSONObject keydata, Schema schema) throws JSONException, IOException
+	{
+		String uniqueID = null;
+		List<String> linesBlock = new ArrayList<>(), linesSkipped = new ArrayList<>(), linesProcessed = new ArrayList<>();
+		Set<String> gotAnnot = new HashSet<>(), gotLiteral = new HashSet<>();
+		JSONArray jsonAnnot = new JSONArray();
+		final String SEP = "::";
+
+		for (String key : keydata.keySet())
+		{
+			String data = keydata.getString(key);
+		
+			Identity id = findIdentity(key);
+			if (id != null)
+			{
+				if (uniqueID == null) uniqueID = id.prefix + data;
+				continue;
+			}
+			
+			TextBlock tblk = findTextBlock(key);
+			if (tblk != null)
+			{
+				String hdr = "";
+				if (Util.notBlank(tblk.title)) hdr = tblk.title + ": ";
+				linesBlock.add(hdr + data);
+				continue;
+			}
+			
+			Value val = findValue(key, data);
+			if (val != null)
+			{
+				if (Util.isBlank(val.valueURI))
+				{
+					linesSkipped.add(key + ": " + data);
+				}
+				else
+				{
+					String hash = val.propURI + SEP + val.valueURI + SEP + (val.groupNest == null ? "" : String.join(SEP, val.groupNest));
+					if (gotAnnot.contains(hash)) continue;
+				
+					JSONObject obj = new JSONObject();
+					obj.put("propURI", ModelSchema.expandPrefix(val.propURI));
+					obj.put("groupNest", expandPrefixes(val.groupNest));
+					obj.put("valueURI", ModelSchema.expandPrefix(val.valueURI));
+					jsonAnnot.put(obj);
+					gotAnnot.add(hash);
+					linesProcessed.add(key + ": " + data);
+				}
+				continue;
+			}
+			
+			Literal lit = findLiteral(key, data);
+			if (lit != null)
+			{
+				String hash = lit.propURI + SEP + (lit.groupNest == null ? "" : String.join(SEP, lit.groupNest)) + SEP + data;
+				if (gotLiteral.contains(hash)) continue;
+			
+				JSONObject obj = new JSONObject();
+				obj.put("propURI", ModelSchema.expandPrefix(lit.propURI));
+				obj.put("groupNest", expandPrefixes(lit.groupNest));
+				obj.put("valueLabel", data);
+				jsonAnnot.put(obj);
+				gotLiteral.add(hash);
+				linesProcessed.add(key + ": " + data);
+				
+				continue;	
+			}
+			
+			// probably shouldn't get this far, but just in case
+			linesSkipped.add(key + ": " + data);
+		}
+		
+		String text = "";
+		if (linesBlock.size() > 0) text += String.join("\n", linesBlock) + "\n\n";
+		if (linesSkipped.size() > 0) text += "SKIPPED:\n" + String.join("\n", linesSkipped) + "\n\n";
+		text += "PROCESSED:\n" + String.join("\n", linesProcessed);
+		
+		JSONObject assay = new JSONObject();
+		assay.put("uniqueID", uniqueID);
+		assay.put("text", text);
+		assay.put("schemaURI", schema.getSchemaPrefix());
+		assay.put("annotations", jsonAnnot);
+		return assay;
+	}
 	
 	// collapses/expands all the prefixes in the list
 	public static String[] collapsePrefixes(String[] uriList)

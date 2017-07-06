@@ -27,6 +27,7 @@ import com.cdd.bao.template.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 import org.apache.commons.lang3.*;
 import org.json.*;
@@ -122,6 +123,8 @@ public class ImportControlledVocab
 		
 		Util.writeln("Saving mapping file...");
 		map.save();
+		
+		writeMappedAssays();
 		
 		Util.writeln("Done.");
 	}
@@ -451,5 +454,35 @@ public class ImportControlledVocab
 			d[i][j] = Math.min(Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1), d[i - 1][j - 1] + cost);
 		}
 		return d[sz1][sz2];
+	}
+	
+	// write everything as a ZIP file (with JSON formatted assays, compatible with BioAssay Express)
+	private void writeMappedAssays() throws IOException
+	{
+		File f = new File(dstFN);
+		Util.writeln("Writing to: " + f.getCanonicalPath());
+		
+		ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(f));
+
+		for (int n = 0; n < srcRows.length(); n++)
+		{
+			JSONObject json = null;
+			try {json = map.createAssay(srcRows.getJSONObject(n), schema);}
+			catch (Exception ex) {zip.close(); throw new IOException("Failed to translate assay at row #" + (n + 1), ex);}
+			
+			String fn = "assay_";
+			for (char ch : json.getString("uniqueID").toCharArray())
+			{
+				if (ch == ' ') fn += ' ';
+				else if (ch == '_' || ch == ':' || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) fn += ch;
+				else fn += '-';
+			}
+			
+			zip.putNextEntry(new ZipEntry(fn + ".json"));
+			zip.write(json.toString(2).getBytes());
+			zip.closeEntry();
+		}
+
+		zip.close();
 	}
 }
