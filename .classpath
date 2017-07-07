@@ -13,7 +13,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.3.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson-databind-2.3.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.9.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/pdfbox-2.0.0-RC2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xml-apis-1.4.01.jar"/>
@@ -34,5 +33,9 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.7.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-web-2.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
