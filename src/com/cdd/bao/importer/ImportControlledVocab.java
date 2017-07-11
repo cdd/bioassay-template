@@ -494,7 +494,7 @@ public class ImportControlledVocab
 		for (int n = 0; n < srcRows.length(); n++)
 		{
 			JSONObject json = null;
-			try {json = map.createAssay(srcRows.getJSONObject(n), schema);}
+			try {json = map.createAssay(srcRows.getJSONObject(n), schema, treeCache);}
 			catch (Exception ex) {zip.close(); throw new IOException("Failed to translate assay at row #" + (n + 1), ex);}
 			
 			if (!json.has("uniqueID"))

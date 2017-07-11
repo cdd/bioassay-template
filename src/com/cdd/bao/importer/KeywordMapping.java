@@ -323,7 +323,7 @@ public class KeywordMapping
 	
 	// takes an assay instance and applies all of the mappings, to turn it into an assay object, which is compatible with the
 	// BioAssay Express import format; complains loudly and rudely if something didn't quite work
-	public JSONObject createAssay(JSONObject keydata, Schema schema) throws JSONException, IOException
+	public JSONObject createAssay(JSONObject keydata, Schema schema, Map<Schema.Assignment, SchemaTree> treeCache) throws JSONException, IOException
 	{
 		String uniqueID = null;
 		List<String> linesBlock = new ArrayList<>(), linesSkipped = new ArrayList<>(), linesProcessed = new ArrayList<>();
@@ -393,6 +393,33 @@ public class KeywordMapping
 			
 			// probably shouldn't get this far, but just in case
 			linesSkipped.add(key + ": " + data);
+		}
+		
+		// annotation collapsing: sometimes there's a branch sequence that should exclude parent nodes
+		for (int n = 0; n < jsonAnnot.length(); n++)
+		{
+			JSONObject obj = jsonAnnot.getJSONObject(n);
+			String propURI = obj.getString("propURI"), valueURI = obj.optString("valueURI");
+			if (valueURI == null) continue;
+			//String[] groupNest = obj.getJSONArray("groupNest").toStringArray();
+			String[] groupNest = (String[])obj.get("groupNest"); // (because it was poked this way)
+			Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(propURI), groupNest);
+			if (assnList.length == 0) continue;
+			SchemaTree tree = treeCache.get(assnList[0]);
+			if (tree == null) continue;
+			
+			Set<String> exclusion = new HashSet<>();
+			for (SchemaTree.Node node = tree.getNode(valueURI); node != null; node = node.parent) exclusion.add(node.uri);
+			if (exclusion.size() == 0) continue;
+			
+			for (int i = jsonAnnot.length() - 1; i >= 0; i--) if (i != n)
+			{
+				obj = jsonAnnot.getJSONObject(i);
+				if (!propURI.equals(obj.getString("propURI"))) continue;
+				if (!Objects.deepEquals(groupNest, obj.getJSONArray("groupNest").toStringArray())) continue;
+				if (!exclusion.contains(obj.getString("valueURI"))) continue;
+				jsonAnnot.remove(i);
+			}
 		}
 		
 		String text = "";
