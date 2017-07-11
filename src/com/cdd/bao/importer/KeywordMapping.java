@@ -416,7 +416,8 @@ public class KeywordMapping
 			{
 				obj = jsonAnnot.getJSONObject(i);
 				if (!propURI.equals(obj.getString("propURI"))) continue;
-				if (!Objects.deepEquals(groupNest, obj.getJSONArray("groupNest").toStringArray())) continue;
+				//if (!Objects.deepEquals(groupNest, obj.getJSONArray("groupNest").toStringArray())) continue;
+				if (!Objects.deepEquals(groupNest, (String[])obj.get("groupNest"))) continue;
 				if (!exclusion.contains(obj.getString("valueURI"))) continue;
 				jsonAnnot.remove(i);
 			}
