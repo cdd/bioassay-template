@@ -277,6 +277,13 @@ public class KeywordMapping
 		return null;
 	}
 	
+	// returns true if the mapping pattern for the assignment is compatible with the name
+	public boolean matchesName(MapAssn assn, String name)
+	{
+		Pattern p = getPattern(assn.regex);
+		return p.matcher(name).matches();
+	}
+	
 	// searches for a property for which the name matches its regex
 	public Property findProperty(String name)
 	{
@@ -341,7 +348,7 @@ public class KeywordMapping
 				String hdr = "";
 				if (Util.notBlank(tblk.title)) hdr = tblk.title + ": ";
 				linesBlock.add(hdr + data);
-				continue;
+				//continue; -- can be text and something else
 			}
 			
 			Value val = findValue(key, data);

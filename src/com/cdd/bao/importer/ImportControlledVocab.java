@@ -138,27 +138,52 @@ public class ImportControlledVocab
 		{
 			Directive d = verifyMapAssn(map.properties.get(n), true);
 			if (d == Directive.MODIFIED) map.save();
-			else if (d == Directive.DELETE) {map.properties.remove(n); n--; map.save();}
+			else if (d == Directive.DELETE) 
+			{
+				Util.writeln("** deleting stale property: " + map.properties.get(n).regex);
+				map.properties.remove(n); 
+				n--;
+				map.save();
+			}
 		}
 		for (int n = 0; n < map.values.size(); n++)
 		{
 			Directive d = verifyMapAssn(map.values.get(n), false);
 			if (d == Directive.MODIFIED) map.save();
-			else if (d == Directive.DELETE) {map.values.remove(n); n--; map.save();}
+			else if (d == Directive.DELETE) 
+			{
+				Util.writeln("** deleting stale value: " + map.values.get(n).regex);
+				map.values.remove(n); 
+				n--;
+				map.save();
+			}
 		}
 		for (int n = 0; n < map.literals.size(); n++)
 		{
 			Directive d = verifyMapAssn(map.literals.get(n), false);
 			if (d == Directive.MODIFIED) map.save();
-			else if (d == Directive.DELETE) {map.literals.remove(n); n--; map.save();}
+			else if (d == Directive.DELETE) 
+			{
+				Util.writeln("** deleting stale literal: " + map.literals.get(n).regex);
+				map.literals.remove(n); 
+				n--; 
+				map.save();
+			}
 		}
 	}
 	
 	// check to see that a mapping to an assignment property is legit, and do something if not
 	private Directive verifyMapAssn(MapAssn mapAssn, boolean isProperty)
 	{
-		// -- if isProperty is true, the wording is different
-		// !!
+		// if the value/literal does not match any columns that in turn match a property, then it is stale: delete it
+		if (!isProperty)
+		{
+			boolean something = false;
+			for (String col : srcColumns.toStringArray()) if (map.matchesName(mapAssn, col))
+				if (map.findProperty(col) != null) {something = true; break;}
+			if (!something) return Directive.DELETE;
+		}
+	
 		return Directive.OK;
 	}
 	
@@ -170,7 +195,9 @@ public class ImportControlledVocab
 		// anything found, assume it's OK
 		if (map.findIdentity(colName) != null) return;
 		if (map.findProperty(colName) != null) return; 
-		if (map.findTextBlock(colName) != null) return;
+		
+		// text blocks are not mutually exclusive
+		//if (map.findTextBlock(colName) != null) return;
 		
 		int[] assnidx = mostSimilarAssignments(colName);
 
