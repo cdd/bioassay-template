@@ -326,7 +326,8 @@ public class KeywordMapping
 	public JSONObject createAssay(JSONObject keydata, Schema schema, Map<Schema.Assignment, SchemaTree> treeCache) throws JSONException, IOException
 	{
 		String uniqueID = null;
-		List<String> linesBlock = new ArrayList<>(), linesSkipped = new ArrayList<>(), linesProcessed = new ArrayList<>();
+		List<String> linesTitle = new ArrayList<>(), linesBlock = new ArrayList<>();
+		List<String> linesSkipped = new ArrayList<>(), linesProcessed = new ArrayList<>();
 		Set<String> gotAnnot = new HashSet<>(), gotLiteral = new HashSet<>();
 		JSONArray jsonAnnot = new JSONArray();
 		final String SEP = "::";
@@ -345,10 +346,10 @@ public class KeywordMapping
 			TextBlock tblk = findTextBlock(key);
 			if (tblk != null)
 			{
-				String hdr = "";
-				if (Util.notBlank(tblk.title)) hdr = tblk.title + ": ";
-				linesBlock.add(hdr + data);
-				//continue; -- can be text and something else
+				if (Util.isBlank(tblk.title)) 
+					linesTitle.add(data);
+				else
+					linesBlock.add(tblk.title + ": " + data);
 			}
 			
 			Value val = findValue(key, data);
@@ -424,10 +425,17 @@ public class KeywordMapping
 			}
 		}
 		
-		String text = "";
+		/*String text = "";
 		if (linesBlock.size() > 0) text += String.join("\n", linesBlock) + "\n\n";
 		if (linesSkipped.size() > 0) text += "SKIPPED:\n" + String.join("\n", linesSkipped) + "\n\n";
-		text += "PROCESSED:\n" + String.join("\n", linesProcessed);
+		text += "PROCESSED:\n" + String.join("\n", linesProcessed);*/
+		
+		List<String> sections = new ArrayList<>();
+		if (linesTitle.size() > 0) sections.add(String.join(" / ", linesTitle));
+		if (linesBlock.size() > 0) sections.add(String.join("\n", linesBlock));
+		if (linesSkipped.size() > 0) sections.add("SKIPPED:\n" + String.join("\n", linesSkipped));
+		if (linesProcessed.size() > 0) sections.add("PROCESSED:\n" + String.join("\n", linesProcessed));
+		String text = String.join("\n\n", sections);
 		
 		JSONObject assay = new JSONObject();
 		assay.put("uniqueID", uniqueID);
