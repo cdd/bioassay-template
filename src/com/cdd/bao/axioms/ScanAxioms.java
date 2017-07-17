@@ -1,4 +1,4 @@
-package com.cdd.bao;
+package com.cdd.bao.axioms;
 
 import java.util.*;
 import java.io.*;
@@ -7,10 +7,15 @@ import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.apache.jena.util.iterator.*;
 
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.axioms.AxiomCollector.AssayAxiomsAll;
+import com.cdd.bao.axioms.AxiomCollector.AssayAxiomsSome;
 import com.cdd.bao.editor.*;
 
 /*
@@ -25,17 +30,53 @@ import com.cdd.bao.editor.*;
 
 public class ScanAxioms 
 {
-	private OntModel ontology; 
-	private Schema schema;
-	private SchemaVocab schvoc;
-	private Map<String, String> uriToLabel = new HashMap<String, String>();
-	private Map<String, List<Statement>> anonStatements = new HashMap<>();
+	public OntModel ontology; 
+	public Schema schema;
+	public SchemaVocab schvoc;
+	
+	public static Map<String, String> uriToLabel = new HashMap<String, String>();
+	public Map<String, List<Statement>> anonStatements = new HashMap<>();
+	//public Map<String, String> allAxiomsMap = new HashMap<String, String>();
+	//public Map<String, String> someAxiomsMap = new HashMap<String, String>();
+	//public Map<String, String> inversePropertiesMap = new HashMap<String, String>();
+	
+	public static Map<String, Set<String>> onlyAxioms = new TreeMap<>();
+	public Map<String, Set<String>> someAxioms = new TreeMap<>();
+	public Map<String, Set<String>> inverseProperties = new TreeMap<>();
+	
+	public int numProperties = 0;
+	public int hasInverseCounter = 0;
+	public int forAllCounter = 0;
+	public int forSomeCounter = 0;
+	public int cardinalityCounter = 0;
+	public int maxCardinalityCounter = 0;
+	public int minCardinalityCounter = 0;
+	
+	public ArrayList rURIs = new ArrayList();
+	
+	public static ArrayList axiomsForAll = new ArrayList<AssayAxiomsAll>();
+	public static ArrayList axiomsForSome = new ArrayList<AssayAxiomsSome>();
+	
+
+	public String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035",
+			"http://www.bioassayontology.org/bao#BAO_0000179",
+			"http://www.bioassayontology.org/bao#BAO_0002202",
+			"http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000026",
+			"http://www.bioassayontology.org/bao#BAO_0000019" };
+	
+	
+	
+	public AxiomCollector ac = new AxiomCollector();
+	
+
+	Map<String, Integer> propTypeCount = new TreeMap<>();
 
 	public ScanAxioms()
 	{
 	}
 
-	public void exec() throws OntologyException 
+	public void exec() throws OntologyException, JSONException, IOException 
 	{ 
 	 	try 
 	  	{
@@ -109,8 +150,7 @@ public class ScanAxioms
 		
 		Util.writeln("Extracting property labels...");
 
-		int numProperties = 0;
-		int hasInverseCounter = 0;
+		
 		timeThen = new Date().getTime();
 		for (Iterator<OntProperty> it = ontology.listOntProperties(); it.hasNext();)
 		{
@@ -145,14 +185,9 @@ public class ScanAxioms
 		
 		Util.writeln("---- Main Iteration ----");
 
-		int forAllCounter = 0;
-		int forSomeCounter = 0;
-		int cardinalityCounter = 0;
-		int maxCardinalityCounter = 0;
-		int minCardinalityCounter = 0;
-
-		Map<String, Integer> propTypeCount = new TreeMap<>();
-
+		
+		JSONArray onlyAxiomsArray = new JSONArray();
+		JSONArray someAxiomsArray = new JSONArray();
 		timeThen = new Date().getTime();
 		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
@@ -187,12 +222,32 @@ public class ScanAxioms
 						String key = nameNode(o);
 						String val = "ALL: property=[" + pname + "] value=";
 						if (sequence.length == 0) val += "{nothing}";
-						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-						
+						String objectURIs = null;
+						String objectLabels = null;
+						for (int n = 0; n < sequence.length; n++) {
+							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+							if(!(Arrays.asList(redundantURIs).contains(sequence[n])))
+							{
+								objectURIs += "[" + sequence[n] + "]";
+							    objectLabels += "[" + nameNode(sequence[n]) + "]";	
+							} 
+							
+						}
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						forAllCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
+						
+						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
+						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only"));
+						
+						
+						//o.URI --> class URI
+						//p.URI --> property URI
+						//val --> for(n<sequence.length) sequence[n] -->objectURI
+						
 					}
+					
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
@@ -208,11 +263,22 @@ public class ScanAxioms
 						String key = nameNode(o);
 						String val = "SOME: property=[" + pname + "] value=";
 						if (sequence.length == 0) val += "{nothing}";
+						String objectURIs = null;
+						String objectLabels = null;
+						for (int n = 0; n < sequence.length; n++) {
+							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+							objectURIs += "[" + sequence[n] + "]";
+							objectLabels += "[" + nameNode(sequence[n]) + "]";	
+						}
 						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						forSomeCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
+						if(!(Arrays.asList(redundantURIs).contains(o.getURI())))
+							axiomsForSome.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "some"));
+							//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
@@ -259,6 +325,8 @@ public class ScanAxioms
 			long timeNow = new Date().getTime();
 			if (timeNow > timeThen + 2000) {Util.writeln("    so far: " + axioms.size()); timeThen = timeNow;}
 		}
+		ac.createJSON("only.json",onlyAxiomsArray);
+		//ac.createJSON("someAxioms.json",someAxiomsArray);
 		
 		Util.writeln("\n---- Category Counts ----");
 		Util.writeln("terms with axioms: " + axioms.size());
@@ -269,7 +337,7 @@ public class ScanAxioms
 		Util.writeln("for exactly axioms: " + cardinalityCounter);
 		Util.writeln("properties with inverse: " + hasInverseCounter);
 		
-		File f = new File("/tmp/axioms.txt");
+		File f = new File("axioms.txt");
 		Util.writeln("\nWriting whole output to: " + f.getPath());
 		
 		try
@@ -372,4 +440,5 @@ public class ScanAxioms
 		}
 		return sequence.toArray(new Resource[sequence.size()]);
 	}
+	
 }
