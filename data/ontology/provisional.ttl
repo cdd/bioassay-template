@@ -195,7 +195,7 @@ bae:BAE_0000038
   .
 
 bae:BAE_0000039
-  rdfs:label "FBS Charcoal/Dextran treated 1%" ;
+  rdfs:label "1% FBS Charcoal Dextran treated" ;
   rdfs:subClassOf bae:BAE_0000020 ;
   obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS). Note: 'Charcoal Dextran treated' sometimes abbreviated as 'C/D'." ;
   .

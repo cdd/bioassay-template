@@ -1358,8 +1358,9 @@ public class JSONObject
 	{
 		if (key == null) throw new NullPointerException("Null key.");
 		if (value != null)
-		{
+		{	
 			testValidity(value);
+			if (value.getClass().isArray()) value = new JSONArray(value);
 			map.put(key, value);
 		}
 		else
@@ -1834,7 +1835,7 @@ public class JSONObject
 		return write(writer, 0, 0);
 	}
 
-	static final Writer writeValue(Writer writer, Object value, int indentFactor, int indent) throws JSONException, IOException
+	static final Writer writeValue(Writer writer, Object value, int indentFactor, int indent, boolean syncBrace) throws JSONException, IOException
 	{
 		if (value == null || value.equals(null))
 		{
@@ -1842,25 +1843,56 @@ public class JSONObject
 		}
 		else if (value instanceof JSONObject)
 		{
-			((JSONObject)value).write(writer, indentFactor, indent);
+			JSONObject obj = (JSONObject)value;
+			if (obj.length() > 1 && syncBrace)
+			{
+				writer.write("\n");
+				indent(writer, indent);
+			}
+			obj.write(writer, indentFactor, indent);
 		}
 		else if (value instanceof JSONArray)
 		{
-			((JSONArray)value).write(writer, indentFactor, indent);
+			JSONArray arr = (JSONArray)value;
+			if (!arr.allFlat() && indentFactor > 0)
+			{
+				writer.write("\n");
+				indent(writer, indent);
+				arr.write(writer, indentFactor, indent, true);
+			}
+			else arr.write(writer, 0, 0, indentFactor > 0);
 		}
 		else if (value instanceof Map)
 		{
 			Map<?, ?> map = (Map<?, ?>)value;
+			if (map.size() > 1 && syncBrace)
+			{
+				writer.write("\n");
+				indent(writer, indent);
+			}
 			new JSONObject(map).write(writer, indentFactor, indent);
 		}
 		else if (value instanceof Collection)
 		{
-			Collection<?> coll = (Collection<?>)value;
-			new JSONArray(coll).write(writer, indentFactor, indent);
+			JSONArray arr = new JSONArray(value);
+			if (!arr.allFlat() && indentFactor > 0)
+			{
+				writer.write("\n");
+				indent(writer, indent);
+				arr.write(writer, indentFactor, indent, true);
+			}
+			else arr.write(writer, indentFactor, indent, indentFactor > 0);
 		}
 		else if (value.getClass().isArray())
 		{
-			new JSONArray(value).write(writer, indentFactor, indent);
+			JSONArray arr = new JSONArray(value);
+			if (!arr.allFlat() && indentFactor > 0)
+			{
+				writer.write("\n");
+				indent(writer, indent);
+				arr.write(writer, indentFactor, indent, true);
+			}
+			else arr.write(writer, indentFactor, indent, indentFactor > 0);
 		}
 		else if (value instanceof Number)
 		{
@@ -1905,6 +1937,7 @@ public class JSONObject
 			boolean commanate = false;
 			final int length = length();
 			Iterator<String> keys = keys();
+	
 			writer.write('{');
 
 			if (length == 1)
@@ -1913,7 +1946,7 @@ public class JSONObject
 				writer.write(quote(key.toString()));
 				writer.write(':');
 				if (indentFactor > 0) writer.write(' ');
-				writeValue(writer, map.get(key), indentFactor, indent);
+				writeValue(writer, map.get(key), indentFactor, indent, true);
 			}
 			else if (length != 0)
 			{
@@ -1921,28 +1954,20 @@ public class JSONObject
 				while (keys.hasNext())
 				{
 					Object key = keys.next();
-					if (commanate)
-					{
-						writer.write(',');
-					}
-					if (indentFactor > 0)
-					{
-						writer.write('\n');
-					}
+
+					if (commanate) writer.write(',');
+					if (indentFactor > 0) writer.write('\n');
 					indent(writer, newindent);
+
 					writer.write(quote(key.toString()));
 					writer.write(':');
-					if (indentFactor > 0)
-					{
-						writer.write(' ');
-					}
-					writeValue(writer, map.get(key), indentFactor, newindent);
+					
+					if (indentFactor > 0) writer.write(' ');
+					
+					writeValue(writer, map.get(key), indentFactor, newindent, true);
 					commanate = true;
 				}
-				if (indentFactor > 0)
-				{
-					writer.write('\n');
-				}
+				if (indentFactor > 0) writer.write('\n');
 				indent(writer, indent);
 			}
 			writer.write('}');

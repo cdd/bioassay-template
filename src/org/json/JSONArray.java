@@ -976,6 +976,7 @@ public class JSONArray implements Iterable<Object>
 	 */
 	public JSONArray put(Object value)
 	{
+		if (value.getClass().isArray()) value = new JSONArray(value);	
 		list.add(value);
 		return this;
 	}
@@ -1225,7 +1226,7 @@ public class JSONArray implements Iterable<Object>
 		StringWriter sw = new StringWriter();
 		synchronized (sw.getBuffer())
 		{
-			return write(sw, indentFactor, 0).toString();
+			return write(sw, indentFactor, 0, indentFactor > 0).toString();
 		}
 	}
 
@@ -1240,7 +1241,7 @@ public class JSONArray implements Iterable<Object>
 	 */
 	public Writer write(Writer writer) throws JSONException
 	{
-		return write(writer, 0, 0);
+		return write(writer, 0, 0, false);
 	}
 
 	/**
@@ -1256,7 +1257,7 @@ public class JSONArray implements Iterable<Object>
 	 * @return The writer.
 	 * @throws JSONException
 	 */
-	Writer write(Writer writer, int indentFactor, int indent) throws JSONException
+	Writer write(Writer writer, int indentFactor, int indent, boolean commaSpc) throws JSONException
 	{
 		try
 		{
@@ -1264,9 +1265,9 @@ public class JSONArray implements Iterable<Object>
 			int length = length();
 			writer.write('[');
 
-			if (length == 1)
+			if (length == 1 && indentFactor == 0)
 			{
-				JSONObject.writeValue(writer, list.get(0), indentFactor, indent);
+				JSONObject.writeValue(writer, list.get(0), indentFactor, indent, false);
 			}
 			else if (length != 0)
 			{
@@ -1274,16 +1275,14 @@ public class JSONArray implements Iterable<Object>
 
 				for (int i = 0; i < length; i += 1)
 				{
-					if (commanate)
+					if (commanate) 
 					{
 						writer.write(',');
+						if (commaSpc) writer.write(' ');
 					}
-					if (indentFactor > 0)
-					{
-						writer.write('\n');
-					}
+					if (indentFactor > 0) writer.write('\n');
 					JSONObject.indent(writer, newindent);
-					JSONObject.writeValue(writer, list.get(i), indentFactor, newindent);
+					JSONObject.writeValue(writer, list.get(i), indentFactor, newindent, false);
 					commanate = true;
 				}
 				if (indentFactor > 0) writer.write('\n');
@@ -1293,5 +1292,40 @@ public class JSONArray implements Iterable<Object>
 			return writer;
 		}
 		catch (IOException e) {throw new JSONException(e);}
+	}
+	
+	// returns true if the array is empty or consists entirely of primitive or empty objects
+	boolean allFlat()
+	{
+		for (Object value : list)
+		{
+			if (value == null) {}
+			else if (value instanceof JSONObject)
+			{
+    			JSONObject obj = (JSONObject)value;
+    			if (obj.length() > 0) return false;
+			}
+			else if (value instanceof JSONArray)
+			{
+				JSONArray arr = (JSONArray)value;
+				if (arr.length() > 0) return false;
+			}
+    		else if (value instanceof Map)
+    		{
+    			Map<?, ?> map = (Map<?, ?>)value;
+    			if (map.size() > 0) return false;
+    		}
+    		else if (value instanceof Collection)
+    		{
+    			Collection<?> coll = (Collection<?>)value;
+    			if (coll.size() > 0) return false;
+    		}
+    		else if (value.getClass().isArray())
+    		{
+    			JSONArray arr = new JSONArray(value);
+    			if (arr.length() > 0) return false;
+    		}
+		}
+		return true;
 	}
 }

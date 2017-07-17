@@ -118,11 +118,28 @@ public class KeywordMapping
 		}
 	}
 	
+	public static final class Assertion
+	{
+		public String propURI; // URI of the assignment to match to (must be in template)
+		public String[] groupNest; // groupNest disambiguation
+		public String valueURI; // value asserted to be always present
+		
+		public static Assertion create(String name, String valueURI, String propURI, String[] groupNest)
+		{
+			Assertion asrt = new Assertion();
+			asrt.valueURI = ModelSchema.collapsePrefix(valueURI);
+			asrt.propURI = ModelSchema.collapsePrefix(propURI);
+			asrt.groupNest = collapsePrefixes(groupNest);
+			return asrt;
+		}
+	}
+	
 	public List<Identity> identities = new ArrayList<>();
 	public List<TextBlock> textBlocks = new ArrayList<>();
 	public List<Property> properties = new ArrayList<>();
 	public List<Value> values = new ArrayList<>();
 	public List<Literal> literals = new ArrayList<>();
+	public List<Assertion> assertions = new ArrayList<>();
 	
 	private Map<String, Pattern> regexes = new HashMap<>(); // avoid reparsing all the time
 
@@ -187,6 +204,14 @@ public class KeywordMapping
 				lit.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
 				literals.add(lit);
 			}
+			for (JSONObject obj : json.optJSONArrayEmpty("assertions").toObjectArray())
+			{
+				Assertion asrt = new Assertion();
+				asrt.propURI = obj.optString("propURI");
+				asrt.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
+				asrt.valueURI = obj.optString("valueURI");
+				assertions.add(asrt);
+			}
 		}
 		catch (JSONException ex) 
 		{
@@ -200,7 +225,8 @@ public class KeywordMapping
 	public void save() throws IOException
 	{
 		JSONObject json = new JSONObject();
-		JSONArray listID = new JSONArray(), listText = new JSONArray(), listProp = new JSONArray(), listVal = new JSONArray(), listLit = new JSONArray();
+		JSONArray listID = new JSONArray(), listText = new JSONArray(), listProp = new JSONArray();
+		JSONArray listVal = new JSONArray(), listLit = new JSONArray(), listAsrt = new JSONArray();
 
 		for (Identity id : identities)
 		{
@@ -243,12 +269,21 @@ public class KeywordMapping
 			obj.put("groupNest", lit.groupNest);
 			listLit.put(obj);
 		}
+		for (Assertion asrt : assertions)
+		{
+			JSONObject obj = new JSONObject();
+			obj.put("propURI", asrt.propURI);
+			obj.put("groupNest", asrt.groupNest);
+			obj.put("valueURI", asrt.valueURI);
+			listAsrt.put(obj);
+		}
 		
 		json.put("identities", listID);
 		json.put("textBlocks", listText);
 		json.put("properties", listProp);
 		json.put("values", listVal);
 		json.put("literals", listLit);
+		json.put("assertions", listAsrt);
 
 		Writer wtr = new FileWriter(file);
 		wtr.write(json.toString(2));
@@ -332,6 +367,20 @@ public class KeywordMapping
 		JSONArray jsonAnnot = new JSONArray();
 		final String SEP = "::";
 
+		// assertions: these always supply a term
+		for (Assertion asrt : assertions)
+		{
+			JSONObject obj = new JSONObject();
+			obj.put("propURI", ModelSchema.expandPrefix(asrt.propURI));
+			obj.put("groupNest", new JSONArray(expandPrefixes(asrt.groupNest)));
+			obj.put("valueURI", ModelSchema.expandPrefix(asrt.valueURI));
+			jsonAnnot.put(obj);
+
+			String hash = asrt.propURI + SEP + asrt.valueURI + SEP + (asrt.groupNest == null ? "" : String.join(SEP, asrt.groupNest));
+			gotAnnot.add(hash);
+		}
+
+		// go through the columns one at a time
 		for (String key : keydata.keySet())
 		{
 			String data = keydata.getString(key);
@@ -366,7 +415,7 @@ public class KeywordMapping
 				
 					JSONObject obj = new JSONObject();
 					obj.put("propURI", ModelSchema.expandPrefix(val.propURI));
-					obj.put("groupNest", expandPrefixes(val.groupNest));
+					obj.put("groupNest", new JSONArray(expandPrefixes(val.groupNest)));
 					obj.put("valueURI", ModelSchema.expandPrefix(val.valueURI));
 					jsonAnnot.put(obj);
 					gotAnnot.add(hash);
@@ -383,7 +432,7 @@ public class KeywordMapping
 			
 				JSONObject obj = new JSONObject();
 				obj.put("propURI", ModelSchema.expandPrefix(lit.propURI));
-				obj.put("groupNest", expandPrefixes(lit.groupNest));
+				obj.put("groupNest", new JSONArray(expandPrefixes(lit.groupNest)));
 				obj.put("valueLabel", data);
 				jsonAnnot.put(obj);
 				gotLiteral.add(hash);
@@ -395,15 +444,14 @@ public class KeywordMapping
 			// probably shouldn't get this far, but just in case
 			linesSkipped.add(key + ": " + data);
 		}
-		
+				
 		// annotation collapsing: sometimes there's a branch sequence that should exclude parent nodes
 		for (int n = 0; n < jsonAnnot.length(); n++)
 		{
 			JSONObject obj = jsonAnnot.getJSONObject(n);
 			String propURI = obj.getString("propURI"), valueURI = obj.optString("valueURI");
 			if (valueURI == null) continue;
-			//String[] groupNest = obj.getJSONArray("groupNest").toStringArray();
-			String[] groupNest = (String[])obj.get("groupNest"); // (because it was poked this way)
+			String[] groupNest = obj.getJSONArray("groupNest").toStringArray();
 			Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(propURI), groupNest);
 			if (assnList.length == 0) continue;
 			SchemaTree tree = treeCache.get(assnList[0]);
@@ -418,8 +466,7 @@ public class KeywordMapping
 				obj = jsonAnnot.getJSONObject(i);
 				if (!obj.has("valueURI")) continue;
 				if (!propURI.equals(obj.getString("propURI"))) continue;
-				//if (!Objects.deepEquals(groupNest, obj.getJSONArray("groupNest").toStringArray())) continue;
-				if (!Objects.deepEquals(groupNest, (String[])obj.get("groupNest"))) continue;
+				if (!Objects.deepEquals(groupNest, obj.getJSONArray("groupNest").toStringArray())) continue;
 				if (!exclusion.contains(obj.getString("valueURI"))) continue;
 				jsonAnnot.remove(i);
 			}
@@ -433,6 +480,7 @@ public class KeywordMapping
 		List<String> sections = new ArrayList<>();
 		if (linesTitle.size() > 0) sections.add(String.join(" / ", linesTitle));
 		if (linesBlock.size() > 0) sections.add(String.join("\n", linesBlock));
+		sections.add("#### IMPORTED ####");
 		if (linesSkipped.size() > 0) sections.add("SKIPPED:\n" + String.join("\n", linesSkipped));
 		if (linesProcessed.size() > 0) sections.add("PROCESSED:\n" + String.join("\n", linesProcessed));
 		String text = String.join("\n\n", sections);
