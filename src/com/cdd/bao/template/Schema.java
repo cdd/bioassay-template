@@ -101,12 +101,14 @@ public class Schema
 	// used within assignments: used to indicate how building of models to make suggestions is handled
 	public enum Suggestions
 	{
-		FULL, // (default) use all of the available methods for guestimating appropriate term suggestions
+		FULL, // (default) use all of the available methods for guestimating appropriate term suggestions for URIs
 		DISABLED, // do not use the underlying terms as either inputs or outputs for suggestion models
 		FIELD, // the assignment should be mapped to an auxiliary compound field rather than a URI
-		STRING, // preferred value type is string literals, of arbitrary format
-		NUMBER, // preferred value type is numeric iterals of arbitrary precision
-		INTEGER // preferred value type is literals that evaluate to an integer
+		STRING, // preferred value type is a string literal, of arbitrary format
+		NUMBER, // preferred value type is a numeric iteral of arbitrary precision
+		INTEGER, // preferred value type is a literal that evaluates to an integer
+		URL, // preferred value type is a URL that directs to an external resource
+		ID, // preferred value an identifier that refers to another assay
 	}
 
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure

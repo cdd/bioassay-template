@@ -90,6 +90,8 @@ public class ModelSchema
 	public static final String SUGGESTIONS_STRING = "suggestionsString"; // use string literals
 	public static final String SUGGESTIONS_NUMBER = "suggestionsNumber"; // use number-formatted literals
 	public static final String SUGGESTIONS_INTEGER = "suggestionsInteger"; // use integer-formatted literals
+	public static final String SUGGESTIONS_URL = "suggestionsURL"; // use URLs to arbitrary resources
+	public static final String SUGGESTIONS_ID = "suggestionsID"; // use ID codes for other assays
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -102,7 +104,9 @@ public class ModelSchema
 	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
-	private Property suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, suggestionsNumber, suggestionsInteger;
+	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
+	private Property suggestionsString, suggestionsNumber, suggestionsInteger;
+	private Property suggestionsURL, suggestionsID;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -272,6 +276,8 @@ public class ModelSchema
 		suggestionsString = model.createProperty(PFX_BAT + SUGGESTIONS_STRING);
 		suggestionsNumber = model.createProperty(PFX_BAT + SUGGESTIONS_NUMBER);
 		suggestionsInteger = model.createProperty(PFX_BAT + SUGGESTIONS_INTEGER);
+		suggestionsURL = model.createProperty(PFX_BAT + SUGGESTIONS_URL);
+		suggestionsID = model.createProperty(PFX_BAT + SUGGESTIONS_ID);
 
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
@@ -353,6 +359,8 @@ public class ModelSchema
 			else if (assn.suggestions == Schema.Suggestions.STRING) model.add(objAssn, suggestionsString, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.NUMBER) model.add(objAssn, suggestionsNumber, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.INTEGER) model.add(objAssn, suggestionsInteger, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.URL) model.add(objAssn, suggestionsURL, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.ID) model.add(objAssn, suggestionsID, model.createTypedLiteral(true));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -480,7 +488,9 @@ public class ModelSchema
 						   findBoolean(objAssn, suggestionsField) ? Schema.Suggestions.FIELD : 
 						   findBoolean(objAssn, suggestionsString) ? Schema.Suggestions.STRING : 
 						   findBoolean(objAssn, suggestionsNumber) ? Schema.Suggestions.NUMBER : 
-						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : Schema.Suggestions.FULL;
+						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : 
+						   findBoolean(objAssn, suggestionsURL) ? Schema.Suggestions.URL : 
+						   findBoolean(objAssn, suggestionsID) ? Schema.Suggestions.ID : Schema.Suggestions.FULL;
 		
 		Map<Object, Integer> order = new HashMap<>();
 

@@ -312,7 +312,7 @@ public class EditSchema
 
 	private void createMenuItems()
     {
-    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN; // alt = KeyCombination.ALT_DOWN;
+    	final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN, alt = KeyCombination.ALT_DOWN;
     
     	addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
     	addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
@@ -347,8 +347,8 @@ public class EditSchema
 		addMenu(menuEdit, "_Paste", new KeyCharacterCombination("V", cmd)).setOnAction(event -> actionEditPaste());
 		menuEdit.getItems().add(new SeparatorMenuItem());
     	addMenu(menuEdit, "_Delete", new KeyCodeCombination(KeyCode.DELETE, cmd, shift)).setOnAction(event -> actionEditDelete());
-    	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd)).setOnAction(event -> actionEditUndo());
-    	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditRedo());
+    	addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditUndo());
+    	addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift, alt)).setOnAction(event -> actionEditRedo());
 		menuEdit.getItems().add(new SeparatorMenuItem());
 		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
 		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));

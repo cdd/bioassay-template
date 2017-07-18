@@ -69,6 +69,7 @@ public class DetailPane extends ScrollPane
 	private TextArea fieldPara = null;
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
 	private RadioButton suggestionsString = null, suggestionsNumber = null, suggestionsInteger = null;
+	private RadioButton suggestionsURL = null, suggestionsID = null;
 	
 	private final class ValueWidgets
 	{
@@ -514,33 +515,44 @@ public class DetailPane extends ScrollPane
 		line.add(fieldURI, "URI:", 1, 0);
 
 		ToggleGroup fieldSuggestions = new ToggleGroup();
-		HBox suggestionsLine = new HBox();
-		suggestionsLine.setSpacing(10);
+		FlowPane suggestionsLine = new FlowPane();
+		suggestionsLine.setPadding(new Insets(5, 0, 5, 0));
+	    suggestionsLine.setHgap(10);		
+	    suggestionsLine.setVgap(4);
 		suggestionsFull = new RadioButton("Full");
 		suggestionsDisabled = new RadioButton("Disabled");
 		suggestionsField = new RadioButton("Field");
 		suggestionsString = new RadioButton("String");
 		suggestionsNumber = new RadioButton("Number");
 		suggestionsInteger = new RadioButton("Integer");
+		suggestionsURL = new RadioButton("URL");
+		suggestionsID = new RadioButton("ID");
 		suggestionsFull.setToggleGroup(fieldSuggestions);
 		suggestionsDisabled.setToggleGroup(fieldSuggestions);
 		suggestionsField.setToggleGroup(fieldSuggestions);
 		suggestionsString.setToggleGroup(fieldSuggestions);
 		suggestionsNumber.setToggleGroup(fieldSuggestions);
 		suggestionsInteger.setToggleGroup(fieldSuggestions);
+		suggestionsURL.setToggleGroup(fieldSuggestions);
+		suggestionsID.setToggleGroup(fieldSuggestions);
 		Tooltip.install(suggestionsFull, new Tooltip("Use suggestion models for the assignment"));
 		Tooltip.install(suggestionsDisabled, new Tooltip("Don't use suggestion models for the assignment"));
 		Tooltip.install(suggestionsField, new Tooltip("Connect assignment value to structure-activity fields"));
 		Tooltip.install(suggestionsString, new Tooltip("Assignment should be free text"));
 		Tooltip.install(suggestionsNumber, new Tooltip("Assignment should be numeric (any precision)"));
 		Tooltip.install(suggestionsInteger, new Tooltip("Assignment should be an integer"));
+		Tooltip.install(suggestionsURL, new Tooltip("Assignment should be a URL to an external resource"));
+		Tooltip.install(suggestionsID, new Tooltip("Assignment should be an ID code for another assay"));
 		suggestionsFull.setSelected(assignment.suggestions == Schema.Suggestions.FULL);
 		suggestionsDisabled.setSelected(assignment.suggestions == Schema.Suggestions.DISABLED);
 		suggestionsField.setSelected(assignment.suggestions == Schema.Suggestions.FIELD);
 		suggestionsString.setSelected(assignment.suggestions == Schema.Suggestions.STRING);
 		suggestionsNumber.setSelected(assignment.suggestions == Schema.Suggestions.NUMBER);
 		suggestionsInteger.setSelected(assignment.suggestions == Schema.Suggestions.INTEGER);
-		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, suggestionsNumber, suggestionsInteger);
+		suggestionsURL.setSelected(assignment.suggestions == Schema.Suggestions.URL);
+		suggestionsID.setSelected(assignment.suggestions == Schema.Suggestions.ID);
+		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, 
+											 suggestionsNumber, suggestionsInteger, suggestionsURL, suggestionsID);
 		line.add(suggestionsLine, "Suggestions:", 1, 0);
 
 		vbox.getChildren().add(line);
