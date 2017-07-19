@@ -191,6 +191,8 @@ public class DetailPane extends ScrollPane
 		else if (suggestionsString.isSelected()) mod.suggestions = Schema.Suggestions.STRING;
 		else if (suggestionsNumber.isSelected()) mod.suggestions = Schema.Suggestions.NUMBER;
 		else if (suggestionsInteger.isSelected()) mod.suggestions = Schema.Suggestions.INTEGER;
+		else if (suggestionsURL.isSelected()) mod.suggestions = Schema.Suggestions.URL;
+		else if (suggestionsID.isSelected()) mod.suggestions = Schema.Suggestions.ID;
 		
 		if (isSummaryView)
 		{
