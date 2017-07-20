@@ -94,6 +94,8 @@ public class ImportControlledVocab
 		Util.writeln("    # properties = " + map.properties.size());
 		Util.writeln("    # values = " + map.values.size());
 		Util.writeln("    # literals = " + map.literals.size());
+		Util.writeln("    # references = " + map.references.size());
+		Util.writeln("    # assertions = " + map.assertions.size());
 		
 		schema = ModelSchema.deserialise(new File(schemaFN));
 		assignments = schema.getRoot().flattenedAssignments();

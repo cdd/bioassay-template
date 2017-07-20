@@ -504,7 +504,7 @@ public class KeywordMapping
 				JSONObject obj = new JSONObject();
 				obj.put("propURI", ModelSchema.expandPrefix(ref.propURI));
 				obj.put("groupNest", new JSONArray(expandPrefixes(ref.groupNest)));
-				obj.put("valueLabel", m.group(1));
+				obj.put("valueLabel", ref.prefix + m.group(1));
 				jsonAnnot.put(obj);
 				linesProcessed.add(key + ": " + data);
 				
