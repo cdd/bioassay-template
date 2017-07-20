@@ -89,7 +89,7 @@ public class ImportControlledVocab
 		
 		map = new KeywordMapping(mapFN);
 		Util.writeln("Mapping file:");
-		Util.writeln("    # identities = " + map.identities.size());
+		Util.writeln("    # identifiers = " + map.identifiers.size());
 		Util.writeln("    # textblocks = " + map.textBlocks.size());
 		Util.writeln("    # properties = " + map.properties.size());
 		Util.writeln("    # values = " + map.values.size());
@@ -112,11 +112,11 @@ public class ImportControlledVocab
 			JSONObject row = srcRows.getJSONObject(n);
 			for (String key : row.keySet())
 			{
-				if (map.findIdentity(key) != null) continue;
+				if (map.findIdentifier(key) != null) continue;
 				Property prop = map.findProperty(key);
 				if (prop == null || Util.isBlank(prop.propURI)) continue; // passed on the opportunity to map
 				String val = row.optString(key, "");
-				if (map.findValue(key, val) != null || map.findLiteral(key, val) != null) continue; // already mapped
+				if (map.findValue(key, val) != null || map.findLiteral(key, val) != null || map.findReference(key, val) != null) continue; // already mapped
 				matchValue(prop, key, val);
 			}
 		}
@@ -193,7 +193,7 @@ public class ImportControlledVocab
 		if (Util.isBlank(colName)) throw new IOException("Blank column name in source: this needs to be fixed.");
 		
 		// anything found, assume it's OK
-		if (map.findIdentity(colName) != null) return;
+		if (map.findIdentifier(colName) != null) return;
 		if (map.findProperty(colName) != null) return; 
 		
 		// text blocks are not mutually exclusive
@@ -337,6 +337,7 @@ public class ImportControlledVocab
 		}
 		Util.writeln("  [;] = pass this value through as literal");
 		Util.writeln("  [*] = pass the whole assignment as literal");
+		Util.writeln("  [:pfx:] = map to a reference ID with given prefix");
 		Util.writeln("  or: enter a URI or abbreviation");
 		
 		String choice = getChoice(Math.min(nodes.length, 9), true);
@@ -353,6 +354,21 @@ public class ImportControlledVocab
 		{
 			Util.writeln("Marking value [" + key + "]:[" + value + "] as a literal.");
 			map.literals.add(Literal.create(key, null, prop.propURI, prop.groupNest));
+			map.save();
+			return;
+		}
+		if (choice.length() >= 3 && choice.startsWith(":") && choice.endsWith(":"))
+		{
+			String pfx = choice.substring(1);
+			int fluff = 0;
+			for (; fluff < value.length(); fluff++)
+			{
+				char ch = value.charAt(fluff);
+				if (ch >= '1' && ch <= '9') break;
+			}
+			String regex = "^" + value.substring(0, fluff) + "(.*)";
+			Util.writeln("Marking value [" + key + "]:[" + value + "] as a reference ID, prefix '" + pfx + "'.");
+			map.references.add(Reference.create(key, regex, pfx, prop.propURI, prop.groupNest));
 			map.save();
 			return;
 		}
@@ -409,6 +425,7 @@ public class ImportControlledVocab
 			if (Util.isBlank(choice) || num >= 0 && num <= highNum) break;
 			if (ModelSchema.expandPrefix(choice).startsWith("http://")) break;
 			if (choice.startsWith(";")) break;
+			if (choice.length() >= 3 && choice.startsWith(":") && choice.endsWith(":")) break;
 			if (allowStar && choice.equals("*")) break;
 			Util.write("Invalid; try again: ");
 		}
@@ -435,6 +452,8 @@ public class ImportControlledVocab
 	// given an assignment and a name, pull out the branch and rank the contents in terms of similarity to the name
 	private SchemaTree.Node[] mostSimilarTerms(Schema.Assignment assn, String name)
 	{
+		if (assn.suggestions != Schema.Suggestions.FULL) return new SchemaTree.Node[0];
+	
 		SchemaTree.Node[] nodes = treeCache.get(assn).getFlat();
 		
 		int[] sim = new int[nodes.length];

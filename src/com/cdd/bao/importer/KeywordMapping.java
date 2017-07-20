@@ -39,14 +39,14 @@ public class KeywordMapping
 {
 	private File file;
 	
-	public static final class Identity
+	public static final class Identifier
 	{
 		public String regex; // there must be at least one group, e.g. "ACME(.*)"
 		public String prefix; // must correspond to an identifier prefix for the output, e.g. "acmeID:"
 
-		public static Identity create(String name, String prefix)
+		public static Identifier create(String name, String prefix)
 		{
-			Identity id = new Identity();
+			Identifier id = new Identifier();
 			id.regex = Pattern.quote(name);
 			id.prefix = prefix;
 			return id;
@@ -118,6 +118,23 @@ public class KeywordMapping
 		}
 	}
 	
+	public static final class Reference extends MapAssn
+	{
+		public String valueRegex; // values to pass through (may include a group selector to extract just pieces)
+		public String prefix; // formal identifier prefix (e.g. "pubchemAID:")
+		
+		public static Reference create(String name, String valueRegex, String prefix, String propURI, String[] groupNest)
+		{
+			Reference ref = new Reference();
+			ref.regex = Pattern.quote(name);
+			ref.valueRegex = valueRegex;
+			ref.prefix = prefix;
+			ref.propURI = ModelSchema.collapsePrefix(propURI);
+			ref.groupNest = collapsePrefixes(groupNest);
+			return ref;
+		}
+	}
+	
 	public static final class Assertion
 	{
 		public String propURI; // URI of the assignment to match to (must be in template)
@@ -134,11 +151,12 @@ public class KeywordMapping
 		}
 	}
 	
-	public List<Identity> identities = new ArrayList<>();
+	public List<Identifier> identifiers = new ArrayList<>();
 	public List<TextBlock> textBlocks = new ArrayList<>();
 	public List<Property> properties = new ArrayList<>();
 	public List<Value> values = new ArrayList<>();
 	public List<Literal> literals = new ArrayList<>();
+	public List<Reference> references = new ArrayList<>();
 	public List<Assertion> assertions = new ArrayList<>();
 	
 	private Map<String, Pattern> regexes = new HashMap<>(); // avoid reparsing all the time
@@ -163,12 +181,12 @@ public class KeywordMapping
 		
 		try
 		{
-			for (JSONObject obj : json.optJSONArrayEmpty("identities").toObjectArray())
+			for (JSONObject obj : json.optJSONArrayEmpty("identifiers").toObjectArray())
 			{
-				Identity id = new Identity();
+				Identifier id = new Identifier();
 				id.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
 				id.prefix = obj.optString("prefix");
-				identities.add(id);
+				identifiers.add(id);
 			}
 			for (JSONObject obj : json.optJSONArrayEmpty("textBlocks").toObjectArray())
 			{
@@ -204,6 +222,16 @@ public class KeywordMapping
 				lit.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
 				literals.add(lit);
 			}
+			for (JSONObject obj : json.optJSONArrayEmpty("references").toObjectArray())
+			{
+				Reference ref = new Reference();
+				ref.regex = regexOrName(obj.optString("regex"), obj.optString("name"));
+				ref.valueRegex = regexOrName(obj.optString("valueRegex"), obj.optString("valueName"));
+				ref.prefix = obj.optString("prefix");
+				ref.propURI = obj.optString("propURI");
+				ref.groupNest = obj.optJSONArrayEmpty("groupNest").toStringArray();
+				references.add(ref);
+			}
 			for (JSONObject obj : json.optJSONArrayEmpty("assertions").toObjectArray())
 			{
 				Assertion asrt = new Assertion();
@@ -226,9 +254,9 @@ public class KeywordMapping
 	{
 		JSONObject json = new JSONObject();
 		JSONArray listID = new JSONArray(), listText = new JSONArray(), listProp = new JSONArray();
-		JSONArray listVal = new JSONArray(), listLit = new JSONArray(), listAsrt = new JSONArray();
+		JSONArray listVal = new JSONArray(), listLit = new JSONArray(), listRef = new JSONArray(), listAsrt = new JSONArray();
 
-		for (Identity id : identities)
+		for (Identifier id : identifiers)
 		{
 			JSONObject obj = new JSONObject();
 			obj.put("regex", id.regex);
@@ -269,6 +297,16 @@ public class KeywordMapping
 			obj.put("groupNest", lit.groupNest);
 			listLit.put(obj);
 		}
+		for (Reference ref : references)
+		{
+			JSONObject obj = new JSONObject();
+			obj.put("regex", ref.regex);
+			obj.put("valueRegex", ref.valueRegex);
+			obj.put("prefix", ref.prefix);
+			obj.put("propURI", ref.propURI);
+			obj.put("groupNest", ref.groupNest);
+			listRef.put(obj);
+		}
 		for (Assertion asrt : assertions)
 		{
 			JSONObject obj = new JSONObject();
@@ -278,11 +316,12 @@ public class KeywordMapping
 			listAsrt.put(obj);
 		}
 		
-		json.put("identities", listID);
+		json.put("identifiers", listID);
 		json.put("textBlocks", listText);
 		json.put("properties", listProp);
 		json.put("values", listVal);
 		json.put("literals", listLit);
+		json.put("references", listRef);
 		json.put("assertions", listAsrt);
 
 		Writer wtr = new FileWriter(file);
@@ -291,9 +330,9 @@ public class KeywordMapping
 	}
 	
 	// searches for an identifier for which the name matches its regex
-	public Identity findIdentity(String name)
+	public Identifier findIdentifier(String name)
 	{
-		for (Identity id : identities)
+		for (Identifier id : identifiers)
 		{
 			Pattern p = getPattern(id.regex);
 			if (p.matcher(name).matches()) return id;
@@ -356,6 +395,19 @@ public class KeywordMapping
 		return null;
 	}	
 	
+	// searches for a reference for which the name matches its regex
+	public Reference findReference(String key, String data)
+	{
+		for (Reference ref : references)
+		{
+			Pattern p = getPattern(ref.regex);
+			if (!p.matcher(key).matches()) continue;
+			p = getPattern(ref.valueRegex);
+			if (p.matcher(data).matches()) return ref;
+		}
+		return null;
+	}	
+
 	// takes an assay instance and applies all of the mappings, to turn it into an assay object, which is compatible with the
 	// BioAssay Express import format; complains loudly and rudely if something didn't quite work
 	public JSONObject createAssay(JSONObject keydata, Schema schema, Map<Schema.Assignment, SchemaTree> treeCache) throws JSONException, IOException
@@ -385,7 +437,7 @@ public class KeywordMapping
 		{
 			String data = keydata.getString(key);
 		
-			Identity id = findIdentity(key);
+			Identifier id = findIdentifier(key);
 			if (id != null)
 			{
 				if (uniqueID == null) uniqueID = id.prefix + data;
@@ -439,6 +491,24 @@ public class KeywordMapping
 				linesProcessed.add(key + ": " + data);
 				
 				continue;	
+			}
+			
+			Reference ref = findReference(key, data);
+			if (ref != null)
+			{
+				Pattern ptn = Pattern.compile(ref.valueRegex);
+				Matcher m = ptn.matcher(data);
+				if (!m.matches() || m.groupCount() < 1)
+					throw new IOException("Pattern /" + ref.valueRegex + "/ did not match '" + data + "' to produce a group.");
+
+				JSONObject obj = new JSONObject();
+				obj.put("propURI", ModelSchema.expandPrefix(ref.propURI));
+				obj.put("groupNest", new JSONArray(expandPrefixes(ref.groupNest)));
+				obj.put("valueLabel", m.group(1));
+				jsonAnnot.put(obj);
+				linesProcessed.add(key + ": " + data);
+				
+				continue;
 			}
 			
 			// probably shouldn't get this far, but just in case
