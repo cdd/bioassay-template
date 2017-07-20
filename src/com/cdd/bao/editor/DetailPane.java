@@ -68,8 +68,8 @@ public class DetailPane extends ScrollPane
 	private TextField fieldURI = null;
 	private TextArea fieldPara = null;
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
-	private RadioButton suggestionsString = null, suggestionsNumber = null, suggestionsInteger = null;
 	private RadioButton suggestionsURL = null, suggestionsID = null;
+	private RadioButton suggestionsString = null, suggestionsNumber = null, suggestionsInteger = null;
 	
 	private final class ValueWidgets
 	{
@@ -188,11 +188,11 @@ public class DetailPane extends ScrollPane
 		if (suggestionsFull.isSelected()) mod.suggestions = Schema.Suggestions.FULL;
 		else if (suggestionsDisabled.isSelected()) mod.suggestions = Schema.Suggestions.DISABLED;
 		else if (suggestionsField.isSelected()) mod.suggestions = Schema.Suggestions.FIELD;
+		else if (suggestionsURL.isSelected()) mod.suggestions = Schema.Suggestions.URL;
+		else if (suggestionsID.isSelected()) mod.suggestions = Schema.Suggestions.ID;
 		else if (suggestionsString.isSelected()) mod.suggestions = Schema.Suggestions.STRING;
 		else if (suggestionsNumber.isSelected()) mod.suggestions = Schema.Suggestions.NUMBER;
 		else if (suggestionsInteger.isSelected()) mod.suggestions = Schema.Suggestions.INTEGER;
-		else if (suggestionsURL.isSelected()) mod.suggestions = Schema.Suggestions.URL;
-		else if (suggestionsID.isSelected()) mod.suggestions = Schema.Suggestions.ID;
 		
 		if (isSummaryView)
 		{
@@ -524,11 +524,11 @@ public class DetailPane extends ScrollPane
 		suggestionsFull = new RadioButton("Full");
 		suggestionsDisabled = new RadioButton("Disabled");
 		suggestionsField = new RadioButton("Field");
+		suggestionsURL = new RadioButton("URL");
+		suggestionsID = new RadioButton("ID");
 		suggestionsString = new RadioButton("String");
 		suggestionsNumber = new RadioButton("Number");
 		suggestionsInteger = new RadioButton("Integer");
-		suggestionsURL = new RadioButton("URL");
-		suggestionsID = new RadioButton("ID");
 		suggestionsFull.setToggleGroup(fieldSuggestions);
 		suggestionsDisabled.setToggleGroup(fieldSuggestions);
 		suggestionsField.setToggleGroup(fieldSuggestions);
@@ -540,21 +540,21 @@ public class DetailPane extends ScrollPane
 		Tooltip.install(suggestionsFull, new Tooltip("Use suggestion models for the assignment"));
 		Tooltip.install(suggestionsDisabled, new Tooltip("Don't use suggestion models for the assignment"));
 		Tooltip.install(suggestionsField, new Tooltip("Connect assignment value to structure-activity fields"));
+		Tooltip.install(suggestionsURL, new Tooltip("Assignment should be a URL to an external resource"));
+		Tooltip.install(suggestionsID, new Tooltip("Assignment should be an ID code for another assay"));
 		Tooltip.install(suggestionsString, new Tooltip("Assignment should be free text"));
 		Tooltip.install(suggestionsNumber, new Tooltip("Assignment should be numeric (any precision)"));
 		Tooltip.install(suggestionsInteger, new Tooltip("Assignment should be an integer"));
-		Tooltip.install(suggestionsURL, new Tooltip("Assignment should be a URL to an external resource"));
-		Tooltip.install(suggestionsID, new Tooltip("Assignment should be an ID code for another assay"));
 		suggestionsFull.setSelected(assignment.suggestions == Schema.Suggestions.FULL);
 		suggestionsDisabled.setSelected(assignment.suggestions == Schema.Suggestions.DISABLED);
 		suggestionsField.setSelected(assignment.suggestions == Schema.Suggestions.FIELD);
+		suggestionsURL.setSelected(assignment.suggestions == Schema.Suggestions.URL);
+		suggestionsID.setSelected(assignment.suggestions == Schema.Suggestions.ID);
 		suggestionsString.setSelected(assignment.suggestions == Schema.Suggestions.STRING);
 		suggestionsNumber.setSelected(assignment.suggestions == Schema.Suggestions.NUMBER);
 		suggestionsInteger.setSelected(assignment.suggestions == Schema.Suggestions.INTEGER);
-		suggestionsURL.setSelected(assignment.suggestions == Schema.Suggestions.URL);
-		suggestionsID.setSelected(assignment.suggestions == Schema.Suggestions.ID);
-		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsString, 
-											 suggestionsNumber, suggestionsInteger, suggestionsURL, suggestionsID);
+		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsURL, suggestionsID, 
+											 suggestionsString, suggestionsNumber, suggestionsInteger);
 		line.add(suggestionsLine, "Suggestions:", 1, 0);
 
 		vbox.getChildren().add(line);

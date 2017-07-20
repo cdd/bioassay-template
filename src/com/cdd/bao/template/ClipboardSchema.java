@@ -140,11 +140,11 @@ public class ClipboardSchema
 		if (assn.suggestions == Schema.Suggestions.FULL) json.put("suggestionsFull", true);
 		else if (assn.suggestions == Schema.Suggestions.DISABLED) json.put("suggestionsDisabled", true);
 		else if (assn.suggestions == Schema.Suggestions.FIELD) json.put("suggestionsField", true);
+		else if (assn.suggestions == Schema.Suggestions.URL) json.put("suggestionsURI", true);
+		else if (assn.suggestions == Schema.Suggestions.ID) json.put("suggestionsID", true);
 		else if (assn.suggestions == Schema.Suggestions.STRING) json.put("suggestionsString", true);
 		else if (assn.suggestions == Schema.Suggestions.NUMBER) json.put("suggestionsNumber", true);
 		else if (assn.suggestions == Schema.Suggestions.INTEGER) json.put("suggestionsInteger", true);
-		else if (assn.suggestions == Schema.Suggestions.URL) json.put("suggestionsURI", true);
-		else if (assn.suggestions == Schema.Suggestions.ID) json.put("suggestionsID", true);
 		
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
@@ -230,11 +230,11 @@ public class ClipboardSchema
 		if (json.optBoolean("suggestionsFull", false)) assn.suggestions = Schema.Suggestions.FULL;
 		else if (json.optBoolean("suggestionsDisabled", false)) assn.suggestions = Schema.Suggestions.DISABLED;
 		else if (json.optBoolean("suggestionsField", false)) assn.suggestions = Schema.Suggestions.FIELD;
+		else if (json.optBoolean("suggestionsURL", false)) assn.suggestions = Schema.Suggestions.URL;
+		else if (json.optBoolean("suggestionsID", false)) assn.suggestions = Schema.Suggestions.ID;
 		else if (json.optBoolean("suggestionsString", false)) assn.suggestions = Schema.Suggestions.STRING;
 		else if (json.optBoolean("suggestionsNumber", false)) assn.suggestions = Schema.Suggestions.NUMBER;
 		else if (json.optBoolean("suggestionsInteger", false)) assn.suggestions = Schema.Suggestions.INTEGER;
-		else if (json.optBoolean("suggestionsURL", false)) assn.suggestions = Schema.Suggestions.URL;
-		else if (json.optBoolean("suggestionsID", false)) assn.suggestions = Schema.Suggestions.ID;
 		
 		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)
