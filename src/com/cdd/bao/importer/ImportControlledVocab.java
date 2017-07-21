@@ -46,7 +46,7 @@ import org.json.*;
 
 public class ImportControlledVocab
 {
-	private String srcFN, mapFN, dstFN, schemaFN, vocabFN;
+	private String srcFN, mapFN, dstFN, schemaFN, vocabFN, hintFN;
 	
 	private JSONArray srcColumns, srcRows;
 	private KeywordMapping map;
@@ -59,21 +59,24 @@ public class ImportControlledVocab
 	{
 		OK, // nothing changed
 		MODIFIED, // content modified
-		DELETE // should be removed from list
+		DELETE, // should be removed from list
 	}
 
 	private Scanner scanner = new Scanner(System.in);
 
+	private Map<String, String> hints = new HashMap<>(); // keyword to URI
+	private Map<String, String[]> invHints = new HashMap<>(); // URI to keyword(s)
 
 	// ------------ public methods ------------
 
-	public ImportControlledVocab(String srcFN, String mapFN, String dstFN, String schemaFN, String vocabFN)
+	public ImportControlledVocab(String srcFN, String mapFN, String dstFN, String schemaFN, String vocabFN, String hintFN)
 	{
 		this.srcFN = srcFN;
 		this.mapFN = mapFN;
 		this.dstFN = dstFN;
 		this.schemaFN = schemaFN;
 		this.vocabFN = vocabFN;
+		this.hintFN = hintFN;
 	}
 	
 	public void exec() throws IOException, JSONException
@@ -105,6 +108,20 @@ public class ImportControlledVocab
 		istr.close();
 		
 		for (SchemaVocab.StoredTree stored : schvoc.getTrees()) treeCache.put(stored.assignment, stored.tree);
+		
+		if (hintFN != null)
+		{
+			rdr = new FileReader(hintFN);
+			JSONObject jsonHints = new JSONObject(new JSONTokener(rdr));
+			rdr.close();
+			for (String key : jsonHints.keySet()) 
+			{
+				String uri = ModelSchema.expandPrefix(jsonHints.getString(key));
+				hints.put(key, uri);
+				invHints.put(uri, ArrayUtils.add(invHints.get(uri), key));
+			}
+			Util.writeln("    # hints = " + hints.size());
+		}
 		
 		checkMappingProperties();
 		for (int n = 0; n < srcColumns.length(); n++) matchColumn(srcColumns.getString(n));
@@ -459,7 +476,17 @@ public class ImportControlledVocab
 		SchemaTree.Node[] nodes = treeCache.get(assn).getFlat();
 		
 		int[] sim = new int[nodes.length];
-		for (int n = 0; n < nodes.length; n++) sim[n] = stringSimilarity(name, nodes[n].label);
+		for (int n = 0; n < nodes.length; n++) 
+		{
+			sim[n] = stringSimilarity(name, nodes[n].label);
+
+			// if there are hints, give each one a chance to 
+			String[] hintKeys = invHints.get(nodes[n].uri);
+			if (hintKeys != null) for (String key : hintKeys)
+			{
+				sim[n] = Math.min(sim[n], stringSimilarity(name, key));
+			}
+		}
 
 		Integer[] idx = new Integer[nodes.length];
 		for (int n = 0; n < nodes.length; n++) idx[n] = n;

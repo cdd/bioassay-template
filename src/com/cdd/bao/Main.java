@@ -252,15 +252,17 @@ public class Main
 	{
 		if (options.length < 5)
 		{
-			Util.writeln("Importing syntax: {src} {map} {dst} {schema} {vocab}");
+			Util.writeln("Importing syntax: {src} {map} {dst} {schema} {vocab} [{hints}]");
 			Util.writeln("    where {src} is the JSON-formatted pre-import data");
 			Util.writeln("          {map} contains the mapping instructions");
 			Util.writeln("          {dst} is an import-ready ZIP file");
 			Util.writeln("          {schema} is the template to conform to");
 			Util.writeln("          {vocab} is the processed vocabulary dump");
+			Util.writeln("          {hints} is an optional JSON file with putative term-to-URI options");
 			return;
 		}
-		ImportControlledVocab imp = new ImportControlledVocab(options[0], options[1], options[2], options[3], options[4]);
+		String hintsFN = options.length >= 6 ? options[5] : null;
+		ImportControlledVocab imp = new ImportControlledVocab(options[0], options[1], options[2], options[3], options[4], hintsFN);
 		imp.exec();
 	}
 }
