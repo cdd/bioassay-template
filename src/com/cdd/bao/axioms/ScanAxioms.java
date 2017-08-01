@@ -1,6 +1,8 @@
 package com.cdd.bao.axioms;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 
 import org.apache.commons.lang3.*;
@@ -63,8 +65,15 @@ public class ScanAxioms
 			"http://www.bioassayontology.org/bao#BAO_0002202",
 			"http://www.bioassayontology.org/bao#BAO_0000015",
 			"http://www.bioassayontology.org/bao#BAO_0000026",
-			"http://www.bioassayontology.org/bao#BAO_0000019" };
-	
+			"http://www.bioassayontology.org/bao#BAO_0000019", 
+			"http://www.bioassayontology.org/bao#BAO_0000248",
+			"http://www.bioassayontology.org/bao#BAO_0000015",
+				 "http://www.bioassayontology.org/bao#BAO_0000264",
+				 "http://www.bioassayontology.org/bao#BAO_0000074",
+				 "http://www.bioassayontology.org/bao#BAO_0002202",
+				 "http://www.bioassayontology.org/bao#BAO_0003075" };
+	 
+	public ArrayList<String> redundantURIsList =  new ArrayList<String>(Arrays.asList(redundantURIs));
 	
 	
 	public AxiomCollector ac = new AxiomCollector();
@@ -226,17 +235,21 @@ public class ScanAxioms
 						String objectLabels = null;
 						for (int n = 0; n < sequence.length; n++) {
 							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-							if(!(Arrays.asList(redundantURIs).contains(sequence[n])))
-							{
+							
 								objectURIs += "[" + sequence[n] + "]";
 							    objectLabels += "[" + nameNode(sequence[n]) + "]";	
-							} 
+							 
 							
 						}
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						forAllCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
+						
+						
+						
+						
+						
 						
 						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
 						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only"));

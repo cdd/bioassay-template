@@ -21,6 +21,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class AxiomCollector {
 	
+	public String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035",
+			"http://www.bioassayontology.org/bao#BAO_0000179",
+			"http://www.bioassayontology.org/bao#BAO_0002202",
+			"http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000026",
+			"http://www.bioassayontology.org/bao#BAO_0000019", 
+			"http://www.bioassayontology.org/bao#BAO_0000248",
+			"http://www.bioassayontology.org/bao#BAO_0000015",
+				 "http://www.bioassayontology.org/bao#BAO_0000264",
+				 "http://www.bioassayontology.org/bao#BAO_0000074",
+				 "http://www.bioassayontology.org/bao#BAO_0002202",
+				 "http://www.bioassayontology.org/bao#BAO_0003075" };
+	//Alright so axiom elimination is two parts in Alex's mind:
+	// first eliminate the URIs that are already in the common assay template
+	//but for those you can add checks for security and dependencies
+	//second you want to eliminate general axioms in the form
+	//assay has bioassay spec some bioassay spec
+	
 	
 	public static final class AssayAxiomsAll{
 		public String classURI;
