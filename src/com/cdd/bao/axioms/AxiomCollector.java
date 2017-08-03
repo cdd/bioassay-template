@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class AxiomCollector {
 	
-	public String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035",
+	public static String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035",
 			"http://www.bioassayontology.org/bao#BAO_0000179",
 			"http://www.bioassayontology.org/bao#BAO_0002202",
 			"http://www.bioassayontology.org/bao#BAO_0000015",
@@ -32,7 +32,17 @@ public class AxiomCollector {
 				 "http://www.bioassayontology.org/bao#BAO_0000264",
 				 "http://www.bioassayontology.org/bao#BAO_0000074",
 				 "http://www.bioassayontology.org/bao#BAO_0002202",
-				 "http://www.bioassayontology.org/bao#BAO_0003075" };
+				 "http://www.bioassayontology.org/bao#BAO_0003075",
+				 "http://www.bioassayontology.org/bao#BAO_0000019",
+				 "http://www.bioassayontology.org/bao#BAO_0000029"};
+	
+   public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
+	
+	public static Map<String, String> uriToLabel = ScanAxioms.uriToLabel;
+	
+	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
+	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
+	
 	//Alright so axiom elimination is two parts in Alex's mind:
 	// first eliminate the URIs that are already in the common assay template
 	//but for those you can add checks for security and dependencies
@@ -83,15 +93,48 @@ public class AxiomCollector {
 		}
 		
 		public String getObjectURIs(){
+			objectURIs = objectURIs.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(objectURIs);
+			if (matcher.find()) 
+			     this.objectURIs +=  matcher.group(1) +"\t";
+			
+			
 			return this.objectURIs;
+		}
+		public String eliminateRedundantURIs(){
+			
+			String currentURI = this.objectURIs;
+			
+			currentURI = currentURI.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(currentURI);
+			while (matcher.find()) 
+				 currentURI =  matcher.group(1);
+			
+			
+			
+			 	 //String currentURI = this.objectURIs;
+			 	 
+			 	 if(Arrays.asList(redundantURIs).contains(currentURI))
+			 	 {	// System.out.println("told ya!");
+			 		 currentURI.replaceAll(currentURI, "");
+			 		 currentURI += "\t redundant axiom";
+			 	 }
+			 	 else
+			 		 currentURI = this.objectURIs;
+			       
+			return currentURI;
 		}
 		
 		public String getObjectLabels(){
 			
 			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 			Matcher matcher = pattern.matcher(objectURIs);
-			if (matcher.find()) 
-			     this.objectLabels += "\t" + uriToLabel.get(matcher.group(1));
+			while (matcher.find()) 
+			     this.objectLabels +=  uriToLabel.get(matcher.group(1)) +"\t";
+			
+			objectLabels = objectLabels.replaceAll("null", "");
 			return this.objectLabels;		
 		}
 		
@@ -105,13 +148,14 @@ public class AxiomCollector {
 	}
 	
 	public static final class AssayAxiomsSome{
-		public String classURI;
+		public  String classURI;
 		public String classLabel;
 		public String axiomType;
 		public String predicateLabel;
 		public String predicateURI;
 		public String objectLabels;
 		public String objectURIs;	
+		public String[] uriArray;
 		
 		public AssayAxiomsSome(String cURI, String cLabel, String pLabel, String pURI, String oLabels, String oURIs, String aType){
 			this.classURI = cURI;
@@ -123,12 +167,14 @@ public class AxiomCollector {
 			this.objectURIs = oURIs;
 		} 
 		
-		public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType){
+		public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType,String[] uriArray){
 			this.classURI = cURI;
 			this.axiomType = aType;
 			this.predicateURI = pURI;
 			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
 		} 
+		
 		
 		public String getClassURI(){
 			return classURI;
@@ -147,15 +193,80 @@ public class AxiomCollector {
 		}
 		
 		public String getObjectURIs(){
+			objectURIs = objectURIs.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(objectURIs);
+			if (matcher.find()) 
+			     this.objectURIs +=  matcher.group(1) +"\t";
+			
+			
 			return this.objectURIs;
+		}
+		
+		public String[] getURIArray(){
+			return this.uriArray;
+		}
+		
+		public String eliminateRedundantURIs(){
+			
+			String currentURI = this.objectURIs;
+			
+			currentURI = currentURI.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(currentURI);
+			while (matcher.find()) 
+				 currentURI =  matcher.group(1);
+			
+			
+			
+			 	 //String currentURI = this.objectURIs;
+			 	 
+			 	 if(Arrays.asList(redundantURIs).contains(currentURI))
+			 	 {	// System.out.println("told ya!");
+			 		 currentURI.replaceAll(currentURI, "");
+			 		 currentURI += "\t redundant axiom";
+			 	 }
+			 	 else
+			 		 currentURI = this.objectURIs;
+			       
+			return currentURI;
+		}
+		
+        public String processURIArray(String[] uriArray){
+        	
+			String uris = "";
+			uriArray = this.uriArray;
+			for(int i =0; i<uriArray.length; i++){
+				uris +=uriArray[i]+ "\t";
+				
+			}
+			       
+			return uris;
+		}
+        
+       public String labelsFromURIArray(String[] uriArray){
+        	
+			String uris = "";
+			String labels ="";
+			uriArray = this.uriArray;
+			for(int i =0; i<uriArray.length; i++){
+				uris +=uriArray[i]+ "\t";
+				if(uriToLabel.get(uriArray[i]) != null)
+					labels += uriToLabel.get(uriArray[i]) + "\t";
+				
+			}
+			       
+			return labels;
 		}
 		
 		public String getObjectLabels(){
 			
 			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 			Matcher matcher = pattern.matcher(objectURIs);
-			if (matcher.find()) 
-			     this.objectLabels += "\t" + uriToLabel.get(matcher.group(1));
+			while (matcher.find()) 
+			     this.objectLabels +=  uriToLabel.get(matcher.group(1)) +"\t";
+			
+			objectLabels = objectLabels.replaceAll("null", "");
 			return this.objectLabels;		
 		}
 		
@@ -177,7 +288,7 @@ public class AxiomCollector {
 	
 
 	
-
+/*
 	
 	public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
 	
@@ -186,27 +297,33 @@ public class AxiomCollector {
 	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
 	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
 	
-	
+	*/
 	
 	public static JSONArray serialiseAxiom() throws IOException
 	{
 		JSONArray jsonFinal = new JSONArray();
-		
+
 	
 		
 		for( AssayAxiomsAll axiom : axiomsForAll)
 		{	 JSONObject json = new JSONObject();
 			try
 			{	
+				
+				if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				
 					//JSONObject obj = new JSONObject();
 					json.put("classURI", axiom.getClassURI() );
 					json.put("classLabel", axiom.getClassLabel());
 					json.put("predicateURI", axiom.getPredicateURI());
-					json.put("objectURI", axiom.getObjectURIs());
+					json.put("predicateLabel", axiom.getPredicateLabel());
+					json.put("objectURI", axiom.eliminateRedundantURIs());
 					json.put("objectLabels", axiom.getObjectLabels());
 					json.put("axiomType", axiom.getAxiomType());
 					
 					jsonFinal.put( json );
+				 }	
+					
 				
 			}catch(Exception e){
 				System.out.println("you failed to generate the JSON!");
@@ -228,21 +345,27 @@ public class AxiomCollector {
 	{
 		JSONArray jsonFinal = new JSONArray();
 		
-	
-		
 		for( AssayAxiomsSome axiom : axiomsForSome)
 		{	 JSONObject json = new JSONObject();
 			try
 			{	
+				
+				if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				
 					//JSONObject obj = new JSONObject();
 					json.put("classURI", axiom.getClassURI() );
 					json.put("classLabel", axiom.getClassLabel());
 					json.put("predicateURI", axiom.getPredicateURI());
-					json.put("objectURI", axiom.getObjectURIs());
+					json.put("predicateLabel", axiom.getPredicateLabel());
+					json.put("objectURI", axiom.eliminateRedundantURIs());
 					json.put("objectLabels", axiom.getObjectLabels());
 					json.put("axiomType", axiom.getAxiomType());
+					json.put("arrayURIs", axiom.processURIArray(axiom.getURIArray()));
+					json.put("arrayLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
 					
 					jsonFinal.put( json );
+				 }	
+					
 				
 			}catch(Exception e){
 				System.out.println("you failed to generate the JSON!");
@@ -257,6 +380,7 @@ public class AxiomCollector {
 			e.printStackTrace();
 		}
 		return jsonFinal;
+		
 		
 	}
 	

@@ -278,10 +278,12 @@ public class ScanAxioms
 						if (sequence.length == 0) val += "{nothing}";
 						String objectURIs = null;
 						String objectLabels = null;
+						String[] uriArray = new String[sequence.length];
 						for (int n = 0; n < sequence.length; n++) {
 							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 							objectURIs += "[" + sequence[n] + "]";
 							objectLabels += "[" + nameNode(sequence[n]) + "]";	
+							uriArray[n] = ""+sequence[n];
 						}
 						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 
@@ -290,7 +292,7 @@ public class ScanAxioms
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
 						if(!(Arrays.asList(redundantURIs).contains(o.getURI())))
-							axiomsForSome.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "some"));
+							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
 							//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 					}
 					else if (r.isMaxCardinalityRestriction())
