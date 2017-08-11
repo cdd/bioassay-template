@@ -344,6 +344,8 @@ public class EditSchema
 		menuEdit.getItems().add(new SeparatorMenuItem());
 		addMenu(menuEdit, "Cu_t", new KeyCharacterCombination("X", cmd)).setOnAction(event -> actionEditCopy(true));
 		addMenu(menuEdit, "_Copy", new KeyCharacterCombination("C", cmd)).setOnAction(event -> actionEditCopy(false));
+		Menu menuCopyAs = new Menu("Copy As");
+    	menuEdit.getItems().add(menuCopyAs);
 		addMenu(menuEdit, "_Paste", new KeyCharacterCombination("V", cmd)).setOnAction(event -> actionEditPaste());
 		menuEdit.getItems().add(new SeparatorMenuItem());
     	addMenu(menuEdit, "_Delete", new KeyCodeCombination(KeyCode.DELETE, cmd, shift)).setOnAction(event -> actionEditDelete());
@@ -352,6 +354,8 @@ public class EditSchema
 		menuEdit.getItems().add(new SeparatorMenuItem());
 		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
 		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));
+
+		addMenu(menuCopyAs, "Layout Tab-Separated", null).setOnAction(event -> actionEditCopyLayoutTSV());
 
 		addMenu(menuValue, "_Add Value", new KeyCharacterCombination("V", cmd, shift)).setOnAction(event -> detail.actionValueAdd());
 		addMenu(menuValue, "Add _Multiple Values", new KeyCharacterCombination("M", cmd, shift)).setOnAction(event -> detail.actionValueMultiAdd());
@@ -950,6 +954,33 @@ public class EditSchema
 		}
 		
 		if (andCut) actionEditDelete();
+	}
+	public void actionEditCopyLayoutTSV()
+	{
+		TreeItem<Branch> item = currentBranch();
+		if (item == null) return;
+		Branch branch = item.getValue();
+		
+		String tsv = null;
+		try
+		{
+			if (branch.group != null) tsv = ClipboardSchema.composeGroupTSV(branch.group);
+			else if (branch.assignment != null) tsv = ClipboardSchema.composeAssignmentTSV(branch.assignment);
+			if (tsv == null)
+			{
+				Util.informWarning("Clipboard Copy", "Select a branch or assignment to copy.");
+				return;
+			}
+		}
+		catch (Exception ex) {ex.printStackTrace(); return;}
+		
+		ClipboardContent content = new ClipboardContent();
+		content.putString(tsv);
+		if (!Clipboard.getSystemClipboard().setContent(content))
+		{
+			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			return;
+		}
 	}
 	public void actionEditPaste()
 	{

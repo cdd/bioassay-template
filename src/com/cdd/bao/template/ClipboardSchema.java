@@ -107,6 +107,39 @@ public class ClipboardSchema
 		}
 	}
 	
+	// turns a group or assignment into a tab-separated list, which is convenient for spreadsheet-style wrangling
+	public static String composeGroupTSV(Schema.Group group)
+	{
+		List<String> lines = new ArrayList<>();
+		lines.add("name\tdescription\tproperty URI\tgroup...");
+		formatGroupTSV(lines, group);
+		return String.join("\n", lines);
+	}
+	public static String composeAssignmentTSV(Schema.Assignment assn)
+	{
+		List<String> lines = new ArrayList<>();
+		lines.add("name\t" + assn.name);
+		lines.add("description\t" + assn.descr.replace("\n", " "));
+		lines.add("property URI\t" + assn.propURI);
+		lines.add("group nest\t" + String.join("\t", assn.groupNest()));
+		lines.add("");
+		lines.add("value hierarchy");
+		lines.add("");
+
+		SchemaTree tree = new SchemaTree(assn, Vocabulary.globalInstance());
+		if (tree != null) for (SchemaTree.Node node : tree.getFlat())
+		{
+			List<String> cols = new ArrayList<>();
+			cols.add(node.label);
+			cols.add(Util.safeString(node.descr).replace("\n", " "));
+			for (SchemaTree.Node look = node.parent; look != null; look = look.parent) cols.add("");
+			cols.add(node.uri);
+			lines.add(String.join("\t", cols));
+		}
+
+		return String.join("\n", lines);
+	}
+	
 	// ------------ private methods ------------	
 
 	private static JSONObject formatGroup(Schema.Group group) throws JSONException
@@ -288,6 +321,28 @@ public class ClipboardSchema
 		}
 		
 		return assay;
+	}
+	
+	private static void formatGroupTSV(List<String> lines, Schema.Group group)
+	{
+		List<String> cols = new ArrayList<>();
+		cols.add(group.name);
+		cols.add(group.descr.replace("\n", " "));
+		cols.add("");
+		for (String g : group.groupNest()) cols.add(g);
+		cols.add(Util.safeString(group.groupURI));
+		lines.add(String.join("\t", cols));
+		
+		for (Schema.Assignment assn : group.assignments)
+		{
+			cols.clear();
+			cols.add(assn.name);
+			cols.add(assn.descr.replace("\n", " "));
+			cols.add(assn.propURI);
+			for (String g : assn.groupNest()) cols.add(g);
+			lines.add(String.join("\t", cols));
+		}
+		for (Schema.Group subgrp : group.subGroups) formatGroupTSV(lines, subgrp);
 	}
 }
 
