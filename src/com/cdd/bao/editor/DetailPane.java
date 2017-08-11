@@ -171,19 +171,19 @@ public class DetailPane extends ScrollPane
 		if (group == null) return null;
 	
 		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && 
-			group.groupURI.equals(fieldURI == null ? "" : fieldURI.getText())) return null;
+			group.groupURI.equals(fieldURI == null ? "" : ModelSchema.expandPrefix(fieldURI.getText()))) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
-		mod.groupURI = fieldURI.getText();
+		mod.groupURI = ModelSchema.expandPrefix(fieldURI.getText());
 		return mod;
 	}
 	public Schema.Assignment extractAssignment()
 	{
 		if (assignment == null) return null;
 		
-		Schema.Assignment mod = new Schema.Assignment(null, fieldName.getText(), fieldURI.getText());
+		Schema.Assignment mod = new Schema.Assignment(null, fieldName.getText(), ModelSchema.expandPrefix(fieldURI.getText()));
 		mod.descr = fieldDescr.getText();
 		if (suggestionsFull.isSelected()) mod.suggestions = Schema.Suggestions.FULL;
 		else if (suggestionsDisabled.isSelected()) mod.suggestions = Schema.Suggestions.DISABLED;
@@ -202,7 +202,7 @@ public class DetailPane extends ScrollPane
 		{
     		for (ValueWidgets vw : valueList)
     		{
-    			Schema.Value val = new Schema.Value(vw.fieldURI.getText(), vw.fieldName.getText());
+    			Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
     			val.descr = vw.fieldDescr.getText();
     			int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
     			val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
@@ -221,7 +221,7 @@ public class DetailPane extends ScrollPane
 		Schema.Assay mod = new Schema.Assay(fieldName.getText());
 		mod.descr = fieldDescr.getText();
 		mod.para = fieldPara.getText();
-		mod.originURI = fieldURI.getText();
+		mod.originURI = ModelSchema.expandPrefix(fieldURI.getText());
 		
 		for (AnnotWidgets aw : annotList) if (aw.sourceAnnot != null) 
 		{
@@ -339,7 +339,7 @@ public class DetailPane extends ScrollPane
     {
     	if (focusIndex < 0) return;
     	ValueWidgets vw = valueList.get(focusIndex);
-    	String uri = vw.fieldURI.getText();
+    	String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
     	if (uri.length() == 0) {actionLookupName(); return;}
     
 		Vocabulary vocab = Vocabulary.globalInstance();
@@ -355,9 +355,9 @@ public class DetailPane extends ScrollPane
     	{
 	    	if (!Vocabulary.globalInstance().isLoaded()) return;
     		ValueWidgets vw = valueList.get(focusIndex);
-    		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : vw.fieldURI.getText();
+    		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : ModelSchema.expandPrefix(vw.fieldURI.getText());
     		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), listExcludedURI(), false);
-    		lookup.setInitialURI(vw.fieldURI.getText());
+    		lookup.setInitialURI(ModelSchema.expandPrefix(vw.fieldURI.getText()));
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -374,7 +374,7 @@ public class DetailPane extends ScrollPane
     	{
 	    	if (!Vocabulary.globalInstance().isLoaded()) return;
     		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
-    		lookup.setInitialURI(fieldURI.getText());
+    		lookup.setInitialURI(ModelSchema.expandPrefix(fieldURI.getText()));
     		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
     		if (result.isPresent())
     		{
@@ -940,7 +940,7 @@ public class DetailPane extends ScrollPane
 		Set<String> used = new HashSet<>();
 		for (ValueWidgets vw : valueList)
 		{
-			String uri = vw.fieldURI.getText();
+			String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
 			if (uri.length() > 0 && vw.dropSpec.getSelectionModel().getSelectedIndex() <= 1) used.add(uri);
 		}
 		return used;
@@ -952,7 +952,7 @@ public class DetailPane extends ScrollPane
 		Set<String> excl = new HashSet<>();
 		for (ValueWidgets vw : valueList)
 		{
-			String uri = vw.fieldURI.getText();
+			String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
 			if (uri.length() > 0 && vw.dropSpec.getSelectionModel().getSelectedIndex() >= 2) excl.add(uri);
 		}
 		return excl;
