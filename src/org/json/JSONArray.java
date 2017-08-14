@@ -976,7 +976,7 @@ public class JSONArray implements Iterable<Object>
 	 */
 	public JSONArray put(Object value)
 	{
-		if (value.getClass().isArray()) value = new JSONArray(value);	
+		if (value != null && value.getClass().isArray()) value = new JSONArray(value);	
 		list.add(value);
 		return this;
 	}
