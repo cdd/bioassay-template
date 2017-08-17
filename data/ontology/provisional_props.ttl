@@ -91,3 +91,194 @@ bao:BAX_0000017
   rdfs:label "has measurement" ;
   obo:IAO_0000115 "Describes activity measurements for accompanying structure-activity data"
   .
+
+bao:BAX_0000018
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has project information" ;
+  obo:IAO_0000115 "A group containing information that applies to the project (also called 'screening campaign', which consists of multiple assays) and not just an individual assay"
+  .
+
+bao:BAX_0000019
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protocol-version" ;
+  obo:IAO_0000115 "Contains the specific protocol and its version used for this assay"
+  .
+
+bao:BAX_0000020
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay summary" ;
+  obo:IAO_0000115 "Contains summary descriptors of the assay"
+  .
+
+bao:BAX_0000021
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has target information" ;
+  obo:IAO_0000115 "Contains descriptors specific to the intended target of the assay. "
+  .
+
+bao:BAX_0000022
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has control summary" ;
+  obo:IAO_0000115 "Contains desriptors of the controls (positive, negaitve, background, etc) used in the assay."
+  .
+
+bao:BAX_0000023
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has screened entity summary" ;
+  obo:IAO_0000115 "Contains descriptors of the screened entity, or perturbagen, used in the assay. "
+  .
+
+bao:BAX_0000024
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay system information" ;
+  obo:IAO_0000115 "Contains descriptors specific to the assay system (e.g., the organism, tissue, cell). "
+  .
+
+bao:BAX_0000025
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has microbe- or virus-specific information" ;
+  obo:IAO_0000115 "Contains descriptors unique to microbes (yeast or bacteria) or viruses, used in the assay,such as strain or Gram-staining. "
+  .
+
+bao:BAX_0000026
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell line information" ;
+  obo:IAO_0000115 "Contains descriptors specific to the cell line(s) used in the assay. "
+  .
+
+bao:BAX_0000027
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has transgene information" ;
+  obo:IAO_0000115 "Contains descriptors specific to the transgene(s) used in the assay. "
+  .
+
+bao:BAX_0000028
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has endpoint information" ;
+  obo:IAO_0000115 "Contains descriptors of the endpoint, such as mode of action, signal direction, endpoint (aka 'result'), unit of measurement, etc. "
+  .
+
+bao:BAX_0000029
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has activity threshold information" ;
+  obo:IAO_0000115 "Contains descriptors of the activity threshold (units, operator, value). "
+  .
+
+bao:BAX_0000030
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protocol details" ;
+  obo:IAO_0000115 "Contains descriptors of the protocol used in the assay. "
+  .
+
+bao:BAX_0000031
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has biochemical assay information" ;
+  obo:IAO_0000115 "Contains descriptors specific to biochemical assays. "
+  .
+
+bao:BAX_0000032
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has purity measure" ;
+  obo:IAO_0000115 "Defines the purity of a reagent (value, unit) used in the assay. "
+  .
+
+bao:BAX_0000033
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay molecule details" ;
+  obo:IAO_0000115 "Contains descriptors of the assay molecule used in the assay, such as class (DNA, protein, lipid, etc), quality (synthetic endogenous, labeled, etc), label (FITC, radioactive, etc) and concentration. "
+  .
+
+bao:BAX_0000034
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay components details" ;
+  obo:IAO_0000115 "Contains descriptors of additional assay components used in the assay. "
+  .
+
+bao:BAX_0000035
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has buffer information" ;
+  obo:IAO_0000115 "Contains descriptors of the buffer(s) used in the assay. "
+  .
+
+bao:BAX_0000036
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has solvent information" ;
+  obo:IAO_0000115 "Contains descriptors of the solvent(s) used in the assay. "
+  .
+
+bao:BAX_0000037
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has reducing agent information" ;
+  obo:IAO_0000115 "Contains descriptors of the reducing agent(s) used in the assay. "
+  .
+
+bao:BAX_0000038
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has detergent information" ;
+  obo:IAO_0000115 "Contains descriptors of the detergent(s) used in the assay. "
+
+
+bao:BAX_0000039
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has carrier protein information" ;
+  obo:IAO_0000115 "Contains descriptors of any carrier protein(s) used in the assay. "
+  .
+  
+bao:BAX_0000040
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has metal salt information" ;
+  obo:IAO_0000115 "Contains descriptors of any metal salt(s) used in the assay. "
+  .
+
+bao:BAX_0000041
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has antibody information" ;
+  obo:IAO_0000115 "Contains descriptors of the antibody(ies) used in the assay, such as name, type (mono- or polyclonal), isotype role (primary or secondary), or label. "
+  .
+
+bao:BAX_0000042
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has perturbagen incubation details" ;
+  obo:IAO_0000115 "Contains descriptors of the time and temperature of the pertubagen (screened entity) incubation. "
+  .
+
+bao:BAX_0000043
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has ligand incubation details" ;
+  obo:IAO_0000115 "Contains descriptors of the time and temperature of the ligand incubation. "
+  .
+
+bao:BAX_0000044
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has substrate incubation details" ;
+  obo:IAO_0000115 "Contains descriptors of the time and temperature of the substrate incubation. "
+  .
+
+bao:BAX_0000045
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has coupled substrate incubation details" ;
+  obo:IAO_0000115 "Contains descriptors of the time and temperature of the coupled substrate incubation. "
+  .
+
+bao:BAX_0000046
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has enzyme reaction details" ;
+  obo:IAO_0000115 "Contains descriptors of the time and temperature of the enzyme incubation. "
+  .
+
+bao:BAX_0000047
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has endpoint processing summary" ;
+  obo:IAO_0000115 "Contains descriptors of endpoint data processing. "
+  .
+
+bao:BAX_0000048
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has quality metrics" ;
+  obo:IAO_0000115 "Contains descriptors of the assay performance quality metrics, such as signal to noise, z-factor, z-prime factor, etc. "
+  .
+
+bao:BAX_0000049
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has chelator information" ;
+  obo:IAO_0000115 "Contains descriptors of the chelator(s) used in the assay. "
