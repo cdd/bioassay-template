@@ -281,4 +281,5 @@ bao:BAX_0000048
 bao:BAX_0000049
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has chelator information" ;
-  obo:IAO_0000115 "Contains descriptors of the chelator(s) used in the assay. "
+  obo:IAO_0000115 "Contains descriptors of the chelator(s) used in the assay."
+  .
