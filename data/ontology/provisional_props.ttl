@@ -216,12 +216,12 @@ bao:BAX_0000038
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has detergent information" ;
   obo:IAO_0000115 "Contains descriptors of the detergent(s) used in the assay."
-
+  .
 
 bao:BAX_0000039
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "has carrier protein information" ;
-  obo:IAO_0000115 "Contains descriptors of any carrier protein(s) used in the assay."
+  rdfs:label "has additional assay component" ;
+  obo:IAO_0000115 "Contains descriptors of any additinal component(s) used in the assay, such as carrier protein (e.g., BSA) or chelator (e.g., EDTA)."
   .
   
 bao:BAX_0000040
@@ -282,4 +282,30 @@ bao:BAX_0000049
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has chelator information" ;
   obo:IAO_0000115 "Contains descriptors of the chelator(s) used in the assay."
+  .
+
+bao:BAX_0000050
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has carrier protein information" ;
+  obo:IAO_0000115 "Contains descriptors of any carrier protein (e.g. BSA) used in the assay."
+  .
+
+bao:BAX_0000051
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell growth property" ;
+  obo:IAO_0000115 "Contains descriptors of the growth mode of a cell (e.g., adherent, suspension, etc)."
+  .
+
+bao:BAX_0000052
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay readout parameter" ;
+  obo:IAO_0000115 "Contains descriptor(s) of assay readout parameter, typically the outcome of image analysis and most often a calculated value, such as intensity, counting, etc."
+  .
+
+bao:BAX_0000053
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has assay data processing method" ;
+  obo:IAO_0000115 "Contains descriptor(s) of methods used to process the measurement into the result or endpoint data reported as the final outcome."
+  .
+
   .
