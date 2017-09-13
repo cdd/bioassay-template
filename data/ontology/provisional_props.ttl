@@ -307,5 +307,3 @@ bao:BAX_0000053
   rdfs:label "has assay data processing method" ;
   obo:IAO_0000115 "Contains descriptor(s) of methods used to process the measurement into the result or endpoint data reported as the final outcome."
   .
-
-  .
