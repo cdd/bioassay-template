@@ -40,3 +40,6 @@ To get started quickly without compiling, download two files:
 Run the application by double clicking on the `BioAssayTemplate.jar` file within the appropriate file manager tool, or run it with the
 command line syntax: `java -jar BioAssayTemplate.jar`. As long as you have Java 8 installed, the interface should appear, with a blank 
 schema window as the default. Use File|Open to locate and load the `schema.ttl` file.
+
+When executing a build version with raw Java `.class` files, it is useful to add the command line parameter 
+`-Dlog4j.configuration=file:cfg/log4j.properties` in order to prevent the logging mechanism from complaining needlessly.
