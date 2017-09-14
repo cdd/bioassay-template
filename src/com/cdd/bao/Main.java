@@ -39,9 +39,6 @@ public class Main
 {
 	public static void main(String[] argv)
 	{
-		//org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
-		org.apache.logging.log4j.status.StatusLogger.getLogger().setLevel(org.apache.logging.log4j.Level.OFF);	
-	
 		if (argv.length > 0 && (argv[0].equals("-h") || argv[0].equals("--help")))
 		{
 			printHelp();
