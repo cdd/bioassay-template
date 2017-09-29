@@ -158,14 +158,24 @@ public class Schema
 		}
 		
 		// determines equality based on the immediate properties of the assignment and its values; does not compare its position in the branch hierarchy
-		public boolean equals(Assignment other)
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Assignment other = (Assignment) o;
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
 			if (suggestions != other.suggestions) return false;
 			if (values.size() != other.values.size()) return false;
 			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
 			return true;
 		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, propURI, suggestions, values);
+		}
+
 		
 		// returns true if the other assignment has the same branch sequence, i.e. the name is the same, and likewise for the trail of parent groups
 		public boolean sameBranch(Assignment other)
@@ -238,9 +248,19 @@ public class Schema
 			dup.spec = spec;
 			return dup;
 		}
-		public boolean equals(Value other)
+		
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Value other = (Value) o;
 			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && spec == other.spec;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(uri, name, descr, spec);
 		}
 	}
 
