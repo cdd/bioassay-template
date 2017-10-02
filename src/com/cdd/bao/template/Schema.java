@@ -162,7 +162,7 @@ public class Schema
 		public boolean equals(Object o)
 		{
 			if (o == null || getClass() != o.getClass()) return false;
-			Assignment other = (Assignment) o;
+			Assignment other = (Assignment)o;
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
 			if (suggestions != other.suggestions) return false;
 			if (values.size() != other.values.size()) return false;
@@ -175,7 +175,6 @@ public class Schema
 		{
 			return Objects.hash(name, descr, propURI, suggestions, values);
 		}
-
 		
 		// returns true if the other assignment has the same branch sequence, i.e. the name is the same, and likewise for the trail of parent groups
 		public boolean sameBranch(Assignment other)
@@ -253,7 +252,7 @@ public class Schema
 		public boolean equals(Object o)
 		{
 			if (o == null || getClass() != o.getClass()) return false;
-			Value other = (Value) o;
+			Value other = (Value)o;
 			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && spec == other.spec;
 		}
 
