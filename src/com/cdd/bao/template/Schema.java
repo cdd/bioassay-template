@@ -65,8 +65,19 @@ public class Schema
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
-		public boolean equals(Group other)
+		//public boolean equals(Group other)
+		//{
+			//if (!name.equals(other.name) || !descr.equals(other.descr) || !groupURI.equals(other.groupURI)) return false;
+			//if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
+			//for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
+			//for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
+			//return true;
+		//}
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Group other = (Group) o;
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !groupURI.equals(other.groupURI)) return false;
 			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
 			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
@@ -74,6 +85,12 @@ public class Schema
 			return true;
 		}
 		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, groupURI, assignments, subGroups);
+		}
+				
 		// returns a list of group URIs leading up to (but not including) this one, which can be used to disambiguate beyond just the propURI
 		public String[] groupNest()
 		{
@@ -269,8 +286,7 @@ public class Schema
 		public String name; // short label for the bioassay
 		public String descr = ""; // more descriptive label: used to complement the semantic assignments
 		public String para = ""; // plain text description of the assay, if available; sometimes this is available prior semantic assignments
-		public String originURI = ""; // optional: use to indicate the semantic resource that the assay originated from
-		
+		public String originURI = ""; // optional: use to indicate the semantic resource that the assay originated from		
 		public List<Annotation> annotations = new ArrayList<>();
 		
 		public Assay(String name)
@@ -286,8 +302,25 @@ public class Schema
 			for (Annotation a : annotations) dup.annotations.add(a.clone());
 			return dup;
 		}
-		public boolean equals(Assay other)
+		//public boolean equals(Assay other)
+		//{
+			//if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
+			//if (annotations.size() != other.annotations.size()) return false;
+
+			//// doesn't work: sort order is random 
+			////for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
+			//Set<String> akeys = new HashSet<>();
+			//for (Annotation annot : annotations) akeys.add(annot.keyString());
+			//for (Annotation annot : other.annotations) if (!akeys.contains(annot.keyString())) return false;
+			
+			//return true;
+		//}
+		
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Assay other = (Assay) o;
 			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
 			if (annotations.size() != other.annotations.size()) return false;
 
@@ -298,7 +331,15 @@ public class Schema
 			for (Annotation annot : other.annotations) if (!akeys.contains(annot.keyString())) return false;
 			
 			return true;
+
 		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, para, originURI, annotations);
+		}
+		
 	}
 	
 	// an "annotation" is associated with an assay, linking it to an assignment and a selected value; note that the assignment/value objects are cloned
@@ -326,8 +367,30 @@ public class Schema
 			Annotation dup = value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
 			return dup;
 		}
-		public boolean equals(Annotation other)
+		//public boolean equals(Annotation other)
+		//{
+			//if (!assn.equals(other.assn)) return false;
+			//Group p1 = assn.parent, p2 = other.assn.parent;
+			//while (true)
+			//{
+				//if (p1 == null && p2 == null) break;
+				//if (p1 == null || p2 == null) return false;
+				//if (!p1.name.equals(p2.name)) return false;
+				//p1 = p1.parent;
+				//p2 = p2.parent;
+			//}
+			
+			//if (value == null && other.value == null) return literal.equals(other.literal);
+			//else if (value != null && other.value == null) return false;
+			//else if (value == null && other.value != null) return false;
+			//return value.equals(other.value);
+		//}
+		
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Annotation other = (Annotation) o;
 			if (!assn.equals(other.assn)) return false;
 			Group p1 = assn.parent, p2 = other.assn.parent;
 			while (true)
@@ -343,6 +406,12 @@ public class Schema
 			else if (value != null && other.value == null) return false;
 			else if (value == null && other.value != null) return false;
 			return value.equals(other.value);
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(assn, assn.parent, assn.name , value, literal);
 		}
 		
 		// returns a string that represents the entire content: can be used for uniqueness/sorting (more or less)
@@ -401,12 +470,29 @@ public class Schema
 	}
 	
 	// returns true if the content is literally equivalent
-	public boolean equals(Schema other)
+	//public boolean equals(Schema other)
+	//{
+		//if (!root.equals(other.root)) return false;
+		//if (assays.size() != other.assays.size()) return false;
+		//for (int n = 0; n < assays.size(); n++) if (!assays.get(n).equals(other.assays.get(n))) return false;
+		//return true;
+	//}
+	
+	@Override
+	public boolean equals(Object o)
 	{
+		if (o == null || getClass() != o.getClass()) return false;
+		Schema other = (Schema) o;
 		if (!root.equals(other.root)) return false;
 		if (assays.size() != other.assays.size()) return false;
 		for (int n = 0; n < assays.size(); n++) if (!assays.get(n).equals(other.assays.get(n))) return false;
 		return true;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(root, assays);
 	}
 	
 	// makes a deep copy of the schema content

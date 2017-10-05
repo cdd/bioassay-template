@@ -191,10 +191,17 @@ public class Vocabulary
 		{
 			String cwd = System.getProperty("user.dir");
 			ontoDir = cwd + "/ontology";
-			if (!new File(ontoDir).exists()) ontoDir = cwd + "/data/ontology";
+			if (!new File(ontoDir).exists()) 
+				ontoDir = cwd + "/data/ontology";
 		}
-		try {loadLabels(new File(ontoDir), extra.toArray(new File[extra.size()]), exclude);}
-		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
+		try 
+		{
+			loadLabels(new File(ontoDir), extra.toArray(new File[extra.size()]), exclude);
+		}
+		catch (Exception ex) 
+		{
+			throw new IOException("Vocabulary loading failed", ex);
+		}
 		finally 
 		{
 			loadingComplete = true;
@@ -345,8 +352,17 @@ public class Vocabulary
 		files.sort((f1, f2) -> (int)(f1.length() - f2.length()));
 		for (File f : files)
 		{
-			try {RDFDataMgr.read(model, f.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
-			catch (Exception ex) {throw new IOException("Failed to load " + f, ex);}
+			try 
+			{
+				if(f.getName().endsWith(".ttl")) //handles only .ttl files (Jason)
+					RDFDataMgr.read(model, f.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
+				else if (f.getName().endsWith(".owl")) //handles .owl files (Jason)
+					RDFDataMgr.read(model, f.getPath());
+			}
+			catch (Exception ex) 
+			{
+				throw new IOException("Failed to load " + f, ex);
+			}
 
 			progressSize += f.length();
 			float progress = (float)progressSize / totalSize;
