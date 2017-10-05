@@ -315,7 +315,7 @@ public class Vocabulary
             URL jar = jarsrc.getLocation();
 
 			// first pass: figure out how many bytes we're talking about
-        	ZipInputStream zip = new ZipInputStream(jar.openStream());
+        		ZipInputStream zip = new ZipInputStream(jar.openStream());
             ZipEntry ze = null;
             while ((ze = zip.getNextEntry()) != null) 
             {
@@ -324,7 +324,7 @@ public class Vocabulary
             }
 
 			// second pass: read it in
-        	zip = new ZipInputStream(jar.openStream());
+        		zip = new ZipInputStream(jar.openStream());
             ze = null;
         
             while ((ze = zip.getNextEntry()) != null) 
@@ -345,7 +345,7 @@ public class Vocabulary
             }
             
             zip.close();
-    	}
+    		}
 
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
@@ -366,7 +366,7 @@ public class Vocabulary
 
 			progressSize += f.length();
 			float progress = (float)progressSize / totalSize;
-        	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
+        		synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
 		}
 	
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
