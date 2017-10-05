@@ -191,10 +191,10 @@ public class Vocabulary
 		{
 			String cwd = System.getProperty("user.dir");
 			ontoDir = cwd + "/ontology";
-			if (!new File(ontoDir).exists()) 
-				ontoDir = cwd + "/data/ontology";
+			if (!new File(ontoDir).exists()) ontoDir = cwd + "/data/ontology";
 		}
-		try 
+		
+		try
 		{
 			loadLabels(new File(ontoDir), extra.toArray(new File[extra.size()]), exclude);
 		}
@@ -205,7 +205,7 @@ public class Vocabulary
 		finally 
 		{
 			loadingComplete = true;
-        	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
+        		synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
 		}
 	}
 	
