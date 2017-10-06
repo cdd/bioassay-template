@@ -203,31 +203,31 @@ public class RenderContext
 		txt = downgradeToASCII(txt);
 		try
 		{
-    		final float[] wad = measureLine(txt, sz);
-
-    		if ((align & TXTALIGN_LEFT) != 0) {}
-    		else if ((align & TXTALIGN_RIGHT) != 0) x -= wad[0];
-    		else /*TXTALIGN_CENTRE*/ x -= 0.5f * wad[0];
-    
-    		if ((align & TXTALIGN_MIDDLE) != 0) y += 0.5f * wad[1];
-    		else if ((align & TXTALIGN_TOP) != 0) y += wad[1];
-    		else if ((align & TXTALIGN_BOTTOM) != 0) y -= wad[2];
-    		// else: TXTALIGN_BASELINE
-    	
-    		if (stream == null)
-    		{
-    			width = Math.max(width, x + wad[0]);
-    			height = Math.max(height, y + wad[2]);
-    		}
-    		else
-    		{
+	    		final float[] wad = measureLine(txt, sz);
+	
+	    		if ((align & TXTALIGN_LEFT) != 0) {}
+	    		else if ((align & TXTALIGN_RIGHT) != 0) x -= wad[0];
+	    		else /*TXTALIGN_CENTRE*/ x -= 0.5f * wad[0];
+	    
+	    		if ((align & TXTALIGN_MIDDLE) != 0) y += 0.5f * wad[1];
+	    		else if ((align & TXTALIGN_TOP) != 0) y += wad[1];
+	    		else if ((align & TXTALIGN_BOTTOM) != 0) y -= wad[2];
+	    		// else: TXTALIGN_BASELINE
+	    	
+	    		if (stream == null)
+	    		{
+	    			width = Math.max(width, x + wad[0]);
+	    			height = Math.max(height, y + wad[2]);
+	    		}
+	    		else
+	    		{
                 stream.beginText();
                 stream.setFont(font, sz);
                 stream.newLineAtOffset(x, height - y);
                 setFill(colour);
                 stream.showText(txt);
                 stream.endText();
-    		}
+	    		}
 		}
 		catch (IOException ex) {}
 	}

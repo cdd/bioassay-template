@@ -77,28 +77,28 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 				String style = "-fx-font-family: arial;"; // note: using "Arial" because Mac system font (or sans) cannot match bold or
 														  // italic for some reason; working around this bug
 
-            	String label = branch.heading != null ? branch.heading : 
-            				   branch.group != null ? branch.group.name : 
-            				   branch.assignment != null ? branch.assignment.name : 
-            				   branch.assay != null ? branch.assay.name : "?";
-
-            	if (label.length() == 0)
-            	{
-            		label = "unnamed";
-            		style += "-fx-text-fill: #800000;";
-            	}
-
-    			if (branch.heading != null || branch.group != null) 
-    			{
-    				style += "-fx-font-weight: bold;";
-    			}
-    			else /*if (branch.assignment != null)*/ 
-    			{
-    				style += "-fx-font-weight: normal;";
-    			}
-
-    			boolean grey = branch.assay != null && branch.assay.annotations.size() == 0;
-    			if (grey) style += " -fx-text-fill: #808080;"; else style += " -fx-text-fill: black;";
+	            	String label = branch.heading != null ? branch.heading : 
+	            				   branch.group != null ? branch.group.name : 
+	            				   branch.assignment != null ? branch.assignment.name : 
+	            				   branch.assay != null ? branch.assay.name : "?";
+	
+	            	if (label.length() == 0)
+	            	{
+	            		label = "unnamed";
+	            		style += "-fx-text-fill: #800000;";
+	            	}
+	
+	    			if (branch.heading != null || branch.group != null) 
+	    			{
+	    				style += "-fx-font-weight: bold;";
+	    			}
+	    			else /*if (branch.assignment != null)*/ 
+	    			{
+	    				style += "-fx-font-weight: normal;";
+	    			}
+	
+	    			boolean grey = branch.assay != null && branch.assay.annotations.size() == 0;
+	    			if (grey) style += " -fx-text-fill: #808080;"; else style += " -fx-text-fill: black;";
 				
 				setStyle(style);
                 setText(label);
@@ -117,11 +117,10 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 		if (branch.group == null && branch.assignment == null) addMenu(ctx, "Add Assa_y").setOnAction(event -> branch.owner.actionAssayAdd());
 		if (branch.group != null || branch.assignment != null || branch.assay != null)
 		{
-			
-    		addMenu(ctx, "Cu_t").setOnAction(event -> branch.owner.actionEditCopy(true));
-    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionEditCopy(false));
-    		addMenu(ctx, "_Paste").setOnAction(event -> branch.owner.actionEditPaste());
-        	addMenu(ctx, "_Delete").setOnAction(event -> branch.owner.actionEditDelete());
+	    		addMenu(ctx, "Cu_t").setOnAction(event -> branch.owner.actionEditCopy(true));
+	    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionEditCopy(false));
+	    		addMenu(ctx, "_Paste").setOnAction(event -> branch.owner.actionEditPaste());
+	        	addMenu(ctx, "_Delete").setOnAction(event -> branch.owner.actionEditDelete());
 		}
 
 		/* maybe add these: but need to check validity first
@@ -133,9 +132,9 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
     }
     private MenuItem addMenu(ContextMenu parent, String title)
     {
-    	MenuItem item = new MenuItem(title);
-    	parent.getItems().add(item);
-    	return item;
+	    	MenuItem item = new MenuItem(title);
+	    	parent.getItems().add(item);
+	    	return item;
     }
 
 	private String getString() 

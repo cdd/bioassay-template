@@ -67,12 +67,12 @@ public class PreviewTreePanel
             if (node != null)
             {
                 String text = "URI <" + node.uri + ">";
-    			String descr = vocab.getDescr(node.uri);
+    				String descr = vocab.getDescr(node.uri);
                 if (descr != null && descr.length() > 0) text += "\n\n" + descr;
                 Tooltip tip = new Tooltip(text);
                 tip.setWrapText(true);
                 tip.setMaxWidth(400);
-    			Tooltip.install(this, tip);
+    				Tooltip.install(this, tip);
             }
      
             if (empty)
@@ -82,13 +82,13 @@ public class PreviewTreePanel
             }
             else 
             {
-            	String label = node.label;
-    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
-            	
-            	setText(label);
+	            	String label = node.label;
+	    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
+	            	
+	            	setText(label);
    				setStyle(style);
                 setGraphic(getTreeItem().getGraphic());
-    	    }
+    	    		}
         }
     }
 

@@ -66,10 +66,10 @@ public class ClipboardSchema
 	{
 		try 
 		{
-    		JSONObject jgroup = obj.optJSONObject("group");
-    		if (jgroup == null) return null;
-    		return parseGroup(jgroup, null);
-    	}
+	    		JSONObject jgroup = obj.optJSONObject("group");
+	    		if (jgroup == null) return null;
+	    		return parseGroup(jgroup, null);
+	    	}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
@@ -80,10 +80,10 @@ public class ClipboardSchema
 	{
 		try
 		{
-    		JSONObject jassn = obj.optJSONObject("assignment");
-    		if (jassn == null) return null;
-    		return parseAssignment(jassn, null);
-    	}
+	    		JSONObject jassn = obj.optJSONObject("assignment");
+	    		if (jassn == null) return null;
+	    		return parseAssignment(jassn, null);
+	    	}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
@@ -96,10 +96,10 @@ public class ClipboardSchema
 	{
 		try
 		{
-    		JSONObject jassay = obj.optJSONObject("assay");
-    		if (jassay == null) return null;
-    		return parseAssay(jassay);
-    	}
+	    		JSONObject jassay = obj.optJSONObject("assay");
+	    		if (jassay == null) return null;
+	    		return parseAssay(jassay);
+	    	}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
@@ -217,9 +217,9 @@ public class ClipboardSchema
 			
 			if (annot.value != null)
 			{
-    			obj.put("valURI", annot.value.uri);
-    			obj.put("valName", annot.value.name);
-    			obj.put("valDescr", annot.value.descr);
+	    			obj.put("valURI", annot.value.uri);
+	    			obj.put("valName", annot.value.name);
+	    			obj.put("valDescr", annot.value.descr);
 			}
 			else if (annot.literal != null)
 			{

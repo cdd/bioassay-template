@@ -120,16 +120,16 @@ public class DisplaySchema extends ScrollPane
 			if (group.parent == null)
 			{
 				heading = new Label("Assignments");
-        		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #E0E0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
+        			heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #E0E0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
 			}
 			else
 			{
-    			String title = group.name;
-    			for (Schema.Group look = group.parent; look.parent != null; look = look.parent) title = look.name + " \u25BA " + title;
-        		heading = new Label(title);
-        		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-underline: true;");
+	    			String title = group.name;
+	    			for (Schema.Group look = group.parent; look.parent != null; look = look.parent) title = look.name + " \u25BA " + title;
+	        		heading = new Label(title);
+	        		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-underline: true;");
 			}
-    		vbox.getChildren().add(heading);
+    			vbox.getChildren().add(heading);
 
 			for (Schema.Assignment assn : group.assignments)
 			{
@@ -181,8 +181,8 @@ public class DisplaySchema extends ScrollPane
 			for (Schema.Assignment assn : group.assignments)
 			{
 				String name = assn.name;
-    			for (Schema.Group look = assn.parent; look.parent != null; look = look.parent) name = look.name + " \u25BA " + name;
-    			assnNames.add(name);
+	    			for (Schema.Group look = assn.parent; look.parent != null; look = look.parent) name = look.name + " \u25BA " + name;
+	    			assnNames.add(name);
 			}
 			stack.addAll(0, group.subGroups);
 		}

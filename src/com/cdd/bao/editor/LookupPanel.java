@@ -88,12 +88,12 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             if (branch != null)
             {
                 String text = "URI <" + branch.uri + ">";
-    			String descr = vocab.getDescr(branch.uri);
+    				String descr = vocab.getDescr(branch.uri);
                 if (descr != null && descr.length() > 0) text += "\n\n" + descr;
                 Tooltip tip = new Tooltip(text);
                 tip.setWrapText(true);
                 tip.setMaxWidth(400);
-    			Tooltip.install(this, tip);
+    				Tooltip.install(this, tip);
             }
      
             if (empty)
@@ -103,27 +103,26 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
             }
             else 
             {
-            	String label = branch.label;
-
-    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
-    			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
-    			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
-    			
-    			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
-    			{
-    				style += " -fx-font-style: normal;";
-    			}
-    			else 
-    			{
-    				style += " -fx-font-style: italic;";
-    				label += " *";
-    			}
-            	
-            	setText(label);
+	            	String label = branch.label;
+	
+	    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
+	    			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+	    			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
+	    			
+	    			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
+	    			{
+	    				style += " -fx-font-style: normal;";
+	    			}
+	    			else 
+	    			{
+	    				style += " -fx-font-style: italic;";
+	    				label += " *";
+	    			}
+	            	
+	            	setText(label);
    				setStyle(style);
                 setGraphic(getTreeItem().getGraphic());
-    	    }
-    	    
+    	    		}
         }
     }
 

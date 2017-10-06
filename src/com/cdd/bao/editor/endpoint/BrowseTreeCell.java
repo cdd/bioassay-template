@@ -95,20 +95,20 @@ public final class BrowseTreeCell extends TreeCell<BrowseEndpoint.Branch>
 
 		if (branch.schema != null && branch.assay == null)
 		{
-    		addMenu(ctx, "_Open").setOnAction(event -> branch.owner.actionOpen());
+    			addMenu(ctx, "_Open").setOnAction(event -> branch.owner.actionOpen());
 		}
 		else if (branch.assay != null)
 		{
-    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionCopy());
+    			addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionCopy());
 		}
 
         if (ctx.getItems().size() > 0) setContextMenu(ctx);
     }
     private MenuItem addMenu(ContextMenu parent, String title)
     {
-    	MenuItem item = new MenuItem(title);
-    	parent.getItems().add(item);
-    	return item;
+	    	MenuItem item = new MenuItem(title);
+	    	parent.getItems().add(item);
+	    	return item;
     }
 
 	private String getString() 

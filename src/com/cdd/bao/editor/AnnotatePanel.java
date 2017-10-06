@@ -243,7 +243,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		{
 			tabber.getSelectionModel().select(tabLiteral);
 			fieldLiteral.setText(annot.literal);
-        	Platform.runLater(() -> fieldLiteral.requestFocus());
+        		Platform.runLater(() -> fieldLiteral.requestFocus());
 			return;
 		}
 		

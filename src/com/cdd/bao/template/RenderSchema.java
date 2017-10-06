@@ -312,10 +312,10 @@ public class RenderSchema
 		float maxX = x;
 		if (group.parent != null)
 		{
-    		//String label = group.name;
-    		//for (Schema.Group look = group.parent; look.parent != null; look = look.parent) label = look.name + "\u25BA" + label;
-    		String label = "";
-    		for (Schema.Group look = group; look.parent != null; look = look.parent) label = look.name + " / " + label;
+	    		//String label = group.name;
+	    		//for (Schema.Group look = group.parent; look.parent != null; look = look.parent) label = look.name + "\u25BA" + label;
+	    		String label = "";
+	    		for (Schema.Group look = group; look.parent != null; look = look.parent) label = look.name + " / " + label;
 			ctx.drawText(x + pad, y, label, 12, 0x000000, TXTALIGN_LEFT | TXTALIGN_TOP); 
 			y += 15;
 			maxX = x + pad + ctx.measureLine(label, 12)[0];

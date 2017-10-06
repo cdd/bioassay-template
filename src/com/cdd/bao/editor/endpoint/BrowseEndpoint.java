@@ -70,25 +70,25 @@ public class BrowseEndpoint
     // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
     public static final class Branch
     {
-    	public BrowseEndpoint owner;
-    	public Schema schema = null;
-    	public Schema.Assay assay = null;
+	    	public BrowseEndpoint owner;
+	    	public Schema schema = null;
+	    	public Schema.Assay assay = null;
 
 		public Branch(BrowseEndpoint owner) 
 		{
 			this.owner = owner;
 		}
-    	public Branch(BrowseEndpoint owner, Schema schema)
-    	{
+	    	public Branch(BrowseEndpoint owner, Schema schema)
+	    	{
 			this.owner = owner;
-    		this.schema = schema;
-    	}
-    	public Branch(BrowseEndpoint owner, Schema schema, Schema.Assay assay)
-    	{
+    			this.schema = schema;
+	    	}
+	    	public Branch(BrowseEndpoint owner, Schema schema, Schema.Assay assay)
+	    	{
 			this.owner = owner;
-    		this.schema = schema;
-    		this.assay = assay;
-    	}
+	    		this.schema = schema;
+	    		this.assay = assay;
+	    	}
     }
 
 	// ------------ public methods ------------	
@@ -102,7 +102,7 @@ public class BrowseEndpoint
 		treeRoot = new TreeItem<>(new Branch(this));
 		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
-        treeView.setCellFactory(p -> new BrowseTreeCell());
+       	treeView.setCellFactory(p -> new BrowseTreeCell());
 		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldval, newval) -> {changeValue(newval.getValue());});
 
 		display = new DisplaySchema();

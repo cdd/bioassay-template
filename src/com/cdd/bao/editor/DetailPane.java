@@ -200,15 +200,15 @@ public class DetailPane extends ScrollPane
 		}
 		else
 		{
-    		for (ValueWidgets vw : valueList)
-    		{
-    			Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
-    			val.descr = vw.fieldDescr.getText();
-    			int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
-    			val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
-    					   sel == 3 ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
-    			mod.values.add(val);
-    		}
+	    		for (ValueWidgets vw : valueList)
+	    		{
+	    			Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
+	    			val.descr = vw.fieldDescr.getText();
+	    			int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
+	    			val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
+	    					   sel == 3 ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
+	    			mod.values.add(val);
+	    		}
 		}
 		
 		if (assignment.equals(mod)) return null;
@@ -252,25 +252,25 @@ public class DetailPane extends ScrollPane
 	// menu-driven action events
     public void actionValueAdd()
     {
-    	if (assignment == null) return;
-    	
-    	Schema.Assignment modAssn = extractAssignment();
-    	if (modAssn == null) modAssn = assignment;
-
-    	modAssn.values.add(new Schema.Value("", ""));
-
-    	main.updateBranchAssignment(modAssn);
-    	recreateAssignment();
-
-    	valueList.get(valueList.size() - 1).fieldURI.requestFocus();
+	    	if (assignment == null) return;
+	    	
+	    	Schema.Assignment modAssn = extractAssignment();
+	    	if (modAssn == null) modAssn = assignment;
+	
+	    	modAssn.values.add(new Schema.Value("", ""));
+	
+	    	main.updateBranchAssignment(modAssn);
+	    	recreateAssignment();
+	
+	    	valueList.get(valueList.size() - 1).fieldURI.requestFocus();
 
 		// scroll to end; have to pause first, though    	
         Platform.runLater(() -> setVvalue(getVmax()));
     }
     public void actionValueMultiAdd()
     {
-    	if (assignment == null) return;
-    	if (!Vocabulary.globalInstance().isLoaded()) return;
+	    	if (assignment == null) return;
+	    	if (!Vocabulary.globalInstance().isLoaded()) return;
 
 		LookupPanel lookup = new LookupPanel(false, "", listValueURI(), listExcludedURI(), true);
 		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
@@ -278,21 +278,21 @@ public class DetailPane extends ScrollPane
 		LookupPanel.Resource[] resList = result.get();
 		if (resList == null || resList.length == 0) return;
 
-    	Schema.Assignment modAssn = extractAssignment();
-    	if (modAssn == null) modAssn = assignment;
+	    	Schema.Assignment modAssn = extractAssignment();
+	    	if (modAssn == null) modAssn = assignment;
 
 		int watermark = modAssn.values.size();
 		for (LookupPanel.Resource res : resList)
 		{
 			Schema.Value val = new Schema.Value(res.uri, res.label);
 			val.descr = res.descr;
-    		modAssn.values.add(val);
+    			modAssn.values.add(val);
 		}
 		
-    	main.updateBranchAssignment(modAssn);
-    	recreateAssignment();
-
-    	valueList.get(watermark).fieldURI.requestFocus();
+	    	main.updateBranchAssignment(modAssn);
+	    	recreateAssignment();
+	
+	    	valueList.get(watermark).fieldURI.requestFocus();
 
 		// scroll to end; have to pause first, though    	
         Platform.runLater(() -> setVvalue(getVmax()));
@@ -300,47 +300,47 @@ public class DetailPane extends ScrollPane
     
     public void actionValueDelete()
     {
-    	if (assignment == null || focusIndex < 0) return;	
-
-    	Schema.Assignment modAssn = extractAssignment();
-    	if (modAssn == null) modAssn = assignment;
-
+	    	if (assignment == null || focusIndex < 0) return;	
+	
+	    	Schema.Assignment modAssn = extractAssignment();
+	    	if (modAssn == null) modAssn = assignment;
+	
 		int idx = focusIndex;
-    	modAssn.values.remove(focusIndex);
-
-    	main.updateBranchAssignment(modAssn);
-    	recreateAssignment();
-    	
-    	if (valueList.size() > 0)
-    		valueList.get(Math.min(idx, valueList.size() - 1)).fieldURI.requestFocus();
-    	else
-    		fieldName.requestFocus();
+	    	modAssn.values.remove(focusIndex);
+	
+	    	main.updateBranchAssignment(modAssn);
+	    	recreateAssignment();
+	    	
+	    	if (valueList.size() > 0)
+	    		valueList.get(Math.min(idx, valueList.size() - 1)).fieldURI.requestFocus();
+	    	else
+	    		fieldName.requestFocus();
     }
     public void actionValueMove(int dir)
     {
-    	if (assignment == null || focusIndex < 0) return;	
-
-    	Schema.Assignment modAssn = extractAssignment();
-    	if (modAssn == null) modAssn = assignment;
-
-    	if (focusIndex + dir < 0 || focusIndex + dir >= modAssn.values.size()) return;
+	    	if (assignment == null || focusIndex < 0) return;	
+	
+	    	Schema.Assignment modAssn = extractAssignment();
+	    	if (modAssn == null) modAssn = assignment;
+	
+	    	if (focusIndex + dir < 0 || focusIndex + dir >= modAssn.values.size()) return;
 
 		int newIndex = focusIndex + dir;
 		Schema.Value v1 = modAssn.values.get(focusIndex), v2 = modAssn.values.get(newIndex);
 		modAssn.values.set(focusIndex, v2);
 		modAssn.values.set(newIndex, v1);
 
-    	main.updateBranchAssignment(modAssn);
-    	recreateAssignment();
+	    	main.updateBranchAssignment(modAssn);
+	    	recreateAssignment();
     	
    		valueList.get(newIndex).fieldURI.requestFocus();
     }
     public void actionLookupURI()
     {
-    	if (focusIndex < 0) return;
-    	ValueWidgets vw = valueList.get(focusIndex);
-    	String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
-    	if (uri.length() == 0) {actionLookupName(); return;}
+	    	if (focusIndex < 0) return;
+	    	ValueWidgets vw = valueList.get(focusIndex);
+	    	String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
+	    	if (uri.length() == 0) {actionLookupName(); return;}
     
 		Vocabulary vocab = Vocabulary.globalInstance();
 		
@@ -351,51 +351,51 @@ public class DetailPane extends ScrollPane
     }
     public void actionLookupName()
     {
-    	if (focusIndex >= 0)
-    	{
-	    	if (!Vocabulary.globalInstance().isLoaded()) return;
-    		ValueWidgets vw = valueList.get(focusIndex);
-    		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : ModelSchema.expandPrefix(vw.fieldURI.getText());
-    		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), listExcludedURI(), false);
-    		lookup.setInitialURI(ModelSchema.expandPrefix(vw.fieldURI.getText()));
-    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
-    		if (result.isPresent())
-    		{
-    			LookupPanel.Resource[] res = result.get();
-    			if (res != null && res.length > 0)
-    			{
-    				vw.fieldURI.setText(res[0].uri);
-    				if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(res[0].label);
-    				if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(res[0].descr);
+	    	if (focusIndex >= 0)
+	    	{
+		    	if (!Vocabulary.globalInstance().isLoaded()) return;
+	    		ValueWidgets vw = valueList.get(focusIndex);
+	    		String searchText = vw.fieldName.getText().length() > 0 ? vw.fieldName.getText() : ModelSchema.expandPrefix(vw.fieldURI.getText());
+	    		LookupPanel lookup = new LookupPanel(false, searchText, listValueURI(), listExcludedURI(), false);
+	    		lookup.setInitialURI(ModelSchema.expandPrefix(vw.fieldURI.getText()));
+	    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
+	    		if (result.isPresent())
+	    		{
+	    			LookupPanel.Resource[] res = result.get();
+	    			if (res != null && res.length > 0)
+	    			{
+	    				vw.fieldURI.setText(res[0].uri);
+	    				if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(res[0].label);
+	    				if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(res[0].descr);
 				}
-    		}
-    	}
-    	else if (assignment != null || group != null)
-    	{
-	    	if (!Vocabulary.globalInstance().isLoaded()) return;
-    		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
-    		lookup.setInitialURI(ModelSchema.expandPrefix(fieldURI.getText()));
-    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
-    		if (result.isPresent())
-    		{
-    			LookupPanel.Resource[] res = result.get();
-    			if (res != null && res.length >= 1)
-    			{
-    				fieldURI.setText(res[0].uri);
-    				if (fieldName.getText().length() == 0) fieldName.setText(res[0].label);
-    				if (fieldDescr.getText().length() == 0) fieldDescr.setText(res[0].descr);
-				}
-    		}
-    	}
+	    		}
+	    	}
+	    	else if (assignment != null || group != null)
+	    	{
+		    	if (!Vocabulary.globalInstance().isLoaded()) return;
+	    		LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
+	    		lookup.setInitialURI(ModelSchema.expandPrefix(fieldURI.getText()));
+	    		Optional<LookupPanel.Resource[]> result = lookup.showAndWait();
+	    		if (result.isPresent())
+	    		{
+	    			LookupPanel.Resource[] res = result.get();
+	    			if (res != null && res.length >= 1)
+	    			{
+	    				fieldURI.setText(res[0].uri);
+	    				if (fieldName.getText().length() == 0) fieldName.setText(res[0].label);
+	    				if (fieldDescr.getText().length() == 0) fieldDescr.setText(res[0].descr);
+					}
+	    		}
+	    	}
     }
 	public void actionShowTree()
 	{
 		if (!Vocabulary.globalInstance().isLoaded()) return;
 	
-    	if (assignment == null) return;
-    	
-    	Schema.Assignment modAssn = extractAssignment();
-    	if (modAssn == null) modAssn = assignment;
+	    	if (assignment == null) return;
+	    	
+	    	Schema.Assignment modAssn = extractAssignment();
+	    	if (modAssn == null) modAssn = assignment;
 
 		SchemaTree tree = new SchemaTree(modAssn, Vocabulary.globalInstance());
 		new PreviewTreePanel(tree, modAssn).show();
@@ -411,27 +411,27 @@ public class DetailPane extends ScrollPane
 		
 		if (group.parent == null)
 		{
-    		Label heading = new Label("Root");
-    		heading.setTextAlignment(TextAlignment.CENTER);
-    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
-    		vbox.getChildren().add(heading);
-    		
-    		Lineup line = new Lineup(PADDING);
-    		line.setMaxWidth(Double.MAX_VALUE);
-    		
-    		Label notes = new Label(
-    			"The schema prefix is a URI stem, which is used as the basis for naming all of the objects that are used by the schema. For loading and saving files, " +
-    			"its value does not matter, but for publishing on the semantic web, it is essential to select a unique namespace.");
-    		notes.setWrapText(true);
-    		notes.setPrefWidth(300);
-    		notes.setMaxWidth(Double.MAX_VALUE);
-    		line.add(notes, null, 1, 0, Lineup.NOINDENT);
-    
-    		fieldPrefix = new TextField(schema.getSchemaPrefix());
-    		fieldPrefix.setPrefWidth(300);
-    		line.add(fieldPrefix, "Prefix:", 1, 0);
-
-    		vbox.getChildren().add(line);
+	    		Label heading = new Label("Root");
+	    		heading.setTextAlignment(TextAlignment.CENTER);
+	    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: black; -fx-background-color: #C0C0FF; -fx-padding: 0.1em 1em 0.1em 1em;");
+	    		vbox.getChildren().add(heading);
+	    		
+	    		Lineup line = new Lineup(PADDING);
+	    		line.setMaxWidth(Double.MAX_VALUE);
+	    		
+	    		Label notes = new Label(
+	    			"The schema prefix is a URI stem, which is used as the basis for naming all of the objects that are used by the schema. For loading and saving files, " +
+	    			"its value does not matter, but for publishing on the semantic web, it is essential to select a unique namespace.");
+	    		notes.setWrapText(true);
+	    		notes.setPrefWidth(300);
+	    		notes.setMaxWidth(Double.MAX_VALUE);
+	    		line.add(notes, null, 1, 0, Lineup.NOINDENT);
+	    
+	    		fieldPrefix = new TextField(schema.getSchemaPrefix());
+	    		fieldPrefix.setPrefWidth(300);
+	    		line.add(fieldPrefix, "Prefix:", 1, 0);
+	
+	    		vbox.getChildren().add(line);
 		}
 		
 		Label heading = new Label("Group");
@@ -637,9 +637,9 @@ public class DetailPane extends ScrollPane
 			
 			if (n < assignment.values.size() - 1)
 			{
-    			Line hr = new Line(0, 0, 300, 0);
-    			hr.setStroke(Color.rgb(0, 0, 0, 0.1));
-    			vbox.getChildren().add(hr);
+	    			Line hr = new Line(0, 0, 300, 0);
+	    			hr.setStroke(Color.rgb(0, 0, 0, 0.1));
+	    			vbox.getChildren().add(hr);
 			}
 		}
 	}
@@ -747,9 +747,9 @@ public class DetailPane extends ScrollPane
 		// if there are any annotations left over, they are orphans
 		if (orphans.size() > 0)
 		{
-    		heading = new Label("Orphans");
-    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
-    		vbox.getChildren().add(heading);
+	    		heading = new Label("Orphans");
+	    		heading.setStyle("-fx-font-weight: bold; -fx-text-fill: #800000;");
+	    		vbox.getChildren().add(heading);
 
 			for (int n = 0; n < orphans.size(); n++)
 			{
@@ -782,10 +782,10 @@ public class DetailPane extends ScrollPane
 		
 		for (int n = 0; n < nbtn; n++)
 		{
-    		aw.buttonShow[n].setPrefWidth(300);
-    		aw.buttonShow[n].setMaxWidth(Double.MAX_VALUE);
-    		Region row = orphan || annots.length == 0 || n < nbtn - 1 ? aw.buttonShow[n] : RowLine.pair(PADDING, aw.buttonShow[n], 1, aw.buttonAdd, 0);
-    		aw.line.add(row, n == 0 ? title : null, 1, 0);
+	    		aw.buttonShow[n].setPrefWidth(300);
+	    		aw.buttonShow[n].setMaxWidth(Double.MAX_VALUE);
+	    		Region row = orphan || annots.length == 0 || n < nbtn - 1 ? aw.buttonShow[n] : RowLine.pair(PADDING, aw.buttonShow[n], 1, aw.buttonAdd, 0);
+	    		aw.line.add(row, n == 0 ? title : null, 1, 0);
 
 			final int idx = n < indices.length ? indices[n] : -1;
 			aw.buttonShow[n].setOnAction(event -> pressedAnnotationButton(aw.sourceAssn, idx));
@@ -804,45 +804,45 @@ public class DetailPane extends ScrollPane
 			Button btn = aw.buttonShow[n];
 			Schema.Annotation annot = n < aw.sourceAnnot.length ? aw.sourceAnnot[n] : null;
 			
-    		if (annot == null)
-    		{
-    			// blank value: waiting for the user to pick something
-    			btn.setText("?");
-    			btn.setStyle("-fx-base: #F0F0FF;");
-    		}
-    		else if (annot.value != null)
-    		{
-    			btn.setText(annot.value.name);
-    			btn.setStyle("-fx-base: #000080; -fx-text-fill: white;");
-    		}
-    		else // annot.literal != null
-    		{
-    			btn.setText('"' + annot.literal + '"');
-    			btn.setStyle("-fx-base: #FFFFD0;");
-    		}
-    
-    		// it's an orphan: mark it noticeably
-    		if (aw.sourceAssn == null)
-    		{
-    			// orphan
-    			btn.setStyle("-fx-base: #C00000; -fx-text-fill: white;");
-    		}
+	    		if (annot == null)
+	    		{
+	    			// blank value: waiting for the user to pick something
+	    			btn.setText("?");
+	    			btn.setStyle("-fx-base: #F0F0FF;");
+	    		}
+	    		else if (annot.value != null)
+	    		{
+	    			btn.setText(annot.value.name);
+	    			btn.setStyle("-fx-base: #000080; -fx-text-fill: white;");
+	    		}
+	    		else // annot.literal != null
+	    		{
+	    			btn.setText('"' + annot.literal + '"');
+	    			btn.setStyle("-fx-base: #FFFFD0;");
+	    		}
+	    
+	    		// it's an orphan: mark it noticeably
+	    		if (aw.sourceAssn == null)
+	    		{
+	    			// orphan
+	    			btn.setStyle("-fx-base: #C00000; -fx-text-fill: white;");
+	    		}
 		}
 	}
 	
 	// responds to the pressing of an annotation button: typically brings up the edit panel
 	private void pressedAnnotationButton(Schema.Assignment assn, int idx)
 	{
-    	Schema.Assay modAssay = extractAssay();
-    	
-    	if (modAssay == null) modAssay = assay.clone();
+	    	Schema.Assay modAssay = extractAssay();
+	    	
+	    	if (modAssay == null) modAssay = assay.clone();
     	
 		// orphan annotations: clicking deletes
 		if (assn == null)
 		{
 			modAssay.annotations.remove(idx);
-        	main.updateBranchAssay(modAssay);
-        	recreateAssay();
+	        	main.updateBranchAssay(modAssay);
+	        	recreateAssay();
 			return;
 		}
 
@@ -855,21 +855,21 @@ public class DetailPane extends ScrollPane
 			Schema.Annotation res = result.get();
 			if (res == null) return;
 			
-    		if (res.assn == null) // clear
-    		{
-    			if (idx < 0) return; // nop
-    			modAssay.annotations.remove(idx);
-    		}
-    		else
-    		{
-    			if (idx < 0)
-    				modAssay.annotations.add(res);
-    			else
-	    			modAssay.annotations.set(idx, res);
-    		}
-    
-        	main.updateBranchAssay(modAssay);
-        	recreateAssay();
+	    		if (res.assn == null) // clear
+	    		{
+	    			if (idx < 0) return; // nop
+	    			modAssay.annotations.remove(idx);
+	    		}
+	    		else
+	    		{
+	    			if (idx < 0)
+	    				modAssay.annotations.add(res);
+	    			else
+		    			modAssay.annotations.set(idx, res);
+	    		}
+	    
+	        	main.updateBranchAssay(modAssay);
+	        	recreateAssay();
 		}
 	}
 
@@ -880,15 +880,16 @@ public class DetailPane extends ScrollPane
 		{
             if (newValue)
             {
-            	if (focusIndex >= 0)
-            	{
-            		valueList.get(focusIndex).line.setBackground(null);
-            	}
-            	focusIndex = idx;
-            	if (focusIndex >= 0)
-            	{
-            		valueList.get(focusIndex).line.setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.05), CornerRadii.EMPTY, new Insets(-4, -4, -4, -4))));
-            	}
+	            	if (focusIndex >= 0)
+	            	{
+	            		valueList.get(focusIndex).line.setBackground(null);
+	            	}
+	            	focusIndex = idx;
+	            	if (focusIndex >= 0)
+	            	{
+	            		Background bg = new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.05), CornerRadii.EMPTY, new Insets(-4, -4, -4, -4)));
+	            		valueList.get(focusIndex).line.setBackground(bg);
+	            	}
             }
 		});
 	}
@@ -900,20 +901,20 @@ public class DetailPane extends ScrollPane
         {
             if (event.getCode() == KeyCode.TAB) 
             {
-            	if (event.isControlDown()) area.replaceSelection("\t");
-            	else
-            	{
-            		List<Control> list = new ArrayList<>();
-            		list.add(main.getTreeView());
-            		recursiveControls(list, vbox);
-            		int idx = list.indexOf(area);
-            		if (idx >= 0)
-            		{
-            			if (event.isShiftDown()) idx--; else idx++;
-            			if (idx < 0) idx = list.size() + idx;
-            			if (idx >= list.size()) idx -= list.size();
-            			list.get(idx).requestFocus();
-            		}
+	            	if (event.isControlDown()) area.replaceSelection("\t");
+	            	else
+	            	{
+	            		List<Control> list = new ArrayList<>();
+	            		list.add(main.getTreeView());
+	            		recursiveControls(list, vbox);
+	            		int idx = list.indexOf(area);
+	            		if (idx >= 0)
+	            		{
+	            			if (event.isShiftDown()) idx--; else idx++;
+	            			if (idx < 0) idx = list.size() + idx;
+	            			if (idx >= list.size()) idx -= list.size();
+	            			list.get(idx).requestFocus();
+	            		}
                 }
                 event.consume();
             }  

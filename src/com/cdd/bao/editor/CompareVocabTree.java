@@ -76,18 +76,18 @@ public class CompareVocabTree
                         
             if (item.direction == 0)
             {
-            	setStyle("-fx-text-fill: black;");
-            	setText(item.assn.name);
+	            	setStyle("-fx-text-fill: black;");
+	            	setText(item.assn.name);
             }
             else
             {
-    			String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
-    			style += "-fx-font-family: arial;";
-    			String label = item.direction < 0 ? "Removed: " : "Added: ";
-    			label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
-            
-            	setStyle(style);
-            	setText(label);
+	    			String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
+	    			style += "-fx-font-family: arial;";
+	    			String label = item.direction < 0 ? "Removed: " : "Added: ";
+	    			label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
+	            
+	            	setStyle(style);
+	            	setText(label);
             }
         }
     }
