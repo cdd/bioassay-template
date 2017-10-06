@@ -468,13 +468,12 @@ public class ModelSchema
 			
 	    		Group subgrp = new Group(group, findString(objGroup, rdfLabel), findAsString(objGroup, hasGroupURI));
 	    		subgrp.descr = findString(objGroup, hasDescription);
-	    		
+	    		parseGroup(objGroup, subgrp);
+
 	    		group.subGroups.add(subgrp);
 	    		order.put(subgrp, findInteger(objGroup, inOrder));
-	    		
-	    		parseGroup(objGroup, subgrp);
 		}
-		group.subGroups.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
+		group.subGroups.sort((g1, g2) -> order.get(g1).compareTo(order.get(g2)));
 	}
 	
 	private Assignment parseAssignment(Group group, Resource objAssn) throws IOException

@@ -65,6 +65,7 @@ public class Schema
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
+		
 		@Override
 		public boolean equals(Object o)
 		{
