@@ -87,8 +87,8 @@ public class Lineup extends Pane
 			getChildren().remove(widget);
 			if (u.label != null) getChildren().remove(u.label);
 			content.remove(u);
-    		requestLayout();
-    		requestParentLayout();
+	    		requestLayout();
+	    		requestParentLayout();
 			break;
 		}
 	}

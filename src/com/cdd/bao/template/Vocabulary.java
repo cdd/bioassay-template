@@ -353,7 +353,7 @@ public class Vocabulary
 		{
 			try 
 			{
-				URL fileURL = new File(f.getPath()).toURI().toURL(); //changing file to a URL for passing into Jena's RDF reader			
+				URL fileURL = new File(f.getPath()).toURI().toURL(); // changing file to a URL for passing into Jena's RDF reader			
 				RDFDataMgr.read(model, fileURL.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
 			}
 			catch (Exception ex) 
