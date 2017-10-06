@@ -205,7 +205,7 @@ public class Vocabulary
 		finally 
 		{
 			loadingComplete = true;
-        		synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
+			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
 		}
 	}
 	
@@ -300,7 +300,7 @@ public class Vocabulary
 			if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
 		}		
 		List<File> files = new ArrayList<>();
-        long progressSize = 0, totalSize = 0;
+		long progressSize = 0, totalSize = 0;
 		for (String fn : allFiles) 
 		{
 			File f = new File(fn);
@@ -312,40 +312,39 @@ public class Vocabulary
 		// first step: load files from the packaged JAR-file, if there is one
 		if (jarsrc != null)
 		{
-            URL jar = jarsrc.getLocation();
+			URL jar = jarsrc.getLocation();
 
 			// first pass: figure out how many bytes we're talking about
-        		ZipInputStream zip = new ZipInputStream(jar.openStream());
-            ZipEntry ze = null;
-            while ((ze = zip.getNextEntry()) != null) 
-            {
-                String path = ze.getName();
-                if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl"))) totalSize += ze.getSize();
-            }
+			ZipInputStream zip = new ZipInputStream(jar.openStream());
+			ZipEntry ze = null;
+			while ((ze = zip.getNextEntry()) != null) 
+			{
+				String path = ze.getName();
+				if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl"))) totalSize += ze.getSize();
+			}
 
 			// second pass: read it in
-        		zip = new ZipInputStream(jar.openStream());
-            ze = null;
-        
-            while ((ze = zip.getNextEntry()) != null) 
-            {
-                String path = ze.getName();
-                if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl")) &&
-                	!exclude.contains(new File(path).getName()))
-                {
-                	progressSize += ze.getSize();
-                	InputStream res = getClass().getResourceAsStream("/" + path);
-                	try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
-                	catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
-                	res.close();
-
+			zip = new ZipInputStream(jar.openStream());
+			ze = null;
+			
+			while ((ze = zip.getNextEntry()) != null) 
+			{
+				String path = ze.getName();
+				if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl")) && !exclude.contains(new File(path).getName()))
+				{
+					progressSize += ze.getSize();
+					InputStream res = getClass().getResourceAsStream("/" + path);
+					try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
+					catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
+					res.close();
+			
 					float progress = (float)progressSize / totalSize;
-                	synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
-                }
-            }
-            
-            zip.close();
-    		}
+					synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
+				}
+			}
+			
+			zip.close();
+		}
 
 		// second step: load files from the local directory; this is the only source when debugging; it is done second because it is valid to
 		// provide content that extends-or-overwrites the default
@@ -364,7 +363,7 @@ public class Vocabulary
 
 			progressSize += f.length();
 			float progress = (float)progressSize / totalSize;
-        		synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
+			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
 		}
 	
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
@@ -422,15 +421,15 @@ public class Vocabulary
 
 			if (predicate.equals(propLabel))
 			{
-    			uriToLabel.put(uri, label);
-    			String[] list = labelToURI.get(label);
-    			if (list != null)
-    			{
-    				list = Arrays.copyOf(list, list.length + 1);
-    				list[list.length - 1] = uri;
-    				labelToURI.put(label, list);
-    			}
-    			else labelToURI.put(label, new String[]{uri});
+				uriToLabel.put(uri, label);
+				String[] list = labelToURI.get(label);
+				if (list != null)
+				{
+					list = Arrays.copyOf(list, list.length + 1);
+					list[list.length - 1] = uri;
+					labelToURI.put(label, list);
+				}
+	    			else labelToURI.put(label, new String[]{uri});
 			}
 			else if (predicate.equals(propDescr))
 			{
@@ -500,17 +499,17 @@ public class Vocabulary
 		// properties need a bit more attention, because singletons need to be represented too
 		for (int pass = 0; pass < 2; pass++)
 		{
-       		for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
-       		{
-    			Statement st = it.next();
-    			String uri = st.getSubject().getURI();
-    			if (properties.uriToBranch.containsKey(uri)) continue;
-    			String label = uriToLabel.get(uri);
-    			if (label == null) continue;
-    			Branch branch = new Branch(uri, label);
-    			properties.uriToBranch.put(uri, branch);
-    			properties.rootBranches.add(branch);
-       		}
+			for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
+			{
+				Statement st = it.next();
+				String uri = st.getSubject().getURI();
+				if (properties.uriToBranch.containsKey(uri)) continue;
+				String label = uriToLabel.get(uri);
+				if (label == null) continue;
+				Branch branch = new Branch(uri, label);
+				properties.uriToBranch.put(uri, branch);
+				properties.rootBranches.add(branch);
+			}
 		}
 		properties.rootBranches.sort((v1, v2) -> 
 		{
@@ -530,40 +529,40 @@ public class Vocabulary
 		// build the tree
 		for (int pass = 0; pass < 2; pass++) // want to do BAO first
 		{
-    		for (StmtIterator it = model.listStatements(null, verb, (RDFNode)null); it.hasNext();)
-    		{
-    			Statement st = it.next();
-    			String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
-    			
-    			if (uriChild.equals(uriParent)) continue; // yes this really does happen (ontology bug)
-    
-    			String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
-    			if (labelChild == null || labelParent == null) continue;
-    			
-    			//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
-    			
-    			Branch child = hier.uriToBranch.get(uriChild), parent = hier.uriToBranch.get(uriParent);
-    			
-    			if (classBreakers != null && classBreakers.contains(uriChild + SEP + uriParent)) continue;
-    			
-   				boolean isBAO = uriParent.startsWith(ModelSchema.PFX_BAO);
-   				if (isBAO != (pass == 0)) continue; // BAO first, other second
-   				if (pass == 1 && child != null && child.parents.size() > 0) continue; // if second pass, and already parented, then don't add the non-BAO part of the hierarchy
+			for (StmtIterator it = model.listStatements(null, verb, (RDFNode)null); it.hasNext();)
+			{
+				Statement st = it.next();
+				String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+				
+				if (uriChild.equals(uriParent)) continue; // yes this really does happen (ontology bug)
 
-    			if (child == null) 
-    			{
-    				child = new Branch(uriChild, labelChild);
-    				hier.uriToBranch.put(uriChild, child);
-    			}
-    			if (parent == null)
-    			{
-    				parent = new Branch(uriParent, labelParent);
-    				hier.uriToBranch.put(uriParent, parent);
-    			}
-    			
-    			parent.children.add(child);
-    			child.parents.add(parent);
-    		}
+				String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
+				if (labelChild == null || labelParent == null) continue;
+				
+				//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
+				
+				Branch child = hier.uriToBranch.get(uriChild), parent = hier.uriToBranch.get(uriParent);
+				
+				if (classBreakers != null && classBreakers.contains(uriChild + SEP + uriParent)) continue;
+
+				boolean isBAO = uriParent.startsWith(ModelSchema.PFX_BAO);
+				if (isBAO != (pass == 0)) continue; // BAO first, other second
+				if (pass == 1 && child != null && child.parents.size() > 0) continue; // if second pass, and already parented, then don't add the non-BAO part of the hierarchy
+
+				if (child == null) 
+				{
+					child = new Branch(uriChild, labelChild);
+					hier.uriToBranch.put(uriChild, child);
+				}
+				if (parent == null)
+				{
+					parent = new Branch(uriParent, labelParent);
+					hier.uriToBranch.put(uriParent, parent);
+				}
+
+				parent.children.add(child);
+				child.parents.add(parent);
+			}
 		}
 		
 		// do child/branch reparenting whenever there is a "preferred" parent opportunity
@@ -669,10 +668,10 @@ public class Vocabulary
 		String[] other = equivalence.get(uri1);
 		if (other != null)
 		{
-    		for (String look : other) if (look.equals(uri2)) return;
-    		other = Arrays.copyOf(other, other.length + 1);
-    		other[other.length - 1] = uri2;
-    		equivalence.put(uri1, other);
+			for (String look : other) if (look.equals(uri2)) return;
+			other = Arrays.copyOf(other, other.length + 1);
+			other[other.length - 1] = uri2;
+			equivalence.put(uri1, other);
 		}
 		else equivalence.put(uri1, new String[]{uri2});
 	}
