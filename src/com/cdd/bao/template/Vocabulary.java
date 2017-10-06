@@ -354,10 +354,8 @@ public class Vocabulary
 		{
 			try 
 			{
-				if(f.getName().endsWith(".ttl")) //handles only .ttl files (Jason)
-					RDFDataMgr.read(model, f.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
-				else if (f.getName().endsWith(".owl")) //handles .owl files (Jason)
-					RDFDataMgr.read(model, f.getPath());
+				URL fileURL = new File(f.getPath()).toURI().toURL(); //changing file to a URL for passing into Jena's RDF reader			
+				RDFDataMgr.read(model, fileURL.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
 			}
 			catch (Exception ex) 
 			{
