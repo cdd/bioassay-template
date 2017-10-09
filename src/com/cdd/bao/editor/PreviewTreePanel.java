@@ -55,42 +55,42 @@ public class PreviewTreePanel
 	private Schema.Assignment assn;
 	private Vocabulary vocab = Vocabulary.globalInstance();
 
-    private TreeItem<SchemaTree.Node> treeRoot = new TreeItem<>(new SchemaTree.Node());
-    private TreeView<SchemaTree.Node> treeView = new TreeView<>(treeRoot);
+	private TreeItem<SchemaTree.Node> treeRoot = new TreeItem<>(new SchemaTree.Node());
+	private TreeView<SchemaTree.Node> treeView = new TreeView<>(treeRoot);
+	
+	private final class HierarchyTreeCell extends TreeCell<SchemaTree.Node>
+	{
+		public void updateItem(SchemaTree.Node node, boolean empty)
+		{
+			super.updateItem(node, empty);
+			
+			if (node != null)
+			{
+				String text = "URI <" + node.uri + ">";
+				String descr = vocab.getDescr(node.uri);
+				if (descr != null && descr.length() > 0) text += "\n\n" + descr;
+				Tooltip tip = new Tooltip(text);
+				tip.setWrapText(true);
+				tip.setMaxWidth(400);
+				Tooltip.install(this, tip);
+			}
+			 
+			if (empty)
+			{
+				setText(null);
+				setGraphic(null);
+			}
+			else 
+			{
+				String label = node.label;
+				String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
 
-    private final class HierarchyTreeCell extends TreeCell<SchemaTree.Node>
-    {
-        public void updateItem(SchemaTree.Node node, boolean empty)
-        {
-            super.updateItem(node, empty);
-            
-            if (node != null)
-            {
-                String text = "URI <" + node.uri + ">";
-    				String descr = vocab.getDescr(node.uri);
-                if (descr != null && descr.length() > 0) text += "\n\n" + descr;
-                Tooltip tip = new Tooltip(text);
-                tip.setWrapText(true);
-                tip.setMaxWidth(400);
-    				Tooltip.install(this, tip);
-            }
-     
-            if (empty)
-            {
-                setText(null);
-                setGraphic(null);
-            }
-            else 
-            {
-	            	String label = node.label;
-	    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
-	            	
-	            	setText(label);
-   				setStyle(style);
-                setGraphic(getTreeItem().getGraphic());
-    	    		}
-        }
-    }
+				setText(label);
+				setStyle(style);
+				setGraphic(getTreeItem().getGraphic());
+			}
+		}
+	}
 
 	// ------------ public methods ------------
 
@@ -118,13 +118,13 @@ public class PreviewTreePanel
 	public void show()
 	{
 		Stage stage = new Stage();
-        stage.setTitle("Tree: " + assn.name);
+		stage.setTitle("Tree: " + assn.name);
 
 		BorderPane root = new BorderPane();
 		root.setCenter(treeView);
-        
-        stage.setScene(new Scene(root, 700, 700));
-        stage.show();
+
+		stage.setScene(new Scene(root, 700, 700));
+		stage.show();
 	}
 	
 	// ------------ private methods ------------

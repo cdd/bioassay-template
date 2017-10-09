@@ -76,58 +76,58 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	private TextField fieldSearch = new TextField();
 	private TableView<Resource> tableList = new TableView<>();
 
-    private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<>(new Vocabulary.Branch(null, null));
-    private TreeView<Vocabulary.Branch> treeView = new TreeView<>(treeRoot);
-
-    private final class HierarchyTreeCell extends TreeCell<Vocabulary.Branch>
-    {
-        public void updateItem(Vocabulary.Branch branch, boolean empty)
-        {
-            super.updateItem(branch, empty);
-            
-            if (branch != null)
-            {
-                String text = "URI <" + branch.uri + ">";
-    				String descr = vocab.getDescr(branch.uri);
-                if (descr != null && descr.length() > 0) text += "\n\n" + descr;
-                Tooltip tip = new Tooltip(text);
-                tip.setWrapText(true);
-                tip.setMaxWidth(400);
-    				Tooltip.install(this, tip);
-            }
-     
-            if (empty)
-            {
-                setText(null);
-                setGraphic(null);
-            }
-            else 
-            {
-	            	String label = branch.label;
+	private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<>(new Vocabulary.Branch(null, null));
+	private TreeView<Vocabulary.Branch> treeView = new TreeView<>(treeRoot);
 	
-	    			String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
-	    			if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
-	    			else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
-	    			
-	    			if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
-	    			{
-	    				style += " -fx-font-style: normal;";
-	    			}
-	    			else 
-	    			{
-	    				style += " -fx-font-style: italic;";
-	    				label += " *";
-	    			}
-	            	
-	            	setText(label);
-   				setStyle(style);
-                setGraphic(getTreeItem().getGraphic());
-    	    		}
-        }
-    }
+	private final class HierarchyTreeCell extends TreeCell<Vocabulary.Branch>
+	{
+		public void updateItem(Vocabulary.Branch branch, boolean empty)
+		{
+			super.updateItem(branch, empty);
+			
+			if (branch != null)
+			{
+				String text = "URI <" + branch.uri + ">";
+				String descr = vocab.getDescr(branch.uri);
+				if (descr != null && descr.length() > 0) text += "\n\n" + descr;
+				Tooltip tip = new Tooltip(text);
+				tip.setWrapText(true);
+				tip.setMaxWidth(400);
+				Tooltip.install(this, tip);
+			}
+		 
+			if (empty)
+			{
+				setText(null);
+				setGraphic(null);
+			}
+			else 
+			{
+				String label = branch.label;
+		
+				String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
+				if (usedURI.contains(branch.uri)) style = "-fx-text-fill: #000080; -fx-font-weight: bold;";
+				else if (exclURI.contains(branch.uri)) style = "-fx-text-fill: #800080; -fx-font-weight: bold;";
+				
+				if (branch.uri.startsWith(ModelSchema.PFX_BAO) || branch.uri.startsWith(ModelSchema.PFX_BAT)) 
+				{
+					style += " -fx-font-style: normal;";
+				}
+				else 
+				{
+					style += " -fx-font-style: italic;";
+					label += " *";
+				}
+					
+				setText(label);
+				setStyle(style);
+				setGraphic(getTreeItem().getGraphic());
+			}
+		}
+	}
 
-    private final int PADDING = 2;
-       
+	private final int PADDING = 2;
+
 	// ------------ public methods ------------
 
 	public LookupPanel(boolean isProperty, String searchText, Set<String> usedURI, Set<String> exclURI, boolean multi)
@@ -180,8 +180,8 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
 		});
 		
-        tableList.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
-        treeView.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
+		tableList.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
+		treeView.getSelectionModel().setSelectionMode(multi ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
 
 		tabber.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
 		{
@@ -189,7 +189,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 			else if (oldValue == tabTree && newValue == tabList) syncSelectionTreeToList();
 		});
 		
-        Platform.runLater(() -> fieldSearch.requestFocus());
+		Platform.runLater(() -> fieldSearch.requestFocus());
 	}
 	
 	// if there's a starting value, set it in the list
@@ -225,42 +225,42 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		Lineup line = new Lineup(PADDING);
 		line.add(fieldSearch, "Search:", 1, 0);
  
-        tableList.setEditable(false);
- 
-        TableColumn<Resource, String> colUsed = new TableColumn<>("U");
+		tableList.setEditable(false);
+		
+		TableColumn<Resource, String> colUsed = new TableColumn<>("U");
 		colUsed.setMinWidth(20);
 		colUsed.setPrefWidth(20);
-        colUsed.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : "");});
-
-        TableColumn<Resource, String> colURI = new TableColumn<>("URI");
+		colUsed.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : "");});
+		
+		TableColumn<Resource, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-        colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri));});
-         
-        TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
+		colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri));});
+		 
+		TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
-        colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().label);});
-        
-        TableColumn<Resource, String> colDescr = new TableColumn<>("Description");
+		colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().label);});
+		
+		TableColumn<Resource, String> colDescr = new TableColumn<>("Description");
 		colDescr.setMinWidth(400);
-        colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
+		colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
 
 		tableList.setMinHeight(450);        
-        tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        tableList.getColumns().add(colUsed);
-        tableList.getColumns().add(colURI);
-        tableList.getColumns().add(colLabel);
-        tableList.getColumns().add(colDescr);
-        tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
-
-        BorderPane pane = new BorderPane();
-        pane.setPrefSize(800, 500);
-        pane.setMaxHeight(Double.MAX_VALUE);
-        pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
-        pane.setTop(line);
-        pane.setCenter(tableList);
-        
-        tabList.setContent(pane);
+		tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		tableList.getColumns().add(colUsed);
+		tableList.getColumns().add(colURI);
+		tableList.getColumns().add(colLabel);
+		tableList.getColumns().add(colDescr);
+		tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
+		
+		BorderPane pane = new BorderPane();
+		pane.setPrefSize(800, 500);
+		pane.setMaxHeight(Double.MAX_VALUE);
+		pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
+		BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
+		pane.setTop(line);
+		pane.setCenter(tableList);
+		
+		tabList.setContent(pane);
 
 		fieldSearch.setText(searchText);
 		fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> 
@@ -280,13 +280,13 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		treeView.setShowRoot(false);
 		treeView.setCellFactory((p) -> new HierarchyTreeCell());
 	
-        BorderPane pane = new BorderPane();
-        pane.setPrefSize(800, 500);
-        pane.setMaxHeight(Double.MAX_VALUE);
-        pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        pane.setCenter(treeView);
-        
-        tabTree.setContent(pane);
+		BorderPane pane = new BorderPane();
+		pane.setPrefSize(800, 500);
+		pane.setMaxHeight(Double.MAX_VALUE);
+		pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
+		pane.setCenter(treeView);
+		
+		tabTree.setContent(pane);
 	}
 	
 	// recursively add a new branch into the tree

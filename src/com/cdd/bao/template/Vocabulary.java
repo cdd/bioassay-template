@@ -429,7 +429,7 @@ public class Vocabulary
 					list[list.length - 1] = uri;
 					labelToURI.put(label, list);
 				}
-	    			else labelToURI.put(label, new String[]{uri});
+				else labelToURI.put(label, new String[]{uri});
 			}
 			else if (predicate.equals(propDescr))
 			{

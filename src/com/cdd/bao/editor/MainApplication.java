@@ -47,9 +47,9 @@ public class MainApplication extends Application
 	{
 		try
 		{
-	    		InputStream istr = Util.openResource(this, "/images/MainIcon.png");
-	    		icon = new Image(istr);
-	    		istr.close();
+			InputStream istr = Util.openResource(this, "/images/MainIcon.png");
+			icon = new Image(istr);
+			istr.close();
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -76,7 +76,7 @@ public class MainApplication extends Application
 		}
 		
 		final Stage stage = primaryStage;
-        Platform.runLater(() -> stage.show());
+		Platform.runLater(() -> stage.show());
 	}
 
 	// ------------ private methods ------------	

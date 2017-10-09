@@ -60,37 +60,37 @@ public class CompareVocabTree
 	{
 		Schema.Assignment assn;
 		int direction;
-		String valueURI, valueLabel;		
+		String valueURI, valueLabel;
 	}
 	
-    private TreeItem<Item> treeRoot = new TreeItem<>(new Item());
-    private TreeView<Item> treeView = new TreeView<>(treeRoot);
+	private TreeItem<Item> treeRoot = new TreeItem<>(new Item());
+	private TreeView<Item> treeView = new TreeView<>(treeRoot);
+	
+	private final class HierarchyTreeCell extends TreeCell<Item>
+	{
+		public void updateItem(Item item, boolean empty)
+		{
+			super.updateItem(item, empty);
+			
+			if (item == null) return;
 
-    private final class HierarchyTreeCell extends TreeCell<Item>
-    {
-        public void updateItem(Item item, boolean empty)
-        {
-            super.updateItem(item, empty);
-            
-            if (item == null) return;
-                        
-            if (item.direction == 0)
-            {
-	            	setStyle("-fx-text-fill: black;");
-	            	setText(item.assn.name);
-            }
-            else
-            {
-	    			String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
-	    			style += "-fx-font-family: arial;";
-	    			String label = item.direction < 0 ? "Removed: " : "Added: ";
-	    			label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
-	            
-	            	setStyle(style);
-	            	setText(label);
-            }
-        }
-    }
+			if (item.direction == 0)
+			{
+				setStyle("-fx-text-fill: black;");
+				setText(item.assn.name);
+			}
+			else
+			{
+				String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
+				style += "-fx-font-family: arial;";
+				String label = item.direction < 0 ? "Removed: " : "Added: ";
+				label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
+
+				setStyle(style);
+				setText(label);
+			}
+		}
+	}
 
 	// ------------ public methods ------------
 
@@ -111,7 +111,7 @@ public class CompareVocabTree
 	public void show()
 	{
 		Stage stage = new Stage();
-        stage.setTitle("Differences: " + file.getName());
+		stage.setTitle("Differences: " + file.getName());
 
 		HBox buttons = new HBox();
 		buttons.setSpacing(5);
@@ -129,10 +129,10 @@ public class CompareVocabTree
 
 		BorderPane root = new BorderPane();
 		root.setCenter(treeView);
-        root.setBottom(buttons);
-        
-        stage.setScene(new Scene(root, 700, 700));
-        stage.show();
+		root.setBottom(buttons);
+		
+		stage.setScene(new Scene(root, 700, 700));
+		stage.show();
 	}
 	
 	// ------------ private methods ------------

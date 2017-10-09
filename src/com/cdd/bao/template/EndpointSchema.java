@@ -69,15 +69,15 @@ public class EndpointSchema
 		
 		try
 		{
-    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
-    		List<String> templates = new ArrayList<>();
-    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-    		{
-    			QuerySolution qs = rs.next();
-    			String uri = qs.get("template").asResource().getURI();
-    			templates.add(uri);
-    		}
-    		return templates.toArray(new String[templates.size()]);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			List<String> templates = new ArrayList<>();
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				String uri = qs.get("template").asResource().getURI();
+				templates.add(uri);
+			}
+			return templates.toArray(new String[templates.size()]);
 		}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
 	}
@@ -97,15 +97,15 @@ public class EndpointSchema
 
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
-	    		List<String> assays = new ArrayList<>();
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			String uri = qs.get("assay").asResource().getURI();
-	    			assays.add(uri);
-	    		}
-	    		return assays.toArray(new String[assays.size()]);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			List<String> assays = new ArrayList<>();
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				String uri = qs.get("assay").asResource().getURI();
+				assays.add(uri);
+			}
+			return assays.toArray(new String[assays.size()]);
 		}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
 	}
@@ -153,12 +153,12 @@ public class EndpointSchema
 
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
-	    		ResultSet rs = qex.execSelect();
-	    		if (!rs.hasNext()) throw new IOException("Missing label/description. " + formulateError(sparql));
-	    		QuerySolution qs = rs.next();
-	    		group.name = getLiteral(qs.get("label"));
-	    		group.descr = getLiteral(qs.get("descr"));
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			ResultSet rs = qex.execSelect();
+			if (!rs.hasNext()) throw new IOException("Missing label/description. " + formulateError(sparql));
+			QuerySolution qs = rs.next();
+			group.name = getLiteral(qs.get("label"));
+			group.descr = getLiteral(qs.get("descr"));
 		}
 		catch (IOException ex) {throw ex;}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
@@ -182,21 +182,21 @@ public class EndpointSchema
 
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
 	
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			String assnURI = getURI(qs.get("assn"));
-	    			Schema.Assignment assn = new Schema.Assignment(group, getLiteral(qs.get("label")), getURI(qs.get("propURI")));
-	    			assn.descr = getLiteral(qs.get("descr"));
-	    			
-	    			fetchValues(assn, getURI(qs.get("assn").asResource()));
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				String assnURI = getURI(qs.get("assn"));
+				Schema.Assignment assn = new Schema.Assignment(group, getLiteral(qs.get("label")), getURI(qs.get("propURI")));
+				assn.descr = getLiteral(qs.get("descr"));
+				
+				fetchValues(assn, getURI(qs.get("assn").asResource()));
 	
-	    			group.assignments.add(assn);
-	    			
-	    			uriToAssn.put(assnURI, assn);
-	    		}
+				group.assignments.add(assn);
+				
+				uriToAssn.put(assnURI, assn);
+			}
 		}
 		catch (IOException ex) {throw ex;}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
@@ -219,18 +219,18 @@ public class EndpointSchema
 
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
 	
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			Schema.Group subgrp = new Schema.Group(group, getLiteral(qs.get("label")));
-	    			subgrp.descr = getLiteral(qs.get("descr"));
-	    			
-	    			fetchGroup(subgrp, getURI(qs.get("subgroup")), uriToAssn);
-	    			
-	    			group.subGroups.add(subgrp);
-	    		}
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				Schema.Group subgrp = new Schema.Group(group, getLiteral(qs.get("label")));
+				subgrp.descr = getLiteral(qs.get("descr"));
+				
+				fetchGroup(subgrp, getURI(qs.get("subgroup")), uriToAssn);
+				
+				group.subGroups.add(subgrp);
+			}
 		}
 		catch (IOException ex) {throw ex;}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
@@ -257,16 +257,16 @@ public class EndpointSchema
 
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
 	
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			Schema.Value val = new Schema.Value(getURI(qs.get("mapsTo")), getLiteral(qs.get("label")));
-	    			val.descr = getLiteral(qs.get("descr"));
-	    			
-	    			assn.values.add(val);
-	    		}
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				Schema.Value val = new Schema.Value(getURI(qs.get("mapsTo")), getLiteral(qs.get("label")));
+				val.descr = getLiteral(qs.get("descr"));
+				
+				assn.values.add(val);
+			}
 		}
 		//catch (IOException ex) {throw ex;}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
@@ -295,17 +295,17 @@ public class EndpointSchema
 		Schema.Assay assay = null;
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
 	
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			assay = new Schema.Assay(getLiteral(qs.get("label")));
-	    			assay.descr = getLiteral(qs.get("descr"));
-	    			assay.para = getLiteral(qs.get("para"));
-	    			assay.originURI = getLiteral(qs.get("origin"));
-	    			break;
-	    		}
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				assay = new Schema.Assay(getLiteral(qs.get("label")));
+				assay.descr = getLiteral(qs.get("descr"));
+				assay.para = getLiteral(qs.get("para"));
+				assay.originURI = getLiteral(qs.get("origin"));
+				break;
+			}
 		}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
 
@@ -337,27 +337,27 @@ public class EndpointSchema
 		
 		try
 		{
-	    		QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
+			QueryExecution qex = QueryExecutionFactory.sparqlService(endpoint, sparql);
 	
-	    		for (ResultSet rs = qex.execSelect(); rs.hasNext();)
-	    		{
-	    			QuerySolution qs = rs.next();
-	    			String assnURI = getURI(qs.get("assn"));
-	    			Schema.Assignment assn = uriToAssn.get(assnURI);
-	    			String propURI = getURI(qs.get("property")), valueURI = getURI(qs.get("value"));
-	    			String label = getLiteral(qs.get("label")), descr = getLiteral(qs.get("descr")), literal = getLiteral(qs.get("literal"));
-  
-  				if (propURI.length() > 0 && valueURI.length() > 0)
-  				{
-  					Schema.Value value = new Schema.Value(valueURI, label);
-  					value.descr = descr;
-  					assay.annotations.add(new Schema.Annotation(assn, value));
-  				}
-  				else if (literal.length() > 0)
-  				{
-  					assay.annotations.add(new Schema.Annotation(assn, literal));
-  				}
-    			}
+			for (ResultSet rs = qex.execSelect(); rs.hasNext();)
+			{
+				QuerySolution qs = rs.next();
+				String assnURI = getURI(qs.get("assn"));
+				Schema.Assignment assn = uriToAssn.get(assnURI);
+				String propURI = getURI(qs.get("property")), valueURI = getURI(qs.get("value"));
+				String label = getLiteral(qs.get("label")), descr = getLiteral(qs.get("descr")), literal = getLiteral(qs.get("literal"));
+
+				if (propURI.length() > 0 && valueURI.length() > 0)
+				{
+					Schema.Value value = new Schema.Value(valueURI, label);
+					value.descr = descr;
+					assay.annotations.add(new Schema.Annotation(assn, value));
+				}
+				else if (literal.length() > 0)
+				{
+					assay.annotations.add(new Schema.Annotation(assn, literal));
+				}
+			}
 		}
 		catch (Exception ex) {throw new IOException(formulateError(sparql), ex);}
 	}

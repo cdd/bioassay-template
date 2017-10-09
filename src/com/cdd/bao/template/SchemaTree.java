@@ -384,21 +384,21 @@ public class SchemaTree
 		{
 			boolean anything = false;
 			for (Iterator<Node> it = tree.values().iterator(); it.hasNext();)
-    		{
-    			Node node = it.next();
+			{
+				Node node = it.next();
 				if (node.inSchema || node.parent != null) continue;
 				int activeChildren = 0;
 				for (Node child : node.children) if (child.schemaCount > 0 || child.inSchema) activeChildren++;
-    			//if (node.parent == null && node.children.size() == 1)
-    			if (activeChildren <= 1)
-    			{
-    				//node.children.get(0).parent = null;
-    				for (Node child : node.children) child.parent = null;
-    				it.remove();
-    				anything = true;
-    			}
-    		}
-    		if (!anything) break;
+				//if (node.parent == null && node.children.size() == 1)
+				if (activeChildren <= 1)
+				{
+					//node.children.get(0).parent = null;
+					for (Node child : node.children) child.parent = null;
+					it.remove();
+					anything = true;
+				}
+			}
+			if (!anything) break;
 		}
 		
 		// perform the flattening: express the tree as a sequence of ordered branches

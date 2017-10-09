@@ -55,41 +55,41 @@ public class BrowseEndpoint
 
 	private Schema[] schemaList = new Schema[0];
 
-    private Stage stage;
-    private BorderPane root;
-    private SplitPane splitter;
-    private TreeView<Branch> treeView;
-    private TreeItem<Branch> treeRoot;
-    private DisplaySchema display;
-    
-    private MenuBar menuBar;
-    //private Menu menuFile, menuEdit, menuValue, menuView;
-    
-    private boolean currentlyRebuilding = false;
-    
-    // a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
-    public static final class Branch
-    {
-	    	public BrowseEndpoint owner;
-	    	public Schema schema = null;
-	    	public Schema.Assay assay = null;
+	private Stage stage;
+	private BorderPane root;
+	private SplitPane splitter;
+	private TreeView<Branch> treeView;
+	private TreeItem<Branch> treeRoot;
+	private DisplaySchema display;
+	
+	private MenuBar menuBar;
+	//private Menu menuFile, menuEdit, menuValue, menuView;
+	
+	private boolean currentlyRebuilding = false;
+	
+	// a "branch" encapsulates a tree item which is a generic heading, or one of the objects used within the schema
+	public static final class Branch
+	{
+		public BrowseEndpoint owner;
+		public Schema schema = null;
+		public Schema.Assay assay = null;
 
 		public Branch(BrowseEndpoint owner) 
 		{
 			this.owner = owner;
 		}
-	    	public Branch(BrowseEndpoint owner, Schema schema)
-	    	{
+		public Branch(BrowseEndpoint owner, Schema schema)
+		{
 			this.owner = owner;
-    			this.schema = schema;
-	    	}
-	    	public Branch(BrowseEndpoint owner, Schema schema, Schema.Assay assay)
-	    	{
+			this.schema = schema;
+		}
+		public Branch(BrowseEndpoint owner, Schema schema, Schema.Assay assay)
+		{
 			this.owner = owner;
-	    		this.schema = schema;
-	    		this.assay = assay;
-	    	}
-    }
+			this.schema = schema;
+			this.assay = assay;
+		}
+	}
 
 	// ------------ public methods ------------	
 
@@ -97,12 +97,12 @@ public class BrowseEndpoint
 	{
 		this.stage = stage;
 
-        stage.setTitle("BioAssay Schema Browser");
+		stage.setTitle("BioAssay Schema Browser");
 
 		treeRoot = new TreeItem<>(new Branch(this));
 		treeView = new TreeView<>(treeRoot);
 		treeView.setEditable(true);
-       	treeView.setCellFactory(p -> new BrowseTreeCell());
+		treeView.setCellFactory(p -> new BrowseTreeCell());
 		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldval, newval) -> {changeValue(newval.getValue());});
 
 		display = new DisplaySchema();
@@ -128,7 +128,7 @@ public class BrowseEndpoint
 		
 		rebuildTree();
 
-        Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
+		Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		new Thread(() -> backgroundLoadTemplates()).start();
  	}
@@ -203,7 +203,7 @@ public class BrowseEndpoint
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-	        Platform.runLater(() -> Util.informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
+			Platform.runLater(() -> Util.informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
 		}
 	}
 	
@@ -238,6 +238,5 @@ public class BrowseEndpoint
 			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
 			return;
 		}
-		
 	}
 }

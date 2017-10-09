@@ -101,8 +101,8 @@ public class RowLine extends Pane
 		{
 			getChildren().remove(widget);
 			content.remove(u);
-	    		requestLayout();
-	    		requestParentLayout();
+			requestLayout();
+			requestParentLayout();
 			break;
 		}
 	}

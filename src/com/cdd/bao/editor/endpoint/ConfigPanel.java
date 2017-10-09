@@ -62,8 +62,8 @@ public class ConfigPanel extends Dialog<Object>
 
 		setResizable(true);
 
-        final int PADDING = 2;
-        
+		final int PADDING = 2;
+
 		Lineup line = new Lineup(PADDING);
 		
 		Label notes = new Label("The SPARQL endpoint is a URL that contacts a triple store, which can serve and store schema documents.");
@@ -74,12 +74,12 @@ public class ConfigPanel extends Dialog<Object>
 		
 		line.add(fieldEndpoint, "Endpoint:", 1, 0);
  
-        BorderPane pane = new BorderPane();
-        pane.setPrefSize(line.getPrefWidth(), line.getPrefHeight());
-        pane.setMaxHeight(Double.MAX_VALUE);
-        pane.setPadding(new Insets(10, 10, 10, 10));
-        BorderPane.setMargin(line, new Insets(0, 0, 10, 0));
-        pane.setCenter(line);
+		BorderPane pane = new BorderPane();
+		pane.setPrefSize(line.getPrefWidth(), line.getPrefHeight());
+		pane.setMaxHeight(Double.MAX_VALUE);
+		pane.setPadding(new Insets(10, 10, 10, 10));
+		BorderPane.setMargin(line, new Insets(0, 0, 10, 0));
+		pane.setCenter(line);
 
 		getDialogPane().setContent(pane);
 
@@ -98,7 +98,7 @@ public class ConfigPanel extends Dialog<Object>
 		
 		fieldEndpoint.setText(EditorPrefs.getSparqlEndpoint());
 
-        Platform.runLater(() -> fieldEndpoint.requestFocus());
+		Platform.runLater(() -> fieldEndpoint.requestFocus());
 	}
 	
 	// ------------ private methods ------------

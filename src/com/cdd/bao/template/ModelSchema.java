@@ -387,15 +387,15 @@ public class ModelSchema
 		String parentName = turnLabelIntoName(group.name);
 		for (Group subgrp : group.subGroups)
 		{
-	    		Resource objGroup = model.createResource(pfx + turnLabelIntoName(subgrp.name));
-	    		model.add(objParent, hasGroup, objGroup);
-	    		model.add(objGroup, rdfType, batGroup);
-	    		model.add(objGroup, rdfLabel, subgrp.name);
-	    		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
+			Resource objGroup = model.createResource(pfx + turnLabelIntoName(subgrp.name));
+			model.add(objParent, hasGroup, objGroup);
+			model.add(objGroup, rdfType, batGroup);
+			model.add(objGroup, rdfLabel, subgrp.name);
+			if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
 			if (isURI(subgrp.groupURI)) model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
-    		
-    			formulateGroup(objGroup, subgrp);
+		
+			formulateGroup(objGroup, subgrp);
 		}
 	}
 
@@ -466,12 +466,12 @@ public class ModelSchema
 			Statement st = it.next();
 			Resource objGroup = (Resource)st.getObject();
 			
-	    		Group subgrp = new Group(group, findString(objGroup, rdfLabel), findAsString(objGroup, hasGroupURI));
-	    		subgrp.descr = findString(objGroup, hasDescription);
-	    		parseGroup(objGroup, subgrp);
-
-	    		group.subGroups.add(subgrp);
-	    		order.put(subgrp, findInteger(objGroup, inOrder));
+			Group subgrp = new Group(group, findString(objGroup, rdfLabel), findAsString(objGroup, hasGroupURI));
+			subgrp.descr = findString(objGroup, hasDescription);
+			parseGroup(objGroup, subgrp);
+	
+			group.subGroups.add(subgrp);
+			order.put(subgrp, findInteger(objGroup, inOrder));
 		}
 		group.subGroups.sort((g1, g2) -> order.get(g1).compareTo(order.get(g2)));
 	}
@@ -564,26 +564,26 @@ public class ModelSchema
 		
 		StringBuffer buff = new StringBuffer();
 		for (String bit : label.split(" "))
-	    	{
-	    		if (bit.length() == 0) continue;
-	    		char[] chars = new char[bit.length()];
-	    		bit.getChars(0, bit.length(), chars, 0);
-	    		chars[0] = Character.toUpperCase(chars[0]);
-	    		for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) buff.append(ch);
-	    	}
-    	
-	    	// if the name was previously encountered, give it a number suffix to disambiguate
-	    	String name = buff.toString();
-	    	Integer count = nameCounts.get(name);
-	    	if (count != null)
-	    	{
-	    		count++;
-	    		nameCounts.put(name, count);
-	    		name += count;
-	    	}
-	    	else nameCounts.put(name, 1);
-	    	
-	    	return name;    	
+		{
+			if (bit.length() == 0) continue;
+			char[] chars = new char[bit.length()];
+			bit.getChars(0, bit.length(), chars, 0);
+			chars[0] = Character.toUpperCase(chars[0]);
+			for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) buff.append(ch);
+		}
+	
+		// if the name was previously encountered, give it a number suffix to disambiguate
+		String name = buff.toString();
+		Integer count = nameCounts.get(name);
+		if (count != null)
+		{
+			count++;
+			nameCounts.put(name, count);
+			name += count;
+		}
+		else nameCounts.put(name, 1);
+		
+		return name;    	
 	}
 	
 	// looks for an assignment and returns it as a string regardless of what type it actually is; blank if not found
