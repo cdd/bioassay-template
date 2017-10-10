@@ -406,7 +406,7 @@ public class Schema
 				dup.parent.subGroups.add(dup);
 				
 				par = par.parent;
-				dup = par.parent;
+				dup = dup.parent;
 			}
 			
 			return assn;
