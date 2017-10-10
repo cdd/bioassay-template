@@ -378,7 +378,7 @@ public class Schema
 		// returns a string that represents the entire content: can be used for uniqueness/sorting (more or less)
 		public String keyString()
 		{
-			StringBuffer buff = new StringBuffer();
+			StringBuilder buff = new StringBuilder();
 			buff.append(assn.name + "\n");
 			for (Group g = assn.parent; g != null; g = g.parent) buff.append(g.name + "\n");
 			if (value != null) buff.append(value.uri + "\n" + value.name + "\n" + value.descr + "\n");
@@ -406,7 +406,7 @@ public class Schema
 				dup.parent.subGroups.add(dup);
 				
 				par = par.parent;
-				dup = par.parent;
+				dup = dup.parent;
 			}
 			
 			return assn;
