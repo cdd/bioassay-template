@@ -44,6 +44,14 @@
 		</jar>
 	</target>
 
+	<target name="pkgAPI" depends="build" description="generate the package without the GUI">
+		<jar jarfile="pkg/BioAssayTemplateAPI.jar" 
+			basedir="bin"
+			excludes="com/cdd/bao/editor/**,com/cdd/bao/importer/**,com/cdd/bao/Main*">
+			<zipgroupfileset dir="lib" includes="*.jar" />
+		</jar>
+	</target>
+
 	<target name="clean" description="clean up">
 		<delete dir="bin" />
 		<delete dir="pkg" />
