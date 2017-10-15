@@ -27,7 +27,6 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.net.*;
-import javafx.scene.control.*;
 
 /*
  * Static utilities to make life a little bit easier.
