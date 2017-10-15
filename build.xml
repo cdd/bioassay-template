@@ -44,10 +44,19 @@
 		</jar>
 	</target>
 
-	<target name="pkgAPI" depends="build" description="generate the package without the GUI">
-		<jar jarfile="pkg/BioAssayTemplateAPI.jar" 
-			basedir="bin"
-			excludes="com/cdd/bao/editor/**,com/cdd/bao/importer/**,com/cdd/bao/Main*">
+	<target name="buildAPI" depends="init" description="build the source (API only)">
+		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="1.8" target="1.8">
+			<exclude name="com/cdd/bao/editor/**" />
+			<exclude name="com/cdd/bao/importer/**" />
+			<exclude name="com/cdd/bao/*.java" />
+			<classpath refid="project.class.path" />
+		</javac>
+		<copy file="cfg/log4j.properties" todir="bin" />
+	</target>
+
+	<target name="pkgAPI" depends="buildAPI" description="generate the package without the GUI">
+		<jar jarfile="pkg/BioAssayTemplateAPI.jar" basedir="bin">
+			<fileset dir="bin" excludes="com/cdd/bao/editor/**,com/cdd/bao/importer/**,com/cdd/bao/*.class" />
 			<zipgroupfileset dir="lib" includes="*.jar" />
 		</jar>
 	</target>
