@@ -600,7 +600,7 @@ public class EditSchema
 		if (schemaFile == null) return;
 		if (!schemaFile.getAbsoluteFile().getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
-			Util.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
+			UtilGUI.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
 			return;
 		}
 	
@@ -639,7 +639,7 @@ public class EditSchema
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-			Util.informWarning("Open", "Failed to parse file: is it a valid schema?");
+			UtilGUI.informWarning("Open", "Failed to parse file: is it a valid schema?");
 		}
 	}
 	public void actionFileExportDump()
@@ -681,7 +681,7 @@ public class EditSchema
 		catch (IOException ex) {ex.printStackTrace();}
 		
 		String msg = "Written to [" + file.getAbsolutePath() + "]. Size: " + file.length();
-		Util.informWarning("Export", msg);
+		UtilGUI.informWarning("Export", msg);
 	}
 	public void actionFileMerge()
 	{
@@ -697,7 +697,7 @@ public class EditSchema
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-			Util.informWarning("Merge", "Failed to parse file: is it a valid schema?");
+			UtilGUI.informWarning("Merge", "Failed to parse file: is it a valid schema?");
 			return;
 		}
 		
@@ -705,7 +705,7 @@ public class EditSchema
 		Schema merged = SchemaUtil.mergeSchema(stack.getSchema(), addSchema, log);
 		if (log.size() == 0)
 		{
-			Util.informMessage("Merge", "The merge file is the same: no action.");
+			UtilGUI.informMessage("Merge", "The merge file is the same: no action.");
 			return;
 		}
 	
@@ -743,7 +743,7 @@ public class EditSchema
 	
 		if (endpoint == null || endpoint.length() == 0)
 		{
-			Util.informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
+			UtilGUI.informWarning("Browse", "You need to setup a SPARQL endpoint first: use the Configuration dialog.");
 			return;
 		}
 
@@ -772,7 +772,7 @@ public class EditSchema
 			fn += "_template.pdf";
 			render.write(new File(fn));
 			
-			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+			UtilGUI.informMessage("Saved PDF", "Written to:\n" + fn);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -784,7 +784,7 @@ public class EditSchema
 		Branch branch = item == null ? null : item.getValue();
 		if (branch == null || branch.assay == null)
 		{
-			Util.informMessage("Graphics for Assay", "Pick an assay first.");
+			UtilGUI.informMessage("Graphics for Assay", "Pick an assay first.");
 			return;
 		}
 
@@ -801,7 +801,7 @@ public class EditSchema
 			fn += "_assay.pdf";
 			render.write(new File(fn));
 			
-			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+			UtilGUI.informMessage("Saved PDF", "Written to:\n" + fn);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -822,7 +822,7 @@ public class EditSchema
 			fn += "_properties.pdf";
 			render.write(new File(fn));
 			
-			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+			UtilGUI.informMessage("Saved PDF", "Written to:\n" + fn);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -843,7 +843,7 @@ public class EditSchema
 			fn += "_values.pdf";
 			render.write(new File(fn));
 			
-			Util.informMessage("Saved PDF", "Written to:\n" + fn);
+			UtilGUI.informMessage("Saved PDF", "Written to:\n" + fn);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -880,7 +880,7 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
 		{
-			Util.informMessage("Add Group", "Select a group to add to.");
+			UtilGUI.informMessage("Add Group", "Select a group to add to.");
 			return;
 		}
 	
@@ -899,7 +899,7 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null || (item.getValue().group == null && item.getValue().assignment == null))
 		{
-			Util.informMessage("Add Assignment", "Select a group to add to.");
+			UtilGUI.informMessage("Add Assignment", "Select a group to add to.");
 			return;
 		}
 	
@@ -949,7 +949,7 @@ public class EditSchema
 		content.putString(serial);
 		if (!Clipboard.getSystemClipboard().setContent(content))
 		{
-			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			UtilGUI.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
 			return;
 		}
 		
@@ -968,7 +968,7 @@ public class EditSchema
 			else if (branch.assignment != null) tsv = ClipboardSchema.composeAssignmentTSV(branch.assignment);
 			if (tsv == null)
 			{
-				Util.informWarning("Clipboard Copy", "Select a branch or assignment to copy.");
+				UtilGUI.informWarning("Clipboard Copy", "Select a branch or assignment to copy.");
 				return;
 			}
 		}
@@ -978,7 +978,7 @@ public class EditSchema
 		content.putString(tsv);
 		if (!Clipboard.getSystemClipboard().setContent(content))
 		{
-			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			UtilGUI.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
 			return;
 		}
 	}
@@ -989,7 +989,7 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null)
 		{
-			Util.informMessage("Clipboard Paste", "Select a group to paste into.");
+			UtilGUI.informMessage("Clipboard Paste", "Select a group to paste into.");
 			return;
 		}
 		Branch branch = item.getValue();
@@ -998,7 +998,7 @@ public class EditSchema
 		String serial = clipboard.getString();
 		if (serial == null)
 		{
-			Util.informWarning("Clipboard Paste", "Content is not parseable.");
+			UtilGUI.informWarning("Clipboard Paste", "Content is not parseable.");
 			return;
 		}
 		
@@ -1006,7 +1006,7 @@ public class EditSchema
 		try {json = new JSONObject(new JSONTokener(serial));}
 		catch (JSONException ex)
 		{
-			Util.informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
+			UtilGUI.informWarning("Clipboard Paste", "Content is not parseable: it should be a JSON-formatted string.");
 			return;
 		}
 		
@@ -1015,7 +1015,7 @@ public class EditSchema
 		Schema.Assay assay = ClipboardSchema.unpackAssay(json);
 		if (group == null && assn == null && assay == null)
 		{
-			Util.informWarning("Clipboard Paste", "Content does not represent a group, assignment or assay: cannot paste.");
+			UtilGUI.informWarning("Clipboard Paste", "Content does not represent a group, assignment or assay: cannot paste.");
 			return;
 		}
 		
@@ -1048,12 +1048,12 @@ public class EditSchema
 		Branch branch = item == null ? null : item.getValue();
 		if (branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
 		{
-			Util.informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
+			UtilGUI.informMessage("Delete Branch", "Select a group, assignment or assay to delete.");
 			return;
 		}
 		if (item == treeRoot)
 		{
-			Util.informMessage("Delete Branch", "Can't delete the root branch.");
+			UtilGUI.informMessage("Delete Branch", "Can't delete the root branch.");
 			return;
 		}
 		
@@ -1089,7 +1089,7 @@ public class EditSchema
 	{
 		if (!stack.canUndo())
 		{
-			Util.informMessage("Undo", "Nothing to undo.");
+			UtilGUI.informMessage("Undo", "Nothing to undo.");
 			return;
 		}
 		stack.performUndo();
@@ -1100,7 +1100,7 @@ public class EditSchema
 	{
 		if (!stack.canRedo())
 		{
-			Util.informMessage("Redo", "Nothing to redo.");
+			UtilGUI.informMessage("Redo", "Nothing to redo.");
 			return;
 		}
 		stack.performRedo();
@@ -1144,7 +1144,7 @@ public class EditSchema
 		Branch branch = item == null ? null : item.getValue();
 		if (branch == null || branch.assignment == null)
 		{
-			Util.informMessage("Sort Values", "Select an assignment with values to sort.");
+			UtilGUI.informMessage("Sort Values", "Select an assignment with values to sort.");
 			return;
 		}
 
@@ -1156,7 +1156,7 @@ public class EditSchema
 		
 		if (schema.equals(stack.peekSchema()))
 		{
-			Util.informMessage("Sort", "Values were already sorted.");
+			UtilGUI.informMessage("Sort", "Values were already sorted.");
 			return;
 		}
 		stack.changeSchema(schema);
@@ -1169,7 +1169,7 @@ public class EditSchema
 		Branch branch = item == null ? null : item.getValue();
 		if (branch == null || branch.assignment == null)
 		{
-			Util.informMessage("Remove Duplicate Values", "Select an assignment with values to de-duplicate.");
+			UtilGUI.informMessage("Remove Duplicate Values", "Select an assignment with values to de-duplicate.");
 			return;
 		}
 	
@@ -1193,14 +1193,14 @@ public class EditSchema
 		
 		if (snippy == 0)
 		{
-			Util.informMessage("Remove Duplicate Values", "No duplicate URI values were found.");
+			UtilGUI.informMessage("Remove Duplicate Values", "No duplicate URI values were found.");
 			return;
 		}
 		stack.changeSchema(schema);
 		rebuildTree();
 		setCurrentBranch(locateBranch(branch.locatorID));
 		
-		Util.informMessage("Remove Duplicate Values", "Number of values removed because of duplicated URI values: " + snippy);
+		UtilGUI.informMessage("Remove Duplicate Values", "Number of values removed because of duplicated URI values: " + snippy);
 	}
 	private void actionValueCleanup()
 	{
@@ -1208,7 +1208,7 @@ public class EditSchema
 		Branch branch = item == null ? null : item.getValue();
 		if (branch == null || branch.assignment == null)
 		{
-			Util.informMessage("Cleanup Values", "Select an assignment in order to remove non-URI values.");
+			UtilGUI.informMessage("Cleanup Values", "Select an assignment in order to remove non-URI values.");
 			return;
 		}
 	
@@ -1230,14 +1230,14 @@ public class EditSchema
 		
 		if (snippy == 0)
 		{
-			Util.informMessage("Cleanup Values", "No values were removed.");
+			UtilGUI.informMessage("Cleanup Values", "No values were removed.");
 			return;
 		}
 		stack.changeSchema(schema);
 		rebuildTree();
 		setCurrentBranch(locateBranch(branch.locatorID));
 		
-		Util.informMessage("Cleanup Values", "Number of values removed on account of not having a proper URI: " + snippy);    
+		UtilGUI.informMessage("Cleanup Values", "Number of values removed on account of not having a proper URI: " + snippy);    
 	}
 	private void actionViewToggleSummary()
 	{

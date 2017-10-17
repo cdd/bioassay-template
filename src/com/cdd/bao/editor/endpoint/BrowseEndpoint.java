@@ -203,7 +203,7 @@ public class BrowseEndpoint
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
-			Platform.runLater(() -> Util.informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
+			Platform.runLater(() -> UtilGUI.informWarning("SPARQL failure", "Unable to fetch a list of templates. See console output for detials."));
 		}
 	}
 	
@@ -235,7 +235,7 @@ public class BrowseEndpoint
 		content.putString(serial);
 		if (!Clipboard.getSystemClipboard().setContent(content))
 		{
-			Util.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
+			UtilGUI.informWarning("Clipboard Copy", "Unable to copy to the clipboard.");
 			return;
 		}
 	}

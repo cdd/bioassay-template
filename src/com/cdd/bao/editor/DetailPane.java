@@ -966,7 +966,7 @@ public class DetailPane extends ScrollPane
 		String text = fieldPara.getText();
 		if (text.length() == 0)
 		{
-			Util.informMessage("Paragraph", "Text is blank: nothing to show.");
+			UtilGUI.informMessage("Paragraph", "Text is blank: nothing to show.");
 			return;
 		}
 	
