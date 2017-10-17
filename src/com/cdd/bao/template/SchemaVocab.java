@@ -1,7 +1,7 @@
 /*
 	BioAssay Express (BAE)
 
-	(c) 2016 Collaborative Drug Discovery Inc.
+	(c) 2016-2017 Collaborative Drug Discovery Inc.
 */
 
 package com.cdd.bao.template;
@@ -32,7 +32,7 @@ public class SchemaVocab
 		public String label, descr;
 	}
 	private StoredTerm[] termList;
-	private Map<String, Integer> termLookup = new HashMap<>();
+	private Map<String, Integer> termLookup = new HashMap<>(); // uri-to-index into termList
 
 	public final static class StoredTree
 	{
@@ -42,7 +42,6 @@ public class SchemaVocab
 		public SchemaTree tree;
 	}
 	private List<StoredTree> treeList = new ArrayList<>();
-	// !! tree map, too
 		
 	private final String SEP = "::";
 
