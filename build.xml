@@ -51,6 +51,7 @@
 			<exclude name="com/cdd/bao/*.java" />
 			<exclude name="com/cdd/bao/util/Lineup.java" />
 			<exclude name="com/cdd/bao/util/RowLine.java" />
+			<exclude name="com/cdd/bao/util/UtilGUI.java" />
 			<classpath refid="project.class.path" />
 		</javac>
 		<copy file="cfg/log4j.properties" todir="bin" />

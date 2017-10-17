@@ -27,7 +27,6 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.net.*;
-import javafx.scene.control.*;
 
 /*
  * Static utilities to make life a little bit easier.
@@ -1047,30 +1046,6 @@ public class Util
 		return istr;
 	}
 	
-	
-	/**
-	 * Displays a helpful informational message.
-	 */	
-	public static void informMessage(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(msg);
-		alert.showAndWait();
-	}
-	
-	/**
-	 * Displays a message with warning theme.
-	 */
-	public static void informWarning(String title, String msg)
-	{
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(msg);
-		alert.showAndWait();
-	}
 	
 	/**
 	 * Increments the value corresponding to a mapped key: if the value does not currently exist or is null, will set it to 1.
