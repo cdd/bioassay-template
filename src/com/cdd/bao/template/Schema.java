@@ -56,6 +56,7 @@ public class Schema
 			this.name = name == null ? "" : name;
 			this.groupURI = groupURI == null ? "" : groupURI;
 		}
+		@Override
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
@@ -71,11 +72,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !groupURI.equals(other.groupURI)) return false;
-			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
-			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
-			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
-			return true;
+			return (name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
+					assignments.equals(other.assignments) && subGroups.equals(other.subGroups));
 		}
 		
 		@Override
@@ -83,7 +81,7 @@ public class Schema
 		{
 			return Objects.hash(name, descr, groupURI, assignments, subGroups);
 		}
-				
+
 		// returns a list of group URIs leading up to (but not including) this one, which can be used to disambiguate beyond just the propURI
 		public String[] groupNest()
 		{
@@ -173,11 +171,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Assignment other = (Assignment)o;
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
-			if (suggestions != other.suggestions) return false;
-			if (values.size() != other.values.size()) return false;
-			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
-			return true;
+			return (name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
+					suggestions == other.suggestions && values.equals(other.values));
 		}
 
 		@Override
@@ -286,6 +281,7 @@ public class Schema
 		{
 			this.name = name == null ? "" : name;
 		}
+		@Override
 		public Assay clone()
 		{
 			Assay dup = new Assay(name);
@@ -301,7 +297,7 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Assay other = (Assay)o;
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
+			if (!(name.equals(other.name) && descr.equals(other.descr) && para.equals(other.para) && originURI.equals(other.originURI))) return false;
 			if (annotations.size() != other.annotations.size()) return false;
 
 			// doesn't work: sort order is random 
@@ -315,7 +311,7 @@ public class Schema
 		@Override
 		public int hashCode()
 		{
-			return Objects.hash(name, descr, para, originURI, annotations);
+			return Objects.hash(name, descr, para, originURI, new HashSet<>(annotations));
 		}
 	}
 	
@@ -339,10 +335,10 @@ public class Schema
 			this.assn = linearBranch(assn);
 			this.literal = literal;
 		}
+		@Override
 		public Annotation clone()
 		{
-			Annotation dup = value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
-			return dup;
+			return value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
 		}
 		
 		@Override
@@ -351,6 +347,8 @@ public class Schema
 			if (o == null || getClass() != o.getClass()) return false;
 			
 			Annotation other = (Annotation)o;
+			// handle the case where one of the assn is null
+			if (assn == null || other.assn == null) return assn == other.assn;
 			if (!assn.equals(other.assn)) return false;
 			
 			Group p1 = assn.parent, p2 = other.assn.parent;
@@ -363,15 +361,19 @@ public class Schema
 				p2 = p2.parent;
 			}
 			
-			if (value == null && other.value == null) return literal.equals(other.literal);
-			else if (value != null && other.value == null) return false;
-			else if (value == null && other.value != null) return false;
+			if (value == null)
+			{
+				if (other.value == null) return literal.equals(other.literal);
+				return false;
+			}
+			if (other.value == null) return false;
 			return value.equals(other.value);
 		}
 		
 		@Override
 		public int hashCode()
 		{
+			if (assn == null) return Objects.hash(null, null, null, value, literal);
 			return Objects.hash(assn, assn.parent, assn.name, value, literal);
 		}
 		
@@ -448,6 +450,7 @@ public class Schema
 	}
 	
 	// makes a deep copy of the schema content
+	@Override
 	public Schema clone()
 	{
 		Schema dup = new Schema();
