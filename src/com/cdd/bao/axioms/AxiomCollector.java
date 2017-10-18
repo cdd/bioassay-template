@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.jsonldjava.core.RDFDataset.Node;
 
 
 public class AxiomCollector {
@@ -36,12 +37,19 @@ public class AxiomCollector {
 				 "http://www.bioassayontology.org/bao#BAO_0000019",
 				 "http://www.bioassayontology.org/bao#BAO_0000029"};
 	
-   public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
+    public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
 	
 	public static Map<String, String> uriToLabel = ScanAxioms.uriToLabel;
 	
 	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
 	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
+	
+	public static ArrayList<AssayAxiomsAll> nonRedundantAxiomsForAll = new ArrayList<AssayAxiomsAll>();
+	public static ArrayList<AssayAxiomsSome> nonRedundantAxiomsForSome = new ArrayList<AssayAxiomsSome>();
+	public static HashMap someAxiomsMap = new HashMap<String, AssayAxiomsSome>();
+	public static HashMap allAxiomsMap = new HashMap<String, AssayAxiomsAll>();
+	public static HashMap axiomMap = new HashMap<String, ArrayList<String>>();
+	
 	
 	//Alright so axiom elimination is two parts in Alex's mind:
 	// first eliminate the URIs that are already in the common assay template
@@ -58,8 +66,9 @@ public class AxiomCollector {
 		public String predicateURI;
 		public String objectLabels;
 		public String objectURIs;	
+		public String[] uriArray;
 			
-		public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs){
+		public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs ){
 			this.classURI = cURI;
 			this.classLabel = cLabel;
 			this.axiomType = aType;
@@ -69,22 +78,76 @@ public class AxiomCollector {
 			this.objectURIs = oURIs;
 		}
 		
-		public AssayAxiomsAll(String cURI, String pURI, String oURIs, String aType){
+		 public String processURIArray(String[] uriArray){
+	        	
+				String uris = "";
+				uriArray = this.uriArray;
+				for(int i =0; i<uriArray.length; i++){
+					uris +=uriArray[i]+ "\t";
+					
+				}
+				       
+				return uris;
+			}
+	        
+	       public String labelsFromURIArray(String[] uriArray){
+	        	
+				String uris = "";
+				String labels ="";
+				uriArray = this.uriArray;
+				for(int i =0; i<uriArray.length; i++){
+					uris +=uriArray[i]+ "\t";
+					if(uriToLabel.get(uriArray[i]) != null)
+						labels += uriToLabel.get(uriArray[i]) + "\t";
+					
+				}
+				       
+				return labels;
+			}
+	       
+	       public static AssayAxioms generalizeOnlyAxiom (AssayAxiomsAll onlyAxiom){
+	   		
+	   		/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
+	   		    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
+	   		    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
+	   		    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
+	   		
+	   		AssayAxioms genAxiom = null;
+	   		
+	   		genAxiom = new AssayAxioms(onlyAxiom.getClassLabel(), onlyAxiom.getClassLabel(), onlyAxiom.getAxiomType(), 
+	   						           onlyAxiom.getPredicateLabel(), onlyAxiom.getPredicateURI(), onlyAxiom.getObjectLabels(), onlyAxiom.getObjectURIs());
+	   		
+	   		
+	   		return genAxiom;
+	   		
+	   		
+	   		
+	   	}
+		public AssayAxiomsAll(String cURI, String pURI, String oURIs, String aType, String[] uriArray){
 			this.classURI = cURI;
 			this.axiomType = aType;
 			this.predicateURI = pURI;
 			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
 		} 
 		
-		public String getClassURI(){
+		public String[] getURIArray()
+		{
+			return this.uriArray;
+		}
+
+		public String getClassURI()
+		{
 			return classURI;
 		}
-		
-		public String getClassLabel(){
+
+		public String getClassLabel()
+		{
 			return uriToLabel.get(this.classURI);
 		}
-		
-		public String getPredicateURI(){
+
+		public String getPredicateURI()
+		{
 			return predicateURI;
 		}
 		
@@ -143,7 +206,13 @@ public class AxiomCollector {
 		}
 		
 		
-		
+		public String toString(){
+			String axiomString = null;
+			axiomString = this.getClassURI() + " ; "+ this.getPredicateURI() + " ; "+ 
+		                       this.getObjectURIs() + " ; " + this.getAxiomType() + " . ";
+		                       
+			return axiomString;
+		}
 		
 	}
 	
@@ -206,6 +275,26 @@ public class AxiomCollector {
 		public String[] getURIArray(){
 			return this.uriArray;
 		}
+		
+		public static AssayAxioms generalizeSomeAxiom (AssayAxiomsSome someAxiom){
+			
+			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
+			    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
+			    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
+			    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
+			
+			AssayAxioms genAxiom = null;
+			
+			genAxiom = new AssayAxioms(someAxiom.getClassLabel(), someAxiom.getClassLabel(), someAxiom.getAxiomType(), 
+							           someAxiom.getPredicateLabel(), someAxiom.getPredicateURI(), someAxiom.getObjectLabels(), someAxiom.getObjectURIs());
+			
+			
+			return genAxiom;
+			
+			
+			
+		}
+		
 		
 		public String eliminateRedundantURIs(){
 			
@@ -274,6 +363,157 @@ public class AxiomCollector {
 			return this.axiomType;
 		}
 		
+		public String toString(){
+			String axiomString = null;
+			axiomString = this.getClassURI() + " ; "+ this.getPredicateURI() + " ; "+ 
+		                       this.getObjectURIs() + " ; " + this.getAxiomType() + " . ";
+		                       
+			return axiomString;
+		}
+		
+	}
+	
+	
+	public static final class AssayAxioms{
+		public String classURI;
+		public String classLabel;
+		public String axiomType;
+		public String predicateLabel;
+		public String predicateURI;
+		public String objectLabels;
+		public String objectURIs;	
+		public String[] uriArray;
+			
+		public AssayAxioms(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs ){
+			this.classURI = cURI;
+			this.classLabel = cLabel;
+			this.axiomType = aType;
+			this.predicateLabel = pLabel;
+			this.predicateURI = pURI;
+			this.objectLabels = oLabels;
+			this.objectURIs = oURIs;
+		}
+		
+		 public String processURIArray(String[] uriArray){
+	        	
+				String uris = "";
+				uriArray = this.uriArray;
+				for(int i =0; i<uriArray.length; i++){
+					uris +=uriArray[i]+ "\t";
+					
+				}
+				       
+				return uris;
+			}
+	        
+	       public String labelsFromURIArray(String[] uriArray){
+	        	
+				String uris = "";
+				String labels ="";
+				uriArray = this.uriArray;
+				for(int i =0; i<uriArray.length; i++){
+					uris +=uriArray[i]+ "\t";
+					if(uriToLabel.get(uriArray[i]) != null)
+						labels += uriToLabel.get(uriArray[i]) + "\t";
+					
+				}
+				       
+				return labels;
+			}
+		public AssayAxioms(String cURI, String pURI, String oURIs, String aType, String[] uriArray){
+			this.classURI = cURI;
+			this.axiomType = aType;
+			this.predicateURI = pURI;
+			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
+		} 
+		
+		public AssayAxioms(String cURI, String pURI, String oURIs, String[] uriArray){
+			this.classURI = cURI;
+			this.predicateURI = pURI;
+			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
+		} 
+		
+		public String[] getURIArray(){
+			return this.uriArray;
+		}
+		public String getClassURI(){
+			return classURI;
+		}
+		
+		public String getClassLabel(){
+			return uriToLabel.get(this.classURI);
+		}
+		
+		public String getPredicateURI(){
+			return predicateURI;
+		}
+		
+		public String getPredicateLabel(){
+			return uriToLabel.get(this.predicateURI);
+		}
+		
+		public String getObjectURIs(){
+			objectURIs = objectURIs.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(objectURIs);
+			if (matcher.find()) 
+			     this.objectURIs +=  matcher.group(1) +"\t";
+			
+			
+			return this.objectURIs;
+		}
+		public String eliminateRedundantURIs(){
+			
+			String currentURI = this.objectURIs;
+			
+			currentURI = currentURI.replaceAll("null", "");
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(currentURI);
+			while (matcher.find()) 
+				 currentURI =  matcher.group(1);
+			
+			
+			
+			 	 //String currentURI = this.objectURIs;
+			 	 
+			 	 if(Arrays.asList(redundantURIs).contains(currentURI))
+			 	 {	// System.out.println("told ya!");
+			 		 currentURI.replaceAll(currentURI, "");
+			 		 currentURI += "\t redundant axiom";
+			 	 }
+			 	 else
+			 		 currentURI = this.objectURIs;
+			       
+			return currentURI;
+		}
+		
+		public String getObjectLabels(){
+			
+			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+			Matcher matcher = pattern.matcher(objectURIs);
+			while (matcher.find()) 
+			     this.objectLabels +=  uriToLabel.get(matcher.group(1)) +"\t";
+			
+			objectLabels = objectLabels.replaceAll("null", "");
+			return this.objectLabels;		
+		}
+		
+		public String getAxiomType(){
+			return this.axiomType;
+		}
+		
+		public String toString(){
+			String axiomString = null;
+			axiomString = this.getClassURI() + " ; "+ this.getPredicateURI() + " ; "+ 
+		                       this.getObjectURIs() + " ; " + this.getAxiomType() + " . ";
+		                       
+			return axiomString;
+		}
+		
+		
+		
 	}
 	
 	
@@ -317,9 +557,15 @@ public class AxiomCollector {
 					json.put("classLabel", axiom.getClassLabel());
 					json.put("predicateURI", axiom.getPredicateURI());
 					json.put("predicateLabel", axiom.getPredicateLabel());
-					json.put("objectURI", axiom.eliminateRedundantURIs());
-					json.put("objectLabels", axiom.getObjectLabels());
+					//json.put("objectURI", axiom.eliminateRedundantURIs());
+					//json.put("objectLabels", axiom.getObjectLabels());
+					json.put("objectURIs", axiom.processURIArray(axiom.getURIArray()));
+					json.put("objectLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
 					json.put("axiomType", axiom.getAxiomType());
+					//public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType,String[] uriArray)
+					nonRedundantAxiomsForAll.add(new AssayAxiomsAll (axiom.getClassURI(), axiom.getPredicateURI(), 
+							                       axiom.getObjectURIs(), axiom.getAxiomType(),
+							                       axiom.getURIArray()));
 					
 					jsonFinal.put( json );
 				 }	
@@ -357,14 +603,17 @@ public class AxiomCollector {
 					json.put("classLabel", axiom.getClassLabel());
 					json.put("predicateURI", axiom.getPredicateURI());
 					json.put("predicateLabel", axiom.getPredicateLabel());
-					json.put("objectURI", axiom.eliminateRedundantURIs());
-					json.put("objectLabels", axiom.getObjectLabels());
+					json.put("objectURIs", axiom.processURIArray(axiom.getURIArray()));
+					json.put("objectLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
+					//json.put("objectURI", axiom.eliminateRedundantURIs());
+					//json.put("objectLabels", axiom.getObjectLabels());
 					json.put("axiomType", axiom.getAxiomType());
-					json.put("arrayURIs", axiom.processURIArray(axiom.getURIArray()));
-					json.put("arrayLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
+					nonRedundantAxiomsForSome.add(new AssayAxiomsSome (axiom.getClassURI(), axiom.getPredicateURI(), 
+		                       axiom.getObjectURIs(), axiom.getAxiomType(),
+		                       axiom.getURIArray()));
 					
 					jsonFinal.put( json );
-				 }	
+				 }
 					
 				
 			}catch(Exception e){
@@ -384,6 +633,406 @@ public class AxiomCollector {
 		
 	}
 	
+	
+	
+  
+	
+	 public void mergeAxiomMaps() {
+		    Map< AssayAxioms, String> mapClass2Axioms = new HashMap< AssayAxioms, String>();
+		    Map<AssayAxiomsAll,String> mapAll = new HashMap<AssayAxiomsAll,String>();
+		    Map<AssayAxiomsSome, String> mapSome = new HashMap<AssayAxiomsSome, String>();
+		    
+		    for(AssayAxiomsSome axiom : axiomsForSome){
+		    	mapSome.put(axiom, axiom.getClassURI());
+		    	mapClass2Axioms.put(axiom.generalizeSomeAxiom(axiom), axiom.getClassURI());
+		    	System.out.println("Class Label " + axiom.getClassLabel() + "Axiom Some String " + axiom.toString() + "Size of Map: "+ mapSome.size());
+		    }
+		    
+		    for(AssayAxiomsAll axiom : axiomsForAll){
+		    	mapAll.put(axiom, axiom.getClassURI());
+		    	mapClass2Axioms.put(axiom.generalizeOnlyAxiom(axiom), axiom.getClassURI());
+		    	System.out.println("Class Label " + axiom.getClassLabel() + "Axiom All String " + axiom.toString()  + "Size of Map: "+ mapAll.size());
+		    }
+		    
+		    
+		    
+	  /*ArrayList<AssayAxioms> validAxiomsInBAO = new ArrayList<AssayAxioms>();
+	  
+		    
+		    Set<String> valueSet = null;
+		    valueSet.retainAll(mapSome.values());
+		    valueSet.retainAll(mapAll.values());
+		    
+		    for (String classURI :valueSet){
+		    	if(mapSome.containsValue(classURI)){
+		    		
+		    		AssayAxioms newAxiom = new AssayAxioms()
+		    		mapClass2Axioms.put(axiomsForSome., value)
+		    		
+		    	}
+		    	mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
+		    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
+		    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
+		    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);
+		    	
+		    }*/
+		    
+		    System.out.println("Map Class To axioms Map : \n"+mapSome);
+		    System.out.println("Map Class To axioms Map : \n"+mapAll);
+		    System.out.println("Map Class To axioms Map : \n"+mapClass2Axioms);
+		    System.out.println("Size of Axioms for Some : " + axiomsForSome.size());
+		    System.out.println("Size of Axioms for All : " + axiomsForAll.size());
+		    System.out.println("Size of Some Map "  +  mapSome.size()); 
+		    System.out.println("Size of All Map "  +  mapAll.size());
+		    System.out.println("Size of Merged Map "  +  mapClass2Axioms.size());
+		    
+	 }
+	 /*public static <AssayAxioms, String> Set<AssayAxioms> getKeysByValue(Map<AssayAxioms, String> map, String value) {
+		    Set<AssayAxioms> keys = new Set<AssayAxioms>();
+		    for (Entry<AssayAxioms, String> entry : map.entrySet()) {
+		        if (Object.equals(value, entry.getValue())) {
+		            keys.add(entry.getKey());
+		        }
+		    }
+		    return keys;
+		}*/
+	
+	
+	public static void collectAxiomsList(){
+		for(AssayAxiomsSome axiom : nonRedundantAxiomsForSome){
+			axiomMap.put(axiom.getClassURI(), axiom.getURIArray());
+		}
+	}
+	
+	public static void findAllAxiomsOfAssay() throws IOException{
+		JSONArray fileArray = new JSONArray();
+		for( AssayAxiomsAll axiom : nonRedundantAxiomsForAll)
+		{
+			fileArray.put(findAllAxiomsOfAssay(axiom.getClassURI()));
+		}
+		try {
+			axiomJSONWriter("AllAxiomsPerClass.json",fileArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static JSONArray findAllAxiomsOfAssay(String uri) throws IOException{
+		//in this method I want to use the two arraylists of nonRedundantAxioms and put the axioms per class together.
+		JSONArray fileArray = new JSONArray();
+		for( AssayAxiomsAll axiom : nonRedundantAxiomsForAll)
+		{
+			JSONArray jsonFinal = new JSONArray();
+			for(AssayAxiomsSome axiomSome : nonRedundantAxiomsForSome){
+				if((axiom.getClassURI()).equals(axiomSome.getClassURI())){
+					
+					 JSONObject json = new JSONObject();
+						try
+						{	
+							
+							if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+							
+								//JSONObject obj = new JSONObject();
+								json.put("classURI", axiom.getClassURI() );
+								json.put("classLabel", axiom.getClassLabel());
+								json.put("predicateURI", axiom.getPredicateURI());
+								json.put("predicateLabel", axiom.getPredicateLabel());
+								json.put("predicateURI_forSome", axiomSome.getPredicateURI());
+							//	json.put("predicateLabel_forSome", axiomSome.getPredicateLabel());
+							//	json.put("objectURIs_forSomeAxioms", axiomSome.processURIArray(axiomSome.getURIArray()));
+							//	json.put("objectLabels_forSomeAxioms", axiomSome.labelsFromURIArray(axiomSome.getURIArray()));
+								json.put("objectURIs", axiom.processURIArray(axiom.getURIArray()));
+								json.put("objectLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
+								//json.put("axiomType", axiom.getAxiomType());
+								//if one of my objects is a sub class of assay method, 
+								//I want to carry its axioms to the assay level as well for this exercise.
+								//actually it doesn't have to be assay method
+								//if I have further axioms connected to my object URIs, I want them to 
+								//connect to my assay json object.
+								//if(Arrays.asList(axiomSome.getURIArray()).contains("http://www.bioassayontology.org/bao#BAO_0003028")){
+								
+								String[] forSomeObjURIs = axiomSome.getURIArray();
+								ArrayList forSomeObjURIsList = new ArrayList(Arrays.asList(forSomeObjURIs));									for(int i = 0; i< forSomeObjURIs.length; i++){
+										if(nonRedundantAxiomsForSome.contains(forSomeObjURIs[i])){//this is one of the obj URIs
+											findAllAxiomsOfAssay(forSomeObjURIs[i]);
+										}
+								
+								}
+							
+								
+								jsonFinal.put( json );
+							 }	
+								fileArray.put(jsonFinal);
+							
+						}catch(Exception e){
+							System.out.println("you failed to generate the JSON!");
+						}
+						
+					
+				}
+			}
+			
+		}
+		
+		return fileArray;
+		
+	}
+	public static HashMap<String,AssayAxiomsAll> createAxiomAllMap(){
+		//HashMap allAxiomsMap = new HashMap<String, AssayAxiomsAll>();
+		Bag allBag = new Bag();
+		for( AssayAxiomsAll axiom : nonRedundantAxiomsForAll)
+			
+		{
+			if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				allAxiomsMap.put(axiom.getClassURI()+axiom.getPredicateURI(), axiom);
+				allBag.put(axiom.getClassURI(), axiom);
+			}
+			
+		}
+		return allAxiomsMap;
+	}
+	public static HashMap<String, AssayAxiomsSome> createAxiomSomeMap(){
+		//HashMap someAxiomsMap = new HashMap<String, AssayAxiomsSome>();
+		Bag someBag = new Bag();
+		
+		for( AssayAxiomsSome axiom : nonRedundantAxiomsForSome)
+			
+		{
+			if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				someAxiomsMap.put(axiom.getClassURI()+axiom.getPredicateURI(), axiom);
+				someBag.put(axiom.getClassURI(), axiom);
+			}
+			
+		}
+		return  someAxiomsMap;
+		
+	}
+	
+	/*public static Bag createAxiomAllMap(){
+		HashMap allAxiomsMap = new HashMap<String, AssayAxiomsAll>();
+		Bag allBag = new Bag();
+		for( AssayAxiomsAll axiom : nonRedundantAxiomsForAll)
+			
+		{
+			if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				allAxiomsMap.put(axiom.getClassURI()+axiom.getPredicateURI(), axiom);
+				allBag.put(axiom.getClassURI(), axiom);
+			}
+			
+		}
+		return allBag;
+	}
+	public static Bag createAxiomSomeMap(){
+		HashMap someAxiomsMap = new HashMap<String, AssayAxiomsSome>();
+		Bag someBag = new Bag();
+		
+		for( AssayAxiomsSome axiom : nonRedundantAxiomsForSome)
+			
+		{
+			if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+				someAxiomsMap.put(axiom.getClassURI()+axiom.getPredicateURI(), axiom);
+				someBag.put(axiom.getClassURI(), axiom);
+			}
+			
+		}
+		return  someBag;
+		
+	}*/
+	public static void createAllAxiomsPerURI() throws IOException{
+		HashMap <String, AssayAxiomsSome> someAxiomsMap = createAxiomSomeMap();
+    	HashMap <String, AssayAxiomsAll> allAxiomsMap = createAxiomAllMap();
+	//	Bag someAxiomsMap = createAxiomSomeMap();
+		//Bag allAxiomsMap = createAxiomAllMap();
+    	JSONArray jsonFinal = new JSONArray();
+
+		for(String uri: someAxiomsMap.keySet()){
+			String uriSome = uri;
+			AssayAxiomsSome axiomSome = someAxiomsMap.get(uri);
+			for(String uri2 : allAxiomsMap.keySet()){
+				AssayAxiomsAll axiomAll = allAxiomsMap.get(uri2);
+				if((uri2).contains(axiomSome.getClassURI())){
+					
+					 JSONObject json = new JSONObject();
+						try
+						{	
+							
+							
+								//JSONObject obj = new JSONObject();
+								json.put("classURI", axiomSome.getClassURI() );
+								json.put("classLabel", axiomSome.getClassLabel());
+								json.put("predicateURI_some", axiomSome.getPredicateURI());
+								json.put("predicateLabel_some", axiomSome.getPredicateLabel());
+								json.put("objectURIs_some", axiomSome.processURIArray(axiomSome.getURIArray()));
+								json.put("objectLabels_some", axiomSome.labelsFromURIArray(axiomSome.getURIArray()));
+								json.put("predicateURI_all", axiomAll.getPredicateURI());
+								json.put("predicateLabel_all", axiomAll.getPredicateLabel());
+								json.put("objectURIs_all", axiomAll.processURIArray(axiomAll.getURIArray()));
+								json.put("objectLabels_all", axiomAll.labelsFromURIArray(axiomAll.getURIArray()));
+								
+								//public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType,String[] uriArray)
+								
+								jsonFinal.put( json );	
+							
+						}catch(Exception e){
+							System.out.println("you failed to generate the JSON!");
+						}
+					 
+				    }
+				}
+			}
+					
+					try {
+						axiomJSONWriter("allFromMap.json",jsonFinal);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}			
+			
+		}
+	public static void createMethodAxiomsPerURI() throws IOException{
+		HashMap <String, AssayAxiomsSome> someAxiomsMap = createAxiomSomeMap();
+    	HashMap <String, AssayAxiomsAll> allAxiomsMap = createAxiomAllMap();
+	//	Bag someAxiomsMap = createAxiomSomeMap();
+		//Bag allAxiomsMap = createAxiomAllMap();
+    	JSONArray jsonFinal = new JSONArray();
+    	
+		for(String uri: someAxiomsMap.keySet()){
+			String uriSome = uri;
+			AssayAxiomsSome axiomSome = someAxiomsMap.get(uri);
+			
+			for(String uri2 : allAxiomsMap.keySet()){
+				AssayAxiomsAll axiomAll = allAxiomsMap.get(uri2);
+				if((uri2).contains(axiomSome.getClassURI())){
+					
+					 JSONObject json = new JSONObject();
+						try
+						{	
+							
+							
+								//JSONObject obj = new JSONObject();
+								json.put("classURI", axiomSome.getClassURI() );
+								json.put("classLabel", axiomSome.getClassLabel());
+								json.put("predicateURI_some", axiomSome.getPredicateURI());
+								json.put("predicateLabel_some", axiomSome.getPredicateLabel());
+								json.put("objectURIs_some", axiomSome.processURIArray(axiomSome.getURIArray()));
+								json.put("objectLabels_some", axiomSome.labelsFromURIArray(axiomSome.getURIArray()));
+								json.put("predicateURI_all", axiomAll.getPredicateURI());
+								json.put("predicateLabel_all", axiomAll.getPredicateLabel());
+								json.put("objectURIs_all", axiomAll.processURIArray(axiomAll.getURIArray()));
+								json.put("objectLabels_all", axiomAll.labelsFromURIArray(axiomAll.getURIArray()));
+								String objLabel = axiomSome.labelsFromURIArray(axiomSome.getURIArray());
+								
+								if((axiomSome.getPredicateURI()).equals("http://www.bioassayontology.org/bao#BAO_0000205")){
+									String objURI =  axiomSome.processURIArray(axiomSome.getURIArray());
+									//String assayMethod = "http://www.bioassayontology.org/bao#BAO_0000205";
+									for(String uri3 : someAxiomsMap.keySet()){
+										AssayAxiomsSome methodAxiom = someAxiomsMap.get(uri3);
+										if((uri3).contains(objURI)){
+						            System.out.println(""+objURI);
+									json.put("methodLabel", methodAxiom.getClassLabel());								
+									json.put("methodAxiom_predicateURI", methodAxiom.getPredicateURI());
+									json.put("methodAxiom_predicateLabel", methodAxiom.getPredicateLabel());
+									json.put("methodAxiom_ObjectURIs", methodAxiom.processURIArray(axiomSome.getURIArray()));
+									json.put("methodAxioms_ObjectLabels_some", methodAxiom.labelsFromURIArray(axiomSome.getURIArray()));
+										}}
+								}
+								
+								//public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType,String[] uriArray)
+								
+								jsonFinal.put( json );	
+							
+						}catch(Exception e){
+							System.out.println("you failed to generate the JSON!");
+						}
+					 
+				    }
+				}
+			}
+					
+					try {
+						axiomJSONWriter("allFromMapMethod.json",jsonFinal);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}			
+			
+		}
+		
+//		for( AssayAxiomsSome axiom : nonRedundantAxiomsForSome)
+//			
+//		{
+//			
+//			if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+//				for(String key : someAxiomsMap){
+//					axiom.getClassURI()+axiom.getPredicateURI();
+//					
+//				}
+//				
+//			}
+//			
+//		}
+	
+	
+	
+	public static void minAllAxiomsOfAssay() throws IOException{
+		//in this method I want to use the two arraylists of nonRedundantAxioms and put the axioms per class together.
+		//I need some kind of a hashmap here to keep
+		//assay URI ---> objectURIs for only, objectURIs for some
+		//and then create the json from the hashmap
+		JSONArray fileArray = new JSONArray();
+		for( AssayAxiomsAll axiom : nonRedundantAxiomsForAll)
+		{
+			JSONArray jsonFinal = new JSONArray();
+			for(AssayAxiomsSome axiomSome : nonRedundantAxiomsForSome){
+				if((axiom.getClassURI()).equals(axiomSome.getClassURI())){
+					
+					 JSONObject json = new JSONObject();
+						try
+						{	
+							
+							if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom"))){
+							
+								//JSONObject obj = new JSONObject();
+								json.put("classURI", axiom.getClassURI() );
+								json.put("classLabel", axiom.getClassLabel());
+								json.put("predicateURI", axiom.getPredicateURI());
+								json.put("predicateLabel", axiom.getPredicateLabel());
+								json.put("predicateURI_forSome", axiomSome.getPredicateURI());
+								json.put("predicateLabel_forSome", axiomSome.getPredicateLabel());
+								json.put("objectURIs_forSomeAxioms", axiomSome.processURIArray(axiomSome.getURIArray()));
+								json.put("objectLabels_forSomeAxioms", axiomSome.labelsFromURIArray(axiomSome.getURIArray()));
+								json.put("objectURIs_forOnlyAxioms", axiom.processURIArray(axiom.getURIArray()));
+								json.put("objectLabels_forOnlyAxioms", axiom.labelsFromURIArray(axiom.getURIArray()));
+								//json.put("axiomType", axiom.getAxiomType());
+								//if one of my objects is a sub class of assay method, 
+								//I want to carry its axioms to the assay level as well for this exercise.
+								//actually it doesn't have to be assay method
+								//if I have further axioms connected to my object URIs, I want them to 
+								//connect to my assay json object.
+								//if(Arrays.asList(axiomSome.getURIArray()).contains("http://www.bioassayontology.org/bao#BAO_0003028")){
+								
+								jsonFinal.put( json );
+							 }	
+								fileArray.put(jsonFinal);
+							
+						}catch(Exception e){
+							System.out.println("you failed to generate the JSON!");
+						}
+						
+					
+				}
+			}
+			
+		}
+		try {
+			axiomJSONWriter("AllAxiomsPerClass.json",fileArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public static void axiomJSONWriter(String fileName, JSONArray obj) throws IOException, JSONException{
 		FileWriter axiomJSON = new FileWriter(fileName);

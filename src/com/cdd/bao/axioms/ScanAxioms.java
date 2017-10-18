@@ -233,12 +233,17 @@ public class ScanAxioms
 						if (sequence.length == 0) val += "{nothing}";
 						String objectURIs = null;
 						String objectLabels = null;
+						String[] uriArray = new String[sequence.length];
 						for (int n = 0; n < sequence.length; n++) {
 							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+							objectURIs += "[" + sequence[n] + "]";
+							objectLabels += "[" + nameNode(sequence[n]) + "]";	
+							uriArray[n] = ""+sequence[n];
 							
-								objectURIs += "[" + sequence[n] + "]";
-							    objectLabels += "[" + nameNode(sequence[n]) + "]";	
-							 
+								//here I want to add all the subclasses for 
+								//OntClass v as well in order to do better suggestions for the
+								//axiom backed up suggestions for [property, value (and its subclasses)]
+							   
 							
 						}
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
@@ -251,8 +256,9 @@ public class ScanAxioms
 						
 						
 						
+						
 						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only"));
+						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only",uriArray));
 						
 						
 						//o.URI --> class URI
@@ -336,6 +342,144 @@ public class ScanAxioms
 					}
 				}
 			}
+			
+			for (Iterator<OntClass> i = o.listEquivalentClasses(); i.hasNext();)
+			{
+				OntClass c = i.next();
+				/*for (Iterator<OntClass> i = o.listSuperClasses(); i.hasNext();)
+			{
+				OntClass c = i.next();
+				
+				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
+				{
+					Restriction r = c.asRestriction(); //restriction == axiom
+					if (r.isAllValuesFromRestriction()) // only axioms
+					{ */
+				
+				if (c.isIntersectionClass()) //go over each axiom of a particular class and put the class and axioms to the bag
+				{
+					Restriction r = c.asRestriction(); //restriction == axiom
+					if (r.isAllValuesFromRestriction()) // only axioms
+					{ 
+						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
+						OntProperty p = (OntProperty)av.getOnProperty();
+						String pname = nameNode(p);
+						OntClass v = (OntClass)av.getAllValuesFrom();
+
+						Resource[] sequence = expandSequence(v);
+						boolean anySchema = false;
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI())) {anySchema = true; break;}
+						if (!anySchema) continue;
+						
+						String key = nameNode(o);
+						String val = "ALL: property=[" + pname + "] value=";
+						if (sequence.length == 0) val += "{nothing}";
+						String objectURIs = null;
+						String objectLabels = null;
+						String[] uriArray = new String[sequence.length];
+						for (int n = 0; n < sequence.length; n++) {
+							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+							objectURIs += "[" + sequence[n] + "]";
+							objectLabels += "[" + nameNode(sequence[n]) + "]";	
+							uriArray[n] = ""+sequence[n];
+						}
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
+						forAllCounter++;
+						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
+						
+						
+						
+						
+						
+						
+						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
+						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only",uriArray));
+						
+						
+						//o.URI --> class URI
+						//p.URI --> property URI
+						//val --> for(n<sequence.length) sequence[n] -->objectURI
+						
+					}
+					
+					else if (r.isSomeValuesFromRestriction())
+					{
+						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
+						OntProperty p = (OntProperty)av.getOnProperty();
+						String pname = nameNode(p);
+						OntClass v = (OntClass)av.getSomeValuesFrom();
+
+						Resource[] sequence = expandSequence(v);
+						boolean anySchema = false;
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI())) {anySchema = true; break;}
+						if (!anySchema) continue;
+
+						String key = nameNode(o);
+						String val = "SOME: property=[" + pname + "] value=";
+						if (sequence.length == 0) val += "{nothing}";
+						String objectURIs = null;
+						String objectLabels = null;
+						String[] uriArray = new String[sequence.length];
+						for (int n = 0; n < sequence.length; n++) {
+							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+							objectURIs += "[" + sequence[n] + "]";
+							objectLabels += "[" + nameNode(sequence[n]) + "]";	
+							uriArray[n] = ""+sequence[n];
+						}
+						for (int n = 0; n < sequence.length; n++) val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
+
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
+						forSomeCounter++;
+						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
+						if(!(Arrays.asList(redundantURIs).contains(o.getURI())))
+							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
+							//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
+					}
+					else if (r.isMaxCardinalityRestriction())
+					{
+						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
+						OntProperty p = (OntProperty)av.getOnProperty();
+						String pname = nameNode(p);
+						int maximum = av.getMaxCardinality();
+						
+						String key = nameNode(o);
+						String val = "MAX: property=[" + pname + "] maximum=" + maximum;
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
+						maxCardinalityCounter++;
+						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+					}
+					else if (r.isMinCardinalityRestriction())
+					{
+						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
+						OntProperty p = (OntProperty)av.getOnProperty();
+						String pname = nameNode(p);
+						int minimum = av.getMinCardinality();
+
+						String key = nameNode(o);
+						String val = "MIN: property=[" + pname + "] minimum=" + minimum;
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
+						minCardinalityCounter++;
+						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+					}
+					else if (r.isCardinalityRestriction())
+					{
+						CardinalityRestriction av = r.asCardinalityRestriction();
+						OntProperty p = (OntProperty)av.getOnProperty();
+						String pname = nameNode(p);
+						int cardinality = av.getCardinality();
+
+						String key = nameNode(o);
+						String val = "EQ: property=[" + pname + "] cardinality=" + cardinality;
+						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
+						cardinalityCounter++;
+						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+					}
+				}
+			}
+			
+			
 			
 			long timeNow = new Date().getTime();
 			if (timeNow > timeThen + 2000) {Util.writeln("    so far: " + axioms.size()); timeThen = timeNow;}

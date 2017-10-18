@@ -25,9 +25,14 @@ import java.util.*;
 import java.io.*;
 
 import org.apache.commons.lang3.*;
+import org.apache.jena.ontology.OntologyException;
+import org.json.JSONException;
 
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.axioms.AxiomCollector;
+import com.cdd.bao.axioms.GetOntologyDetails;
+import com.cdd.bao.axioms.ScanAxioms;
 import com.cdd.bao.editor.*;
 
 /*
@@ -93,6 +98,37 @@ public class Main
 			Util.writeln("Unknown option '" + argv[0] + "'");
 			printHelp();
 		}
+		
+		GetOntologyDetails g = new GetOntologyDetails();
+		g.ontologyReader();
+		
+		ScanAxioms s = new ScanAxioms();
+		try {
+			s.exec();
+		} catch (OntologyException | JSONException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		AxiomCollector ac;
+		ac = new AxiomCollector();
+		ac.mergeAxiomMaps();
+		try {
+			AxiomCollector.serialiseAxiom();
+			AxiomCollector.serialiseAxiomSome();
+			//AxiomCollector.findAllAxiomsOfAssay();
+			//AxiomCollector.minAllAxiomsOfAssay();
+			AxiomCollector.createAllAxiomsPerURI();
+			AxiomCollector.createMethodAxiomsPerURI();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ac.mergeAxiomMaps();
+		
+		
+		
+		
 	}
 	
 	public static void printHelp()
