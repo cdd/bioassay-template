@@ -1,0 +1,341 @@
+# provisional additions to the ontologies that are used by the BioAssay Express: each of these terms should
+# be considered long term temporary, i.e. it should eventually find a home within the appropriate official
+# ontology (BAO, DTO, CLO, GO, etc.) and all references to it should be updated to point to the new term
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix bae:   <http://www.bioassayexpress.org/bae#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+bae:BAE_0000001
+  rdfs:label "viral titer assay" ;
+  rdfs:subClassOf bao:BAO_0000015 ;
+  obo:IAO_0000115 "A titer (or titre) is a measure of concentration. A viral titer assay is any method to quantify the number of viruses in a specific volume. Common methods include a plaque formation assay (PFA), focus forming assay (FFA), which yield results of plaque or focus forming units per ml (pfu or ffu/ ml), or endpoint dilution assay (TCID50, which measures the amount of virus needed to kill 50% 0of infected hosts or cells). TCID50 and pfu/ml results are not equivalent." 
+  .
+
+bae:BAE_0000002
+  rdfs:label "Am2.2-beta2AR cell" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to the extracellular N-terminus of the human β2AR gene  (thus, 'AM2.2-beta2AR'). See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000003
+  rdfs:label "Ebola virus" ;
+  rdfs:subClassOf bao:BAO_0000232 ;
+  .
+
+bae:BAE_0000004
+  rdfs:label "Am2.2-beta2AR/MG13-CCR5 dual cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing both the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to the extracellular N-terminus of the human β2AR (AM2.2-beta2AR) and the surface displayed fusion protein of FAP MG13 to the extracellular N-terminus of the murine CCR5 . See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000005
+  rdfs:label "MG13-mCCRF cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) MG13 to the extracellular N-terminus of murine CCRF. See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000006
+  rdfs:label "AM2.2-GPR32 cells" ;
+  rdfs:subClassOf bao:BAO_0003048 ;
+  obo:IAO_0000115 "U937 cells stably transfected with and expressing the surface displayed fusion protein of FAP (fluorogen activating protein) AM2.2 to GPR32. See PMCID: PMC3621705"
+  .
+
+bae:BAE_0000007
+  rdfs:label "beta-arrestin clustering (aka 'Transfluor') assay" ;
+  rdfs:subClassOf bao:BAO_0000248;
+  obo:IAO_0000115 "The Transfluor assay employs a a beta-arrestin-GFP fusion protein to detect activation of GPCRs: Upon ligand binding the GPCR, cytosolic arrestin-GFP quickly translocates to the cell membrane and then to endocytic vesicles, where it 'clusters' and can be detected by fluorescent image analysis. (Developed / commercialized by Norak, then Molecular Devices)"
+  .
+
+bae:BAE_0000008
+  rdfs:label "DNA-small molecule interaction assay" ;
+  rdfs:subClassOf bao:BAO_0002989 ;
+  obo:IAO_0000115 "An interaction between DNA (single- or double-stranded) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
+
+bae:BAE_0000009
+  rdfs:label "RNA-small molecule interaction assay" ;
+  rdfs:subClassOf bao:BAO_0002989 ;
+  obo:IAO_0000115 "An interaction between any RNA (such as mRNA, tRNA, rRNA, miRNA, lincRNA, synthetic RNA) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
+  
+bae:BAE_0000010
+  rdfs:label "protein profiling assay" ;
+  rdfs:subClassOf bao:BAO_0000015 ;
+  obo:IAO_0000115 "An interaction between any RNA (such as mRNA, tRNA, rRNA, miRNA, lincRNA, synthetic RNA) and a small molecule (e.g., hormone, organic compound with a low molecular weight (<800 Da))."
+  .
+    
+bae:BAE_0000011
+  rdfs:label "parallel artificial membrane permeability assay" ;
+  rdfs:subClassOf bao:BAO_0002182 ;
+  obo:IAO_0000115 "PAMPA (parallel artificial membrane permeability assay) is a method which determines the permeability of substances from a donor compartment, through a lipid-infused artificial membrane into an acceptor compartment. It is used as an in vitro model of passive, transcellular permeation to predict oral absorption. PAMPA is an alternative to the cell-based Caco-2 permeability assay: Caco-2 uses compartments of different volumes separated by a monolayer of cells grown on a filter. PAMPA, however, uses chambers of the same size, separated by a filter coated with lipid in organic solvent."
+  .
+
+bae:BAE_0000012
+  rdfs:label "SILAC" ;
+  rdfs:subClassOf bao:BAO_0040014 ;
+  obo:IAO_0000115 "SILAC (Stable Isotope Labeling by/with Amino acids in Cell culture) is a technique based on mass spectrometry that detects differences in protein abundance among samples using non-radioactive isotopic labeling. It is a popular method for quantitative proteomics."
+  .
+
+bae:BAE_0000013
+  rdfs:label "total cellular lipids format" ;
+  rdfs:subClassOf bao:BAO_0000220 ;
+  .
+
+#bae:BAE_0000014
+#  rdfs:label "threshold comparisons" ;
+#  rdfs:subClassOf bao:BAO_0002140 ;
+#  .
+
+#bae:BAE_0000015
+#  rdfs:label "greater than (>)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
+
+#bae:BAE_0000016
+#  rdfs:label "less than (<)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
+
+#bae:BAE_0000017
+#  rdfs:label "greater than or equal (≥)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
+
+#bae:BAE_0000018
+#  rdfs:label "less than or equal (≤)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
+
+#bae:BAE_0000019
+#  rdfs:label "equal to (=)" ;
+#  rdfs:subClassOf bae:BAE_0000014 ;
+#  .
+
+bae:BAE_0000020
+  rdfs:label "serum supplement" ;
+  obo:IAO_0000115 "Serum is the blood fraction remaining after the natural coagulation of blood, followed by centrifugation to remove any remaining red blood cells. Serum is thought to provide basic elements required for cell culture, including growth factors, attachment factors, iron transporters, vitamins, amino acids, lipids, carbohydrates, hormones, and trace elements. Fetal bovine serum (FBS), also called fetal calf serum (FCS), comes from the blood drawn from a bovine (cow) fetus via a closed system of collection at the slaughterhouse. FBS/FCS is the most widely used serum-supplement for the in vitro cell culture of eukaryotic cells. This is due to it having a very low level of antibodies and containing more growth factors, allowing for versatility in many different cell culture applications. Serum contains many factors that are not controlled for, which can have a direct or indirect effect on the cells in culture, thus creating significant variability between suppliers and lots from a single supplier. Different methods, such as heat inactivation or dialysis, are sometimes used to eliminate undesired components (such as labile growth factors, vitamins, etc. or the complement system). Some suppliers test serum for the presence of other factors such as tetracylcine or mycoplasma." ;
+  .
+
+bae:BAE_0000021
+  rdfs:label "0.1% Charcoal Dextran Stripped FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000022
+  rdfs:label "0.1% FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000023
+  rdfs:label "0.5% FBS (Dialyzed)" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000025
+  rdfs:label "1% FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000026
+  rdfs:label "10% FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000027
+  rdfs:label "10% FBS (Tet free)" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000028
+  rdfs:label "10% FBS (Dialyzed)" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000032
+  rdfs:label "10% heat-inactivated horse serum" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000033
+  rdfs:label "10% heat-inactivated FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000036
+  rdfs:label "100% warm FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000037
+  rdfs:label "20% FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000038
+  rdfs:label "FBS" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note:  Fetal bovine serum (FBS) is also called fetal calf serum (FCS)." ;
+  .
+
+bae:BAE_0000039
+  rdfs:label "1% FBS Charcoal Dextran treated" ;
+  rdfs:subClassOf bae:BAE_0000020 ;
+  obo:IAO_0000115 "Note: Fetal bovine serum (FBS) is also called fetal calf serum (FCS). Note: 'Charcoal Dextran treated' sometimes abbreviated as 'C/D'." ;
+  .
+
+bae:BAE_0000041
+  rdfs:label "IgG1" ;
+  rdfs:subClassOf bao:BAO_0002609 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000042
+  rdfs:label "IgG2" ;
+  rdfs:subClassOf bao:BAO_0002609 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000043
+  rdfs:label "125I" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000044
+  rdfs:label "Alexa Fluor" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000045
+  rdfs:label "Alexa488" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000046
+  rdfs:label "Alexa594" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000047
+  rdfs:label "Alexa647" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000048
+  rdfs:label "AMC" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "AMC is an abbreviation for 7-Amino-4-methylcoumarin, is a chromophore for enzyme substrates. A synonym is coumarin 120" ;
+  .
+
+bae:BAE_0000049
+  rdfs:label "calcium-3" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000050
+  rdfs:label "edans" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "EDANS (5-((2-Aminoethyl)amino)naphthalene-1-sulfonic acid) is a common donor for developing FRET-based nucleic acid probes and protease substrates. EDANS is often paired with DABCYL or DABSYL." ;
+  .
+
+bae:BAE_0000051
+  rdfs:label "Europium; APC" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000052
+  rdfs:label "FAM/TAMRA" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000053
+  rdfs:label "MCA" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "MCA is an abbreviation for methoxycoumarin, or 7-Methoxycoumarin-4-acetic acid, commonly used as a fluorescent label for peptides." ;
+  .
+
+bae:BAE_0000054
+  rdfs:label "MDC" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "MDC is an abbreviation for monodansyl cadaverine (aka dansylcadaverine), an autofluorescent dye commonly used to monitor autophagy" ;
+  .
+
+bae:BAE_0000055
+  rdfs:label "Ribogreen" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000056
+  rdfs:label "SYBR green" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000057
+  rdfs:label "TAM/DABCYL" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000058
+  rdfs:label "ThioGlo" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000059
+  rdfs:label "GFP tag" ;
+  rdfs:subClassOf bao:BAO_0000325 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000060
+  rdfs:label "biotin tag" ;
+  rdfs:subClassOf bao:BAO_0003043 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000061
+  rdfs:label "cells per well" ;
+  rdfs:subClassOf obo:UO_0000200 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000062
+  rdfs:label "endpoint correction present" ;
+  rdfs:subClassOf bao:BAO_0000419 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000063
+  rdfs:label "endpoint correction absent" ;
+  rdfs:subClassOf bao:BAO_0000419 ;
+  obo:IAO_0000115 "" ;
+  .
+
+

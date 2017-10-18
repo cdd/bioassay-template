@@ -48,26 +48,26 @@ public final class BrowseTreeCell extends TreeCell<BrowseEndpoint.Branch>
 {
 	// ------------ private data ------------	
 
-    public BrowseTreeCell()
-    {
-    }
- 
-    public void updateItem(BrowseEndpoint.Branch branch, boolean empty)
-    {
-        super.updateItem(branch, empty);
- 
-        if (empty)
-        {
-            setText(null);
-            setGraphic(null);
-        }
-        else 
-        {
-            if (isEditing()) 
-            {
-            }
-            else
-            {
+	public BrowseTreeCell()
+	{
+	}
+	
+	public void updateItem(BrowseEndpoint.Branch branch, boolean empty)
+	{
+		super.updateItem(branch, empty);
+		
+		if (empty)
+		{
+			setText(null);
+			setGraphic(null);
+		}
+		else 
+		{
+			if (isEditing()) 
+			{
+			}
+			else
+			{
 				String label = "?", style = "";
 				
 				if (branch.assay == null)
@@ -82,38 +82,38 @@ public final class BrowseTreeCell extends TreeCell<BrowseEndpoint.Branch>
 				}
 
 				setStyle(style);
-                setText(label);
-                setGraphic(getTreeItem().getGraphic());
-                setupContextMenu(branch);
-            }
-	    }
-    }
+				setText(label);
+				setGraphic(getTreeItem().getGraphic());
+				setupContextMenu(branch);
+			}
+		}
+	}
 
-    private void setupContextMenu(BrowseEndpoint.Branch branch)
-    {
-        ContextMenu ctx = new ContextMenu();
+	private void setupContextMenu(BrowseEndpoint.Branch branch)
+	{
+		ContextMenu ctx = new ContextMenu();
 
 		if (branch.schema != null && branch.assay == null)
 		{
-    		addMenu(ctx, "_Open").setOnAction(event -> branch.owner.actionOpen());
+			addMenu(ctx, "_Open").setOnAction(event -> branch.owner.actionOpen());
 		}
 		else if (branch.assay != null)
 		{
-    		addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionCopy());
+			addMenu(ctx, "_Copy").setOnAction(event -> branch.owner.actionCopy());
 		}
 
-        if (ctx.getItems().size() > 0) setContextMenu(ctx);
-    }
-    private MenuItem addMenu(ContextMenu parent, String title)
-    {
-    	MenuItem item = new MenuItem(title);
-    	parent.getItems().add(item);
-    	return item;
-    }
+		if (ctx.getItems().size() > 0) setContextMenu(ctx);
+	}
+	private MenuItem addMenu(ContextMenu parent, String title)
+	{
+		MenuItem item = new MenuItem(title);
+		parent.getItems().add(item);
+		return item;
+	}
 
 	private String getString() 
-    {
-        return getItem() == null ? "" : getItem().toString();
-    }
+	{
+		return getItem() == null ? "" : getItem().toString();
+	}
 }
 

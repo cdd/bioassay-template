@@ -95,7 +95,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		setupValue();
 		setupLiteral();
 		setupCustom();
-        
+
 		tabber.getTabs().addAll(tabValue, tabLiteral, tabCustom);
 
 		getDialogPane().setContent(tabber);
@@ -120,48 +120,48 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		});
 		
 		if (annot != null) fillCurrent(annot);
-
-        //Platform.runLater(() -> fieldSearch.requestFocus());
 	}
 		
 	// ------------ private methods ------------
 
 	private void setupValue()
 	{
-        table.setEditable(false);
+		table.setEditable(false);
  
-        TableColumn<Schema.Value, String> colURI = new TableColumn<>("URI");
+		TableColumn<Schema.Value, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-        colURI.setCellValueFactory(value -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(value.getValue().uri));});
-         
-        TableColumn<Schema.Value, String> colLabel = new TableColumn<>("Label");
+		colURI.setCellValueFactory(value -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(value.getValue().uri));});
+		 
+		TableColumn<Schema.Value, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
-        colLabel.setCellValueFactory(value -> {return new SimpleStringProperty(valueName(value.getValue()));});
-        
-        TableColumn<Schema.Value, String> colDescr = new TableColumn<>("Description");
+		colLabel.setCellValueFactory(value -> {return new SimpleStringProperty(valueName(value.getValue()));});
+		
+		TableColumn<Schema.Value, String> colDescr = new TableColumn<>("Description");
 		colDescr.setMinWidth(400);
-        colDescr.setCellValueFactory(value -> {return new SimpleStringProperty(cleanupDescription(value.getValue().descr));});
-
+		colDescr.setCellValueFactory(value -> {return new SimpleStringProperty(cleanupDescription(value.getValue().descr));});
+		
 		table.setMinHeight(450);        
-        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        table.getColumns().addAll(colURI, colLabel, colDescr);
-        table.setItems(FXCollections.observableArrayList(options));
+		table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		table.getColumns().add(colURI);
+		table.getColumns().add(colLabel);
+		table.getColumns().add(colDescr);
+		table.setItems(FXCollections.observableArrayList(options));
  
 		Lineup line = new Lineup(PADDING);
 		fieldSearch.setPrefWidth(500);
 		fieldSearch.setMaxWidth(Double.MAX_VALUE);
 		line.add(RowLine.pair(PADDING, fieldSearch, 1, chkHierarchy, 0), "Search:", 1, 0);
 
-        BorderPane pane = new BorderPane();
-        pane.setPrefSize(800, 500);
-        pane.setMaxHeight(Double.MAX_VALUE);
-        pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
-        pane.setTop(line);
-        pane.setCenter(table);
-        
-        tabValue.setContent(pane);
-        
+		BorderPane pane = new BorderPane();
+		pane.setPrefSize(800, 500);
+		pane.setMaxHeight(Double.MAX_VALUE);
+		pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
+		BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
+		pane.setTop(line);
+		pane.setCenter(table);
+		
+		tabValue.setContent(pane);
+
 		fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> 
 		{
 			List<Schema.Value> selected = table.getSelectionModel().getSelectedItems();
@@ -187,7 +187,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		{
 			if (event.getCode() == KeyCode.ENTER) btnUse.fire();
 		});
-   	}
+	}
 	private void setupLiteral()
 	{
 		Lineup content = new Lineup(PADDING, PADDING * 2);
@@ -241,7 +241,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 		{
 			tabber.getSelectionModel().select(tabLiteral);
 			fieldLiteral.setText(annot.literal);
-        	Platform.runLater(() -> fieldLiteral.requestFocus());
+			Platform.runLater(() -> fieldLiteral.requestFocus());
 			return;
 		}
 		
@@ -292,23 +292,6 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 	{
 		return new Schema.Annotation();
 	}
-	
-	// switches shorter prefixes for display convenience
-	/*private final String[] SUBST = 
-    {
-    	"obo:", "http://purl.obolibrary.org/obo/",
-    	"bao:", "http://www.bioassayontology.org/bao#",
-    	"bat:",	"http://www.bioassayontology.org/bat#",
-    	"uo:",	"http://purl.org/obo/owl/UO#"
-    };
-	private String substitutePrefix(String uri)
-	{
-		for (int n = 0; n < SUBST.length; n += 2)
-		{
-			if (uri.startsWith(SUBST[n + 1])) return SUBST[n] + uri.substring(SUBST[n + 1].length());
-		}
-		return uri;
-	}*/
 	
 	private String cleanupDescription(String descr)
 	{

@@ -58,15 +58,15 @@ public class OntologyFilter
 			Property propLabel = inmodel.createProperty(ModelSchema.PFX_RDFS + "label");
 			Property propDescr = inmodel.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
 
-    		for (StmtIterator it = inmodel.listStatements(null, null, (RDFNode)null); it.hasNext();)
-    		{
-    			Statement st = it.next();
-    			Property pred = st.getPredicate();
-    			//if (pred != propClass && pred != propLabel && pred != propDescr) continue;
-    			if (!pred.equals(propClass) && !pred.equals(propLabel) && !pred.equals(propDescr)) continue;
-    			
-    			outmodel.add(st);
-    		}
+			for (StmtIterator it = inmodel.listStatements(null, null, (RDFNode)null); it.hasNext();)
+			{
+				Statement st = it.next();
+				Property pred = st.getPredicate();
+				//if (pred != propClass && pred != propLabel && pred != propDescr) continue;
+				if (!pred.equals(propClass) && !pred.equals(propLabel) && !pred.equals(propDescr)) continue;
+				
+				outmodel.add(st);
+			}
 		}
 		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
 	}

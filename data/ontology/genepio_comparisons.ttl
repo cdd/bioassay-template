@@ -1,0 +1,41 @@
+# subset of Genomic Epidemiology Ontology, which is culled for the sole purpose of providing the comparison
+# operators (<, >, <=, >=, =) needed for the Common Assay Template
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix bae:   <http://www.bioassayexpress.org/bae#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+obo:GENEPIO_0001001
+  rdfs:label "threshold comparisons" ;
+  rdfs:subClassOf bao:BAO_0002140 ;
+  .
+
+obo:GENEPIO_0001006
+  rdfs:label "greater than (>)" ;
+  rdfs:subClassOf obo:GENEPIO_0001001 ;
+  .
+
+obo:GENEPIO_0001002
+  rdfs:label "less than (<)" ;
+  rdfs:subClassOf obo:GENEPIO_0001001 ;
+  .
+
+obo:GENEPIO_0001005
+  rdfs:label "greater than or equal (≥)" ;
+  rdfs:subClassOf obo:GENEPIO_0001001 ;
+  .
+
+obo:GENEPIO_0001003
+  rdfs:label "less than or equal (≤)" ;
+  rdfs:subClassOf obo:GENEPIO_0001001 ;
+  .
+
+obo:GENEPIO_0001004
+  rdfs:label "equal to (=)" ;
+  rdfs:subClassOf obo:GENEPIO_0001001 ;
+  .

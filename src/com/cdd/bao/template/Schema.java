@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -41,6 +41,7 @@ public class Schema
 	{
 		public Group parent;
 		public String name, descr = "";
+		public String groupURI = "";
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
 		
@@ -49,32 +50,94 @@ public class Schema
 			this.parent = parent;
 			this.name = name == null ? "" : name;
 		}
+		public Group(Group parent, String name, String groupURI) 
+		{
+			this.parent = parent;
+			this.name = name == null ? "" : name;
+			this.groupURI = groupURI == null ? "" : groupURI;
+		}
+		@Override
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
-			Group dup = new Group(parent, name);
+			Group dup = new Group(parent, name, groupURI);
 			dup.descr = descr;
 			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
 		}
-		public boolean equals(Group other)
+		
+		@Override
+		public boolean equals(Object o)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr)) return false;
-			if (assignments.size() != other.assignments.size() || subGroups.size() != other.subGroups.size()) return false;
-			for (int n = 0; n < assignments.size(); n++) if (!assignments.get(n).equals(other.assignments.get(n))) return false;
-			for (int n = 0; n < subGroups.size(); n++) if (!subGroups.get(n).equals(other.subGroups.get(n))) return false;
-			return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			Group other = (Group)o;
+			return (name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
+					assignments.equals(other.assignments) && subGroups.equals(other.subGroups));
 		}
 		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, groupURI, assignments, subGroups);
+		}
+
+		// returns a list of group URIs leading up to (but not including) this one, which can be used to disambiguate beyond just the propURI
+		public String[] groupNest()
+		{
+			if (parent == null) return new String[0];
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
+			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
+			return nest.toArray(new String[nest.size()]);
+		}
+		
+		// as above, except compiles the labels rather than URIs
+		public String[] groupLabel()
+		{
+			if (parent == null) return new String[0];
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.name == null ? "" : look.name);
+			return nest.toArray(new String[nest.size()]);
+		}
+		
+		// render
 		private void outputAsString(StringBuffer buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
-			buff.append("[" + name + "] (" + descr + ")\n");
+			buff.append("[" + name + "] <" + groupURI + "> (" + descr + ")\n");
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
+		
+		// makes a list of all the assignments that occur within this group and its subgroups, in order of occurrence
+		public Assignment[] flattenedAssignments()
+		{
+			List<Assignment> list = new ArrayList<>();
+			List<Group> stack = new ArrayList<>();
+			stack.add(this);
+			while (stack.size() > 0)
+			{
+				Group g = stack.remove(0);
+				list.addAll(g.assignments);
+				stack.addAll(g.subGroups);
+			}
+			return list.toArray(new Assignment[list.size()]);
+		}
 	};
+
+	// used within assignments: used to indicate how building of models to make suggestions is handled
+	public enum Suggestions
+	{
+		FULL, // (default) use all of the available methods for guestimating appropriate term suggestions for URIs
+		DISABLED, // do not use the underlying terms as either inputs or outputs for suggestion models
+		FIELD, // the assignment should be mapped to an auxiliary compound field rather than a URI
+		URL, // preferred value type is a URL that directs to an external resource
+		ID, // preferred value an identifier that refers to another assay
+		STRING, // preferred value type is a string literal, of arbitrary format
+		NUMBER, // preferred value type is a numeric iteral of arbitrary precision
+		INTEGER, // preferred value type is a literal that evaluates to an integer
+	}
 
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure
 	// has a unique property URI, and a list of applicable values
@@ -84,6 +147,7 @@ public class Schema
 		public String name, descr = "";
 		public String propURI;
 		public List<Value> values = new ArrayList<>();
+		public Suggestions suggestions = Suggestions.FULL;
 		
 		public Assignment(Group parent, String name, String propURI) 
 		{
@@ -97,16 +161,24 @@ public class Schema
 			Assignment dup = new Assignment(parent, name, propURI);
 			dup.descr = descr;
 			for (Value val : values) dup.values.add(val.clone());
+			dup.suggestions = suggestions;
 			return dup;
 		}
 		
 		// determines equality based on the immediate properties of the assignment and its values; does not compare its position in the branch hierarchy
-		public boolean equals(Assignment other)
+		@Override
+		public boolean equals(Object o)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !propURI.equals(other.propURI)) return false;
-			if (values.size() != other.values.size()) return false;
-			for (int n = 0; n < values.size(); n++) if (!values.get(n).equals(other.values.get(n))) return false;
-			return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			Assignment other = (Assignment)o;
+			return (name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
+					suggestions == other.suggestions && values.equals(other.values));
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, propURI, suggestions, values);
 		}
 		
 		// returns true if the other assignment has the same branch sequence, i.e. the name is the same, and likewise for the trail of parent groups
@@ -119,6 +191,23 @@ public class Schema
 				if (!g1.name.equals(g2.name)) return false;
 			}
 			return true;
+		}
+
+		// returns a list of group URIs leading up to this one, which can be used to disambiguate beyond just the propURI
+		public String[] groupNest()
+		{
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
+			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
+			return nest.toArray(new String[nest.size()]);
+		}
+		
+		// as above, except compiles the labels rather than URIs
+		public String[] groupLabel()
+		{
+			List<String> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.name == null ? "" : look.name);
+			return nest.toArray(new String[nest.size()]);
 		}
 		
 		private void outputAsString(StringBuffer buff, int indent)
@@ -163,9 +252,19 @@ public class Schema
 			dup.spec = spec;
 			return dup;
 		}
-		public boolean equals(Value other)
+		
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Value other = (Value)o;
 			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && spec == other.spec;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(uri, name, descr, spec);
 		}
 	}
 
@@ -175,14 +274,14 @@ public class Schema
 		public String name; // short label for the bioassay
 		public String descr = ""; // more descriptive label: used to complement the semantic assignments
 		public String para = ""; // plain text description of the assay, if available; sometimes this is available prior semantic assignments
-		public String originURI = ""; // optional: use to indicate the semantic resource that the assay originated from
-		
+		public String originURI = ""; // optional: use to indicate the semantic resource that the assay originated from		
 		public List<Annotation> annotations = new ArrayList<>();
 		
 		public Assay(String name)
 		{
 			this.name = name == null ? "" : name;
 		}
+		@Override
 		public Assay clone()
 		{
 			Assay dup = new Assay(name);
@@ -192,18 +291,27 @@ public class Schema
 			for (Annotation a : annotations) dup.annotations.add(a.clone());
 			return dup;
 		}
-		public boolean equals(Assay other)
+		
+		@Override
+		public boolean equals(Object o)
 		{
-			if (!name.equals(other.name) || !descr.equals(other.descr) || !para.equals(other.para) || !originURI.equals(other.originURI)) return false;
+			if (o == null || getClass() != o.getClass()) return false;
+			Assay other = (Assay)o;
+			if (!(name.equals(other.name) && descr.equals(other.descr) && para.equals(other.para) && originURI.equals(other.originURI))) return false;
 			if (annotations.size() != other.annotations.size()) return false;
 
 			// doesn't work: sort order is random 
-			//for (int n = 0; n < annotations.size(); n++) if (!annotations.get(n).equals(other.annotations.get(n))) return false;
 			Set<String> akeys = new HashSet<>();
 			for (Annotation annot : annotations) akeys.add(annot.keyString());
 			for (Annotation annot : other.annotations) if (!akeys.contains(annot.keyString())) return false;
 			
 			return true;
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(name, descr, para, originURI, new HashSet<>(annotations));
 		}
 	}
 	
@@ -227,14 +335,22 @@ public class Schema
 			this.assn = linearBranch(assn);
 			this.literal = literal;
 		}
+		@Override
 		public Annotation clone()
 		{
-			Annotation dup = value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
-			return dup;
+			return value != null ? new Annotation(assn, value) : new Annotation(assn, literal);
 		}
-		public boolean equals(Annotation other)
+		
+		@Override
+		public boolean equals(Object o)
 		{
+			if (o == null || getClass() != o.getClass()) return false;
+			
+			Annotation other = (Annotation)o;
+			// handle the case where one of the assn is null
+			if (assn == null || other.assn == null) return assn == other.assn;
 			if (!assn.equals(other.assn)) return false;
+			
 			Group p1 = assn.parent, p2 = other.assn.parent;
 			while (true)
 			{
@@ -245,16 +361,26 @@ public class Schema
 				p2 = p2.parent;
 			}
 			
-			if (value == null && other.value == null) return literal.equals(other.literal);
-			else if (value != null && other.value == null) return false;
-			else if (value == null && other.value != null) return false;
+			if (value == null)
+			{
+				if (other.value == null) return literal.equals(other.literal);
+				return false;
+			}
+			if (other.value == null) return false;
 			return value.equals(other.value);
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			if (assn == null) return Objects.hash(null, null, null, value, literal);
+			return Objects.hash(assn, assn.parent, assn.name, value, literal);
 		}
 		
 		// returns a string that represents the entire content: can be used for uniqueness/sorting (more or less)
 		public String keyString()
 		{
-			StringBuffer buff = new StringBuffer();
+			StringBuilder buff = new StringBuilder();
 			buff.append(assn.name + "\n");
 			for (Group g = assn.parent; g != null; g = g.parent) buff.append(g.name + "\n");
 			if (value != null) buff.append(value.uri + "\n" + value.name + "\n" + value.descr + "\n");
@@ -269,7 +395,7 @@ public class Schema
 		public static Assignment linearBranch(Assignment assn)
 		{
 			Group par = assn.parent;
-			Group dup = new Group(null, par.name);
+			Group dup = new Group(null, par.name, par.groupURI);
 			dup.descr = par.descr;
 			dup.assignments.add(assn);
 
@@ -277,19 +403,19 @@ public class Schema
 
 			while (par.parent != null)
 			{
-				dup.parent = new Group(null, par.parent.name);
+				dup.parent = new Group(null, par.parent.name, par.parent.groupURI);
 				dup.parent.descr = par.parent.descr;
 				dup.parent.subGroups.add(dup);
 				
 				par = par.parent;
-				dup = par.parent;
+				dup = dup.parent;
 			}
 			
 			return assn;
 		}
 	}
 	
-	// ------------ private methods ------------	
+	// ------------ private members ------------	
 	
 	// template root: the schema definition resides within here
 	private Group root = new Group(null, "common assay template");
@@ -306,19 +432,29 @@ public class Schema
 	{
 	}
 	
-	// returns true if the content is literally equivalent
-	public boolean equals(Schema other)
+	@Override
+	public boolean equals(Object o)
 	{
+		if (o == null || getClass() != o.getClass()) return false;
+		Schema other = (Schema)o;
 		if (!root.equals(other.root)) return false;
 		if (assays.size() != other.assays.size()) return false;
 		for (int n = 0; n < assays.size(); n++) if (!assays.get(n).equals(other.assays.get(n))) return false;
 		return true;
 	}
 	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(root, assays);
+	}
+	
 	// makes a deep copy of the schema content
+	@Override
 	public Schema clone()
 	{
 		Schema dup = new Schema();
+		dup.schemaPrefix = schemaPrefix;
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
@@ -457,32 +593,6 @@ public class Schema
 	
 	public Assignment findAssignment(Annotation annot)
 	{
-		/*Assignment fakeAssn = annot.assn;
-		List<Group> fakeGroups = new ArrayList<>();
-		for (Group p = fakeAssn.parent; p != null && p.parent != null; p = p.parent) fakeGroups.add(0, p);
-
-		// drill down the sequence of groups, until "look" is defined to be the matching group that should contain the assignment; in this way any
-		// assignment that has an exact named hierarchy match is considered to be a hit
-		Group look = root;
-		descend: while (fakeGroups.size() > 0)
-		{
-			Group fake = fakeGroups.remove(0);
-			for (Group g : look.subGroups) if (g.name.equals(fake.name))
-			{
-				look = g;
-				continue descend;
-			}
-			look = null;
-			break;
-		}
-		if (look != null)
-		{
-			for (Assignment assn : look.assignments)
-			{
-				if (assn.name.equals(fakeAssn.name) && assn.propURI.equals(fakeAssn.propURI)) return assn;
-			}
-		}*/
-		
 		Assignment assn = findAssignment(annot.assn);
 		if (assn != null) return assn;
 		
@@ -492,16 +602,26 @@ public class Schema
 		return null;
 	}
 	
-	// returns all of the assignments that match the given property URI, or empty list if none
-	public Assignment[] findAssignmentByProperty(String propURI)
+	// returns all of the assignments that match the given property URI, or empty list if none; if the groupNest parameter is given, it will
+	// make sure that the nested hierarchy of groupURIs match the parameter (otherwise it will be ignored)
+	public Assignment[] findAssignmentByProperty(String propURI) {return findAssignmentByProperty(propURI, null);}
+	public Assignment[] findAssignmentByProperty(String propURI, String[] groupNest)
 	{
+		int gsz = Util.length(groupNest);
 		List<Assignment> matches = new ArrayList<>();
 		List<Group> stack = new ArrayList<>();
 		stack.add(root);
 		while (stack.size() > 0)
 		{
 			Group grp = stack.remove(0);
-			for (Assignment assn : grp.assignments) if (assn.propURI.equals(propURI)) matches.add(assn);
+			skip: for (Assignment assn : grp.assignments) if (assn.propURI.equals(propURI)) 
+			{
+				Group look = assn.parent;
+				for (int n = 0; n < gsz && look != null; n++, look = look.parent)
+					if (!groupNest[n].equals(look.groupURI)) continue skip;
+				
+				matches.add(assn);
+			}
 			stack.addAll(grp.subGroups);
 		}
 		return matches.toArray(new Assignment[matches.size()]);
@@ -526,6 +646,32 @@ public class Schema
 		}
 		
 		return true;
+	}
+	
+	// convenience methods for comparing property/groupNest; for "same", the group nesting has to be equivalent (usually the right
+	// call for matching within the same template); "compatible" means that only the defined parts of the group nesting are compared,
+	// which is often useful for inter-template annotation comparisons; note that all of these methods treat groupNests of null & empty
+	// array as the same
+	public static boolean sameGroupNest(String[] groupNest1, String[] groupNest2)
+	{
+		int sz1 = Util.length(groupNest1), sz2 = Util.length(groupNest2);
+		if (sz1 != sz2) return false;
+		for (int n = 0; n < sz1; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		return true;
+	}
+	public static boolean compatibleGroupNest(String[] groupNest1, String[] groupNest2)
+	{
+		int sz = Math.min(Util.length(groupNest1), Util.length(groupNest2));
+		for (int n = 0; n < sz; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		return true;
+	}
+	public static boolean samePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	{
+		return propURI1.equals(propURI2) && sameGroupNest(groupNest1, groupNest2);
+	}
+	public static boolean compatiblePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	{
+		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
 	}
 	
 	// adding of content

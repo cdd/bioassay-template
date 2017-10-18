@@ -138,10 +138,10 @@ public class SchemaUtil
 		List<Set<String>> assnValues = new ArrayList<>(), assnHits = new ArrayList<>();
 		for (Schema.Assignment assn : assignments)
 		{
-    		Set<String> values = new HashSet<>();
-    		for (Schema.Value val : assn.values) if (val.uri.length() > 0) values.add(val.uri);
-    		assnValues.add(values);
-    		assnHits.add(new HashSet<>());
+			Set<String> values = new HashSet<>();
+			for (Schema.Value val : assn.values) if (val.uri.length() > 0) values.add(val.uri);
+			assnValues.add(values);
+			assnHits.add(new HashSet<>());
 		}
 
 		final int nassn = assignments.size();

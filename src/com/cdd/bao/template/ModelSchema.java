@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -54,6 +54,7 @@ public class ModelSchema
 	public static final String PFX_TAXON = "http://www.bioassayontology.org/taxon#";
 	public static final String PFX_PROTEIN = "http://www.bioassayontology.org/protein#";
 	public static final String PFX_PROV = "http://www.w3.org/ns/prov#";
+	public static final String PFX_ASTRAZENECA = "http://rdf.astrazeneca.com/bae#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -67,6 +68,7 @@ public class ModelSchema
 	public static final String HAS_DESCRIPTION = "hasDescription"; // longwinded version of rdf:label
 	public static final String IN_ORDER = "inOrder"; // each group/assignment can have one of these
 	
+	public static final String HAS_GROUPURI = "hasGroupURI"; // maps to identifier property (one per assignment)
 	public static final String HAS_PROPERTY = "hasProperty"; // maps to predicate (one per assignment)
 	public static final String HAS_VALUE = "hasValue"; // contains a value option (many per assignment)	
 	public static final String MAPS_TO = "mapsTo";
@@ -81,6 +83,15 @@ public class ModelSchema
 	public static final String IS_EXCLUDE = "isExclude"; // indicates a value refers to something to exclude
 	public static final String IS_WHOLEBRANCH = "isWholeBranch"; // indicates a value refers to an entire branch, not just one term
 	public static final String IS_EXCLUDEBRANCH = "isExcludeBranch"; // indicates a value refers to an entire branch to exclude
+	
+	public static final String SUGGESTIONS_FULL = "suggestionsFull"; // normal state: all suggestion modelling options enabled
+	public static final String SUGGESTIONS_DISABLED = "suggestionsDisabled"; // do not use for suggestion models (neither input nor output)
+	public static final String SUGGESTIONS_FIELD = "suggestionsField"; // suggestions based on auxiliary field names, not URIs
+	public static final String SUGGESTIONS_URL = "suggestionsURL"; // use URLs to arbitrary resources
+	public static final String SUGGESTIONS_ID = "suggestionsID"; // use ID codes for other assays
+	public static final String SUGGESTIONS_STRING = "suggestionsString"; // use string literals
+	public static final String SUGGESTIONS_NUMBER = "suggestionsNumber"; // use number-formatted literals
+	public static final String SUGGESTIONS_INTEGER = "suggestionsInteger"; // use integer-formatted literals
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -90,9 +101,12 @@ public class ModelSchema
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
 	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
-	private Property hasProperty, hasValue;
+	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
+	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
+	private Property suggestionsURL, suggestionsID;
+	private Property suggestionsString, suggestionsNumber, suggestionsInteger;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -120,7 +134,9 @@ public class ModelSchema
 		"dto:", PFX_DTO,
 		"geneid:", PFX_GENEID,
 		"taxon:", PFX_TAXON,
-		"protein:", PFX_PROTEIN
+		"protein:", PFX_PROTEIN,
+		"prov:", PFX_PROV,
+		"az:", PFX_ASTRAZENECA,
 	};
 	
 	// in case the caller needs to know what htye are
@@ -134,6 +150,7 @@ public class ModelSchema
 	// if the given URI has one of the common prefixes, replace it with the abbreviated version; if none, returns same as input
 	public static String collapsePrefix(String uri)
 	{
+		if (uri == null) return null;
 		for (int n = 0; n < PREFIX_MAP.length; n += 2)
 		{
 			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
@@ -145,6 +162,7 @@ public class ModelSchema
 	// if the given proto-URI starts with one of the common prefixes, replace it with the actual URI root stem; if none, returns same as input
 	public static String expandPrefix(String uri)
 	{
+		if (uri == null) return null;
 		for (int n = 0; n < PREFIX_MAP.length; n += 2)
 		{
 			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
@@ -206,7 +224,7 @@ public class ModelSchema
 		RDFDataMgr.write(ostr, model, RDFFormat.TURTLE);
 	}
 	
-	// writes the 
+	// writes the schema into a Jena triple collection
 	public static String serialiseToModel(Schema schema, Model model) throws IOException
 	{
 		ModelSchema thing = new ModelSchema(schema, model);
@@ -239,6 +257,7 @@ public class ModelSchema
 		hasAssignment = model.createProperty(PFX_BAT + HAS_ASSIGNMENT);
 		hasDescription = model.createProperty(PFX_BAT + HAS_DESCRIPTION);
 		inOrder = model.createProperty(PFX_BAT + IN_ORDER);
+		hasGroupURI = model.createProperty(PFX_BAT + HAS_GROUPURI);
 		hasProperty = model.createProperty(PFX_BAT + HAS_PROPERTY);
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
@@ -251,7 +270,15 @@ public class ModelSchema
 		isExclude = model.createProperty(PFX_BAT + IS_EXCLUDE);
 		isWholeBranch = model.createProperty(PFX_BAT + IS_WHOLEBRANCH);
 		isExcludeBranch = model.createProperty(PFX_BAT + IS_EXCLUDEBRANCH);
-		
+		suggestionsFull = model.createProperty(PFX_BAT + SUGGESTIONS_FULL);
+		suggestionsDisabled = model.createProperty(PFX_BAT + SUGGESTIONS_DISABLED);
+		suggestionsField = model.createProperty(PFX_BAT + SUGGESTIONS_FIELD);
+		suggestionsURL = model.createProperty(PFX_BAT + SUGGESTIONS_URL);
+		suggestionsID = model.createProperty(PFX_BAT + SUGGESTIONS_ID);
+		suggestionsString = model.createProperty(PFX_BAT + SUGGESTIONS_STRING);
+		suggestionsNumber = model.createProperty(PFX_BAT + SUGGESTIONS_NUMBER);
+		suggestionsInteger = model.createProperty(PFX_BAT + SUGGESTIONS_INTEGER);
+
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
 	}
@@ -324,7 +351,16 @@ public class ModelSchema
 			model.add(objAssn, rdfLabel, assn.name);
 			if (assn.descr.length() > 0) model.add(objAssn, hasDescription, assn.descr);
 			model.add(objAssn, inOrder, model.createTypedLiteral(++order));
-			model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
+			if (isURI(assn.propURI)) model.add(objAssn, hasProperty, model.createResource(assn.propURI.trim()));
+			
+			if (assn.suggestions == Schema.Suggestions.FULL) model.add(objAssn, suggestionsFull, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.DISABLED) model.add(objAssn, suggestionsDisabled, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.FIELD) model.add(objAssn, suggestionsField, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.URL) model.add(objAssn, suggestionsURL, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.ID) model.add(objAssn, suggestionsID, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.STRING) model.add(objAssn, suggestionsString, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.NUMBER) model.add(objAssn, suggestionsNumber, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.INTEGER) model.add(objAssn, suggestionsInteger, model.createTypedLiteral(true));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -332,7 +368,7 @@ public class ModelSchema
 				Resource blank = model.createResource();		
 				model.add(objAssn, hasValue, blank);
 				
-				Resource objValue = val.uri == null ? null : model.createResource(val.uri.trim());
+				Resource objValue = isURI(val.uri) ? model.createResource(val.uri.trim()) : null;
 				if (objValue != null) model.add(blank, mapsTo, objValue);
 				model.add(blank, rdfLabel, model.createLiteral(val.name));
 				if (val.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(val.descr));
@@ -351,14 +387,15 @@ public class ModelSchema
 		String parentName = turnLabelIntoName(group.name);
 		for (Group subgrp : group.subGroups)
 		{
-    		Resource objGroup = model.createResource(pfx + turnLabelIntoName(subgrp.name));
-    		model.add(objParent, hasGroup, objGroup);
-    		model.add(objGroup, rdfType, batGroup);
-    		model.add(objGroup, rdfLabel, subgrp.name);
-    		if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
+			Resource objGroup = model.createResource(pfx + turnLabelIntoName(subgrp.name));
+			model.add(objParent, hasGroup, objGroup);
+			model.add(objGroup, rdfType, batGroup);
+			model.add(objGroup, rdfLabel, subgrp.name);
+			if (subgrp.descr.length() > 0) model.add(objGroup, hasDescription, subgrp.descr);
 			model.add(objGroup, inOrder, model.createTypedLiteral(++order));
-    		
-    		formulateGroup(objGroup, subgrp);
+			if (isURI(subgrp.groupURI)) model.add(objGroup, hasGroupURI, model.createResource(subgrp.groupURI.trim()));
+		
+			formulateGroup(objGroup, subgrp);
 		}
 	}
 
@@ -429,21 +466,30 @@ public class ModelSchema
 			Statement st = it.next();
 			Resource objGroup = (Resource)st.getObject();
 			
-    		Group subgrp = new Group(group, findString(objGroup, rdfLabel));
-    		subgrp.descr = findString(objGroup, hasDescription);
-    		
-    		group.subGroups.add(subgrp);
-    		order.put(subgrp, findInteger(objGroup, inOrder));
-    		
-    		parseGroup(objGroup, subgrp);
+			Group subgrp = new Group(group, findString(objGroup, rdfLabel), findAsString(objGroup, hasGroupURI));
+			subgrp.descr = findString(objGroup, hasDescription);
+			parseGroup(objGroup, subgrp);
+	
+			group.subGroups.add(subgrp);
+			order.put(subgrp, findInteger(objGroup, inOrder));
 		}
-		group.subGroups.sort((a1, a2) -> order.get(a1).compareTo(order.get(a2)));
+		group.subGroups.sort((g1, g2) -> order.get(g1).compareTo(order.get(g2)));
 	}
 	
 	private Assignment parseAssignment(Group group, Resource objAssn) throws IOException
 	{
 		Assignment assn = new Assignment(group, findString(objAssn, rdfLabel), findAsString(objAssn, hasProperty));
+		if (assn.propURI.startsWith("file://")) assn.propURI = "";
 		assn.descr = findString(objAssn, hasDescription);
+		
+		assn.suggestions = findBoolean(objAssn, suggestionsFull) ? Schema.Suggestions.FULL :
+						   findBoolean(objAssn, suggestionsDisabled) ? Schema.Suggestions.DISABLED :
+						   findBoolean(objAssn, suggestionsField) ? Schema.Suggestions.FIELD : 
+						   findBoolean(objAssn, suggestionsURL) ? Schema.Suggestions.URL : 
+						   findBoolean(objAssn, suggestionsID) ? Schema.Suggestions.ID : 
+						   findBoolean(objAssn, suggestionsString) ? Schema.Suggestions.STRING : 
+						   findBoolean(objAssn, suggestionsNumber) ? Schema.Suggestions.NUMBER : 
+						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : Schema.Suggestions.FULL;
 		
 		Map<Object, Integer> order = new HashMap<>();
 
@@ -452,6 +498,7 @@ public class ModelSchema
 			Resource blank = (Resource)it.next().getObject();
 					
 			Value val = new Value(findAsString(blank, mapsTo), findString(blank, rdfLabel));
+			if (val.uri.startsWith("file://")) val.uri = "";
 			val.descr = findString(blank, hasDescription);
 			val.spec = findBoolean(blank, isExclude) ? Schema.Specify.EXCLUDE :
 					   findBoolean(blank, isWholeBranch) ? Schema.Specify.WHOLEBRANCH :
@@ -517,26 +564,26 @@ public class ModelSchema
 		
 		StringBuffer buff = new StringBuffer();
 		for (String bit : label.split(" "))
-    	{
-    		if (bit.length() == 0) continue;
-    		char[] chars = new char[bit.length()];
-    		bit.getChars(0, bit.length(), chars, 0);
-    		chars[0] = Character.toUpperCase(chars[0]);
-    		for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) buff.append(ch);
-    	}
-    	
-    	// if the name was previously encountered, give it a number suffix to disambiguate
-    	String name = buff.toString();
-    	Integer count = nameCounts.get(name);
-    	if (count != null)
-    	{
-    		count++;
-    		nameCounts.put(name, count);
-    		name += count;
-    	}
-    	else nameCounts.put(name, 1);
-    	
-    	return name;    	
+		{
+			if (bit.length() == 0) continue;
+			char[] chars = new char[bit.length()];
+			bit.getChars(0, bit.length(), chars, 0);
+			chars[0] = Character.toUpperCase(chars[0]);
+			for (char ch : chars) if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) buff.append(ch);
+		}
+	
+		// if the name was previously encountered, give it a number suffix to disambiguate
+		String name = buff.toString();
+		Integer count = nameCounts.get(name);
+		if (count != null)
+		{
+			count++;
+			nameCounts.put(name, count);
+			name += count;
+		}
+		else nameCounts.put(name, 1);
+		
+		return name;    	
 	}
 	
 	// looks for an assignment and returns it as a string regardless of what type it actually is; blank if not found
@@ -601,6 +648,14 @@ public class ModelSchema
 			if (obj.isResource()) return obj.asResource();
 		}
 		return null;
+	}
+	
+	// returns true if the string can be reasonably interpreted as a URI
+	private boolean isURI(String uri)
+	{
+		if (uri == null) return false;
+		uri = uri.trim();
+		return uri.startsWith("http://") || uri.startsWith("https://");
 	}
 }
 

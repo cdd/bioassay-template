@@ -67,12 +67,12 @@ public class RenderSchema
 		renderPageTemplate(ctx);
 		if (ctx.width == 0 || ctx.height == 0) return;
 		
-        PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
-        document.addPage(page);
-        
-        ctx.stream = new PDPageContentStream(document, page);
-        renderPageTemplate(ctx);
-        ctx.stream.close();
+		PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
+		document.addPage(page);
+		
+		ctx.stream = new PDPageContentStream(document, page);
+		renderPageTemplate(ctx);
+		ctx.stream.close();
 	}
 
 	// creates a page showing the given assay and its annotations
@@ -83,12 +83,12 @@ public class RenderSchema
 		renderPageTemplate(ctx);
 		if (ctx.width == 0 || ctx.height == 0) return;
 		
-        PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
-        document.addPage(page);
-        
-        ctx.stream = new PDPageContentStream(document, page);
-        renderPageAssay(ctx, assay);
-        ctx.stream.close();
+		PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
+		document.addPage(page);
+		
+		ctx.stream = new PDPageContentStream(document, page);
+		renderPageAssay(ctx, assay);
+		ctx.stream.close();
 	}
 	
 	// creates a page showing the property & value hierarchies, respectively	
@@ -99,12 +99,12 @@ public class RenderSchema
 		renderPageHierarchy(ctx, vocab.getPropertyHierarchy());
 		if (ctx.width == 0 || ctx.height == 0) return;
 		
-        PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
-        document.addPage(page);
-        
-        ctx.stream = new PDPageContentStream(document, page);
+		PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
+		document.addPage(page);
+		
+		ctx.stream = new PDPageContentStream(document, page);
 		renderPageHierarchy(ctx, vocab.getPropertyHierarchy());
-        ctx.stream.close();
+		ctx.stream.close();
 	}
 	public void createPageValues() throws IOException
 	{
@@ -113,12 +113,12 @@ public class RenderSchema
 		renderPageHierarchy(ctx, vocab.getValueHierarchy());
 		if (ctx.width == 0 || ctx.height == 0) return;
 		
-        PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
-        document.addPage(page);
-        
-        ctx.stream = new PDPageContentStream(document, page);
+		PDPage page = new PDPage(new PDRectangle(ctx.width, ctx.height));
+		document.addPage(page);
+		
+		ctx.stream = new PDPageContentStream(document, page);
 		renderPageHierarchy(ctx, vocab.getValueHierarchy());
-        ctx.stream.close();
+		ctx.stream.close();
 	}
 	
 	public void write(File file) throws IOException
@@ -201,8 +201,8 @@ public class RenderSchema
 		}
 	}
 
-    private void renderPageAssay(RenderContext ctx, Schema.Assay assay)
-    {
+	private void renderPageAssay(RenderContext ctx, Schema.Assay assay)
+	{
 		float y = 0;
 		final float pad = 5;
 		
@@ -247,7 +247,7 @@ public class RenderSchema
 			}
 			for (int n = group.subGroups.size() - 1; n >= 0; n--) groupList.add(0, group.subGroups.get(n));
 		}
-    }
+	}
 
 	private void renderPageHierarchy(RenderContext ctx, Vocabulary.Hierarchy hier)
 	{
@@ -312,10 +312,10 @@ public class RenderSchema
 		float maxX = x;
 		if (group.parent != null)
 		{
-    		//String label = group.name;
-    		//for (Schema.Group look = group.parent; look.parent != null; look = look.parent) label = look.name + "\u25BA" + label;
-    		String label = "";
-    		for (Schema.Group look = group; look.parent != null; look = look.parent) label = look.name + " / " + label;
+			//String label = group.name;
+			//for (Schema.Group look = group.parent; look.parent != null; look = look.parent) label = look.name + "\u25BA" + label;
+			String label = "";
+			for (Schema.Group look = group; look.parent != null; look = look.parent) label = look.name + " / " + label;
 			ctx.drawText(x + pad, y, label, 12, 0x000000, TXTALIGN_LEFT | TXTALIGN_TOP); 
 			y += 15;
 			maxX = x + pad + ctx.measureLine(label, 12)[0];

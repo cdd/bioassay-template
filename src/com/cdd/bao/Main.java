@@ -34,6 +34,7 @@ import com.cdd.bao.axioms.AxiomCollector;
 import com.cdd.bao.axioms.GetOntologyDetails;
 import com.cdd.bao.axioms.ScanAxioms;
 import com.cdd.bao.editor.*;
+import com.cdd.bao.importer.*;
 
 /*
 	Entrypoint for all command line functionality: delegates to the appropriate corner.
@@ -43,20 +44,47 @@ public class Main
 {
 	public static void main(String[] argv)
 	{
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);	
-	
 		if (argv.length > 0 && (argv[0].equals("-h") || argv[0].equals("--help")))
 		{
 			printHelp();
 			return;
-		}		
-//		// TODO: add option to read in multiple schema files and export them to a single "vocab.dump"
-//		// TODO: read in an RDF/TTL file and export only the relevant predicates in minimal TTL (to reduce file sizes)
-//		
+		}
+		
+		// look for additional options that affect overall state
+		String[] extraOnto = null, exclOnto = null;
+		for (int n = 0; n < argv.length;)
+		{
+			if (argv[n].startsWith("--onto"))
+			{
+				argv = ArrayUtils.remove(argv, n);
+				while (n < argv.length)
+				{
+					if (argv[n].startsWith("-")) break;
+					extraOnto = ArrayUtils.add(extraOnto, argv[n]);
+					argv = ArrayUtils.remove(argv, n);
+				}
+			}
+			else if (argv[n].startsWith("--excl"))
+			{
+				argv = ArrayUtils.remove(argv, n);
+				while (n < argv.length)
+				{
+					if (argv[n].startsWith("-")) break;
+					exclOnto = ArrayUtils.add(exclOnto, argv[n]);
+					argv = ArrayUtils.remove(argv, n);
+				}
+			}
+			else n++;
+		}
+		Vocabulary.setExtraOntology(extraOnto);
+		Vocabulary.setExclOntology(exclOnto);
+
+		// main command-induced functionality
 		if (argv.length == 0) new MainApplication().exec(new String[0]);
 		else if (argv[0].equals("edit")) 
-		{			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
-		new MainApplication().exec(subset);
+		{			
+			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
+			new MainApplication().exec(subset);
 		}
 		else if (argv[0].equals("geneont"))
 		{
@@ -86,6 +114,16 @@ public class Main
 		else if (argv[0].equals("compile"))
 		{
 			try {compileSchema(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
+		else if (argv[0].equals("check"))
+		{
+			try {checkTemplate(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
+		else if (argv[0].equals("import"))
+		{
+			try {importKeywords(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
 		else if (argv[0].equals("scanaxioms"))
@@ -140,7 +178,11 @@ public class Main
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
+		Util.writeln("    check {schema.ttl}");
+		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
+		Util.writeln("    --onto {files...}");
+		Util.writeln("    --excl {files...}");
 	}
 	
 	private static void diffVocab(String[] options) throws Exception
@@ -223,5 +265,37 @@ public class Main
 		schvoc.serialise(ostr);
 		ostr.close();
 		Util.writeln("Done.");
+	}
+
+	// evaluates a schema template, looking for obvious shortcomings
+	private static void checkTemplate(String[] options) throws Exception
+	{
+		if (options.length == 0)
+		{
+			Util.writeln("Must provide the schema filename to check filename.");
+			return;
+		}
+		String fn = options[0];
+		TemplateChecker chk = new TemplateChecker(fn);
+		chk.perform();
+	}
+	
+	// initiates the importing of keywords from controlled vocabulary
+	private static void importKeywords(String[] options) throws Exception
+	{
+		if (options.length < 5)
+		{
+			Util.writeln("Importing syntax: {src} {map} {dst} {schema} {vocab} [{hints}]");
+			Util.writeln("    where {src} is the JSON-formatted pre-import data");
+			Util.writeln("          {map} contains the mapping instructions");
+			Util.writeln("          {dst} is an import-ready ZIP file");
+			Util.writeln("          {schema} is the template to conform to");
+			Util.writeln("          {vocab} is the processed vocabulary dump");
+			Util.writeln("          {hints} is an optional JSON file with putative term-to-URI options");
+			return;
+		}
+		String hintsFN = options.length >= 6 ? options[5] : null;
+		ImportControlledVocab imp = new ImportControlledVocab(options[0], options[1], options[2], options[3], options[4], hintsFN);
+		imp.exec();
 	}
 }

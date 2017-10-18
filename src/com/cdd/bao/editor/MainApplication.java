@@ -23,6 +23,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.template.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,6 +31,7 @@ import java.util.*;
 import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.image.*;
+import org.apache.commons.lang3.*;
 
 /*
 	BioAssay Ontology Tools: entrypoint with command line parameters.
@@ -45,9 +47,9 @@ public class MainApplication extends Application
 	{
 		try
 		{
-    		InputStream istr = Util.openResource(this, "/images/MainIcon.png");
-    		icon = new Image(istr);
-    		istr.close();
+			InputStream istr = Util.openResource(this, "/images/MainIcon.png");
+			icon = new Image(istr);
+			istr.close();
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
@@ -59,8 +61,8 @@ public class MainApplication extends Application
 	
 	public void start(Stage primaryStage)
 	{
+		// open a main window: either a new schema or an existing one
 		EditSchema edit = new EditSchema(primaryStage);
-		
 		for (String fn : getParameters().getUnnamed())
 		{
 			File f = new File(fn);
@@ -74,7 +76,7 @@ public class MainApplication extends Application
 		}
 		
 		final Stage stage = primaryStage;
-        Platform.runLater(() -> stage.show());
+		Platform.runLater(() -> stage.show());
 	}
 
 	// ------------ private methods ------------	

@@ -66,10 +66,10 @@ public class ClipboardSchema
 	{
 		try 
 		{
-    		JSONObject jgroup = obj.optJSONObject("group");
-    		if (jgroup == null) return null;
-    		return parseGroup(jgroup, null);
-    	}
+			JSONObject jgroup = obj.optJSONObject("group");
+			if (jgroup == null) return null;
+			return parseGroup(jgroup, null);
+		}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
@@ -80,10 +80,10 @@ public class ClipboardSchema
 	{
 		try
 		{
-    		JSONObject jassn = obj.optJSONObject("assignment");
-    		if (jassn == null) return null;
-    		return parseAssignment(jassn, null);
-    	}
+			JSONObject jassn = obj.optJSONObject("assignment");
+			if (jassn == null) return null;
+			return parseAssignment(jassn, null);
+		}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
@@ -96,15 +96,48 @@ public class ClipboardSchema
 	{
 		try
 		{
-    		JSONObject jassay = obj.optJSONObject("assay");
-    		if (jassay == null) return null;
-    		return parseAssay(jassay);
-    	}
+			JSONObject jassay = obj.optJSONObject("assay");
+			if (jassay == null) return null;
+			return parseAssay(jassay);
+		}
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	// turns a group or assignment into a tab-separated list, which is convenient for spreadsheet-style wrangling
+	public static String composeGroupTSV(Schema.Group group)
+	{
+		List<String> lines = new ArrayList<>();
+		lines.add("name\tdescription\tproperty URI\tgroup...");
+		formatGroupTSV(lines, group);
+		return String.join("\n", lines);
+	}
+	public static String composeAssignmentTSV(Schema.Assignment assn)
+	{
+		List<String> lines = new ArrayList<>();
+		lines.add("name\t" + assn.name);
+		lines.add("description\t" + assn.descr.replace("\n", " "));
+		lines.add("property URI\t" + assn.propURI);
+		lines.add("group nest\t" + String.join("\t", assn.groupNest()));
+		lines.add("");
+		lines.add("value hierarchy");
+		lines.add("");
+
+		SchemaTree tree = new SchemaTree(assn, Vocabulary.globalInstance());
+		if (tree != null) for (SchemaTree.Node node : tree.getFlat())
+		{
+			List<String> cols = new ArrayList<>();
+			cols.add(node.label);
+			cols.add(Util.safeString(node.descr).replace("\n", " "));
+			for (SchemaTree.Node look = node.parent; look != null; look = look.parent) cols.add("");
+			cols.add(node.uri);
+			lines.add(String.join("\t", cols));
+		}
+
+		return String.join("\n", lines);
 	}
 	
 	// ------------ private methods ------------	
@@ -114,6 +147,7 @@ public class ClipboardSchema
 		JSONObject json = new JSONObject();
 		json.put("name", group.name);
 		json.put("descr", group.descr);
+		json.put("groupURI", group.groupURI);
 		
 		JSONArray jassignments = new JSONArray(), jsubgroups = new JSONArray();
 		for (Schema.Assignment assn : group.assignments)
@@ -135,6 +169,15 @@ public class ClipboardSchema
 		json.put("name", assn.name);
 		json.put("descr", assn.descr);
 		json.put("propURI", assn.propURI);
+
+		if (assn.suggestions == Schema.Suggestions.FULL) json.put("suggestionsFull", true);
+		else if (assn.suggestions == Schema.Suggestions.DISABLED) json.put("suggestionsDisabled", true);
+		else if (assn.suggestions == Schema.Suggestions.FIELD) json.put("suggestionsField", true);
+		else if (assn.suggestions == Schema.Suggestions.URL) json.put("suggestionsURI", true);
+		else if (assn.suggestions == Schema.Suggestions.ID) json.put("suggestionsID", true);
+		else if (assn.suggestions == Schema.Suggestions.STRING) json.put("suggestionsString", true);
+		else if (assn.suggestions == Schema.Suggestions.NUMBER) json.put("suggestionsNumber", true);
+		else if (assn.suggestions == Schema.Suggestions.INTEGER) json.put("suggestionsInteger", true);
 		
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
@@ -174,9 +217,9 @@ public class ClipboardSchema
 			
 			if (annot.value != null)
 			{
-    			obj.put("valURI", annot.value.uri);
-    			obj.put("valName", annot.value.name);
-    			obj.put("valDescr", annot.value.descr);
+				obj.put("valURI", annot.value.uri);
+				obj.put("valName", annot.value.name);
+				obj.put("valDescr", annot.value.descr);
 			}
 			else if (annot.literal != null)
 			{
@@ -195,7 +238,8 @@ public class ClipboardSchema
 	private static Schema.Group parseGroup(JSONObject json, Schema.Group parent) throws JSONException
 	{
 		Schema.Group group = new Schema.Group(parent, json.getString("name"));
-		group.descr = json.getString("descr");
+		group.descr = json.optString("descr", "");
+		group.groupURI = json.optString("groupURI", "");
 		
 		JSONArray jassignments = json.getJSONArray("assignments"), jsubgroups = json.getJSONArray("subGroups");
 		for (int n = 0; n < jassignments.length(); n++)
@@ -214,14 +258,23 @@ public class ClipboardSchema
 	private static Schema.Assignment parseAssignment(JSONObject json, Schema.Group parent) throws JSONException
 	{
 		Schema.Assignment assn = new Schema.Assignment(parent, json.getString("name"), json.getString("propURI"));
-		assn.descr = json.getString("descr");
+		assn.descr = json.optString("descr", "");
 		
-		JSONArray jvalues =  json.getJSONArray("values");
+		if (json.optBoolean("suggestionsFull", false)) assn.suggestions = Schema.Suggestions.FULL;
+		else if (json.optBoolean("suggestionsDisabled", false)) assn.suggestions = Schema.Suggestions.DISABLED;
+		else if (json.optBoolean("suggestionsField", false)) assn.suggestions = Schema.Suggestions.FIELD;
+		else if (json.optBoolean("suggestionsURL", false)) assn.suggestions = Schema.Suggestions.URL;
+		else if (json.optBoolean("suggestionsID", false)) assn.suggestions = Schema.Suggestions.ID;
+		else if (json.optBoolean("suggestionsString", false)) assn.suggestions = Schema.Suggestions.STRING;
+		else if (json.optBoolean("suggestionsNumber", false)) assn.suggestions = Schema.Suggestions.NUMBER;
+		else if (json.optBoolean("suggestionsInteger", false)) assn.suggestions = Schema.Suggestions.INTEGER;
+		
+		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)
 		{
 			JSONObject obj = jvalues.getJSONObject(n);
-			Schema.Value val = new Schema.Value(obj.getString("uri"), obj.getString("name"));
-			val.descr = obj.getString("descr");
+			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
+			val.descr = obj.optString("descr", "");
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
 			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
 			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
@@ -268,6 +321,28 @@ public class ClipboardSchema
 		}
 		
 		return assay;
+	}
+	
+	private static void formatGroupTSV(List<String> lines, Schema.Group group)
+	{
+		List<String> cols = new ArrayList<>();
+		cols.add(group.name);
+		cols.add(group.descr.replace("\n", " "));
+		cols.add("");
+		for (String g : group.groupNest()) cols.add(g);
+		cols.add(Util.safeString(group.groupURI));
+		lines.add(String.join("\t", cols));
+		
+		for (Schema.Assignment assn : group.assignments)
+		{
+			cols.clear();
+			cols.add(assn.name);
+			cols.add(assn.descr.replace("\n", " "));
+			cols.add(assn.propURI);
+			for (String g : assn.groupNest()) cols.add(g);
+			lines.add(String.join("\t", cols));
+		}
+		for (Schema.Group subgrp : group.subGroups) formatGroupTSV(lines, subgrp);
 	}
 }
 

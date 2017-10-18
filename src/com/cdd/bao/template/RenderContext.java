@@ -65,20 +65,20 @@ public class RenderContext
 	{
 		try
 		{
-    		if (stream == null)
-    		{
-        		width = Math.max(width, Math.max(x1 + 0.5f * thickness, x2 + 0.5f * thickness));
-        		height = Math.max(height, Math.max(y1 + 0.5f * thickness, y2 + 0.5f * thickness));
-    		}
-    		else
-    		{
-    			if (colour == NOCOLOUR) return;
-                stream.moveTo(x1, height - y1);
-                stream.lineTo(x2, height - y2);
-                stream.setLineWidth(thickness);
-                setStroke(colour);
-                stream.stroke();
-    		}
+			if (stream == null)
+			{
+				width = Math.max(width, Math.max(x1 + 0.5f * thickness, x2 + 0.5f * thickness));
+				height = Math.max(height, Math.max(y1 + 0.5f * thickness, y2 + 0.5f * thickness));
+			}
+			else
+			{
+				if (colour == NOCOLOUR) return;
+				stream.moveTo(x1, height - y1);
+				stream.lineTo(x2, height - y2);
+				stream.setLineWidth(thickness);
+				setStroke(colour);
+				stream.stroke();
+			}
 		}
 		catch (IOException ex) {}
 	}
@@ -87,27 +87,27 @@ public class RenderContext
 	{
 		try
 		{
-    		if (stream == null)
-    		{
-    			width = Math.max(width, x + w + 0.5f * thickness);
-    			height = Math.max(height, y + h + 0.5f * thickness);
-    		}
-    		else
-    		{
-    			if (fillCol != NOCOLOUR)
-    			{
-    				stream.addRect(x, height - y, w, -h);
-    				setFill(fillCol);
-    				stream.fill();
-    			}
-    			if (edgeCol != NOCOLOUR)
-    			{
-    				stream.addRect(x, height - y, w, -h);
-    	            stream.setLineWidth(thickness);
-    				setStroke(edgeCol);
-    				stream.stroke();
-    			}
-    		}
+			if (stream == null)
+			{
+				width = Math.max(width, x + w + 0.5f * thickness);
+				height = Math.max(height, y + h + 0.5f * thickness);
+			}
+			else
+			{
+				if (fillCol != NOCOLOUR)
+				{
+					stream.addRect(x, height - y, w, -h);
+					setFill(fillCol);
+					stream.fill();
+				}
+				if (edgeCol != NOCOLOUR)
+				{
+					stream.addRect(x, height - y, w, -h);
+					stream.setLineWidth(thickness);
+					setStroke(edgeCol);
+					stream.stroke();
+				}
+			}
 		}
 		catch (IOException ex) {}
 	}
@@ -116,22 +116,22 @@ public class RenderContext
 	{
 		//try
 		{
-    		if (stream == null)
-    		{
-    			width = Math.max(width, cx + rw + 0.5f * thickness);
-    			height = Math.max(height, cy + rh + 0.5f * thickness);
-    		}
-    		else
-    		{
-    			if (fillCol != NOCOLOUR)
-    			{
-    				// !! have to implement with a spline
-    			}
-    			if (edgeCol != NOCOLOUR)
-    			{
-    				// !! have to implement with a spline
-    			}
-    		}
+			if (stream == null)
+			{
+				width = Math.max(width, cx + rw + 0.5f * thickness);
+				height = Math.max(height, cy + rh + 0.5f * thickness);
+			}
+			else
+			{
+				if (fillCol != NOCOLOUR)
+				{
+					// !! have to implement with a spline
+				}
+				if (edgeCol != NOCOLOUR)
+				{
+					// !! have to implement with a spline
+				}
+			}
 		}
 		//catch (IOException ex) {}
 	}
@@ -140,30 +140,30 @@ public class RenderContext
 	{
 		try
 		{
-    		if (stream == null)
-    		{
-    			for (float x : px) width = Math.max(width, x + 0.5f * thickness);
-    			for (float y : py) height = Math.max(height, y + 0.5f * thickness);
-    		}
-    		else
-    		{
-    			if (fillCol != NOCOLOUR)
-    			{
-    				stream.moveTo(px[0], height - py[0]);
-    				for (int n = 1; n < px.length; n++) stream.lineTo(px[n], height - py[n]);
-    				setFill(fillCol);
-    				stream.fill();
-    			}
-    			if (edgeCol != NOCOLOUR)
-    			{
-    				stream.moveTo(px[0], height - py[0]);
-    				for (int n = 1; n < px.length; n++) stream.lineTo(px[n], height - py[n]);
-    				if (closed) stream.closePath();
-    	            stream.setLineWidth(thickness);
-    				setStroke(edgeCol);
-    				stream.stroke();
-    			}
-    		}
+			if (stream == null)
+			{
+				for (float x : px) width = Math.max(width, x + 0.5f * thickness);
+				for (float y : py) height = Math.max(height, y + 0.5f * thickness);
+			}
+			else
+			{
+				if (fillCol != NOCOLOUR)
+				{
+					stream.moveTo(px[0], height - py[0]);
+					for (int n = 1; n < px.length; n++) stream.lineTo(px[n], height - py[n]);
+					setFill(fillCol);
+					stream.fill();
+				}
+				if (edgeCol != NOCOLOUR)
+				{
+					stream.moveTo(px[0], height - py[0]);
+					for (int n = 1; n < px.length; n++) stream.lineTo(px[n], height - py[n]);
+					if (closed) stream.closePath();
+					stream.setLineWidth(thickness);
+					setStroke(edgeCol);
+					stream.stroke();
+				}
+			}
 		}
 		catch (IOException ex) {}
 	}
@@ -172,28 +172,28 @@ public class RenderContext
 	{
 		try
 		{
-    		if (stream == null)
-    		{
-    			for (float x : px) width = Math.max(width, x + 0.5f * thickness);
-    			for (float y : py) height = Math.max(height, y + 0.5f * thickness);
-    		}
-    		else
-    		{
-    			if (fillCol != NOCOLOUR)
-    			{
-    				defineCurve(px, py, ctrl);
-    				setFill(fillCol);
-    				stream.fill();
-    			}
-    			if (edgeCol != NOCOLOUR)
-    			{
-    				defineCurve(px, py, ctrl);
-    				if (closed) stream.closePath();
-    	            stream.setLineWidth(thickness);
-    				setStroke(edgeCol);
-    				stream.stroke();
-    			}
-    		}
+			if (stream == null)
+			{
+				for (float x : px) width = Math.max(width, x + 0.5f * thickness);
+				for (float y : py) height = Math.max(height, y + 0.5f * thickness);
+			}
+			else
+			{
+				if (fillCol != NOCOLOUR)
+				{
+					defineCurve(px, py, ctrl);
+					setFill(fillCol);
+					stream.fill();
+				}
+				if (edgeCol != NOCOLOUR)
+				{
+					defineCurve(px, py, ctrl);
+					if (closed) stream.closePath();
+					stream.setLineWidth(thickness);
+					setStroke(edgeCol);
+					stream.stroke();
+				}
+			}
 		}
 		catch (IOException ex) {}
 	}
@@ -203,31 +203,31 @@ public class RenderContext
 		txt = downgradeToASCII(txt);
 		try
 		{
-    		final float[] wad = measureLine(txt, sz);
-
-    		if ((align & TXTALIGN_LEFT) != 0) {}
-    		else if ((align & TXTALIGN_RIGHT) != 0) x -= wad[0];
-    		else /*TXTALIGN_CENTRE*/ x -= 0.5f * wad[0];
-    
-    		if ((align & TXTALIGN_MIDDLE) != 0) y += 0.5f * wad[1];
-    		else if ((align & TXTALIGN_TOP) != 0) y += wad[1];
-    		else if ((align & TXTALIGN_BOTTOM) != 0) y -= wad[2];
-    		// else: TXTALIGN_BASELINE
-    	
-    		if (stream == null)
-    		{
-    			width = Math.max(width, x + wad[0]);
-    			height = Math.max(height, y + wad[2]);
-    		}
-    		else
-    		{
-                stream.beginText();
-                stream.setFont(font, sz);
-                stream.newLineAtOffset(x, height - y);
-                setFill(colour);
-                stream.showText(txt);
-                stream.endText();
-    		}
+			final float[] wad = measureLine(txt, sz);
+	
+			if ((align & TXTALIGN_LEFT) != 0) {}
+			else if ((align & TXTALIGN_RIGHT) != 0) x -= wad[0];
+			else /*TXTALIGN_CENTRE*/ x -= 0.5f * wad[0];
+	
+			if ((align & TXTALIGN_MIDDLE) != 0) y += 0.5f * wad[1];
+			else if ((align & TXTALIGN_TOP) != 0) y += wad[1];
+			else if ((align & TXTALIGN_BOTTOM) != 0) y -= wad[2];
+			// else: TXTALIGN_BASELINE
+		
+			if (stream == null)
+			{
+				width = Math.max(width, x + wad[0]);
+				height = Math.max(height, y + wad[2]);
+			}
+			else
+			{
+				stream.beginText();
+				stream.setFont(font, sz);
+				stream.newLineAtOffset(x, height - y);
+				setFill(colour);
+				stream.showText(txt);
+				stream.endText();
+			}
 		}
 		catch (IOException ex) {}
 	}
@@ -238,9 +238,9 @@ public class RenderContext
 		txt = downgradeToASCII(txt);
 		try
 		{
-    		float width = font.getStringWidth(txt) * sz * 0.001f;
-    		float ascent = sz, descent = 0.3f * sz; // faked, but should be good enough
-    		return new float[]{width, ascent, descent};
+			float width = font.getStringWidth(txt) * sz * 0.001f;
+			float ascent = sz, descent = 0.3f * sz; // faked, but should be good enough
+			return new float[]{width, ascent, descent};
 		}
 		catch (IOException ex) {return null;}
 	}
