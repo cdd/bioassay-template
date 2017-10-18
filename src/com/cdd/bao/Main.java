@@ -31,7 +31,6 @@ import org.json.JSONException;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.axioms.AxiomCollector;
-import com.cdd.bao.axioms.GetOntologyDetails;
 import com.cdd.bao.axioms.ScanAxioms;
 import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
@@ -137,8 +136,7 @@ public class Main
 			printHelp();
 		}
 		
-		GetOntologyDetails g = new GetOntologyDetails();
-		g.ontologyReader();
+		
 		
 		ScanAxioms s = new ScanAxioms();
 		try {
@@ -149,14 +147,14 @@ public class Main
 		}
 		AxiomCollector ac;
 		ac = new AxiomCollector();
-		ac.mergeAxiomMaps();
+		
 		try {
 			AxiomCollector.serialiseAxiom();
 			AxiomCollector.serialiseAxiomSome();
 			//AxiomCollector.findAllAxiomsOfAssay();
 			//AxiomCollector.minAllAxiomsOfAssay();
-			AxiomCollector.createAllAxiomsPerURI();
-			AxiomCollector.createMethodAxiomsPerURI();
+			//AxiomCollector.createAllAxiomsPerURI();
+			//AxiomCollector.createMethodAxiomsPerURI();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
