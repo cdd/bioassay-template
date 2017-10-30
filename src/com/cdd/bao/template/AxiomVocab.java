@@ -8,8 +8,14 @@ package com.cdd.bao.template;
 
 import com.cdd.bao.util.*;
 import com.cdd.bao.template.*;
+import com.cdd.bao.template.AxiomVocab.Rule;
+import com.cdd.bao.template.AxiomVocab.Term;
+import com.cdd.bao.template.AxiomVocab.Type;
+
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
+import com.cdd.bao.axioms.*;
+import com.cdd.bao.axioms.AxiomCollector.AssayAxioms;
 
 import java.util.*;
 import java.io.*;
@@ -37,11 +43,11 @@ public class AxiomVocab
 	
 	public class Term
 	{
-		public String branchURI;
+		//public String branchURI;
 		public String valueURI;
 		public boolean wholeBranch;
 		
-		public Term(String branchURI, String valueURI, boolean wholeBranch)
+		/*public Term(String branchURI, String valueURI, boolean wholeBranch)
 		{
 			this.branchURI = branchURI;
 			this.valueURI = valueURI;
@@ -52,12 +58,21 @@ public class AxiomVocab
 			this.branchURI = branchURI;
 			this.valueURI = null;
 			this.wholeBranch = false;
-		}
+		}*/
 		public Term(String valueURI, boolean wholeBranch)
 		{
-			this.branchURI = null;
+			//this.branchURI = null;
 			this.valueURI = valueURI;
 			this.wholeBranch = wholeBranch;
+		}
+		
+		public String toString()
+		{
+			String termString = "";
+			
+			termString += "value URI: [" + valueURI + "] ";// + "branch URI: [" + branchURI + "] " ;
+			
+			return termString;
 		}
 	}
 	
@@ -67,9 +82,26 @@ public class AxiomVocab
 
 		// selection of the subject domain; any blank parts are considered to be wildcards
 		public Term subject;
-		
+
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
+
+		public String toString()
+		{
+			String ruleString = "";
+
+			if (type.equals(Type.LIMIT)) ruleString += "LIMIT type axiom \n";
+			else if (type.equals(Type.EXCLUDE))	ruleString += "EXCLUDE type axiom \n";
+			else if (type.equals(Type.REQUIRED)) ruleString += "REQUIRED type axiom \n";
+			else if (type.equals(Type.BLANK)) ruleString += "BLANK type axiom \n";
+
+			ruleString += "Subject = [" + subject + "]";
+
+			ruleString += "Objects = [" + impact[0].toString() + "]\n";
+
+			return ruleString;
+		}
+
 	}
 	private List<Rule> rules = new ArrayList<>();
 
@@ -95,12 +127,12 @@ public class AxiomVocab
 		{
 			if (rule.subject != null)
 			{
-				if (rule.subject.branchURI != null) termSet.add(rule.subject.branchURI);
+				//if (rule.subject.branchURI != null) termSet.add(rule.subject.branchURI);
 				if (rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
 			}
 			if (rule.impact != null) for (Term term : rule.impact)
 			{
-				if (term.branchURI != null) termSet.add(term.branchURI);
+				//if (term.branchURI != null) termSet.add(term.branchURI);
 				if (term.valueURI != null) termSet.add(term.valueURI);
 			}
 		}
@@ -150,14 +182,14 @@ public class AxiomVocab
 		{
 			data.writeInt(rule.type.raw);
 
-			data.writeUTF(rule.subject == null ? null : rule.subject.branchURI);
+			//data.writeUTF(rule.subject == null ? null : rule.subject.branchURI);
 			data.writeUTF(rule.subject == null ? null : rule.subject.valueURI);
 			data.writeBoolean(rule.subject == null ? false : rule.subject.wholeBranch);
 
 			data.writeInt(rule.impact == null ? 0 : rule.impact.length);
 			if (rule.impact != null) for (Term term : rule.impact)
 			{
-				data.writeUTF(term.branchURI);
+				//data.writeUTF(term.branchURI);
 				data.writeUTF(term.valueURI);
 				data.writeBoolean(term.wholeBranch);
 			}
@@ -235,6 +267,76 @@ public class AxiomVocab
 		
 		return av;
 	}
+	
+	//create rule method should read the axioms from a map or array list and 
+	// generate the rule in the format that the "addRule" method can use
+	//all the rules we have extracted fall into the LIMIT category
+	
+	/*public ArrayList<Rule> createRules(HashMap<AssayAxioms, String> axiomMap){
+		
+		//assayAxiomsMap<axiom, axiomsClassURI>
+		HashMap<AssayAxioms, String> assayAxiomsMap = axiomMap;
+		ArrayList<Rule> axioms2Rules = new ArrayList();
+		Term subject = null;
+		Term[] impact = null;
+		Rule newRule = null;
+
+		for(AssayAxioms axiom: assayAxiomsMap.keySet())
+		{
+			subject = new Term(axiom.getClassURI());
+			
+			String[] objURIs = axiom.getURIArray();
+			for(int i = objURIs.length-1; i>=0; i-- ){
+			  impact[i] = new Term(objURIs[i]);
+			}
+			
+			 newRule.subject = subject;
+			 newRule.impact = impact;
+			 newRule.type = Type.LIMIT;
+			axioms2Rules.add(newRule);
+							
+		}
+		return axioms2Rules;
+	}*/
+	
+	public ArrayList<Rule> createRules(Map<AssayAxioms,String> axiomMap)
+	{
+
+		//assayAxiomsMap<axiom, axiomsClassURI>
+		Map<AssayAxioms,String> assayAxiomsMap = axiomMap;
+		ArrayList<Rule> axioms2Rules = new ArrayList();
+		
+
+		Rule newRule = new Rule();
+
+		for (AssayAxioms axiom : assayAxiomsMap.keySet())
+		{
+			Term subject = new Term(axiom.getClassURI(), true);
+			
+
+			String[] objURIs = axiom.uriArray;
+			//objURIs[0] = axiom.getObjectURIs();
+			Term[] impact = new Term[objURIs.length];
+			
+			for(int i = objURIs.length-1; i>=0; i-- )
+			{
+				if(objURIs[i] !=null)
+					impact[i] = new Term(objURIs[i],true);
+			}
+			//impact[0] = new Term("" + objURIs[0]);
+			newRule.subject = subject;
+			newRule.impact = impact;
+			newRule.type = Type.LIMIT;
+			axioms2Rules.add(newRule);
+
+		}
+		System.out.println(axioms2Rules.toString());
+		return axioms2Rules;
+	}
+	
+	
+	//add rule method, currently all the rules we have extracted fall into the LIMIT category
+
 	
 	// ------------ private methods ------------
 	
