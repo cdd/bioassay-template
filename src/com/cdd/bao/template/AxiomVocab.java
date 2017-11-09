@@ -238,7 +238,7 @@ public class AxiomVocab
 		{
 			int pfx = data.readInt();
 			String str = data.readUTF();
-			termList[n] = pfx < 0 ? str : pfxList[n] + str;
+			termList[n] = pfx < 0 ? str : pfxList[pfx] + str;
 		}
 		
 		int nrule = data.readInt();
@@ -251,6 +251,8 @@ public class AxiomVocab
 			int nimpact = data.readInt();
 			r.impact = new Term[nimpact];
 			for (int i = 0; i < nimpact; i++) r.impact[i] = new Term(data.readUTF(), data.readBoolean());
+			
+			av.addRule(r);
 		}
 
 		return av;
