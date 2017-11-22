@@ -131,7 +131,7 @@ public class BrowseEndpoint
 		Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		new Thread(() -> backgroundLoadTemplates()).start();
- 	}
+	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}
 

@@ -1,3 +1,24 @@
+/*
+ * BioAssay Ontology Annotator Tools
+ * 
+ * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2.0
+ * as published by the Free Software Foundation:
+ * 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.cdd.bao;
 
 import java.util.*;
@@ -37,33 +58,33 @@ public class ScanAxioms
 
 	public void exec() throws OntologyException 
 	{ 
-	 	try 
-	  	{
-	  		Util.writeln("Loading common assay template...");
-	  		schema = ModelSchema.deserialise(new File("data/template/schema.ttl"));
-	  		
-	  		Util.writeln("Loading vocabulary dump...");
-	  		InputStream idump = new FileInputStream("data/template/vocab.dump");
-	  		schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
-	  		idump.close();
-	  	
-	  		List<File> files = new ArrayList<>();
-	  		for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-	  		//for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-	  		Util.writeln("# files to read: " + files.size());
+		try 
+		{
+			Util.writeln("Loading common assay template...");
+			schema = ModelSchema.deserialise(new File("data/template/schema.ttl"));
+		
+			Util.writeln("Loading vocabulary dump...");
+			InputStream idump = new FileInputStream("data/template/vocab.dump");
+			schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+			idump.close();
+			
+			List<File> files = new ArrayList<>();
+			for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+			//for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+			Util.writeln("# files to read: " + files.size());
 
-   			ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF); 
+			ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF); 
 			for (File f : files)
 			{
-//if (!f.getName().equals("bao_vocabulary_phenotype.owl")) continue; // !!			
+				//if (!f.getName().equals("bao_vocabulary_phenotype.owl")) continue; // !!			
 				Util.writeln("    reading: " + f.getCanonicalPath());
 				//org.apache.jena.riot.RDFDataMgr.read(ontology, f.getPath(), org.apache.jena.riot.Lang.RDFXML);
 				Reader rdr = new FileReader(f);
 				ontology.read(rdr, null);
 				rdr.close();
 			}
-   		}
-   		catch (Exception e) {throw new OntologyException(e.getMessage());}
+		}
+		catch (Exception e) {throw new OntologyException(e.getMessage());}
 		
 		Util.writeln("Collating values from schema...");
 		Set<String> schemaValues = new HashSet<>();

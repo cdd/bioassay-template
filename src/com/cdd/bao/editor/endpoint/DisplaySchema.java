@@ -53,7 +53,7 @@ public class DisplaySchema extends ScrollPane
 	private Schema schema = null;
 	private Schema.Assay assay = null;
 	
-	private final int PADDING = 4;
+	private static final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
 
@@ -70,7 +70,7 @@ public class DisplaySchema extends ScrollPane
 		vbox.setPadding(new Insets(4));
 		setContent(vbox);
 		vbox.setPrefWidth(Double.MAX_VALUE);
- 	}
+	}
 
 	// replaces the schema and redraws everything
 	public void clearContent()

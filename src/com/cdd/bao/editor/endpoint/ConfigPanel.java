@@ -31,7 +31,6 @@ import java.util.*;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;

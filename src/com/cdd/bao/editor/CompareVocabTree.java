@@ -30,7 +30,6 @@ import java.util.*;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -102,7 +101,7 @@ public class CompareVocabTree
 		schvoc = new SchemaVocab(Vocabulary.globalInstance(), new Schema[]{schema});
 	
 		treeView.setShowRoot(false);
-		treeView.setCellFactory((p) -> new HierarchyTreeCell());
+		treeView.setCellFactory(p -> new HierarchyTreeCell());
 		
 		try {setupTree();}
 		catch (IOException ex) {ex.printStackTrace();}
