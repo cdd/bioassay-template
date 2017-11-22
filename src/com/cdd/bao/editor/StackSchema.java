@@ -46,7 +46,7 @@ public class StackSchema
 	}
 
 	State current = new State(null, false);
-	private final int STACK_SIZE = 20;
+	private static final int STACK_SIZE = 20;
 	private List<State> undoStack = new ArrayList<>(), redoStack = new ArrayList<>();
 
 	// ------------ public methods ------------	

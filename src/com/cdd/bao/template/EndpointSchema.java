@@ -41,7 +41,7 @@ public class EndpointSchema
 {
 	private String endpoint;
 
-	private final String SPARQL_PREFIXES =
+	private static final String SPARQL_PREFIXES =
 		"PREFIX rdfs: <" + ModelSchema.PFX_RDFS + ">\n" + 
 		"PREFIX bat: <" + ModelSchema.PFX_BAT + ">";
 		

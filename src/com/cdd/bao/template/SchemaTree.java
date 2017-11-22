@@ -7,7 +7,6 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 
@@ -45,7 +44,7 @@ public class SchemaTree
 	private List<Node> flat = new ArrayList<>(); // ordered by tree structure, i.e. root at the beginning, depth & parentIndex are meaningful
 	private List<Node> list = new ArrayList<>(); // just nodes in the schema, sorted alphabetically (i.e. no tree structure)
 
-	private final String SEP = "::";
+	private static final String SEP = "::";
 
 	// ------------ public methods ------------
 
@@ -98,7 +97,7 @@ public class SchemaTree
 			for (int n = 0; n < node.depth; n++) buff.append("* ");
 			buff.append("<" + ModelSchema.collapsePrefix(node.uri) + "> '" + node.label + "'");
 			if (node.inSchema) buff.append(" [schema]");
-			buff.append(" (children="+node.childCount+", #schema="+node.schemaCount+")");
+			buff.append(" (children=" + node.childCount + ", #schema=" + node.schemaCount + ")");
 			buff.append("\n");
 		}
 		return buff.toString();
@@ -120,116 +119,6 @@ public class SchemaTree
 	}
 	
 	// ------------ private methods ------------
-
-/*
-	// do the hard work of constructing the tree, and pruning as necessary for presentation purposes
-	private void buildTree(Vocabulary vocab)
-	{
-		Hierarchy hier = vocab.getValueHierarchy();
-
-		// collect up the directives for include/exclude
-		Set<String> includeURI = new HashSet<>(); // URIs that have been explicitly requested by the schema
-		Set<String> includeBranch = new HashSet<>(); // URIs that have been implicitly requested by virtue of branch
-		Set<String> excludeURI = new HashSet<>(); // URIs that have been explicitly excluded
-		Set<String> excludeBranch = new HashSet<>(); // URIs that have been excluded as part of a branch
-		
-		for (Value value : assn.values)
-		{
-			Branch branch = hier.uriToBranch.get(value.uri);
-			if (branch == null) continue;
-			
-			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH)
-			{
-				includeURI.add(value.uri);
-				if (value.spec == Specify.WHOLEBRANCH) includeBranch.add(value.uri);
-			}
-			else if (value.spec == Specify.EXCLUDE || value.spec == Specify.EXCLUDEBRANCH)
-			{
-				excludeURI.add(value.uri);
-				if (value.spec == Specify.EXCLUDEBRANCH) excludeBranch.add(value.uri);
-			}
-		}		
-
-		// branch directives have to be turned into entire trees
-		List<Node> includeTrees = new ArrayList<>(), excludeTrees = new ArrayList<>();
-		for (String uri : includeBranch) includeTrees.add(exciseTree(hier.uriToBranch.get(uri), vocab, excludeURI));
-		for (String uri : excludeBranch) excludeTrees.add(exciseTree(hier.uriToBranch.get(uri), vocab, includeURI));
-		
-		// tree branches get merged together, when possible 
-		recycle: while (includeTrees.size() > 1)
-		{
-			for (int i = 0; i < includeTrees.size() - 1; i++) for (int j = i + 1; j < includeTrees.size(); j++)
-			{
-				Node merged = mergeTrees(includeTrees.get(i), includeTrees.get(j));
-				if (merged == null) continue;
-				includeTrees.set(i, merged);
-				includeTrees.remove(j);
-				continue recycle;
-			}
-			break;
-		}
-		
-		// !! HAVE TO merge together the inclusion branches, using just the node structure
-		// !! compile parent-child pairs for excludeTrees; leave these out of the included branch
-		// !! ADD IN the includeURI cases: try to use existing parents whenever possible
-		// !! LOOK FOR missing parents: whenever there's a choice for the groups collectively, make a set of those
-		//			that aren't in the exclude list; whichever one is most popular gets applied to anything that uses it
-		// !! THEN cut out root nodes (reuse the old code, it worked)
-	}
-
-	// given a root URI, pulls out a tree structure and returns it as a node with children, each of which have just
-	// one parent; an additional parameter provides a list of URIs that should not be included
-	private Node exciseTree(Branch rootBranch, Vocabulary vocab, Set<String> exceptForURI)
-	{
-		Node root = new Node(rootBranch, vocab.getDescr(rootBranch.uri));
-
-		Set<String> alreadyGotURI = new HashSet<>();
-		List<Node> stack = new ArrayList<>();
-		stack.add(root);
-		
-		while (stack.size() > 0)
-		{
-			Node node = stack.remove(0);
-			for (Branch br : node.source.children) if (!alreadyGotURI.contains(br.uri) && !exceptForURI.contains(br.uri))
-			{
-				Node child = new Node(br, vocab.getDescr(br.uri));
-				child.parent = node;
-				stack.add(child);
-				alreadyGotURI.add(br.uri);
-			}
-		}
-		
-		return root;
-	}
-
-	// returns a set that contains everything in the branch structure, from the given root
-	private Map<String, Node> treeToSet(Node node)
-	{
-		Map<String, Node> allNodes = new HashMap<>();
-		List<Node> stack = new ArrayList<>();
-		stack.add(node);
-		
-		while (stack.size() > 0)
-		{
-			node = stack.remove(0);
-			stack.addAll(node.children);
-			for (Node child : node.children) allNodes.add(child.uri, child);
-		}
-
-		return allNodes;
-	}
-
-	// consider two trees: if the root of one is a branch of the other, splice them together; returns the node that is still a root,
-	// or null if they do not 
-	private Node mergeTrees(Node nodeA, Node nodeB)
-	{
-		Map<String, Node> allA = treeToSet(nodeA);
-		if (allA.containsKey(nodeB.uri)) {mergeBranches(allA.get(nodeB.uri), nodeB); return nodeA;}
-		Map<String, Node> allB = treeToSet(nodeB);
-		if (allB.containsKey(nodeA.uri)) {mergeBranches(allB.get(nodeA.uri), nodeA); return node B;}
-		return null;
-	}
-	*/
 
 	// do the hard work of constructing the tree, and pruning as necessary for presentation purposes
 	private void buildTree(Vocabulary vocab)
@@ -294,13 +183,6 @@ public class SchemaTree
 		{
 			Branch branch = hier.uriToBranch.get(uri);
 			collectBranch(everything, branch, excludeURI);
-			
-			/*if (branch.parents.size() > 0)
-			{
-    			Branch parent = branch.parents.get(0);
-    			for (Branch look : branch.parents) if (includeURI.contains(look.uri) || includeBranch.contains(look.uri)) {parent = look; break;}
-    			if (!excludeBranch.contains(parent.uri)) collectBranch(everything, parent, excludeBranch);
-			}*/
 		}
 		
 		// now follow the parent lineage, and make sure these are included
@@ -309,21 +191,6 @@ public class SchemaTree
 			Branch look = branch;
 			while (look != null && look.parents.size() > 0)
 			{
-			/*
-				// if multiple parents, give preferential treatment to anything that's already in the inclusion branch; if none of them are,
-				// add the first one to the inclusion branch, and follow that trail
-				Branch pick = null;
-				for (Branch parent : look.parents) if (everything.contains(parent.uri)) {pick = parent; break;}
-				if (pick == null)
-				{
-					//look = look.parents.get(0);
-					//everything.add(look.uri);
-					
-					for (Branch parent : look.parents) if (!excludeURI.contains(parent.uri)) {pick = parent; break;}
-					if (pick != null) everything.add(pick.uri);
-				}
-				look = pick;*/
-				
 				String oneURI = oneParent.get(look.uri);
 				if (oneURI == null)
 				{

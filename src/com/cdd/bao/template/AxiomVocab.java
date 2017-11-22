@@ -7,11 +7,6 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
-import com.cdd.bao.template.AxiomVocab.Rule;
-import com.cdd.bao.template.AxiomVocab.Term;
-import com.cdd.bao.template.AxiomVocab.Type;
-
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 
@@ -95,7 +90,7 @@ public class AxiomVocab
 			StringBuilder str = new StringBuilder();
 
 			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
-			else if (type.equals(Type.EXCLUDE))	str.append("EXCLUDE type axiom; ");
+			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
 			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
 			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
 

@@ -195,7 +195,7 @@ public class EditSchema
 			}
 		};		
 		Vocabulary.globalInstance(listener);
- 	}
+	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}
 	public DetailPane getDetailView() {return detail;}

@@ -74,7 +74,7 @@ public class Util
 	 * @param msg message to show
 	 * @param ex exception to format
 	 */
-	public static void errmsg(String msg,Exception ex)
+	public static void errmsg(String msg, Exception ex)
 	{
 		System.out.println("*** ERROR: " + msg + "/" + ex.getMessage());
 		ex.printStackTrace();
@@ -96,71 +96,71 @@ public class Util
 	/**
 	 * Length of array, protected against nulls.
 	 */
-	public static int length(Object A) {return A == null ? 0 : Array.getLength(A);}
+	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(int[] A)
+	public static String arrayStr(int[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + A[n];
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + arr[n];
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(long[] A)
+	public static String arrayStr(long[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + A[n];
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + arr[n];
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(float[] A)
+	public static String arrayStr(float[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + A[n];
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + arr[n];
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(double[] A)
+	public static String arrayStr(double[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + A[n];
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + arr[n];
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(String[] A)
+	public static String arrayStr(String[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + "\"" + A[n] + "\"";
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + "\"" + arr[n] + "\"";
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(boolean[] A)
+	public static String arrayStr(boolean[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "{";
-		for (int n = 0; n < A.length; n++) str += (A[n] ? "1" : "0");
+		for (int n = 0; n < arr.length; n++) str += arr[n] ? "1" : "0";
 		return str + "}";
 	}
 	
@@ -169,10 +169,10 @@ public class Util
 	 * @param A array to format
 	 * @param mul modifier to multiply by
 	 */
-	public static String arrayStr(float[] A, float mul)
+	public static String arrayStr(float[] arr, float mul)
 	{
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + (A[n] * mul);
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + (arr[n] * mul);
 		return str;
 	}
 	
@@ -181,21 +181,21 @@ public class Util
 	 * @param A array to format
 	 * @param mul modifier to multiply by
 	 */
-	public static String arrayStr(double[] A, double mul)
+	public static String arrayStr(double[] arr, double mul)
 	{
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += (n > 0 ? "," : "") + (A[n] * mul);
+		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + (arr[n] * mul);
 		return str;
 	}
 	
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
-	public static String arrayStr(int[][] A) 
+	public static String arrayStr(int[][] arr) 
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++) str += A[n] == null ? "{null}" : "{" + arrayStr(A[n]) + "}";
+		for (int n = 0; n < arr.length; n++) str += arr[n] == null ? "{null}" : "{" + arrayStr(arr[n]) + "}";
 		return str;
 	}
 	
@@ -242,13 +242,13 @@ public class Util
 	/**
 	 * Converts an array to a human-readable string, where each value is represented as an 8-digit padded hex string.
 	 */
-	public static String arrayStrHex(int[] A)
+	public static String arrayStrHex(int[] arr)
 	{
-		if (A == null) return "{null}";
+		if (arr == null) return "{null}";
 		String str = "";
-		for (int n = 0; n < A.length; n++)
+		for (int n = 0; n < arr.length; n++)
 		{
-			long v = A[n] >= 0 ? A[n] : ((A[n] & 0x7FFFFFFF) | (1L << 31));
+			long v = arr[n] >= 0 ? arr[n] : ((arr[n] & 0x7FFFFFFF) | (1L << 31));
 			String hex = Long.toString(v, 16);
 			str += (n > 0 ? "," : "") + "0x" + padstr(hex, 8, '0');
 		}
@@ -271,7 +271,7 @@ public class Util
 	 * @param str string to convert
 	 * @param def default value to return in case it is not a valid number
 	 */
-	public static int safeInt(String str,int def) 
+	public static int safeInt(String str, int def) 
 	{
 		if (str == null) return def;
 		try {return Integer.valueOf(str).intValue();} 
@@ -282,17 +282,17 @@ public class Util
 	 * Converts a string into an integer, or returns zero if it is invalid, rather than throwing an exception.
 	 * @param str string to convert
 	 */
-	public static int safeInt(String S) {return safeInt(S, 0);}
+	public static int safeInt(String str) {return safeInt(str, 0);}
 	
 	/**
 	 * Converts a string into a long integer, without the annoyance of having to trap an exception
 	 * @param str string to convert
 	 * @param def default value to return in case it is not a valid number
 	 */
-	public static long safeLong(String S, long def) 
+	public static long safeLong(String str, long def) 
 	{
-		if (S == null) return def;
-		try {return Long.valueOf(S).longValue();} 
+		if (str == null) return def;
+		try {return Long.valueOf(str).longValue();} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -300,17 +300,17 @@ public class Util
 	 * Converts a string into a long integer, or returns zero if it is invalid, rather than throwing an exception.
 	 * @param str string to convert
 	 */
-	public static long safeLong(String S) {return safeLong(S, 0);}
+	public static long safeLong(String str) {return safeLong(str, 0);}
 	
 	/**
 	 * Converts a string into a float, without the annoyance of having to trap an exception
 	 * @param str string to convert
 	 * @param def default value to return in case it is not a valid number
 	 */
-	public static float safeFloat(String S, float def) 
+	public static float safeFloat(String str, float def) 
 	{
-		if (S == null) return def;
-		try {return Float.valueOf(S).floatValue();} 
+		if (str == null) return def;
+		try {return Float.valueOf(str).floatValue();} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -318,17 +318,17 @@ public class Util
 	 * Converts a string into a float, or returns zero if it is invalid, rather than throwing an exception.
 	 * @param str string to convert
 	 */
-	public static float safeFloat(String S) {return safeFloat(S, 0);}
+	public static float safeFloat(String str) {return safeFloat(str, 0);}
 	
 	/**
 	 * Converts a string into a double, without the annoyance of having to trap an exception
 	 * @param str string to convert
 	 * @param def default value to return in case it is not a valid number
 	 */
-	public static double safeDouble(String S, double def) 
+	public static double safeDouble(String str, double def) 
 	{
-		if ( S== null) return def;
-		try {return Double.valueOf(S).doubleValue();} 
+		if (str == null) return def;
+		try {return Double.valueOf(str).doubleValue();} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -336,27 +336,27 @@ public class Util
 	 * Converts a string into a double, or returns zero if it is invalid, rather than throwing an exception.
 	 * @param str string to convert
 	 */
-	public static double safeDouble(String S) {return safeDouble(S, 0);}
+	public static double safeDouble(String str) {return safeDouble(str, 0);}
 	
 	/**
 	 * Returns the value of the string, or a blank string if the parameter is null.
 	 */
-	public static String safeString(String S) {return S == null ? "" : S;}
+	public static String safeString(String str) {return str == null ? "" : str;}
 	
 	/**
 	 * Returns the value of the string, or null if the string was blank.
 	 */
-	public static String nullOrString(String S) {return S == null || S.length() == 0 ? null : S;}
+	public static String nullOrString(String str) {return str == null || str.length() == 0 ? null : str;}
 	
 	/**
 	 * Returns true if the string is either blank or null.
 	 */
-	public static boolean isBlank(String s) {return s == null || s.length() == 0;}
+	public static boolean isBlank(String str) {return str == null || str.length() == 0;}
 	
 	/**
 	 * Returns true if the string is neither blank nor null.
 	 */
-	public static boolean notBlank(String s) {return s != null && s.length() > 0;}
+	public static boolean notBlank(String str) {return str != null && str.length() > 0;}
 	
 	/**
 	 * Returns true if the two strings are equal, whereby null strings and blank strings are considered the same.
@@ -369,7 +369,7 @@ public class Util
 	 */
 	public static String formatDouble(double val)
 	{
-		return String.format("%.17g", val).replaceFirst("\\.?0+(e|$)","$1");
+		return String.format("%.17g", val).replaceFirst("\\.?0+(e|$)", "$1");
 	}
 	
 	/**
@@ -399,57 +399,57 @@ public class Util
 	/**
 	 * Rounds a floating point value and returns it as an integer.
 	 */
-	public static int iround(float V) {return (int)Math.round(V);}
+	public static int iround(float val) {return (int)Math.round(val);}
 	
 	/**
 	 * Rounds a floating point value and returns it as an integer.
 	 */
-	public static int iround(double V) {return (int)Math.round(V);}
+	public static int iround(double val) {return (int)Math.round(val);}
 	
 	/**
 	 * Rounds down a floating point value and returns it as an integer.
 	 */
-	public static int ifloor(float V) {return (int)Math.floor(V);}
+	public static int ifloor(float val) {return (int)Math.floor(val);}
 	
 	/**
 	 * Rounds down a floating point value and returns it as an integer.
 	 */
-	public static int ifloor(double V) {return (int)Math.floor(V);}
+	public static int ifloor(double val) {return (int)Math.floor(val);}
 	
 	/**
 	 * Rounds up a floating point value and returns it as an integer.
 	 */
-	public static int iceil(float V) {return (int)Math.ceil(V);}
+	public static int iceil(float val) {return (int)Math.ceil(val);}
 	
 	/**
 	 * Rounds up a floating point value and returns it as an integer.
 	 */
-	public static int iceil(double V) {return (int)Math.ceil(V);}
+	public static int iceil(double val) {return (int)Math.ceil(val);}
 	
 	/**
 	 * Rounds down a floating point value and returns it as a float.
 	 */
-	public static float ffloor(float V) {return (float)Math.floor(V);}
+	public static float ffloor(float val) {return (float)Math.floor(val);}
 	
 	/**
 	 * Rounds up a floating point value and returns it as a float.
 	 */
-	public static float fceil(float V) {return (float)Math.ceil(V);}
+	public static float fceil(float val) {return (float)Math.ceil(val);}
 	
 	/**
 	 * Returns the square of a number. This is useful when the parameter is calculated in an expression.
 	 */
-	public static int sqr(int V) {return V * V;}
+	public static int sqr(int val) {return val * val;}
 	
 	/**
 	 * Returns the square of a number. This is useful when the parameter is calculated in an expression.
 	 */
-	public static float sqr(float V) {return V * V;}
+	public static float sqr(float val) {return val * val;}
 	
 	/**
 	 * Returns the square of a number. This is useful when the parameter is calculated in an expression.
 	 */
-	public static double sqr(double V) {return V * V;}
+	public static double sqr(double val) {return val * val;}
 	
 	/**
 	 * Returns the square of the magnitude of a 2D vector.
@@ -702,7 +702,7 @@ public class Util
 	public static Color mergeCols(Color col1, Color col2)
 	{
 		int r = col1.getRed() + col2.getRed(), g = col1.getGreen() + col2.getGreen(), b = col1.getBlue() + col2.getBlue();
-		return new Color(r / 2,g / 2,b / 2);
+		return new Color(r / 2, g / 2, b / 2);
 	}
 	
 	/**
@@ -711,7 +711,7 @@ public class Util
 	public static Color intToCol(int trgb)
 	{
 		int t = (trgb >> 24) & 0xFF, r = (trgb >> 16) & 0xFF, g = (trgb >> 8) & 0xFF, b = trgb & 0xFF;
-		return new Color(r,g,b,0xFF - t);
+		return new Color(r, g, b, 0xFF - t);
 	}
 	
 	/**
@@ -737,8 +737,8 @@ public class Util
 		if (r < 0) {g -= r; b -= r; r = 0;}
 		if (g < 0) {r -= g; b -= g; g = 0;}
 		if (b < 0) {r -= b; g -= b; b = 0;}
-		if (r < 0) r=0;
-		if (g < 0) g=0;
+		if (r < 0) r = 0;
+		if (g < 0) g = 0;
 		if (r > 255) {float m = 255.0f / r; r = 255; g *= m; b *= m;}
 		if (g > 255) {float m = 255.0f / g; g = 255; r *= m; b *= m;}
 		if (b > 255) {float m = 255.0f / b; b = 255; r *= m; g *= m;}
@@ -934,7 +934,7 @@ public class Util
 	{
 		Writer wtr = new StringWriter();
 		char[] buff = new char[1024];
-		Reader rdr = new BufferedReader(new InputStreamReader(in,UTF8));
+		Reader rdr = new BufferedReader(new InputStreamReader(in, UTF8));
 		int sz;
 		while ((sz = rdr.read(buff)) >= 0) wtr.write(buff, 0, sz);
 		return wtr.toString();
@@ -963,7 +963,8 @@ public class Util
 	 */
 	public static void silentClose(InputStream istr)
 	{
-		try {if (istr != null) istr.close();} catch (IOException ex) {}
+		try {if (istr != null) istr.close();} 
+		catch (IOException ex) {}
 	}
 	
 	/**
@@ -971,7 +972,8 @@ public class Util
 	 */
 	public static void silentClose(OutputStream ostr)
 	{
-		try {if (ostr != null) ostr.close();} catch (IOException ex) {}
+		try {if (ostr != null) ostr.close();} 
+		catch (IOException ex) {}
 	}
 	
 	/**
@@ -979,7 +981,8 @@ public class Util
 	 */
 	public static void silentClose(Reader rdr)
 	{
-		try {if (rdr != null) rdr.close();} catch (IOException ex) {}
+		try {if (rdr != null) rdr.close();} 
+		catch (IOException ex) {}
 	}
 	
 	/**
@@ -987,7 +990,8 @@ public class Util
 	 */
 	public static void silentClose(Writer wtr)
 	{
-		try {if (wtr != null) wtr.close();} catch (IOException ex) {}
+		try {if (wtr != null) wtr.close();} 
+		catch (IOException ex) {}
 	}
 	
 	/**
@@ -1074,7 +1078,11 @@ public class Util
 	*/
 	public static String makeRequest(String url, String post, int rerequests) throws IOException
 	{
-		for (int n = 0; n < rerequests - 1; n++) try {return makeRequest(url, post);} catch (Exception ex) {}
+		for (int n = 0; n < rerequests - 1; n++) 
+		{
+			try {return makeRequest(url, post);} 
+			catch (Exception ex) {}
+		}
 		return makeRequest(url, post);
 	}
 	
@@ -1099,7 +1107,7 @@ public class Util
 		
 		if (post != null)
 		{
-			BufferedWriter send = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(),Util.UTF8));
+			BufferedWriter send = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), Util.UTF8));
 			send.append(post);
 			send.flush();
 			send.close();
@@ -1116,7 +1124,8 @@ public class Util
 		while (true)
 		{
 			int b = -1;
-			try {b = istr.read();} catch (SocketTimeoutException ex) {throw new IOException(ex);}
+			try {b = istr.read();} 
+			catch (SocketTimeoutException ex) {throw new IOException(ex);}
 			if (b < 0) break;
 			if (buff.size() >= DOWNLOAD_LIMIT) 
 				throw new IOException("Download size limit exceeded (max=" + DOWNLOAD_LIMIT + " bytes) for URL: " + url);

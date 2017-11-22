@@ -30,7 +30,6 @@ import java.util.*;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -126,7 +125,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		}
 	}
 
-	private final int PADDING = 2;
+	private static final int PADDING = 2;
 
 	// ------------ public methods ------------
 
@@ -278,7 +277,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		}
 		
 		treeView.setShowRoot(false);
-		treeView.setCellFactory((p) -> new HierarchyTreeCell());
+		treeView.setCellFactory(p -> new HierarchyTreeCell());
 	
 		BorderPane pane = new BorderPane();
 		pane.setPrefSize(800, 500);

@@ -30,7 +30,6 @@ import java.util.*;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -57,7 +56,7 @@ public class AnnotatePanel extends Dialog<Schema.Annotation>
 
 	private Button btnUse, btnClear;
 
-	private final int PADDING = 2;
+	private static final int PADDING = 2;
 
 	private TextField fieldSearch = new TextField();
 	private CheckBox chkHierarchy = new CheckBox("Show ontology hierarchy");

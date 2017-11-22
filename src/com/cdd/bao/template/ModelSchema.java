@@ -341,7 +341,7 @@ public class ModelSchema
 		int order = 0;
 		String pfx = schema.getSchemaPrefix();
 		
- 		for (Assignment assn : group.assignments)
+		for (Assignment assn : group.assignments)
 		{
 			String name = turnLabelIntoName(assn.name);
 						

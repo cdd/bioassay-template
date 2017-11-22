@@ -59,7 +59,7 @@ public class DetailPane extends ScrollPane
 
 	private boolean isSummaryView;
 
-	private final int PADDING = 4;
+	private static final int PADDING = 4;
 	private VBox vbox = new VBox(PADDING);
 	
 	private TextField fieldPrefix = null;
@@ -108,7 +108,7 @@ public class DetailPane extends ScrollPane
 		vbox.setPadding(new Insets(4));
 		setContent(vbox);
 		vbox.setPrefWidth(Double.MAX_VALUE);
- 	}
+	}
 
 	// clears out the contents of the pane; does so without regard for saving the content
 	public void clearContent()
@@ -250,8 +250,8 @@ public class DetailPane extends ScrollPane
 	}
 
 	// menu-driven action events
-    public void actionValueAdd()
-    {
+	public void actionValueAdd()
+	{
 		if (assignment == null) return;
 		
 		Schema.Assignment modAssn = extractAssignment();
@@ -681,7 +681,7 @@ public class DetailPane extends ScrollPane
 		passthroughTab(fieldPara);
 		Tooltip.install(fieldPara, new Tooltip("Optional detailed text for the assay, typically imported"));
 		Button btnPara = new Button("View");
-		btnPara.setOnAction((ev) -> popupViewPara());
+		btnPara.setOnAction(ev -> popupViewPara());
 		line.add(RowLine.pair(PADDING, 0, fieldPara, 1, RowLine.TOP, btnPara, 0, RowLine.BOTTOM), "Paragraph:", 1, 0);
 		
 		fieldURI = new TextField(assay.originURI);

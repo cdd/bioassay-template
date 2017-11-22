@@ -72,8 +72,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
-			return (name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
-					assignments.equals(other.assignments) && subGroups.equals(other.subGroups));
+			return name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
+					assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
 		}
 		
 		@Override
@@ -171,8 +171,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Assignment other = (Assignment)o;
-			return (name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
-					suggestions == other.suggestions && values.equals(other.values));
+			return name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
+					suggestions == other.suggestions && values.equals(other.values);
 		}
 
 		@Override

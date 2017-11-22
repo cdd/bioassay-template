@@ -7,7 +7,6 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 
@@ -43,7 +42,7 @@ public class SchemaVocab
 	}
 	private List<StoredTree> treeList = new ArrayList<>();
 		
-	private final String SEP = "::";
+	private static final String SEP = "::";
 
 	// ------------ public methods ------------
 
@@ -252,7 +251,8 @@ public class SchemaVocab
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
 			Util.writeln("Schema [" + stored.schemaPrefix + "], locator: " + stored.locator + ", name:" + assn.name);
-			int maxDepth = 0, depths[] = new int[20];
+			int maxDepth = 0;
+			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)
 			{
 				maxDepth = Math.max(maxDepth, node.depth);

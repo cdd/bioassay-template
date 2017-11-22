@@ -87,8 +87,8 @@ public class Lineup extends Pane
 			getChildren().remove(widget);
 			if (u.label != null) getChildren().remove(u.label);
 			content.remove(u);
-	    		requestLayout();
-	    		requestParentLayout();
+			requestLayout();
+			requestParentLayout();
 			break;
 		}
 	}
@@ -191,7 +191,7 @@ public class Lineup extends Pane
 		{
 			int h = 0;
 			if (u.label != null) h = Math.max(h, (int)Math.ceil(u.label.prefHeight(tw)));
-			if (u.widget != null) h = Math.max(h,(int)Math.ceil(u.widget.prefHeight(width -tw)));
+			if (u.widget != null) h = Math.max(h, (int)Math.ceil(u.widget.prefHeight(width - tw)));
 			ph += h;
 		}
 		return ph + 2 * margin + (content.size() - 1) * padding;

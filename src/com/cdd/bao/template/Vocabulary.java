@@ -54,7 +54,7 @@ public class Vocabulary
 	private Map<String, String[]> equivalence = new HashMap<>(); // interchangeable URIs: A->[B] means that all terms [B] are noted as being the same
 	private Set<String> prefParent = new HashSet<>(); // preferred parent URIs: when building the tree, and there's a choice between equivalences
 	
-	private final String SEP = "::";
+	private static final String SEP = "::";
 	
 	public static class Branch
 	{
