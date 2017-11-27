@@ -9,7 +9,7 @@ Released under the Gnu Public License 2.0
 
 Based on Java 8 using Eclipse, JavaFX and Apache Jena.
 
-The [BioAssay Ontology](http://bioassayontology.org) is included as part of the distribution.
+The [BioAssay Ontology](http://bioassayontology.org) is included as part of the distribution. Latest content can be obtained from the [GitHub repository](https://github.com/BioAssayOntology/BAO/releases).
 
 This project has been described in the scientific literature:
 A.M. Clark, N.K. Litterman, J.E. Kranz, P. Gund, K. Gregory, B.A. Bunin. _BioAssay templates for the semantic web_. PeerJ Computer Science **2**:e61 (2016) [link](http://doi.org/10.7717/peerj-cs.61)
