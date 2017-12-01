@@ -1,0 +1,45 @@
+# provisional additions to the ontologies that are used by the BioAssay Express: each of these terms should
+# be considered long term temporary, i.e. it should eventually find a home within the appropriate official
+# ontology (BAO, DTO, CLO, GO, etc.) and all references to it should be updated to point to the new term
+
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix bae:   <http://www.bioassayexpress.org/bae#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix src:   <https://pubchem.ncbi.nlm.nih.gov/source/> .
+
+rdfs:Source .
+
+rdfs:PubChem_Source rdfs:subClassOf Source .
+
+src:Broad Institute
+  rdfs:label "Broad Institute" ;
+  rdfs:subClassOf Source ;
+  rdfs:type PubChem_Source .
+  obo:IAO_0000115 "A PubChem Bioasay source."
+  .
+
+src:Burnham Center for Chemical Genomics
+   rdfs:label "Burnham Center for Chemical Genomics" ;
+   rdfs:subClassOf Source ;
+   rdfs:type PubChem_Source .
+   obo:IAO_0000115 "A PubChem Bioasay source."
+   .
+
+src:Burnham_Center_for_Chemical_Genomics
+   rdfs:label "Burnham_Center_for_Chemical_Genomics" ;
+   rdfs:subClassOf Source ;
+   rdfs:type PubChem_Source .
+   obo:IAO_0000115 "A PubChem Bioasay source."
+   .
+
+src:Circadian Research, Kay Laboratory, University of California at San Diego (UCSD)
+   rdfs:label "Circadian Research, Kay Laboratory, University of California at San Diego (UCSD)" ;
+   rdfs:subClassOf Source ;
+   rdfs:type PubChem_Source .
+   obo:IAO_0000115 "A PubChem Bioasay source."
+   .
