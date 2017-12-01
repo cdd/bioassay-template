@@ -15,31 +15,193 @@ src:sources
   .
 
 src:pubchem_sources
-  rdfs:label "PubChem" ;
+  rdfs:label "PubChem Sources" ;
   rdfs:subClassOf src:sources ;
-  obo:IAO_0000115 "BioAssay protocols submitted to the NCBI PubChem database" ;
+  obo:IAO_0000115 "Sources providing data to the NCBI PubChem databases. https://pubchem.ncbi.nlm.nih.gov/source/." ;
   .
 
-src:PubChem_idnumber
+src:SRC_0000001
   rdfs:label "Broad Institute" ;
   rdfs:subClassOf src:pubchem_sources ;
-  obo:IAO_0000115 "..."
+  obo:IAO_0000115 "Broad Institute. http://www.broadinstitute.org."
   .
 
-src:PubChem_idnumber
+src:SRC_0000002
    rdfs:label "Burnham Center for Chemical Genomics" ;
    rdfs:subClassOf src:pubchem_sources ;
-   obo:IAO_0000115 "..."
+   obo:IAO_0000115 "Sanford-Burnham Center for Chemical Genomics. http://cpccg.sanfordburnham.org."
    .
 
-src:PubChem_idnumber
-   rdfs:label "Burnham_Center_for_Chemical_Genomics" ;
-   rdfs:subClassOf src:pubchem_sources ;
-   obo:IAO_0000115 "..."
-   .
-
-src:PubChem_idnumber
+src:SRC_0000003
    rdfs:label "Circadian Research, Kay Laboratory, University of California at San Diego (UCSD)" ;
    rdfs:subClassOf src:pubchem_sources ;
-   obo:IAO_0000115 "..."
+   obo:IAO_0000115 "Circadian Research, Kay Laboratory, University of California at San Diego (UCSD). https://ccb.ucsd.edu/."
+   .
+
+src:SRC_0000005
+   rdfs:label "Columbia University Molecular Screening Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Columbia University Molecular Screening Center. http://ycmd.yale.edu/."
+   .
+
+src:SRC_0000006
+   rdfs:label "Drosophila RNAi Screening Center (DRSC)" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Drosophila RNAi Screening Center (DRSC). http://flyRNAi.org."
+   .
+
+src:SRC_0000007
+   rdfs:label "Emory University Molecular Libraries Screening Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Emory University Molecular Libraries Screening Center. http://www.pharm.emory.edu/ECBDC/."
+   .
+
+src:SRC_0000008
+   rdfs:label "EPA DSSTox" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "EPA DSSTox. https://www.epa.gov/chemical-research/distributed-structure-searchable-toxicity-dsstox-database."
+   .
+
+src:SRC_0000009
+   rdfs:label "GlaxoSmithKline (GSK)" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "GlaxoSmithKline (GSK). http://www.gsk.com."
+   .
+
+src:SRC_0000010
+   rdfs:label "ICCB-Longwood/NSRB Screening Facility, Harvard Medical School" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "ICCB-Longwood Screening Facility, Harvard Medical School. http://iccb.med.harvard.edu/."
+   .
+
+src:SRC_0000011
+   rdfs:label "Johns Hopkins Ion Channel Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Johns Hopkins Ion Channel Center. http://www.jhicc.org."
+   .
+
+src:SRC_0000012
+   rdfs:label "MLSMR" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "MLSMR. https://commonfund.nih.gov/molecularlibraries/index."
+   .
+
+src:SRC_0000013
+   rdfs:label "Molecular Libraries Program, Specialized Chemistry Center, University of Kansas" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Molecular Libraries Program, Specialized Chemistry Center, University of Kansas. http://www.scc.ku.edu/"
+   .
+
+src:SRC_0000014
+   rdfs:label "MTDP" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "MTDP. https://home.ncifcrf.gov/mtdp/Catalog/catalog.html. Molecular Targets Development Program (MTDP) catalog provides structures, sources and other reference information for compounds isolated and characterized by MTDP scientists from extracts from the NCI Natural Products Repository."
+   .
+
+src:SRC_0000015
+   rdfs:label "NCGC" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "NCGC. https://ncats.nih.gov/ncgc. he NCATS Chemical Genomics Center (NCGC), formerly known as the NIH Chemical Genomics Center, was created in 2008 as a comprehensive screening center in the Molecular Libraries Probe Production Centers Network, part of the NIH Common Fund's Molecular Libraries Program. The NCGC's goal is to uncover new small molecule therapeutics and advance the process of therapeutic development through a model of collaborative research."
+   .
+
+src:SRC_0000016
+   rdfs:label "NIH Clinical Collection" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "NIH Clinical Collection. http://nihsmr.evotec.com/evotec/."
+   .
+
+src:SRC_0000017
+   rdfs:label "NINDS Approved Drug Screening Program" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "NINDS Approved Drug Screening Program. http://www.ninds.nih.gov/."
+   .
+
+src:SRC_0000018
+   rdfs:label "NMMLSC" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "NMMLSC. http://nmmlsc.health.unm.edu."
+   .
+
+src:SRC_0000019
+   rdfs:label "PCMD" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "PCMD. ttp://www.seas.upenn.edu/~pcmd/."
+   .
+
+src:SRC_0000020
+   rdfs:label "PDSP" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "PDSP. https://pdspdb.unc.edu/pdspWeb/."
+   .
+
+src:SRC_0000021
+   rdfs:label "SGCOxCompounds" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "SGCOxCompounds. http://www.thesgc.org/. SGC Oxford seeks to generate high quality reagents to accelerate the discovery of new medicines and place them into the public domain without restriction. Using 3D structures of human proteins and the reagents generated as part of the structure determination process as well as the chemical probes identified, we work with organisations within Oxford, the UK and the rest of the world to further the understanding of the biological roles of these proteins. We have particular interests in human protein kinases, metabolism-associated proteins, integral membrane proteins and proteins associated with epigenetics."
+   .
+
+src:SRC_0000022
+   rdfs:label "Southern Research Institute" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Southern Research Institute. http://www.southernresearch.org/."
+   .
+
+src:SRC_0000023
+   rdfs:label "Southern Research Specialized Biocontainment Screening Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Southern Research Specialized Biocontainment Screening Center. http://www.southernresearch.org/."
+   .
+
+src:SRC_0000024
+   rdfs:label "SRMLSC" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "SRMLSC. http://srmlsc.southernresearch.org/."
+   .
+
+src:SRC_0000025
+   rdfs:label "The Genomics Institute of the Novartis Research Foundation (GNF)" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "The Genomics Institute of the Novartis Research Foundation (GNF). http://biogps.org/circadian."
+   .
+
+src:SRC_0000026
+   rdfs:label "The Scripps Research Institute Molecular Screening Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "The Scripps Research Institute Molecular Screening Center. http://mlpcn.florida.scripps.edu/."
+   .
+
+src:SRC_0000027
+   rdfs:label "824" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Tox21. http://www.ncats.nih.gov/tox21."
+   .
+
+src:SRC_0000028
+   rdfs:label "UCLA Molecular Screening Shared Resource" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "UCLA Molecular Screening Shared Resource. http://www.mssr.ucla.edu/."
+   .
+
+src:SRC_0000029
+   rdfs:label "University of Pittsburgh Molecular Library Screening Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "University of Pittsburgh Molecular Library Screening Center. http://pmlsc.pitt.edu/. The University of Pittsburgh Molecular Library Screening Center (UPMLSC) is now part of the University of Pittsburgh Drug Discovery Institute (UPDDI). The MLSCN Pilot Phase and the UPMLSC ended in June 2008."
+   .
+
+src:SRC_0000030
+   rdfs:label "Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Vanderbilt High Throughput Screening Facility. http://www.vanderbilt.edu/hts/. The Vanderbilt High-Throughput Screening (HTS) facility provides screening-based services to aide research investigators in the identification and investigation of new compounds for basic research and pharmacological discovery."
+   .
+
+src:SRC_0000031
+   rdfs:label "Vanderbilt Specialized Chemistry Center" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Vanderbilt Specialized Chemistry Center. http://www.mc.vanderbilt.edu/centers/mlpcn/index.html". The Vanderbilt Specialized Chemistry Center for Accelerated Probe Development was established as a member of the Molecular Libraries Probe Production Centers Network (MLPCN) initiated and supported by the National Institutes of Health (NIH) Molecular Libraries Roadmap."
+   .
+
+src:SRC_0000032
+   rdfs:label "Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters" ;
+   rdfs:subClassOf src:pubchem_sources ;
+   obo:IAO_0000115 "Vanderbilt High Throughput Screening Facility. http://www.vanderbilt.edu/hts/. The Vanderbilt High-Throughput Screening (HTS) facility provides screening-based services to aide research investigators in the identification and investigation of new compounds for basic research and pharmacological discovery."
    .
