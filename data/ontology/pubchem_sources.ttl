@@ -1,6 +1,4 @@
-# provisional additions to the ontologies that are used by the BioAssay Express: each of these terms should
-# be considered long term temporary, i.e. it should eventually find a home within the appropriate official
-# ontology (BAO, DTO, CLO, GO, etc.) and all references to it should be updated to point to the new term
+# sources for assays that are typically described using the Common Assay Template
 
 @prefix bao:   <http://www.bioassayontology.org/bao#> .
 @prefix bat:   <http://www.bioassayontology.org/bat#> .
