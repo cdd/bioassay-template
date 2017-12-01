@@ -12,24 +12,6 @@ bas:BiologicalProcess
         rdfs:label           "biological process" ;
         bat:hasDescription   "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO). For annotated BioAssays, Biological Process is the process that is being (or is presumed to be) affected by an entity with a perturbagen role in the assay." ;
         bat:hasProperty      bao:BAO_0002009 ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
-                             ] ;
-        bat:hasValue         [ rdfs:label          "molecular function" ;
-                               bat:hasDescription  "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          obo:GO_0003674
-                             ] ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "5"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
-                             ] ;
         bat:hasValue         [ rdfs:label          "biological process" ;
                                bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO)." ;
                                bat:inOrder         "2"^^xsd:int ;
@@ -42,7 +24,25 @@ bas:BiologicalProcess
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:inOrder          "8"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "5"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:SeeGeneID
+                             ] ;
+        bat:hasValue         [ rdfs:label          "molecular function" ;
+                               bat:hasDescription  "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          obo:GO_0003674
+                             ] ;
+        bat:inOrder          "9"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Operator  a              bat:Assignment ;
@@ -61,17 +61,11 @@ bas:Organism  a              bat:Assignment ;
         rdfs:label           "organism" ;
         bat:hasDescription   "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
         bat:hasProperty      bao:BAO_0002921 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "2"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "3"^^xsd:int ;
                                bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
+                               bat:mapsTo          bat:SeeGeneID
                              ] ;
         bat:hasValue         [ rdfs:label          "organism" ;
                                bat:hasDescription  "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote." ;
@@ -79,19 +73,25 @@ bas:Organism  a              bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000551
                              ] ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
                              ] ;
-        bat:inOrder          "7"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "2"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
+        bat:inOrder          "8"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:CommonAssayTemplate
         a                   bat:BioAssayTemplate , bat:Group ;
         rdfs:label          "common assay template" ;
-        bat:hasAssignment   bas:Result , bas:AssayDesignMethod , bas:AssayFormat , bas:BioassayType , bas:AssaySources , bas:AssayFootprint , bas:ProteinIdentity , bas:Bioassay , bas:AssayKit , bas:Target , bas:Organism , bas:PerturbagenType , bas:GOTerms , bas:AssayCellLine , bas:PhysicalDetectionMethod , bas:AppliesToDisease , bas:GeneIdentity , bas:ScreeningCampaignStage , bas:BiologicalProcess , bas:AssaySupportingMethod , bas:DetectionInstrument , bas:AssayModeOfAction ;
+        bat:hasAssignment   bas:Result , bas:AssayDesignMethod , bas:AssayFormat , bas:BioassayType , bas:AssayFootprint , bas:AssaySources , bas:ProteinIdentity , bas:Bioassay , bas:AssayKit , bas:Target , bas:Organism , bas:PerturbagenType , bas:GOTerms , bas:AssayCellLine , bas:PhysicalDetectionMethod , bas:AppliesToDisease , bas:GeneIdentity , bas:ScreeningCampaignStage , bas:BiologicalProcess , bas:AssaySupportingMethod , bas:DetectionInstrument , bas:AssayModeOfAction ;
         bat:hasDescription  "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening." ;
         bat:hasGroup        bas:Measurement .
 
@@ -112,36 +112,24 @@ bas:ProteinIdentity  a       bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          <http://www.bioassayontology.org/taxon#Root>
                              ] ;
-        bat:inOrder          "19"^^xsd:int ;
+        bat:inOrder          "20"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssaySources  a          bat:Assignment ;
         rdfs:label           "assay sources" ;
         bat:hasProperty      bao:BAO_0002852 ;
         bat:hasValue         [ rdfs:label          "PubChem Sources" ;
-                               bat:hasDescription  "Sources providing data to the NCBI PubChem databases. https://pubchem.ncbi.nlm.nih.gov/source/." ;
+                               bat:hasDescription  "Assay origination." ;
                                bat:inOrder         "1"^^xsd:int ;
-                               bat:mapsTo          <http://www.bioassayexpress.org/sources#pubchem_sources>
+                               bat:mapsTo          <http://www.bioassayexpress.org/sources#sources>
                              ] ;
-        bat:inOrder          "22"^^xsd:int ;
+        bat:inOrder          "1"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssayKit  a              bat:Assignment ;
         rdfs:label           "assay kit" ;
         bat:hasDescription   "The title of the kit/biologicals used in the assay." ;
         bat:hasProperty      bao:BAO_0002663 ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
-                             ] ;
-        bat:hasValue         [ rdfs:label          "assay kit" ;
-                               bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
-                               bat:inOrder         "4"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bao:BAO_0000248
-                             ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                                bat:inOrder         "1"^^xsd:int ;
@@ -154,7 +142,19 @@ bas:AssayKit  a              bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:inOrder          "15"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:SeeGeneID
+                             ] ;
+        bat:hasValue         [ rdfs:label          "assay kit" ;
+                               bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
+                               bat:inOrder         "4"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bao:BAO_0000248
+                             ] ;
+        bat:inOrder          "16"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Measurement  a          bat:Group ;
@@ -168,17 +168,17 @@ bas:AssayFormat  a           bat:Assignment ;
         rdfs:label           "assay format" ;
         bat:hasDescription   "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism." ;
         bat:hasProperty      bao:BAO_0000205 ;
+        bat:hasValue         [ rdfs:label          "assay format" ;
+                               bat:hasDescription  "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism." ;
+                               bat:inOrder         "4"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bao:BAO_0000019
+                             ] ;
         bat:hasValue         [ rdfs:label          "not determined" ;
                                bat:hasDescription  "The measurement was not made." ;
                                bat:inOrder         "2"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
                              ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
@@ -186,25 +186,19 @@ bas:AssayFormat  a           bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
                              ] ;
-        bat:hasValue         [ rdfs:label          "assay format" ;
-                               bat:hasDescription  "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism." ;
-                               bat:inOrder         "4"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
                                bat:isWholeBranch   true ;
-                               bat:mapsTo          bao:BAO_0000019
+                               bat:mapsTo          bat:Absence
                              ] ;
-        bat:inOrder          "3"^^xsd:int ;
+        bat:inOrder          "4"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Target  a                bat:Assignment ;
         rdfs:label           "target" ;
         bat:hasDescription   "The molecular entity (e.g., protein, carbohydrate, nucleic acid, or other) that is the presumed subject of the assay and whose activity is being effected by an entity with a perturbagen role in the assay. Can encompass the TYPE of biological macromolecule (e.g., enzyme, chaperone, GPCR, etc.) as well as the specific molecular target (e.g., gene name or geneid). An assay can have zero (e.g., if unknown as in assays for cytotoxic compounds) or multiple targets." ;
         bat:hasProperty      bao:BAO_0000211 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "5"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                                bat:inOrder         "4"^^xsd:int ;
@@ -226,30 +220,24 @@ bas:Target  a                bat:Assignment ;
                                bat:isWholeBranch  true ;
                                bat:mapsTo         bao:BAO_0003111
                              ] ;
-        bat:inOrder          "9"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "5"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
+        bat:inOrder          "10"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssayFootprint  a        bat:Assignment ;
         rdfs:label           "assay footprint" ;
         bat:hasDescription   "This describes the physical format such as plate density in which an assay is performed, which is generally a microplate format, but can also be an array format." ;
         bat:hasProperty      bao:BAO_0002867 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "2"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
         bat:hasValue         [ rdfs:label          "assay footprint" ;
                                bat:hasDescription  "This describes the physical format such as plate density in which an assay is performed, which is generally a microplate format, but can also be an array format." ;
                                bat:inOrder         "4"^^xsd:int ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000512
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
                              ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
@@ -257,43 +245,51 @@ bas:AssayFootprint  a        bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
                              ] ;
-        bat:inOrder          "14"^^xsd:int ;
-        bat:suggestionsFull  true .
-
-bas:Units  a                 bat:Assignment ;
-        rdfs:label           "units" ;
-        bat:hasDescription   "Units for the resulting measurements (e.g. IC50, EC50, etc.)" ;
-        bat:hasProperty      bao:BAO_0002874 ;
-        bat:hasValue         [ rdfs:label         "rate" ;
-                               bat:inOrder        "9"^^xsd:int ;
-                               bat:isWholeBranch  true ;
-                               bat:mapsTo         bao:BAO_0080019
-                             ] ;
-        bat:hasValue         [ rdfs:label          "log10 molar" ;
-                               bat:hasDescription  "log10 of concentration (in moles)" ;
-                               bat:inOrder         "6"^^xsd:int ;
-                               bat:mapsTo          bao:BAO_0000101
-                             ] ;
-        bat:hasValue         [ rdfs:label          "binary unit" ;
-                               bat:hasDescription  "A simple binary assessment, such as 'active/ inactive', 'true/ false', etc." ;
-                               bat:inOrder         "5"^^xsd:int ;
-                               bat:mapsTo          bao:BAO_0080023
-                             ] ;
-        bat:hasValue         [ rdfs:label         "ratio" ;
-                               bat:inOrder        "8"^^xsd:int ;
-                               bat:isWholeBranch  true ;
-                               bat:mapsTo         bao:BAO_0190001
-                             ] ;
         bat:hasValue         [ rdfs:label          "not determined" ;
                                bat:hasDescription  "The measurement was not made." ;
                                bat:inOrder         "2"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:hasValue         [ rdfs:label          "negative log10 molar" ;
-                               bat:hasDescription  "-log10 of concentration (in moles), often abbreviated as pIC50, pKi, etc." ;
-                               bat:inOrder         "7"^^xsd:int ;
-                               bat:mapsTo          bao:BAO_0000102
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:inOrder          "15"^^xsd:int ;
+        bat:suggestionsFull  true .
+
+bas:Units  a                 bat:Assignment ;
+        rdfs:label           "units" ;
+        bat:hasDescription   "Units for the resulting measurements (e.g. IC50, EC50, etc.)" ;
+        bat:hasProperty      bao:BAO_0002874 ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "2"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:hasValue         [ rdfs:label         "rate" ;
+                               bat:inOrder        "9"^^xsd:int ;
+                               bat:isWholeBranch  true ;
+                               bat:mapsTo         bao:BAO_0080019
+                             ] ;
+        bat:hasValue         [ rdfs:label         "ratio" ;
+                               bat:inOrder        "8"^^xsd:int ;
+                               bat:isWholeBranch  true ;
+                               bat:mapsTo         bao:BAO_0190001
+                             ] ;
+        bat:hasValue         [ rdfs:label          "binary unit" ;
+                               bat:hasDescription  "A simple binary assessment, such as 'active/ inactive', 'true/ false', etc." ;
+                               bat:inOrder         "5"^^xsd:int ;
+                               bat:mapsTo          bao:BAO_0080023
                              ] ;
         bat:hasValue         [ rdfs:label          "unit of measurement" ;
                                bat:hasDescription  "It is the definite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it." ;
@@ -301,17 +297,21 @@ bas:Units  a                 bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          obo:UO_0000000
                              ] ;
+        bat:hasValue         [ rdfs:label          "negative log10 molar" ;
+                               bat:hasDescription  "-log10 of concentration (in moles), often abbreviated as pIC50, pKi, etc." ;
+                               bat:inOrder         "7"^^xsd:int ;
+                               bat:mapsTo          bao:BAO_0000102
+                             ] ;
+        bat:hasValue         [ rdfs:label          "log10 molar" ;
+                               bat:hasDescription  "log10 of concentration (in moles)" ;
+                               bat:inOrder         "6"^^xsd:int ;
+                               bat:mapsTo          bao:BAO_0000101
+                             ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                                bat:inOrder         "3"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
                              ] ;
         bat:inOrder          "2"^^xsd:int ;
         bat:suggestionsFull  true .
@@ -321,12 +321,6 @@ bas:ScreeningCampaignStage
         rdfs:label           "screening campaign stage" ;
         bat:hasDescription   "The assay stage describes the purpose of the assay in an assay campaign.  Assay stage also relates to the order of assays in a screening campaign.  For example the primary assay, which is performed first, identifies hits. The primary hits are then confirmed in a confirmatory assay.  Subsequent secondary assays are run to eliminate compounds that are not of interest or to confirm hits using an alternate design / technology, or to further characterize compounds.\nWhether an assay is run in single concentration or concentration response is defined in the class 'assay measurement throughput quality'.  For example primary assays are typically run in single concentration with single measurements. However, the NCGC runs qHTS primary assays as concentration-response assays." ;
         bat:hasProperty      bao:BAO_0000210 ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
-                             ] ;
         bat:hasValue         [ rdfs:label          "assay screening campaign stage" ;
                                bat:hasDescription  "The assay stage describes the purpose of the assay in an assay campaign.  Assay stage also relates to the order of assays in a screening campaign.  For example the primary assay, which is performed first, identifies hits. The primary hits are then confirmed in a confirmatory assay.  Subsequent secondary assays are run to eliminate compounds that are not of interest or to confirm hits using an alternate design / technology, or to further characterize compounds.\nWhether an assay is run in single concentration or concentration response is defined in the class 'assay measurement throughput quality'.  For example primary assays are typically run in single concentration with single measurements. However, the NCGC runs qHTS primary assays as concentration-response assays." ;
                                bat:inOrder         "4"^^xsd:int ;
@@ -345,13 +339,25 @@ bas:ScreeningCampaignStage
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:inOrder          "13"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:inOrder          "14"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AppliesToDisease  a      bat:Assignment ;
         rdfs:label           "applies to disease" ;
         bat:hasDescription   "Disease targets that the assay is designed to affect. This is a more general term than the specific biological target." ;
         bat:hasProperty      bao:BAO_0002848 ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
         bat:hasValue         [ rdfs:label          "Disease" ;
                                bat:hasDescription  "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\n" ;
                                bat:inOrder         "1"^^xsd:int ;
@@ -364,24 +370,18 @@ bas:AppliesToDisease  a      bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
+        bat:hasValue         [ rdfs:label     "assay biology component" ;
+                               bat:inOrder    "2"^^xsd:int ;
+                               bat:isExclude  true ;
+                               bat:mapsTo     bao:BAO_0003114
+                             ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                                bat:inOrder         "5"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
                              ] ;
-        bat:hasValue         [ rdfs:label     "assay biology component" ;
-                               bat:inOrder    "2"^^xsd:int ;
-                               bat:isExclude  true ;
-                               bat:mapsTo     bao:BAO_0003114
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
-                             ] ;
-        bat:inOrder          "10"^^xsd:int ;
+        bat:inOrder          "11"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Bioassay  a              bat:Assignment ;
@@ -393,6 +393,12 @@ bas:Bioassay  a              bat:Assignment ;
                                bat:inOrder         "9"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bao:BAO_0002185
+                             ] ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
                              ] ;
         bat:hasValue         [ rdfs:label          "assay kit" ;
                                bat:hasDescription  "The title of the kit/biologicals used in the assay." ;
@@ -406,6 +412,24 @@ bas:Bioassay  a              bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bat:Absence
                              ] ;
+        bat:hasValue         [ rdfs:label          "measure group" ;
+                               bat:hasDescription  "Measure group is used to group and link multiple (different) sets of experimental results to one bioassay. Measure groups thus facilitate the description of multiparametric (or multiplexed) assays, that measure more than one effect of the perturbagen on the system that is screened. It also facilitate the definition of panel and profiling assays, e.g. assays that test compounds against multiple (protein) targets.\nCompare definition of bioassay.\nMeasure group links to those classes that can vary among different measurements of a panel assay, profiling assay, multiparametric assay, e.g. target, assay design method, physical detection method, endpoint. Measure group is also used to define derived endpoints, for example concentration-response endpoints obtained by curve fitting a set of results from the same compound tested in the same assay at different concentrations." ;
+                               bat:inOrder         "8"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bao:BAO_0000040
+                             ] ;
+        bat:hasValue         [ rdfs:label          "bioassay specification" ;
+                               bat:hasDescription  "Description of an experiment carried out for the purpose of screening a perturbing agent in a biological system, measuring the effect of the agents using specified technology, and arriving at endpoints that satisfy particular criteria." ;
+                               bat:inOrder         "7"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bao:BAO_0000026
+                             ] ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "4"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:SeeGeneID
+                             ] ;
         bat:hasValue         [ rdfs:label          "bioassay" ;
                                bat:hasDescription  "A set of instructions, methodology, operations, required reagents, instruments to carrie out experiments for the purpose of testing the effect of a perturbing agent in a biological model system, measuring one or multiple effect(s) of the agent facilitated by an assay design method translate the perturbation into a detectable signal to arrive at one or multiple endpoint(s) that quantify or qualify the extent of the perturbation.  Bioassay is described by multiple bioassay components: assay format, biology (biological participants in various role and processes), design method, physical detection method / technology, screened entity, and endpoint. Bioassay includes one or multiple measure groups to describe panel, profiling, multiparametric (or multiplexed) assays (assays that measure more than one effect of the perturbagen on the system that is screened)." ;
                                bat:inOrder         "1"^^xsd:int ;
@@ -417,31 +441,7 @@ bas:Bioassay  a              bat:Assignment ;
                                bat:isExclude  true ;
                                bat:mapsTo     bao:BAO_0002933
                              ] ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "4"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
-                             ] ;
-        bat:hasValue         [ rdfs:label          "measure group" ;
-                               bat:hasDescription  "Measure group is used to group and link multiple (different) sets of experimental results to one bioassay. Measure groups thus facilitate the description of multiparametric (or multiplexed) assays, that measure more than one effect of the perturbagen on the system that is screened. It also facilitate the definition of panel and profiling assays, e.g. assays that test compounds against multiple (protein) targets.\nCompare definition of bioassay.\nMeasure group links to those classes that can vary among different measurements of a panel assay, profiling assay, multiparametric assay, e.g. target, assay design method, physical detection method, endpoint. Measure group is also used to define derived endpoints, for example concentration-response endpoints obtained by curve fitting a set of results from the same compound tested in the same assay at different concentrations." ;
-                               bat:inOrder         "8"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bao:BAO_0000040
-                             ] ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
-        bat:hasValue         [ rdfs:label          "bioassay specification" ;
-                               bat:hasDescription  "Description of an experiment carried out for the purpose of screening a perturbing agent in a biological system, measuring the effect of the agents using specified technology, and arriving at endpoints that satisfy particular criteria." ;
-                               bat:inOrder         "7"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bao:BAO_0000026
-                             ] ;
-        bat:inOrder          "2"^^xsd:int ;
+        bat:inOrder          "3"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Result  a                bat:Assignment ;
@@ -472,7 +472,7 @@ bas:Result  a                bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000179
                              ] ;
-        bat:inOrder          "12"^^xsd:int ;
+        bat:inOrder          "13"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssayModeOfAction
@@ -480,23 +480,17 @@ bas:AssayModeOfAction
         rdfs:label           "assay mode of action" ;
         bat:hasDescription   "Assay mode of action refers both to the mechanism (binding vs. functional) and the effect of the perturbagen on the target - whether it brings about inhibition, activation, cytotoxicity, etc." ;
         bat:hasProperty      bao:BAO_0000196 ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "2"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
                              ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                                bat:inOrder         "3"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
-                             ] ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "2"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
                              ] ;
         bat:hasValue         [ rdfs:label          "mode of action" ;
                                bat:hasDescription  "This refers to the effect of the perturbagen on the target of an assay, whether it brings about inhibition, activation, cytotoxicity, etc. " ;
@@ -504,18 +498,24 @@ bas:AssayModeOfAction
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000074
                              ] ;
-        bat:inOrder          "11"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:inOrder          "12"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:BioassayType  a          bat:Assignment ;
         rdfs:label           "bioassay type" ;
         bat:hasDescription   "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc." ;
         bat:hasProperty      bao:BAO_0002854 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
+        bat:hasValue         [ rdfs:label          "bioassay type" ;
+                               bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bao:BAO_0000008
                              ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
@@ -529,13 +529,13 @@ bas:BioassayType  a          bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
                              ] ;
-        bat:hasValue         [ rdfs:label          "bioassay type" ;
-                               bat:hasDescription  "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bao:BAO_0000008
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:inOrder          "1"^^xsd:int ;
+        bat:inOrder          "2"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssaySupportingMethod
@@ -543,24 +543,6 @@ bas:AssaySupportingMethod
         rdfs:label           "assay supporting method" ;
         bat:hasDescription   "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process. Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
         bat:hasProperty      bao:BAO_0095010 ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
-                             ] ;
-        bat:hasValue         [ rdfs:label          "assay design method" ;
-                               bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
-                               bat:inOrder         "2"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bao:BAO_0002202
-                             ] ;
-        bat:hasValue         [ rdfs:label          "assay supporting method" ;
-                               bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bao:BAO_0002429
-                             ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                                bat:inOrder         "5"^^xsd:int ;
@@ -573,18 +555,48 @@ bas:AssaySupportingMethod
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:inOrder          "5"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:hasValue         [ rdfs:label          "assay supporting method" ;
+                               bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bao:BAO_0002429
+                             ] ;
+        bat:hasValue         [ rdfs:label          "assay design method" ;
+                               bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
+                               bat:inOrder         "2"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bao:BAO_0002202
+                             ] ;
+        bat:inOrder          "6"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:GOTerms  a                   bat:Assignment ;
         rdfs:label               "GO terms" ;
         bat:hasDescription       "Functions of the target gene, selected from the Gene Ontology hierarchy." ;
         bat:hasProperty          bao:BAO_0003107 ;
+        bat:hasValue             [ rdfs:label          "biological process" ;
+                                   bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end." ;
+                                   bat:inOrder         "1"^^xsd:int ;
+                                   bat:isWholeBranch   true ;
+                                   bat:mapsTo          obo:GO_0008150
+                                 ] ;
         bat:hasValue             [ rdfs:label          "molecular function" ;
                                    bat:hasDescription  "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions." ;
                                    bat:inOrder         "3"^^xsd:int ;
                                    bat:isWholeBranch   true ;
                                    bat:mapsTo          obo:GO_0003674
+                                 ] ;
+        bat:hasValue             [ rdfs:label          "cellular component" ;
+                                   bat:hasDescription  "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together." ;
+                                   bat:inOrder         "2"^^xsd:int ;
+                                   bat:isWholeBranch   true ;
+                                   bat:mapsTo          obo:GO_0005575
                                  ] ;
         bat:hasValue             [ rdfs:label          "see Gene ID" ;
                                    bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
@@ -598,25 +610,13 @@ bas:GOTerms  a                   bat:Assignment ;
                                    bat:isExclude       true ;
                                    bat:mapsTo          bat:NotDetermined
                                  ] ;
-        bat:hasValue             [ rdfs:label          "cellular component" ;
-                                   bat:hasDescription  "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together." ;
-                                   bat:inOrder         "2"^^xsd:int ;
-                                   bat:isWholeBranch   true ;
-                                   bat:mapsTo          obo:GO_0005575
-                                 ] ;
-        bat:hasValue             [ rdfs:label          "biological process" ;
-                                   bat:hasDescription  "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end." ;
-                                   bat:inOrder         "1"^^xsd:int ;
-                                   bat:isWholeBranch   true ;
-                                   bat:mapsTo          obo:GO_0008150
-                                 ] ;
         bat:hasValue             [ rdfs:label          "absence" ;
                                    bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                                    bat:inOrder         "4"^^xsd:int ;
                                    bat:isWholeBranch   true ;
                                    bat:mapsTo          bat:Absence
                                  ] ;
-        bat:inOrder              "21"^^xsd:int ;
+        bat:inOrder              "22"^^xsd:int ;
         bat:suggestionsDisabled  true .
 
 bas:PhysicalDetectionMethod
@@ -624,23 +624,11 @@ bas:PhysicalDetectionMethod
         rdfs:label           "physical detection method" ;
         bat:hasDescription   "The physical method (technology) used to measure / readout the effect caused by a perturbagen in the assay environment." ;
         bat:hasProperty      bao:BAO_0000207 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "2"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
         bat:hasValue         [ rdfs:label          "see Gene ID" ;
                                bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
                                bat:inOrder         "4"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:SeeGeneID
-                             ] ;
-        bat:hasValue         [ rdfs:label          "absence" ;
-                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
-                               bat:inOrder         "1"^^xsd:int ;
-                               bat:isWholeBranch   true ;
-                               bat:mapsTo          bat:Absence
                              ] ;
         bat:hasValue         [ rdfs:label          "physical detection method" ;
                                bat:hasDescription  "The physical method (technology) used to measure / readout the effect caused by a perturbagen in the assay environment." ;
@@ -648,7 +636,19 @@ bas:PhysicalDetectionMethod
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000035
                              ] ;
-        bat:inOrder          "16"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "absence" ;
+                               bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
+                               bat:inOrder         "1"^^xsd:int ;
+                               bat:isWholeBranch   true ;
+                               bat:mapsTo          bat:Absence
+                             ] ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "2"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
+        bat:inOrder          "17"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:DetectionInstrument
@@ -680,7 +680,7 @@ bas:DetectionInstrument
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bat:Absence
                              ] ;
-        bat:inOrder          "17"^^xsd:int ;
+        bat:inOrder          "18"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssayDesignMethod
@@ -688,23 +688,11 @@ bas:AssayDesignMethod
         rdfs:label           "assay design method" ;
         bat:hasDescription   "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
         bat:hasProperty      bao:BAO_0095009 ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "3"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
         bat:hasValue         [ rdfs:label          "assay design method" ;
                                bat:hasDescription  "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest." ;
                                bat:inOrder         "1"^^xsd:int ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0002202
-                             ] ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "4"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
                              ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
@@ -712,13 +700,25 @@ bas:AssayDesignMethod
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bat:Absence
                              ] ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "4"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:SeeGeneID
+                             ] ;
         bat:hasValue         [ rdfs:label          "assay supporting method" ;
                                bat:hasDescription  "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method)." ;
                                bat:inOrder         "5"^^xsd:int ;
                                bat:isExclude       true ;
                                bat:mapsTo          bao:BAO_0002429
                              ] ;
-        bat:inOrder          "4"^^xsd:int ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "3"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
+        bat:inOrder          "5"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:Threshold  a               bat:Assignment ;
@@ -732,6 +732,12 @@ bas:PerturbagenType  a       bat:Assignment ;
         rdfs:label           "perturbagen type" ;
         bat:hasDescription   "Compounds or other perturbagens that modulate diverse biological targets." ;
         bat:hasProperty      bao:BAO_0000185 ;
+        bat:hasValue         [ rdfs:label          "not determined" ;
+                               bat:hasDescription  "The measurement was not made." ;
+                               bat:inOrder         "4"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:NotDetermined
+                             ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                                bat:inOrder         "3"^^xsd:int ;
@@ -755,13 +761,7 @@ bas:PerturbagenType  a       bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          bao:BAO_0000661
                              ] ;
-        bat:hasValue         [ rdfs:label          "not determined" ;
-                               bat:hasDescription  "The measurement was not made." ;
-                               bat:inOrder         "4"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:NotDetermined
-                             ] ;
-        bat:inOrder          "18"^^xsd:int ;
+        bat:inOrder          "19"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:GeneIdentity  a          bat:Assignment ;
@@ -774,13 +774,24 @@ bas:GeneIdentity  a          bat:Assignment ;
                                bat:isWholeBranch   true ;
                                bat:mapsTo          <http://www.bioassayontology.org/geneid#Root>
                              ] ;
-        bat:inOrder          "20"^^xsd:int ;
+        bat:inOrder          "21"^^xsd:int ;
         bat:suggestionsFull  true .
 
 bas:AssayCellLine  a         bat:Assignment ;
         rdfs:label           "assay cell line" ;
         bat:hasDescription   "An assay cell line refers to the source of the cells or cell line used in the assay. This may be from primary cells (as annotated) or, more frequently, from an immortal cell line. Due to the continued passaging of immortal cell lines, users must be aware that spontaneous mutations can, and often do, arise in sub-populations, such that the actual cells used in the individual assay may differ from the original source." ;
         bat:hasProperty      bao:BAO_0002800 ;
+        bat:hasValue         [ rdfs:label         "BRENDA tissues and cell lines" ;
+                               bat:inOrder        "1"^^xsd:int ;
+                               bat:isWholeBranch  true ;
+                               bat:mapsTo         <http://dto.org/DTO/DTO_000>
+                             ] ;
+        bat:hasValue         [ rdfs:label          "see Gene ID" ;
+                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
+                               bat:inOrder         "5"^^xsd:int ;
+                               bat:isExclude       true ;
+                               bat:mapsTo          bat:SeeGeneID
+                             ] ;
         bat:hasValue         [ rdfs:label          "absence" ;
                                bat:hasDescription  "A group of annotations that explain why an annotation is missing, when it should not be." ;
                                bat:inOrder         "3"^^xsd:int ;
@@ -793,21 +804,10 @@ bas:AssayCellLine  a         bat:Assignment ;
                                bat:isExclude       true ;
                                bat:mapsTo          bat:NotDetermined
                              ] ;
-        bat:hasValue         [ rdfs:label         "BRENDA tissues and cell lines" ;
-                               bat:inOrder        "1"^^xsd:int ;
-                               bat:isWholeBranch  true ;
-                               bat:mapsTo         <http://dto.org/DTO/DTO_000>
-                             ] ;
-        bat:hasValue         [ rdfs:label          "see Gene ID" ;
-                               bat:hasDescription  "The target is present in the Gene ID section, but needs to be mapped to a formal ontology." ;
-                               bat:inOrder         "5"^^xsd:int ;
-                               bat:isExclude       true ;
-                               bat:mapsTo          bat:SeeGeneID
-                             ] ;
         bat:hasValue         [ rdfs:label         "cell line cell" ;
                                bat:inOrder        "2"^^xsd:int ;
                                bat:isWholeBranch  true ;
                                bat:mapsTo         obo:CLO_0000001
                              ] ;
-        bat:inOrder          "6"^^xsd:int ;
+        bat:inOrder          "7"^^xsd:int ;
         bat:suggestionsFull  true .
