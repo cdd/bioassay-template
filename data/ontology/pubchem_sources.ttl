@@ -199,9 +199,3 @@ src:SRC_0000031
    rdfs:subClassOf src:pubchem_sources ;
    obo:IAO_0000115 "Vanderbilt Specialized Chemistry Center. http://www.mc.vanderbilt.edu/centers/mlpcn/index.html. The Vanderbilt Specialized Chemistry Center for Accelerated Probe Development was established as a member of the Molecular Libraries Probe Production Centers Network (MLPCN) initiated and supported by the National Institutes of Health (NIH) Molecular Libraries Roadmap."
    .
-
-src:SRC_0000032
-   rdfs:label "Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters" ;
-   rdfs:subClassOf src:pubchem_sources ;
-   obo:IAO_0000115 "Vanderbilt High Throughput Screening Facility. http://www.vanderbilt.edu/hts/. The Vanderbilt High-Throughput Screening (HTS) facility provides screening-based services to aide research investigators in the identification and investigation of new compounds for basic research and pharmacological discovery."
-   .
