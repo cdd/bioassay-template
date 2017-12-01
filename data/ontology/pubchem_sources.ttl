@@ -197,7 +197,7 @@ src:SRC_0000030
 src:SRC_0000031
    rdfs:label "Vanderbilt Specialized Chemistry Center" ;
    rdfs:subClassOf src:pubchem_sources ;
-   obo:IAO_0000115 "Vanderbilt Specialized Chemistry Center. http://www.mc.vanderbilt.edu/centers/mlpcn/index.html". The Vanderbilt Specialized Chemistry Center for Accelerated Probe Development was established as a member of the Molecular Libraries Probe Production Centers Network (MLPCN) initiated and supported by the National Institutes of Health (NIH) Molecular Libraries Roadmap."
+   obo:IAO_0000115 "Vanderbilt Specialized Chemistry Center. http://www.mc.vanderbilt.edu/centers/mlpcn/index.html. The Vanderbilt Specialized Chemistry Center for Accelerated Probe Development was established as a member of the Molecular Libraries Probe Production Centers Network (MLPCN) initiated and supported by the National Institutes of Health (NIH) Molecular Libraries Roadmap."
    .
 
 src:SRC_0000032
