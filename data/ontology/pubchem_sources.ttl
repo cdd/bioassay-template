@@ -10,13 +10,9 @@
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
 @prefix src:   <http://www.bioassayexpress.org/sources#> .
 
-src:sources
-  rdfs:label "Assay Sources" ;
-  .
-
 src:pubchem_sources
   rdfs:label "PubChem Sources" ;
-  rdfs:subClassOf src:sources ;
+  rdfs:subClassOf bao:BAO_0002934 ;
   obo:IAO_0000115 "Sources providing data to the NCBI PubChem databases. https://pubchem.ncbi.nlm.nih.gov/source/." ;
   .
 
