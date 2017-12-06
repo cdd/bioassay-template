@@ -29,6 +29,10 @@ public class SchemaVocab
 	{
 		public String uri;
 		public String label, descr;
+		public String[] altLabels;
+		public String[] externalURLs;
+		public String pubchemSource;
+		public boolean pubchemImport;
 	}
 	private StoredTerm[] termList;
 	private Map<String, Integer> termLookup = new HashMap<>(); // uri-to-index into termList
@@ -87,6 +91,10 @@ public class SchemaVocab
 			termList[n].uri = termURI[n];
 			termList[n].label = vocab.getLabel(termURI[n]);
 			termList[n].descr = vocab.getDescr(termURI[n]);
+			termList[n].altLabels = vocab.getAltLabels(termURI[n]);
+			termList[n].externalURLs = vocab.getExternalURLs(termURI[n]);
+			termList[n].pubchemSource = vocab.getPubChemSource(termURI[n]);	
+			termList[n].pubchemImport = vocab.getPubChemImport(termURI[n]);
 
 			termLookup.put(termURI[n], n);
 		}
@@ -121,6 +129,14 @@ public class SchemaVocab
 			data.writeUTF(uri);
 			data.writeUTF(term.label == null ? "" : term.label);
 			data.writeUTF(term.descr == null ? "" : term.descr);
+			
+			data.writeInt(Util.length(term.altLabels));
+			if (term.altLabels != null) for (String label : term.altLabels) data.writeUTF(label);
+			data.writeInt(Util.length(term.externalURLs));
+			if (term.externalURLs != null) for (String url : term.externalURLs) data.writeUTF(url);
+			
+			data.writeUTF(term.pubchemSource == null ? "" : term.pubchemSource);
+			data.writeBoolean(term.pubchemImport);
 		}
 		
 		data.writeInt(treeList.size());
@@ -168,6 +184,22 @@ public class SchemaVocab
 			if (pfx >= 0) term.uri = sv.prefixes[pfx] + term.uri;
 			term.label = data.readUTF();
 			term.descr = data.readUTF();
+			
+			int numAltLabels = data.readInt();
+			if (numAltLabels > 0) // null will be "null"
+			{
+				term.altLabels = new String[numAltLabels];
+				for (int i = 0; i < numAltLabels; i++) term.altLabels[i] = data.readUTF();
+			}
+			int numURLs = data.readInt();
+			if (numURLs > 0)
+			{
+				term.externalURLs = new String[numURLs];
+				for (int i = 0; i < numURLs; i++) term.externalURLs[i] = data.readUTF();
+			}
+			term.pubchemSource = data.readUTF(); // null will be as string empty ""
+			term.pubchemImport = data.readBoolean();
+			
 			sv.termList[n] = term;
 			sv.termLookup.put(term.uri, n);
 		}
