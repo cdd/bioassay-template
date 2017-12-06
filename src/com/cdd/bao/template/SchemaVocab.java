@@ -226,6 +226,11 @@ public class SchemaVocab
 				node.uri = sv.termList[termidx].uri;
 				node.label = sv.termList[termidx].label;
 				node.descr = sv.termList[termidx].descr;
+
+				node.altLabels = sv.termList[termidx].altLabels;
+				node.externalURLs = sv.termList[termidx].externalURLs;
+				node.pubchemSource = sv.termList[termidx].pubchemSource;
+				node.pubchemImport = sv.termList[termidx].pubchemImport;
 				
 				node.depth = data.readInt();
 				node.parentIndex = data.readInt();
