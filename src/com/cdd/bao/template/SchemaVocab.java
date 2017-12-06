@@ -186,7 +186,7 @@ public class SchemaVocab
 			term.descr = data.readUTF();
 			
 			int numAltLabels = data.readInt();
-			if (numAltLabels > 0) // null will be "null"
+			if (numAltLabels > 0)
 			{
 				term.altLabels = new String[numAltLabels];
 				for (int i = 0; i < numAltLabels; i++) term.altLabels[i] = data.readUTF();
@@ -197,7 +197,7 @@ public class SchemaVocab
 				term.externalURLs = new String[numURLs];
 				for (int i = 0; i < numURLs; i++) term.externalURLs[i] = data.readUTF();
 			}
-			term.pubchemSource = data.readUTF(); // null will be as string empty ""
+			term.pubchemSource = data.readUTF();
 			term.pubchemImport = data.readBoolean();
 			
 			sv.termList[n] = term;

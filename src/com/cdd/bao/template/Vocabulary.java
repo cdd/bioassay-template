@@ -435,18 +435,8 @@ public class Vocabulary
 			if (predicate.equals(propLabel))
 			{
 				uriToLabel.put(uri, label);
-				/*
 				String[] list = labelToURI.get(label);
-				if (list != null)
-				{
-					list = Arrays.copyOf(list, list.length + 1);
-					list[list.length - 1] = uri;
-					labelToURI.put(label, list);
-				}
-				else labelToURI.put(label, new String[]{uri});
-				*/
-				String[] list = labelToURI.get(label);
-				labelToURI.put(label, ArrayUtils.add(list, uri)); // handles null already
+				labelToURI.put(label, ArrayUtils.add(list, uri));
 			}
 			else if (predicate.equals(propDescr))
 			{
@@ -463,12 +453,12 @@ public class Vocabulary
 			else if (predicate.equals(externalURL))
 			{
 				String[] list = uriToExternalURLs.get(label);
-				uriToExternalURLs.put(label, ArrayUtils.add(list, uri)); // handles null already
+				uriToExternalURLs.put(label, ArrayUtils.add(list, uri));
 			}
 			else if (predicate.equals(altLabel))
 			{
 				String[] list = uriToAlternateLabels.get(label);
-				uriToAlternateLabels.put(label, ArrayUtils.add(list, uri)); // handles null already
+				uriToAlternateLabels.put(label, ArrayUtils.add(list, uri));
 			}			
 		}
 		
