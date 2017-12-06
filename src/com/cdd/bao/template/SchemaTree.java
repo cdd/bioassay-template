@@ -25,6 +25,12 @@ public class SchemaTree
 	{
 		public Branch source = null;
 		public String uri = null, label = null, descr = null;
+		
+		public String[] altLabels = null;
+		public String[] externalURLs = null;
+		public String pubchemSource = null;
+		public boolean pubchemImport = false;
+		
 		public Node parent = null;
 		public List<Node> children = new ArrayList<>();
 		public int depth = 0, parentIndex = -1;

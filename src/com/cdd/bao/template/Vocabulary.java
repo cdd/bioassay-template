@@ -33,6 +33,7 @@ import java.util.zip.*;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
+import org.apache.commons.lang3.*;
 
 /*
 	Loads and stores the current list of vocabulary terms. Basically, it pulls in the local definition of the
@@ -49,6 +50,10 @@ public class Vocabulary
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
 	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
+	private Map<String, String[]> uriToExternalURLs = new HashMap<>();
+	private Map<String, String[]> uriToAlternateLabels = new HashMap<>();
+	private Map<String, String> uriToPubChemSource = new HashMap<>();
+	private Map<String, Boolean> uriToPubChemImport = new HashMap<>();
 	// URIs that are known to be involved in property & class relationships, respectively
 	private Set<String> uriProperties = new HashSet<>(), uriValues = new HashSet<>();
 	private Map<String, String[]> equivalence = new HashMap<>(); // interchangeable URIs: A->[B] means that all terms [B] are noted as being the same
@@ -237,6 +242,10 @@ public class Vocabulary
 	// fetches the label/description for a given URI; if there is none, returns null
 	public String getLabel(String uri) {return uriToLabel.get(uri);}
 	public String getDescr(String uri) {return uriToDescr.get(uri);}
+	public String[] getAltLabels(String uri) {return uriToAlternateLabels.get(uri);}
+	public String[] getExternalURLs(String uri) {return uriToExternalURLs.get(uri);}
+	public String getPubChemSource(String uri) {return uriToPubChemSource.get(uri);}
+	public boolean getPubChemImport(String uri) {return uriToPubChemImport.getOrDefault(uri, false);} // changes null to false
 	
 	// finds the URI that matches a given label; singular version tries to disambiguate if there are multiple URIs sharing
 	// the same label (there are a few of these)
@@ -370,6 +379,10 @@ public class Vocabulary
 		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
 		Property subPropOf = model.createProperty(ModelSchema.PFX_RDFS + "subPropertyOf");
 		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		Property pubchemImport = model.createProperty(ModelSchema.PFX_BAE + "pubchemImport");
+		Property pubchemSource = model.createProperty(ModelSchema.PFX_BAE + "pubchemSource");
+		Property externalURL = model.createProperty(ModelSchema.PFX_BAE + "externalURL");
+		Property altLabel = model.createProperty(ModelSchema.PFX_BAE + "altLabel");
 		Property rdfType = model.createProperty(ModelSchema.PFX_RDF + "type");
 		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
@@ -423,18 +436,30 @@ public class Vocabulary
 			{
 				uriToLabel.put(uri, label);
 				String[] list = labelToURI.get(label);
-				if (list != null)
-				{
-					list = Arrays.copyOf(list, list.length + 1);
-					list[list.length - 1] = uri;
-					labelToURI.put(label, list);
-				}
-				else labelToURI.put(label, new String[]{uri});
+				labelToURI.put(label, ArrayUtils.add(list, uri));
 			}
 			else if (predicate.equals(propDescr))
 			{
 				uriToDescr.put(uri, label);
 			}
+			else if (predicate.equals(pubchemSource))
+			{
+				uriToPubChemSource.put(uri, label);
+			}
+			else if (predicate.equals(pubchemImport))
+			{
+				uriToPubChemImport.put(uri, object.asLiteral().getBoolean());
+			}
+			else if (predicate.equals(externalURL))
+			{
+				String[] list = uriToExternalURLs.get(label);
+				uriToExternalURLs.put(label, ArrayUtils.add(list, uri));
+			}
+			else if (predicate.equals(altLabel))
+			{
+				String[] list = uriToAlternateLabels.get(label);
+				uriToAlternateLabels.put(label, ArrayUtils.add(list, uri));
+			}			
 		}
 		
 		// pull out the equivalences
