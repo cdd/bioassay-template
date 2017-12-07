@@ -382,7 +382,10 @@ public class Vocabulary
 		Property pubchemImport = model.createProperty(ModelSchema.PFX_BAE + "pubchemImport");
 		Property pubchemSource = model.createProperty(ModelSchema.PFX_BAE + "pubchemSource");
 		Property externalURL = model.createProperty(ModelSchema.PFX_BAE + "externalURL");
-		Property altLabel = model.createProperty(ModelSchema.PFX_BAE + "altLabel");
+		Property altLabel1 = model.createProperty(ModelSchema.PFX_BAE + "altLabel");
+		Property altLabel2 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000118");
+		Property altLabel3 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000111");
+		Property altLabel4 = model.createProperty("http://www.ebi.ac.uk/efo/alternative_term");
 		Property rdfType = model.createProperty(ModelSchema.PFX_RDF + "type");
 		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
@@ -455,7 +458,7 @@ public class Vocabulary
 				String[] list = uriToExternalURLs.get(label);
 				uriToExternalURLs.put(label, ArrayUtils.add(list, uri));
 			}
-			else if (predicate.equals(altLabel))
+			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
 				String[] list = uriToAlternateLabels.get(label);
 				uriToAlternateLabels.put(label, ArrayUtils.add(list, uri));
