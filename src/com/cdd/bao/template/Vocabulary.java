@@ -455,13 +455,13 @@ public class Vocabulary
 			}
 			else if (predicate.equals(externalURL))
 			{
-				String[] list = uriToExternalURLs.get(label);
-				uriToExternalURLs.put(label, ArrayUtils.add(list, uri));
+				String[] list = uriToExternalURLs.get(uri);
+				uriToExternalURLs.put(uri, ArrayUtils.add(list, label));
 			}
 			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
-				String[] list = uriToAlternateLabels.get(label);
-				uriToAlternateLabels.put(label, ArrayUtils.add(list, uri));
+				String[] list = uriToAlternateLabels.get(uri);
+				uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
 			}			
 		}
 		
