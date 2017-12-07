@@ -20,7 +20,7 @@
 		</fileset>
 	</path>
 
-	<target name="init">
+	<target name="init" depends="check">
 		<tstamp />
 		<mkdir dir="bin" />
 		<mkdir dir="pkg" />
@@ -67,6 +67,30 @@
 	<target name="clean" description="clean up">
 		<delete dir="bin" />
 		<delete dir="pkg" />
+	</target>
+
+	<!-- checkstyle configuration -->
+	<property name="check.config" location="check/bax_checks.xml" />
+	<path id="path.check">
+		<pathelement location="check/checkstyle-patch.jar" />
+		<pathelement location="check/checkstyle-8.4-all.jar" />
+	</path>
+
+	<path id="project.sourcepath">
+		<fileset dir="src/com">
+			<include name="**/*" />
+		</fileset>
+	</path>
+	<pathconvert property="classpath.check" refid="path.check" />
+
+	<target name="check">
+		<taskdef name="bax_checkstyle" classname="com.puppycrawl.tools.checkstyle.ant.CheckstyleAntTask" classpath="${classpath.check}" />
+		<!-- Use failOnViolation="false" to make style violations warning only -->
+		<bax_checkstyle config="${check.config}">
+			<path refid="project.sourcepath" />
+			<classpath path="${classpath.check}" />
+			<formatter type="plain" />
+		</bax_checkstyle>
 	</target>
 
 </project>
