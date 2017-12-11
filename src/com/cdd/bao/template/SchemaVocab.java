@@ -29,8 +29,8 @@ public class SchemaVocab
 	{
 		public String uri;
 		public String label, descr;
-		public String[] altLabels;
-		public String[] externalURLs;
+		public HashSet<String> altLabels;
+		public HashSet<String> externalURLs;
 		public String pubchemSource;
 		public boolean pubchemImport;
 	}
@@ -188,14 +188,13 @@ public class SchemaVocab
 			int numAltLabels = data.readInt();
 			if (numAltLabels > 0)
 			{
-				term.altLabels = new String[numAltLabels];
-				for (int i = 0; i < numAltLabels; i++) term.altLabels[i] = data.readUTF();
+
+				for (int i = 0; i < numAltLabels; i++) term.altLabels.add(data.readUTF());
 			}
 			int numURLs = data.readInt();
 			if (numURLs > 0)
 			{
-				term.externalURLs = new String[numURLs];
-				for (int i = 0; i < numURLs; i++) term.externalURLs[i] = data.readUTF();
+				for (int i = 0; i < numURLs; i++) term.externalURLs.add(data.readUTF());
 			}
 			term.pubchemSource = data.readUTF();
 			term.pubchemImport = data.readBoolean();

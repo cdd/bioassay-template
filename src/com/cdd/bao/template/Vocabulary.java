@@ -21,7 +21,6 @@
 
 package com.cdd.bao.template;
 
-import com.cdd.bao.*;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -30,10 +29,8 @@ import java.security.*;
 import java.util.*;
 import java.util.zip.*;
 
-import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
-import org.apache.commons.lang3.*;
 
 /*
 	Loads and stores the current list of vocabulary terms. Basically, it pulls in the local definition of the
@@ -48,10 +45,10 @@ public class Vocabulary
 
 	private boolean loadingComplete = false;
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
-	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
+	private Map<String, HashSet<String>> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
-	private Map<String, String[]> uriToExternalURLs = new HashMap<>();
-	private Map<String, String[]> uriToAlternateLabels = new HashMap<>();
+	private Map<String, HashSet<String>> uriToExternalURLs = new HashMap<>();
+	private Map<String, HashSet<String>> uriToAlternateLabels = new HashMap<>();
 	private Map<String, String> uriToPubChemSource = new HashMap<>();
 	private Map<String, Boolean> uriToPubChemImport = new HashMap<>();
 	// URIs that are known to be involved in property & class relationships, respectively
@@ -242,19 +239,19 @@ public class Vocabulary
 	// fetches the label/description for a given URI; if there is none, returns null
 	public String getLabel(String uri) {return uriToLabel.get(uri);}
 	public String getDescr(String uri) {return uriToDescr.get(uri);}
-	public String[] getAltLabels(String uri) {return uriToAlternateLabels.get(uri);}
-	public String[] getExternalURLs(String uri) {return uriToExternalURLs.get(uri);}
+	public HashSet<String> getAltLabels(String uri) {return uriToAlternateLabels.get(uri);}
+	public HashSet<String> getExternalURLs(String uri) {return uriToExternalURLs.get(uri);}
 	public String getPubChemSource(String uri) {return uriToPubChemSource.get(uri);}
 	public boolean getPubChemImport(String uri) {return uriToPubChemImport.getOrDefault(uri, false);} // changes null to false
 	
 	// finds the URI that matches a given label; singular version tries to disambiguate if there are multiple URIs sharing
 	// the same label (there are a few of these)
-	public String[] getURIList(String label) {return labelToURI.get(label);}
+	public HashSet<String> getURIList(String label) {return labelToURI.get(label);}
 	public String findURIForLabel(String label)
 	{
-		String[] list = labelToURI.get(label);
-		if (list == null) return null;
-		return list[0];
+		HashSet<String> set = labelToURI.get(label);
+		if (set == null) return null;
+		return set.iterator().next(); // gets the first element of the set as the URI
 	}
 	
 	// grab all of the URIs
@@ -435,11 +432,12 @@ public class Vocabulary
 			String uri = subject.getURI();
 			String label = object.asLiteral().getString();
 
-			if (predicate.equals(propLabel))
+			if (predicate.equals(propLabel)) // primary label
 			{
 				uriToLabel.put(uri, label);
-				String[] list = labelToURI.get(label);
-				labelToURI.put(label, ArrayUtils.add(list, uri));
+				HashSet<String> set = labelToURI.get(label);
+				set.add(uri); // add label to the set of labels for this uri
+				labelToURI.put(label, set);
 			}
 			else if (predicate.equals(propDescr))
 			{
@@ -455,14 +453,17 @@ public class Vocabulary
 			}
 			else if (predicate.equals(externalURL))
 			{
-				String[] list = uriToExternalURLs.get(uri);
-				uriToExternalURLs.put(uri, ArrayUtils.add(list, label));
+				HashSet<String> set = uriToExternalURLs.get(uri);
+				set.add(label);
+				uriToExternalURLs.put(uri, set);
 			}
 			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
-				String[] list = uriToAlternateLabels.get(uri);
-				uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
-			}			
+				HashSet<String> set = uriToAlternateLabels.get(uri);
+				set.add(label); // prevents duplicate altLabels by default bc this is a set
+				if (!(labelToURI.get(label).contains(label))) // ingores adding altLabels that are already a primaryLabel
+					uriToAlternateLabels.put(uri, set); // add this label to the growing list of altLabels associated with this uri
+			}
 		}
 		
 		// pull out the equivalences
@@ -492,28 +493,37 @@ public class Vocabulary
 			Statement stmt = iter.next();
 			String uri = stmt.getSubject().getURI(), label = stmt.getObject().asLiteral().getString();
 			uriToLabel.put(uri, label);
-			String[] list = labelToURI.get(label);
-			if (list != null)
-			{
-				list = Arrays.copyOf(list, list.length + 1);
-				list[list.length - 1] = uri;
-				labelToURI.put(label, list);
-			}
-			else labelToURI.put(label, new String[]{uri});
+			HashSet<String> set = labelToURI.get(label);
+			set.add(uri); // adding the uri to the last element of the set
+			labelToURI.put(label, set);
 		}
 
 		// go over the label-to-URI list and whenever there are multiple cases, try to favour the BAO version first (expect a few to
 		// slip through though)
 		for (String label : labelToURI.keySet())
 		{
-			String[] list = labelToURI.get(label);
-			if (list.length == 1) continue;
-			Arrays.sort(list);
+			HashSet<String> set = labelToURI.get(label);
+			if (set.size() == 1) continue;
+			List<String> list = new ArrayList<>(set);
+			Collections.sort(list);
 			int idx = -1;
-			for (int n = 0; n < list.length; n++) if (list[n].startsWith(ModelSchema.PFX_BAO)) {idx = n; break;}
-			// NOTE: if there's more than one BAO-based label, that with the lowest sort order will be retained; there are a 
-			// couple of these in the list
-			if (idx >= 0) labelToURI.put(label, new String[]{list[idx]});
+			for (int n = 0; n < list.size(); n++)
+			{
+				if (list.get(n).startsWith(ModelSchema.PFX_BAO)) 
+				{
+					idx = n;
+					// NOTE: if there's more than one BAO-based label, that with the lowest sort order will be retained; there are a 
+					// couple of these in the list
+					if (idx >= 0) 
+					{
+						HashSet<String> singleLabel = new HashSet<>();
+						singleLabel.add(list.get(idx));
+						labelToURI.put(label, singleLabel);
+					}
+					break; // got the single label at the lowest sort order, so stop looking for others
+				}
+			}
+
 		}
 		
 		// spool class/property values: only those that have a label
