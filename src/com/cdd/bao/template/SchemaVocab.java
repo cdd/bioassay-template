@@ -9,6 +9,7 @@ package com.cdd.bao.template;
 import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
+import org.apache.commons.lang3.*;
 
 import java.util.*;
 import java.io.*;
@@ -91,7 +92,9 @@ public class SchemaVocab
 			termList[n].uri = termURI[n];
 			termList[n].label = vocab.getLabel(termURI[n]);
 			termList[n].descr = vocab.getDescr(termURI[n]);
-			termList[n].altLabels = vocab.getAltLabels(termURI[n]);
+			List<String> myList = new ArrayList<>(Arrays.asList(vocab.getAltLabels(termURI[n]))); // convert array of altLabels to a list
+			myList.remove(vocab.getLabel(termURI[n])); // removes any first occurence of a primary label from the list of altLabels (should only be uo to 1 match since list is already made to be unique)
+			termList[n].altLabels = myList.toArray(new String[0]); // convert list back to an array and add it to the termList
 			termList[n].externalURLs = vocab.getExternalURLs(termURI[n]);
 			termList[n].pubchemSource = vocab.getPubChemSource(termURI[n]);	
 			termList[n].pubchemImport = vocab.getPubChemImport(termURI[n]);

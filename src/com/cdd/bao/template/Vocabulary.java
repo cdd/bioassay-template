@@ -461,8 +461,7 @@ public class Vocabulary
 			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
 				String[] list = uriToAlternateLabels.get(uri);
-				String primaryLabel = uriToLabel.get(uri); // get primaryLabel for this uri to check for redundancy against this putatuve altLabel
-				if (!ArrayUtils.contains(list, label) && !label.equals(primaryLabel)) // doesn't add label to the altLabels list for this uri if it already contains it as an altLabel or it's the same as a primaryLabel
+				if (!ArrayUtils.contains(list, label)) // doesn't add label to the altLabels list for this uri if it already contains it as an altLabel
 					uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
 			}
 		}
