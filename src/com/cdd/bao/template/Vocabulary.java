@@ -461,8 +461,7 @@ public class Vocabulary
 			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
 				String[] list = uriToAlternateLabels.get(uri);
-				if (!ArrayUtils.contains(list, label))
-					uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
+				if (!ArrayUtils.contains(list, label)) uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
 			}
 		}
 		
