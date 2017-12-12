@@ -9,6 +9,7 @@ package com.cdd.bao.template;
 import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
+import org.apache.commons.lang3.*;
 
 import java.util.*;
 import java.io.*;
@@ -91,7 +92,7 @@ public class SchemaVocab
 			termList[n].uri = termURI[n];
 			termList[n].label = vocab.getLabel(termURI[n]);
 			termList[n].descr = vocab.getDescr(termURI[n]);
-			termList[n].altLabels = vocab.getAltLabels(termURI[n]);
+			termList[n].altLabels = ArrayUtils.removeElement(vocab.getAltLabels(termURI[n]), termList[n].label);
 			termList[n].externalURLs = vocab.getExternalURLs(termURI[n]);
 			termList[n].pubchemSource = vocab.getPubChemSource(termURI[n]);	
 			termList[n].pubchemImport = vocab.getPubChemImport(termURI[n]);
