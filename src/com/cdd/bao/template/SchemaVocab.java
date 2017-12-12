@@ -92,7 +92,7 @@ public class SchemaVocab
 			termList[n].uri = termURI[n];
 			termList[n].label = vocab.getLabel(termURI[n]);
 			termList[n].descr = vocab.getDescr(termURI[n]);
-			termList[n].altLabels = ArrayUtils.removeElement(vocab.getAltLabels(termURI[n]), termList[n].label); // tries to remove the first occurence of the label from altLabels (already duplicate-free)
+			termList[n].altLabels = ArrayUtils.removeElement(vocab.getAltLabels(termURI[n]), termList[n].label);
 			termList[n].externalURLs = vocab.getExternalURLs(termURI[n]);
 			termList[n].pubchemSource = vocab.getPubChemSource(termURI[n]);	
 			termList[n].pubchemImport = vocab.getPubChemImport(termURI[n]);
