@@ -21,17 +21,11 @@
 
 package com.cdd.bao.editor;
 
-import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
-
-import java.io.*;
 import java.util.*;
-
 import javafx.application.*;
-import javafx.event.*;
 import javafx.geometry.*;
-import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
@@ -39,14 +33,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Line;
 import javafx.scene.text.*;
-import javafx.beans.value.*;
-import javafx.util.*;
+import javafx.stage.*;
 
 /*
 	Detail: shows an object from the schema, and makes it editable.
 */
 
-public class DetailPane extends ScrollPane
+public class DetailPane extends ScrollPane implements URITextFieldDelegate
 {
 	// ------------ private data ------------	
 
@@ -65,7 +58,7 @@ public class DetailPane extends ScrollPane
 	private TextField fieldPrefix = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
-	private TextField fieldURI = null;
+	private URIRowLine fieldURI = null;
 	private TextArea fieldPara = null;
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
 	private RadioButton suggestionsURL = null, suggestionsID = null;
@@ -75,7 +68,8 @@ public class DetailPane extends ScrollPane
 	{
 		Lineup line;
 		Schema.Value sourceVal;
-		TextField fieldURI, fieldName;
+		URIRowLine fieldURI;
+		TextField fieldName;
 		ComboBox<String> dropSpec;
 		TextArea fieldDescr;
 	}
@@ -335,19 +329,43 @@ public class DetailPane extends ScrollPane
 
 		valueList.get(newIndex).fieldURI.requestFocus();
 	}
-	public void actionLookupURI()
+
+	@Override
+	public void actionLookupURI(int focusIndex)
 	{
-		if (focusIndex < 0) return;
+		System.out.println("focusIndex=" + focusIndex + "; valueList.length=" + valueList.size());
 		ValueWidgets vw = valueList.get(focusIndex);
 		String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
-		if (uri.length() == 0) {actionLookupName(); return;}
-	
+		if (uri.length() == 0)
+		{
+			actionLookupName();
+			return;
+		}
+
 		Vocabulary vocab = Vocabulary.globalInstance();
-		
+
 		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
-		if (label == null) {actionLookupName(); return;}
-		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(label);
-		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(descr);
+		if (label == null)
+		{
+			actionLookupName();
+			return;
+		}
+		if (vw.fieldName.getText().length() == 0)
+		{
+			vw.fieldName.setText(label);
+		}
+		if (descr != null && vw.fieldDescr.getText().length() == 0)
+		{
+			vw.fieldDescr.setText(descr);
+		}
+	}
+	public void actionLookupURI()
+	{
+        if (focusIndex < 0)
+        {
+            return;
+        }
+		this.actionLookupURI(focusIndex);
 	}
 	public void actionLookupName()
 	{
@@ -458,10 +476,7 @@ public class DetailPane extends ScrollPane
 
 		if (group.parent != null)
 		{
-			fieldURI = new TextField(group.groupURI);
-			fieldURI.setPrefWidth(350);
-			observeFocus(fieldURI, -1);
-			Tooltip.install(fieldURI, new Tooltip("The group URI used to disambiguate this group"));
+			fieldURI = new URIRowLine(group.groupURI, "The group URI used to disambiguate this group", -1, PADDING, this);
 			line.add(fieldURI, "URI:", 1, 0);
 		}
 
@@ -510,10 +525,7 @@ public class DetailPane extends ScrollPane
 		Tooltip.install(fieldDescr, new Tooltip("Concise paragraph describing the assignment to the user"));
 		line.add(fieldDescr, "Description:", 1, 0);
 
-		fieldURI = new TextField(assignment.propURI);
-		fieldURI.setPrefWidth(350);
-		observeFocus(fieldURI, -1);
-		Tooltip.install(fieldURI, new Tooltip("The property URI used to link the assay to the assignment"));
+		fieldURI = new URIRowLine(assignment.propURI, "The property URI used to link the assay to the assignment", -1, PADDING, this);
 		line.add(fieldURI, "URI:", 1, 0);
 
 		ToggleGroup fieldSuggestions = new ToggleGroup();
@@ -599,13 +611,9 @@ public class DetailPane extends ScrollPane
 			valueList.add(vw);
 			
 			vw.line = new Lineup(PADDING);
-			
-			vw.fieldURI = new TextField(val.uri == null ? "" : val.uri);
-			vw.fieldURI.setPrefWidth(350);
-			observeFocus(vw.fieldURI, n);
-			Tooltip.install(vw.fieldURI, new Tooltip("The URI for this assignment value"));
+			vw.fieldURI = new URIRowLine(val.uri, "The URI for this assignment value", n, PADDING, this);
 			vw.line.add(vw.fieldURI, "URI:", 1, 0);
-			
+
 			vw.fieldName = new TextField(val.name);
 			vw.fieldName.setPrefWidth(350);
 			observeFocus(vw.fieldName, n);
@@ -623,7 +631,7 @@ public class DetailPane extends ScrollPane
 			rowNameSpec.add(new Label("Specify:"), 0);
 			rowNameSpec.add(vw.dropSpec, 0);
 			vw.line.add(rowNameSpec, "Name:", 1, 0);
-			
+
 			vw.fieldDescr = new TextArea(val.descr);
 			vw.fieldDescr.setPrefRowCount(5);
 			vw.fieldDescr.setPrefWidth(350);
@@ -683,11 +691,8 @@ public class DetailPane extends ScrollPane
 		Button btnPara = new Button("View");
 		btnPara.setOnAction(ev -> popupViewPara());
 		line.add(RowLine.pair(PADDING, 0, fieldPara, 1, RowLine.TOP, btnPara, 0, RowLine.BOTTOM), "Paragraph:", 1, 0);
-		
-		fieldURI = new TextField(assay.originURI);
-		fieldURI.setPrefWidth(300);
-		observeFocus(fieldURI, -1);
-		Tooltip.install(fieldURI, new Tooltip("Optional URI referencing the origin of the assay"));
+
+		fieldURI = new URIRowLine(assay.originURI, "Optional URI referencing the origin of the assay", -1, PADDING, this);
 		line.add(fieldURI, "Origin URI:", 1, 0);
 
 		vbox.getChildren().add(line);
@@ -874,7 +879,7 @@ public class DetailPane extends ScrollPane
 	}
 
 	// respond to focus so that one of the blocks gets a highlight
-	private void observeFocus(Control field, final int idx)
+	public void observeFocus(Control field, final int idx)
 	{
 		field.focusedProperty().addListener((val, oldValue, newValue) -> 
 		{
