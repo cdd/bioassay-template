@@ -333,8 +333,7 @@ public class DetailPane extends ScrollPane implements URITextFieldDelegate
 	@Override
 	public void actionLookupURI(int focusIndex)
 	{
-		System.out.println("focusIndex=" + focusIndex + "; valueList.length=" + valueList.size());
-		ValueWidgets vw = valueList.get(focusIndex);
+        ValueWidgets vw = valueList.get(focusIndex);
 		String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
 		if (uri.length() == 0)
 		{
