@@ -33,11 +33,8 @@ public class URIRowLine extends RowLine
 	private TextField getURITextField()
 	{
 		for (Node n : getChildren())
-		{
-			if (n instanceof TextField)
-				return (TextField) n;
+			if (n instanceof TextField) return (TextField)n;
 
-		}
 		return null;
 	}
 
@@ -51,20 +48,13 @@ public class URIRowLine extends RowLine
 		this.delegate.observeFocus(tfURI, focusIndex);
 		Tooltip.install(tfURI, new Tooltip(tooltip));
 
-		Button lookupUriBtn = new Button("Lookup URI");
-		if (focusIndex >= 0)
-		{
-			lookupUriBtn.setOnAction(event -> this.delegate.actionLookupURI(focusIndex));
-		}
+		Button lookupUriBtn = new Button("Lookup");
+		lookupUriBtn.setOnAction(event -> this.delegate.actionLookupName(focusIndex));
 
 		this.add(tfURI, 1);
 		this.add(lookupUriBtn, 0);
 	}
 
-	/**
-	 * @return text containing URI, which should be populated in the TextField
-	 * child.
-	 */
 	public String getText()
 	{
 		TextField tf = this.getURITextField();

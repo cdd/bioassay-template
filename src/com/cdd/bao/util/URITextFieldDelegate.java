@@ -28,5 +28,5 @@ public interface URITextFieldDelegate
 
 	public void observeFocus(Control field, final int idx);
 
-	public void actionLookupURI(int focusIndex);
+	public void actionLookupName(int focusIndex);
 }

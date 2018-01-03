@@ -329,44 +329,21 @@ public class DetailPane extends ScrollPane implements URITextFieldDelegate
 
 		valueList.get(newIndex).fieldURI.requestFocus();
 	}
-
-	@Override
-	public void actionLookupURI(int focusIndex)
-	{
-        ValueWidgets vw = valueList.get(focusIndex);
-		String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
-		if (uri.length() == 0)
-		{
-			actionLookupName();
-			return;
-		}
-
-		Vocabulary vocab = Vocabulary.globalInstance();
-
-		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
-		if (label == null)
-		{
-			actionLookupName();
-			return;
-		}
-		if (vw.fieldName.getText().length() == 0)
-		{
-			vw.fieldName.setText(label);
-		}
-		if (descr != null && vw.fieldDescr.getText().length() == 0)
-		{
-			vw.fieldDescr.setText(descr);
-		}
-	}
 	public void actionLookupURI()
 	{
-        if (focusIndex < 0)
-        {
-            return;
-        }
-		this.actionLookupURI(focusIndex);
+		if (focusIndex < 0) return;
+		ValueWidgets vw = valueList.get(focusIndex);
+		String uri = ModelSchema.expandPrefix(vw.fieldURI.getText());
+		if (uri.length() == 0) {actionLookupName(); return;}
+	
+		Vocabulary vocab = Vocabulary.globalInstance();
+		
+		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
+		if (label == null) {actionLookupName(); return;}
+		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(label);
+		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(descr);
 	}
-	public void actionLookupName()
+	public void actionLookupName(int focusIndex)
 	{
 		if (focusIndex >= 0)
 		{
@@ -404,7 +381,11 @@ public class DetailPane extends ScrollPane implements URITextFieldDelegate
 				}
 			}
 		}
-}	
+	}
+	public void actionLookupName()
+	{
+		this.actionLookupName(focusIndex);
+	}	
 	public void actionShowTree()
 	{
 		if (!Vocabulary.globalInstance().isLoaded()) return;
