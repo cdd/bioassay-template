@@ -21,15 +21,12 @@
 
 package com.cdd.bao.util;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.*;
+import javafx.scene.control.*;
 
 public class URIRowLine extends RowLine
 {
-	public interface URITextFieldDelegate
+	public interface Delegate
 	{
 		public void observeFocus(Control field, final int idx);
 		public void actionLookupName(int focusIndex);
