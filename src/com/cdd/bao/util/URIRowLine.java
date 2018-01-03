@@ -65,8 +65,7 @@ public class URIRowLine extends RowLine
 	public String getText()
 	{
 		TextField tf = this.getURITextField();
-		if (tf != null)
-			return tf.getText();
+		if (tf != null) return tf.getText();
 
 		return null;
 	}
@@ -74,7 +73,6 @@ public class URIRowLine extends RowLine
 	public void setText(String txt)
 	{
 		TextField tf = this.getURITextField();
-		if (tf != null)
-			tf.setText(txt);
+		if (tf != null) tf.setText(txt);
 	}
 }
