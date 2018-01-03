@@ -22,7 +22,6 @@
 package com.cdd.bao.editor;
 
 import com.cdd.bao.template.*;
-import com.cdd.bao.util.URIRowLine.URITextFieldDelegate;
 import com.cdd.bao.util.*;
 
 import java.util.*;
@@ -41,7 +40,7 @@ import javafx.stage.*;
 	Detail: shows an object from the schema, and makes it editable.
 */
 
-public class DetailPane extends ScrollPane implements URITextFieldDelegate
+public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 {
 	// ------------ private data ------------	
 
