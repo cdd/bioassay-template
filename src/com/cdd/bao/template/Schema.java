@@ -137,6 +137,7 @@ public class Schema
 		STRING, // preferred value type is a string literal, of arbitrary format
 		NUMBER, // preferred value type is a numeric iteral of arbitrary precision
 		INTEGER, // preferred value type is a literal that evaluates to an integer
+		DATE, // preferred value type is a date
 	}
 
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure

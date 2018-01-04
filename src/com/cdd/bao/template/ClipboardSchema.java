@@ -177,7 +177,8 @@ public class ClipboardSchema
 		else if (assn.suggestions == Schema.Suggestions.STRING) json.put("suggestionsString", true);
 		else if (assn.suggestions == Schema.Suggestions.NUMBER) json.put("suggestionsNumber", true);
 		else if (assn.suggestions == Schema.Suggestions.INTEGER) json.put("suggestionsInteger", true);
-		
+		else if (assn.suggestions == Schema.Suggestions.DATE) json.put("suggestionsDate", true);
+
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
 		{
@@ -267,6 +268,7 @@ public class ClipboardSchema
 		else if (json.optBoolean("suggestionsString", false)) assn.suggestions = Schema.Suggestions.STRING;
 		else if (json.optBoolean("suggestionsNumber", false)) assn.suggestions = Schema.Suggestions.NUMBER;
 		else if (json.optBoolean("suggestionsInteger", false)) assn.suggestions = Schema.Suggestions.INTEGER;
+		else if (json.optBoolean("suggestionsDate", false)) assn.suggestions = Schema.Suggestions.DATE;
 		
 		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)
