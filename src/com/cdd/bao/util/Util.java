@@ -99,7 +99,7 @@ public class Util
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 	
 	/**
-	 * Converts an array of Byte objects directly to a primitive array.
+	 * Converts a list of Byte objects directly to a primitive array.
 	 */
 	public static byte[] primByte(List<Byte> vec) 
 	{
@@ -109,7 +109,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of Integer objects directly to a primitive array.
+	 * Converts a set of Z objects directly to a primitive array.
+	 */
+	public static byte[] primByte(Set<Byte> set) 
+	{
+		byte[] arr = new byte[set.size()];
+		int n = 0;
+		for (byte v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Integer objects directly to a primitive array.
 	 */
 	public static int[] primInt(List<Integer> vec)
 	{
@@ -119,7 +130,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of Long objects directly to a primitive array.
+	 * Converts a set of Integer objects directly to a primitive array.
+	 */
+	public static int[] primInt(Set<Integer> set) 
+	{
+		int[] arr = new int[set.size()];
+		int n = 0;
+		for (int v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Long objects directly to a primitive array.
 	 */
 	public static long[] primLong(List<Long> vec)
 	{
@@ -129,7 +151,18 @@ public class Util
 	}
 	
 	/**
-	 * Converts an array of Float objects directly to a primitive array.
+	 * Converts a set of Long objects directly to a primitive array.
+	 */
+	public static long[] primLong(Set<Long> set) 
+	{
+		long[] arr = new long[set.size()];
+		int n = 0;
+		for (long v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Float objects directly to a primitive array.
 	 */	
 	public static float[] primFloat(List<Float> vec)
 	{
@@ -139,7 +172,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of Double objects directly to a primitive array.
+	 * Converts a set of Float objects directly to a primitive array.
+	 */
+	public static float[] primFloat(Set<Float> set) 
+	{
+		float[] arr = new float[set.size()];
+		int n = 0;
+		for (float v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Double objects directly to a primitive array.
 	 */
 	public static double[] primDouble(List<Double> vec)
 	{
@@ -149,7 +193,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of Boolean objects directly to a primitive array.
+	 * Converts a set of Double objects directly to a primitive array.
+	 */
+	public static double[] primDouble(Set<Double> set) 
+	{
+		double[] arr = new double[set.size()];
+		int n = 0;
+		for (double v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Boolean objects directly to a primitive array.
 	 */
 	public static boolean[] primBoolean(List<Boolean> vec)
 	{
@@ -159,7 +214,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of Character objects directly to a primitive array.
+	 * Converts a set of Boolean objects directly to a primitive array.
+	 */
+	public static boolean[] primBoolean(Set<Boolean> set) 
+	{
+		boolean[] arr = new boolean[set.size()];
+		int n = 0;
+		for (boolean v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of Character objects directly to a primitive array.
 	 */
 	public static char[] primChar(List<Character> vec)
 	{
@@ -169,7 +235,18 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of String objects directly to a primitive array.
+	 * Converts a set of Character objects directly to a primitive array.
+	 */
+	public static char[] primCharacter(Set<Character> set) 
+	{
+		char[] arr = new char[set.size()];
+		int n = 0;
+		for (char v : set) arr[n++] = v;
+		return arr;
+	}
+
+	/**
+	 * Converts a list of String objects directly to a primitive array.
 	 */
 	public static String[] primString(List<String> vec)
 	{
@@ -177,14 +254,31 @@ public class Util
 	}
 
 	/**
-	 * Converts an array of arbitrary objects directly to a primitive array of same object type.
+	 * Converts a set of String objects directly to a primitive array.
+	 */
+	public static String[] primString(Set<String> set)
+	{
+		return (String[])set.toArray();
+	}
+
+	/**
+	 * Converts a list of arbitrary objects directly to a primitive array of same object type.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T[] primObject(List<T> vec)
+	public static <T> T[] primObject(List<T> set)
+	{
+		return (T[])set.toArray();
+	}
+	
+	/**
+	 * Converts a set of arbitrary objects directly to a primitive array of same object type.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] primObject(Set<T> vec)
 	{
 		return (T[])vec.toArray();
 	}
-	
+
 	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
