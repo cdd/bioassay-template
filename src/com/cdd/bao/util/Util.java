@@ -99,6 +99,93 @@ public class Util
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 	
 	/**
+	 * Converts an array of Byte objects directly to a primitive array.
+	 */
+	public static byte[] primByte(List<Byte> vec) 
+	{
+		byte[] arr = new byte[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+
+	/**
+	 * Converts an array of Integer objects directly to a primitive array.
+	 */
+	public static int[] primInt(List<Integer> vec)
+	{
+		int[] arr = new int[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+
+	/**
+	 * Converts an array of Long objects directly to a primitive array.
+	 */
+	public static long[] primLong(List<Long> vec)
+	{
+		long[] arr = new long[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+	
+	/**
+	 * Converts an array of Float objects directly to a primitive array.
+	 */	
+	public static float[] primFloat(List<Float> vec)
+	{
+		float[] arr = new float[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+
+	/**
+	 * Converts an array of Double objects directly to a primitive array.
+	 */
+	public static double[] primDouble(List<Double> vec)
+	{
+		double[] arr = new double[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = 
+		vec.get(n); return arr;
+	}
+
+	/**
+	 * Converts an array of Boolean objects directly to a primitive array.
+	 */
+	public static boolean[] primBoolean(List<Boolean> vec)
+	{
+		boolean[] arr = new boolean[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+
+	/**
+	 * Converts an array of Character objects directly to a primitive array.
+	 */
+	public static char[] primChar(List<Character> vec)
+	{
+		char[] arr = new char[vec.size()]; 
+		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
+		return arr;
+	}
+
+	/**
+	 * Converts an array of String objects directly to a primitive array.
+	 */
+	public static String[] primString(List<String> vec)
+	{
+		return (String[])vec.toArray();
+	}
+
+	/**
+	 * Converts an array of arbitrary objects directly to a primitive array of same object type.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] primObject(List<T> vec)
+	{
+		return (T[])vec.toArray();
+	}
+	
+	/**
 	 * Converts an array to a human-readable string, for debugging purposes.
 	 */
 	public static String arrayStr(int[] arr)
