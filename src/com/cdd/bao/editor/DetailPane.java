@@ -62,8 +62,8 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private URIRowLine fieldURI = null;
 	private TextArea fieldPara = null;
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
-	private RadioButton suggestionsURL = null, suggestionsID = null;
-	private RadioButton suggestionsString = null, suggestionsNumber = null, suggestionsInteger = null;
+	private RadioButton suggestionsURL = null, suggestionsID = null, suggestionsString = null;
+	private RadioButton suggestionsNumber = null, suggestionsInteger = null, suggestionsDate = null; 
 	
 	private final class ValueWidgets
 	{
@@ -188,6 +188,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		else if (suggestionsString.isSelected()) mod.suggestions = Schema.Suggestions.STRING;
 		else if (suggestionsNumber.isSelected()) mod.suggestions = Schema.Suggestions.NUMBER;
 		else if (suggestionsInteger.isSelected()) mod.suggestions = Schema.Suggestions.INTEGER;
+		else if (suggestionsDate.isSelected()) mod.suggestions = Schema.Suggestions.DATE;
 		
 		if (isSummaryView)
 		{
@@ -522,12 +523,14 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		suggestionsString = new RadioButton("String");
 		suggestionsNumber = new RadioButton("Number");
 		suggestionsInteger = new RadioButton("Integer");
+		suggestionsDate = new RadioButton("Date");
 		suggestionsFull.setToggleGroup(fieldSuggestions);
 		suggestionsDisabled.setToggleGroup(fieldSuggestions);
 		suggestionsField.setToggleGroup(fieldSuggestions);
 		suggestionsString.setToggleGroup(fieldSuggestions);
 		suggestionsNumber.setToggleGroup(fieldSuggestions);
 		suggestionsInteger.setToggleGroup(fieldSuggestions);
+		suggestionsDate.setToggleGroup(fieldSuggestions);
 		suggestionsURL.setToggleGroup(fieldSuggestions);
 		suggestionsID.setToggleGroup(fieldSuggestions);
 		Tooltip.install(suggestionsFull, new Tooltip("Use suggestion models for the assignment"));
@@ -538,6 +541,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		Tooltip.install(suggestionsString, new Tooltip("Assignment should be free text"));
 		Tooltip.install(suggestionsNumber, new Tooltip("Assignment should be numeric (any precision)"));
 		Tooltip.install(suggestionsInteger, new Tooltip("Assignment should be an integer"));
+		Tooltip.install(suggestionsDate, new Tooltip("Assignment should be an date"));
 		suggestionsFull.setSelected(assignment.suggestions == Schema.Suggestions.FULL);
 		suggestionsDisabled.setSelected(assignment.suggestions == Schema.Suggestions.DISABLED);
 		suggestionsField.setSelected(assignment.suggestions == Schema.Suggestions.FIELD);
@@ -546,8 +550,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		suggestionsString.setSelected(assignment.suggestions == Schema.Suggestions.STRING);
 		suggestionsNumber.setSelected(assignment.suggestions == Schema.Suggestions.NUMBER);
 		suggestionsInteger.setSelected(assignment.suggestions == Schema.Suggestions.INTEGER);
+		suggestionsDate.setSelected(assignment.suggestions == Schema.Suggestions.DATE);
 		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsURL, suggestionsID, 
-											 suggestionsString, suggestionsNumber, suggestionsInteger);
+											 suggestionsString, suggestionsNumber, suggestionsInteger, suggestionsDate);
 		line.add(suggestionsLine, "Suggestions:", 1, 0);
 
 		vbox.getChildren().add(line);
