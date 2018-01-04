@@ -9,4 +9,4 @@ jobs:
     steps:
       - checkout
       - run: ls -alh
-      - run: cd ~/bae; ant clean pkg
+      #- run: cd ~/bae; ant clean pkg
