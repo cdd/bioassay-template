@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -250,7 +250,7 @@ public class Util
 	 */
 	public static String[] primString(List<String> vec)
 	{
-		return (String[])vec.toArray();
+		return vec.toArray(new String[vec.size()]);
 	}
 
 	/**
@@ -258,25 +258,7 @@ public class Util
 	 */
 	public static String[] primString(Set<String> set)
 	{
-		return (String[])set.toArray();
-	}
-
-	/**
-	 * Converts a list of arbitrary objects directly to a primitive array of same object type.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T[] primObject(List<T> set)
-	{
-		return (T[])set.toArray();
-	}
-	
-	/**
-	 * Converts a set of arbitrary objects directly to a primitive array of same object type.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T[] primObject(Set<T> vec)
-	{
-		return (T[])vec.toArray();
+		return set.toArray(new String[set.size()]);
 	}
 
 	/**
