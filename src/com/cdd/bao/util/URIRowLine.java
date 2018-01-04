@@ -32,7 +32,7 @@ public class URIRowLine extends RowLine
 		public void actionLookupName(int focusIndex);
 	}
 
-	private URITextFieldDelegate delegate;
+	private URIRowLine.Delegate delegate;
 
 	private TextField getURITextField()
 	{
@@ -42,7 +42,7 @@ public class URIRowLine extends RowLine
 		return null;
 	}
 
-	public URIRowLine(String uri, String tooltip, int focusIndex, int padding, URITextFieldDelegate delegate)
+	public URIRowLine(String uri, String tooltip, int focusIndex, int padding, URIRowLine.Delegate delegate)
 	{
 		super(padding);
 		this.delegate = delegate;
