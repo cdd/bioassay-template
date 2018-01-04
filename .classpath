@@ -35,6 +35,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/apache-log4j-extras-1.2.17.jar"/>
-	<classpathentry kind="lib" path="bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
