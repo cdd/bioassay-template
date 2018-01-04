@@ -21,16 +21,11 @@
 
 package com.cdd.bao.util;
 
-import com.cdd.bao.*;
 
-import java.io.*;
 import java.util.*;
 
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
 import javafx.geometry.*;
+import javafx.scene.layout.*;
 
 /*
 	RowLine: functions as a combination Hbox/FlowPane, providing the ability to stretch to fit, and specify vertical
