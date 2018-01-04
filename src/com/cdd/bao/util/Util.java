@@ -173,20 +173,16 @@ public class Util
 	 */
 	public static String[] primString(List<String> vec)
 	{
-		String[] arr = new String[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
+		return (String[])vec.toArray();
 	}
 
 	/**
 	 * Converts an array of arbitrary objects directly to a primitive array of same object type.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T[] primObject(List<T> vec)
 	{
-		@SuppressWarnings("unchecked")
-		T[] arr = (T[])new Object[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
+		return (T[])vec.toArray();
 	}
 	
 	/**
