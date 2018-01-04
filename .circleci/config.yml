@@ -7,7 +7,7 @@ jobs:
       - image: circleci/openjdk:8
     working_directory: ~/bax
     steps:
-      - apt-get install openjfx
+      - run: sudo apt-get install openjfx
       - checkout
       - run: ls -alh
       - run: cd ~/bax; ant clean check pkgAPI pkg
