@@ -51,6 +51,7 @@
 			<exclude name="com/cdd/bao/*.java" />
 			<exclude name="com/cdd/bao/util/Lineup.java" />
 			<exclude name="com/cdd/bao/util/RowLine.java" />
+			<exclude name="com/cdd/bao/util/URIRowLine.java" />
 			<exclude name="com/cdd/bao/util/UtilGUI.java" />
 			<classpath refid="project.class.path" />
 		</javac>
