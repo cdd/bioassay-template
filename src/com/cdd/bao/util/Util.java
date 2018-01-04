@@ -120,145 +120,77 @@ public class Util
 	}
 
 	/**
-	 * Converts a list of Integer objects directly to a primitive array.
+	 * Converts a collection of Integer objects directly to a primitive array.
 	 */
-	public static int[] primInt(List<Integer> vec)
+	public static int[] primInt(Collection<Integer> coll) 
 	{
-		int[] arr = new int[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Integer objects directly to a primitive array.
-	 */
-	public static int[] primInt(Set<Integer> set) 
-	{
-		int[] arr = new int[set.size()];
+		int[] arr = new int[coll.size()];
 		int n = 0;
-		for (int v : set) arr[n++] = v;
+		for (int v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of Long objects directly to a primitive array.
+	 * Converts a collection of Long objects directly to a primitive array.
 	 */
-	public static long[] primLong(List<Long> vec)
+	public static long[] primLong(Collection<Long> coll) 
 	{
-		long[] arr = new long[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-	
-	/**
-	 * Converts a set of Long objects directly to a primitive array.
-	 */
-	public static long[] primLong(Set<Long> set) 
-	{
-		long[] arr = new long[set.size()];
+		long[] arr = new long[coll.size()];
 		int n = 0;
-		for (long v : set) arr[n++] = v;
+		for (long v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of Float objects directly to a primitive array.
+	 * Converts a collection of Float objects directly to a primitive array.
 	 */	
-	public static float[] primFloat(List<Float> vec)
+	public static float[] primFloat(Collection<Float> coll)
 	{
-		float[] arr = new float[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Float objects directly to a primitive array.
-	 */
-	public static float[] primFloat(Set<Float> set) 
-	{
-		float[] arr = new float[set.size()];
+		float[] arr = new float[coll.size()];
 		int n = 0;
-		for (float v : set) arr[n++] = v;
+		for (float v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of Double objects directly to a primitive array.
+	 * Converts a collection of Double objects directly to a primitive array.
 	 */
-	public static double[] primDouble(List<Double> vec)
+	public static double[] primDouble(Collection<Double> coll) 
 	{
-		double[] arr = new double[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = 
-		vec.get(n); return arr;
-	}
-
-	/**
-	 * Converts a set of Double objects directly to a primitive array.
-	 */
-	public static double[] primDouble(Set<Double> set) 
-	{
-		double[] arr = new double[set.size()];
+		double[] arr = new double[coll.size()];
 		int n = 0;
-		for (double v : set) arr[n++] = v;
+		for (double v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of Boolean objects directly to a primitive array.
+	 * Converts a collection of Boolean objects directly to a primitive array.
 	 */
-	public static boolean[] primBoolean(List<Boolean> vec)
+	public static boolean[] primBoolean(Collection<Boolean> coll)
 	{
-		boolean[] arr = new boolean[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Boolean objects directly to a primitive array.
-	 */
-	public static boolean[] primBoolean(Set<Boolean> set) 
-	{
-		boolean[] arr = new boolean[set.size()];
+		boolean[] arr = new boolean[coll.size()];
 		int n = 0;
-		for (boolean v : set) arr[n++] = v;
+		for (boolean v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of Character objects directly to a primitive array.
+	 * Converts a collection of Character objects directly to a primitive array.
 	 */
-	public static char[] primChar(List<Character> vec)
+	public static char[] primCharacter(Collection<Character> coll) 
 	{
-		char[] arr = new char[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Character objects directly to a primitive array.
-	 */
-	public static char[] primCharacter(Set<Character> set) 
-	{
-		char[] arr = new char[set.size()];
+		char[] arr = new char[coll.size()];
 		int n = 0;
-		for (char v : set) arr[n++] = v;
+		for (char v : coll) arr[n++] = v;
 		return arr;
 	}
 
 	/**
-	 * Converts a list of String objects directly to a primitive array.
+	 * Converts a collection of String objects directly to a primitive array.
 	 */
-	public static String[] primString(List<String> vec)
+	public static String[] primString(Collection<String> coll)
 	{
-		return vec.toArray(new String[vec.size()]);
-	}
-
-	/**
-	 * Converts a set of String objects directly to a primitive array.
-	 */
-	public static String[] primString(Set<String> set)
-	{
-		return set.toArray(new String[set.size()]);
+		return coll.toArray(new String[0]);
 	}
 
 	/**
