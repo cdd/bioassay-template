@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    environment:
+      _JAVA_OPTIONS: "-Xms512m -Xmx3072m"
+    docker:
+      - image: circleci/openjdk:8
+    working_directory: ~/bax
+    steps:
+      - checkout
+      - run: ls -alh
+      #- run: cd ~/bae; ant clean pkg
