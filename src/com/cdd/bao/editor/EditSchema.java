@@ -35,6 +35,7 @@ import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
@@ -42,6 +43,7 @@ import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.util.*;
 
+import org.apache.commons.lang3.*;
 import org.json.*;
 
 /*
@@ -351,6 +353,8 @@ public class EditSchema
 		addMenu(menuEdit, "_Delete", new KeyCodeCombination(KeyCode.DELETE, cmd, shift)).setOnAction(event -> actionEditDelete());
 		addMenu(menuEdit, "_Undo", new KeyCharacterCombination("Z", cmd, shift)).setOnAction(event -> actionEditUndo());
 		addMenu(menuEdit, "_Redo", new KeyCharacterCombination("Z", cmd, shift, alt)).setOnAction(event -> actionEditRedo());
+		menuEdit.getItems().add(new SeparatorMenuItem());
+		addMenu(menuEdit, "_Find", new KeyCharacterCombination("F", cmd)).setOnAction(event -> actionEditFind());
 		menuEdit.getItems().add(new SeparatorMenuItem());
 		addMenu(menuEdit, "Move _Up", new KeyCharacterCombination("[", cmd)).setOnAction(event -> actionEditMove(-1));
 		addMenu(menuEdit, "Move _Down", new KeyCharacterCombination("]", cmd)).setOnAction(event -> actionEditMove(1));
@@ -1106,6 +1110,50 @@ public class EditSchema
 		stack.performRedo();
 		rebuildTree();
 		clearSelection();
+	}
+	public void actionEditFind()
+	{
+		SearchSchema.State state = new SearchSchema.State();
+		
+		ButtonType okBtnType = new ButtonType("Find Next", ButtonData.NEXT_FORWARD);
+		ButtonType cancelBtnType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+		TextInputDialog findDiag = new TextInputDialog();
+		findDiag.getDialogPane().getButtonTypes().setAll(okBtnType, cancelBtnType);
+		findDiag.setTitle("Find group or assignment");
+		findDiag.setHeaderText("Enter text fragment from group or assignment.");
+
+		final Button okBtn = (Button)findDiag.getDialogPane().lookupButton(okBtnType);
+		okBtn.addEventFilter(ActionEvent.ACTION, event ->
+		{
+			// If empty search text, do nothing. Otherwise, initiate search.
+			String searchText = findDiag.getEditor().getText();
+			if (!StringUtils.isEmpty(searchText))
+			{
+				if (!StringUtils.equals(searchText, state.searchText))
+				{
+					// Reset state.
+					state.searchText = searchText;
+					state.index = 0;
+					state.found = SearchSchema.find(treeView, searchText);
+				}
+				else state.index = ++state.index % state.found.size();
+					
+				this.setCurrentBranch(state.found.get(state.index));
+			}
+			event.consume();
+		});
+
+		final Button cancelBtn = (Button)findDiag.getDialogPane().lookupButton(cancelBtnType);
+		cancelBtn.addEventFilter(ActionEvent.ACTION, event ->
+		{
+			// Clear state.
+			state.searchText = null;
+			state.index = 0;
+			state.found = null;
+		});
+
+		findDiag.show();
 	}
 	public void actionEditMove(int dir)
 	{
