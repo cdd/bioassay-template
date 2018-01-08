@@ -30,7 +30,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 
 /*
-	Search Schema: search groups / assignments from the currently editable schema
+	Search Schema: search groups / assignments from the currently editable schema.
 */
 
 public class SearchSchema
@@ -43,15 +43,15 @@ public class SearchSchema
 		List<TreeItem<Branch>> found;
 	}
 
-	// return true if search text matches any of uri, name, or description.
+	// return true if search text matches any of uri, name, or description
 	private static boolean isMatch(String uri, String name, String descr, String searchText)
 	{
-		return (uri != null && uri.indexOf(searchText) >= 0)
-				|| (name != null && name.indexOf(searchText) >= 0)
-				|| (descr != null && descr.indexOf(searchText) >= 0);
+		return uri != null && uri.indexOf(searchText) >= 0 || 
+			   name != null && name.indexOf(searchText) >= 0 ||
+			   descr != null && descr.indexOf(searchText) >= 0;
 	}
 
-	// return list of nodes that match search text.
+	// return list of nodes that match search text
 	public static List<TreeItem<Branch>> find(TreeView<Branch> treeView, String searchText)
 	{
 		List<TreeItem<Branch>> found = new ArrayList<>();
@@ -73,8 +73,7 @@ public class SearchSchema
 				Schema.Assignment asmt = curBranch.assignment;
 				if (isMatch(asmt.propURI, asmt.name, asmt.descr, searchText)) found.add(curItem);
 			}
-			for (TreeItem<Branch> ti : curItem.getChildren())
-				stack.addFirst(ti);
+			for (TreeItem<Branch> ti : curItem.getChildren()) stack.addFirst(ti);
 		}
 		return found;
 	}
