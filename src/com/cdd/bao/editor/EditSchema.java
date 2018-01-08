@@ -1126,20 +1126,22 @@ public class EditSchema
 		final Button okBtn = (Button)findDiag.getDialogPane().lookupButton(okBtnType);
 		okBtn.addEventFilter(ActionEvent.ACTION, event ->
 		{
-			// If empty search text, do nothing. Otherwise, initiate search.
+			// if empty search text, do nothing; otherwise, initiate search
 			String searchText = findDiag.getEditor().getText();
 			if (!StringUtils.isEmpty(searchText))
 			{
 				if (!StringUtils.equals(searchText, state.searchText))
 				{
-					// Reset state.
+					// reset state
 					state.searchText = searchText;
 					state.index = 0;
 					state.found = SearchSchema.find(treeView, searchText);
 				}
-				else state.index = ++state.index % state.found.size();
-					
-				this.setCurrentBranch(state.found.get(state.index));
+				else if (state.found.size() > 0)
+					state.index = ++state.index % state.found.size();
+
+				if (state.found != null && state.found.size() > 0)
+					this.setCurrentBranch(state.found.get(state.index));
 			}
 			event.consume();
 		});
@@ -1147,7 +1149,7 @@ public class EditSchema
 		final Button cancelBtn = (Button)findDiag.getDialogPane().lookupButton(cancelBtnType);
 		cancelBtn.addEventFilter(ActionEvent.ACTION, event ->
 		{
-			// Clear state.
+			// clear state
 			state.searchText = null;
 			state.index = 0;
 			state.found = null;

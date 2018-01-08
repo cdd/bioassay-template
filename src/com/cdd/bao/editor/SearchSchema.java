@@ -23,16 +23,19 @@ package com.cdd.bao.editor;
 
 import java.util.*;
 
-import com.cdd.bao.editor.EditSchema.Branch;
-import com.cdd.bao.template.Schema;
+import com.cdd.bao.editor.EditSchema.*;
+import com.cdd.bao.template.*;
 
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.*;
+import javafx.scene.control.*;
+
+/*
+	Search Schema: search groups / assignments from the currently editable schema
+*/
 
 public class SearchSchema
 {
-	// Houses search state to facilitate stepping through results.
+	// houses search state to facilitate stepping through results
 	public static class State
 	{
 		String searchText;
@@ -43,14 +46,9 @@ public class SearchSchema
 	// return true if search text matches any of uri, name, or description.
 	private static boolean isMatch(String uri, String name, String descr, String searchText)
 	{
-		boolean isMatch = false;
-		if ((uri != null && uri.indexOf(searchText) >= 0)
-			|| (name != null && name.indexOf(searchText) >= 0)
-			|| (descr != null && descr.indexOf(searchText) >= 0))
-		{
-			isMatch = true;	
-		}
-		return isMatch;
+		return (uri != null && uri.indexOf(searchText) >= 0)
+				|| (name != null && name.indexOf(searchText) >= 0)
+				|| (descr != null && descr.indexOf(searchText) >= 0);
 	}
 
 	// return list of nodes that match search text.
@@ -59,7 +57,7 @@ public class SearchSchema
 		List<TreeItem<Branch>> found = new ArrayList<>();
 		Deque<TreeItem<Branch>> stack = new ArrayDeque<>();
 
-		// Maybe we should skip over the root since it is not shown.
+		// maybe we should skip over the root since it is not shown
 		stack.addFirst(treeView.getRoot());
 		while (stack.size() > 0)
 		{
@@ -68,14 +66,12 @@ public class SearchSchema
 			if (curBranch.group != null)
 			{
 				Schema.Group sg = curBranch.group;
-				if (isMatch(sg.groupURI, sg.name, sg.descr, searchText))
-					found.add(curItem);
+				if (isMatch(sg.groupURI, sg.name, sg.descr, searchText)) found.add(curItem);
 			}
 			else if (curBranch.assignment != null) 
 			{
 				Schema.Assignment asmt = curBranch.assignment;
-				if (isMatch(asmt.propURI, asmt.name, asmt.descr, searchText))
-					found.add(curItem);
+				if (isMatch(asmt.propURI, asmt.name, asmt.descr, searchText)) found.add(curItem);
 			}
 			for (TreeItem<Branch> ti : curItem.getChildren())
 				stack.addFirst(ti);
