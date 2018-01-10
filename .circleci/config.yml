@@ -11,4 +11,4 @@ jobs:
       - run: ls -alh
       - run: cd ~/bax; ant clean check pkgAPI
       - run: sudo apt-get install openjfx
-      - run: cd ~/bax; ant clean check pkg
+      - run: cd ~/bax; ant clean junit check pkg
