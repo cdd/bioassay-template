@@ -100,12 +100,10 @@
 	<property name="test.build.dir" value="build/test" />
 	<property name="main.build.dir" value="bin" />
 
+	<!-- These are the jar files required to run the tests -->
 	<path id="classpath.main">
-		<fileset dir="lib">
-			<include name="*.jar" />
-			<exclude name="junit-4.12.jar" />
-			<exclude name="hamcrest-core-1.3.jar" />
-		</fileset>
+		<pathelement location="lib/commons-lang3-3.3.2.jar" />
+		<pathelement location="lib/jena-core-3.0.0.jar" />
 	</path>
 
 	<path id="classpath.test">
