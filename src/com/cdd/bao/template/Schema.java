@@ -27,6 +27,8 @@ import com.cdd.bao.util.*;
 import java.io.*;
 import java.util.*;
 
+import org.json.*;
+
 /*
 	Schema: functionality for encapsulating a "BioAssay Template" document and some number of accompanying annotated
 	assays. The datastructure matches a portion of the semantic triples that represent the same thing, but once it
@@ -800,6 +802,64 @@ public class Schema
 		}
 		return list;
 	}
+	
+	// ------------ serialisation ------------
+	
+	// the default serialisation format is JSON, which is highly convenient; there are other options though (such as RDF triples), provided
+	// by other classes
+	
+	public static Schema deserialise(File file) throws IOException
+	{
+		try (Reader rdr = new FileReader(file))
+		{
+			Schema schema = deserialise(rdr);
+			return schema;
+		}
+		catch (IOException ex) {throw new IOException("Loading schema file failed [" + file.getAbsolutePath() + "].", ex);}
+	}
+	public static Schema deserialise(InputStream istr) throws IOException
+	{
+		return deserialise(new InputStreamReader(istr));
+	}
+	public static Schema deserialise(Reader rdr) throws IOException
+	{
+		try
+		{
+			JSONObject json = new JSONObject(new JSONTokener(rdr));
+			Schema schema = new Schema();
+			schema.setSchemaPrefix(json.getString("schemaPrefix"));
+			
+			JSONObject jsonRoot = json.getJSONObject("root");
+			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+			return schema;
+		}
+		catch (JSONException ex)
+		{
+			// all errors percolate up to here, from invalid JSON to missing parts of the JSON hierarchy; one size fits all
+			// error message will suffice
+			throw new IOException("Not a valid JSON-formatted schema.");
+		}
+	}
+	
+	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
+	public static void serialise(Schema schema, File file) throws IOException
+	{
+		try (Writer wtr = new BufferedWriter(new FileWriter(file)))
+		{
+			serialise(schema, wtr);
+		}
+	}
+	public static void serialise(Schema schema, OutputStream ostr) throws IOException
+	{
+		serialise(schema, new OutputStreamWriter(ostr));
+	}
+	public static void serialise(Schema schema, Writer wtr) throws IOException
+	{
+		JSONObject json = new JSONObject();
+		json.put("schemaPrefix", schema.schemaPrefix);
+		json.put("root", ClipboardSchema.composeGroup(schema.root));
+		wtr.write(json.toString(4));
+	}	
 	
 	// ------------ private methods ------------	
 
