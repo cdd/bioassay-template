@@ -317,11 +317,14 @@ public class EditSchema
 		final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN, alt = KeyCombination.ALT_DOWN;
 	
 		addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
-		addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
-		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
-		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+		addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen(false));
+		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false, false));
+		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true, false));
 		addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
 		addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
+		menuFile.getItems().add(new SeparatorMenuItem());
+		addMenu(menuFile, "Import TTL", null).setOnAction(event -> actionFileOpen(true));
+		addMenu(menuFile, "Export TTL", null).setOnAction(event -> actionFileSave(true, true));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
 		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
@@ -580,7 +583,7 @@ public class EditSchema
 		EditSchema edit = new EditSchema(stage);
 		stage.show();
 	}
-	public void actionFileSave(boolean promptNew)
+	public void actionFileSave(boolean promptNew, boolean exportTTL)
 	{
 		pullDetail();
 	
@@ -593,8 +596,9 @@ public class EditSchema
 			
 			File file = chooser.showSaveDialog(stage);
 			if (file == null) return;
-			
-			if (!file.getName().endsWith(".json")) file = new File(file.getAbsolutePath() + ".json");
+
+			if (exportTTL && !file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
+			else if (!exportTTL && !file.getName().endsWith(".json")) file = new File(file.getAbsolutePath() + ".json");
 
 			schemaFile = file;
 			updateTitle();
@@ -607,17 +611,19 @@ public class EditSchema
 			UtilGUI.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
 			return;
 		}
-	
+
 		// serialise-to-file
 		Schema schema = stack.peekSchema();
 		try (OutputStream ostr = new FileOutputStream(schemaFile))
 		{
-			schema.serialise(ostr);
+			if (exportTTL) ModelSchema.serialise(schema, ostr);
+			else schema.serialise(ostr);
+
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
-	public void actionFileOpen()
+	public void actionFileOpen(boolean importTTL)
 	{
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Open Schema Template");
@@ -625,11 +631,10 @@ public class EditSchema
 			
 		File file = chooser.showOpenDialog(stage);
 		if (file == null) return;
-		
+
 		try
 		{
-			Schema schema = Schema.deserialise(file);
-		
+			Schema schema = importTTL ? ModelSchema.deserialise(file) : Schema.deserialise(file);
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
 			edit.loadFile(file, schema);
