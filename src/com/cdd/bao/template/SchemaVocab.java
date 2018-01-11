@@ -160,6 +160,7 @@ public class SchemaVocab
 				data.writeBoolean(node.isExplicit);
 			}
 		}
+		data.flush();
 	}
 	
 	// read the raw binary content; a list of all available templates needs to be provided; note that the loaded trees

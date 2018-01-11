@@ -859,6 +859,7 @@ public class Schema
 		json.put("schemaPrefix", schema.schemaPrefix);
 		json.put("root", ClipboardSchema.composeGroup(schema.root));
 		wtr.write(json.toString(4));
+		wtr.flush();
 	}	
 	
 	// ------------ private methods ------------	

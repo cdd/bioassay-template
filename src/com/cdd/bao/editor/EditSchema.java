@@ -207,7 +207,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = ModelSchema.deserialise(file);
+			Schema schema = Schema.deserialise(file);
 			loadFile(file, schema);
 		}
 		catch (Exception ex) 
@@ -594,7 +594,7 @@ public class EditSchema
 			File file = chooser.showSaveDialog(stage);
 			if (file == null) return;
 			
-			if (!file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
+			if (!file.getName().endsWith(".json")) file = new File(file.getAbsolutePath() + ".json");
 
 			schemaFile = file;
 			updateTitle();
@@ -610,14 +610,9 @@ public class EditSchema
 	
 		// serialise-to-file
 		Schema schema = stack.peekSchema();
-		try 
+		try (OutputStream ostr = new FileOutputStream(schemaFile))
 		{
-			//schema.serialise(System.out);
-			
-			OutputStream ostr = new FileOutputStream(schemaFile);
-			ModelSchema.serialise(schema, ostr);
-			ostr.close();
-			
+			Schema.serialise(schema, ostr);
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
@@ -633,7 +628,7 @@ public class EditSchema
 		
 		try
 		{
-			Schema schema = ModelSchema.deserialise(file);
+			Schema schema = Schema.deserialise(file);
 		
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
@@ -676,11 +671,9 @@ public class EditSchema
 		sv.debugSummary();
 		Util.writeln("-------------------------");
 		
-		try
+		try (OutputStream ostr = new FileOutputStream(file))
 		{
-			OutputStream ostr = new FileOutputStream(file);
 			sv.serialise(ostr);
-			ostr.close();
 		}
 		catch (IOException ex) {ex.printStackTrace();}
 		
@@ -697,7 +690,7 @@ public class EditSchema
 		if (file == null) return;
 		
 		Schema addSchema = null;
-		try {addSchema = ModelSchema.deserialise(file);}
+		try {addSchema = Schema.deserialise(file);}
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
