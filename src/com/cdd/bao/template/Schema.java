@@ -842,22 +842,22 @@ public class Schema
 	}
 	
 	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
-	public static void serialise(Schema schema, File file) throws IOException
+	public void serialise(File file) throws IOException
 	{
 		try (Writer wtr = new BufferedWriter(new FileWriter(file)))
 		{
-			serialise(schema, wtr);
+			serialise(wtr);
 		}
 	}
-	public static void serialise(Schema schema, OutputStream ostr) throws IOException
+	public void serialise(OutputStream ostr) throws IOException
 	{
-		serialise(schema, new OutputStreamWriter(ostr));
+		serialise(new OutputStreamWriter(ostr));
 	}
-	public static void serialise(Schema schema, Writer wtr) throws IOException
+	public void serialise(Writer wtr) throws IOException
 	{
 		JSONObject json = new JSONObject();
-		json.put("schemaPrefix", schema.schemaPrefix);
-		json.put("root", ClipboardSchema.composeGroup(schema.root));
+		json.put("schemaPrefix", schemaPrefix);
+		json.put("root", ClipboardSchema.composeGroup(root));
 		wtr.write(json.toString(4));
 	}	
 	
