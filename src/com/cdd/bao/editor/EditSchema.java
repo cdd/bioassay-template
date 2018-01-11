@@ -612,7 +612,7 @@ public class EditSchema
 		Schema schema = stack.peekSchema();
 		try (OutputStream ostr = new FileOutputStream(schemaFile))
 		{
-			Schema.serialise(schema, ostr);
+			schema.serialise(ostr);
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
