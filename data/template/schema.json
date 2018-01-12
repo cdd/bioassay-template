@@ -1,6 +1,6 @@
 {
     "schemaPrefix": "http://www.bioassayontology.org/bas#",
-    "root": {"group": 
+    "root": 
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
@@ -872,5 +872,5 @@
                 "subGroups": []
             }
         ]
-    }}
+    }
 }

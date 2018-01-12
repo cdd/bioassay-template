@@ -40,10 +40,7 @@ public class ClipboardSchema
 	// turns a group/assignment/assay into a JSON object which can be conveniently unpacked later
 	public static JSONObject composeGroup(Schema.Group group)
 	{
-		JSONObject branch = new JSONObject();
-		try {branch.put("group", formatGroup(group));}
-		catch (JSONException ex) {}
-		return branch;
+		return formatGroup(group);
 	}
 	public static JSONObject composeAssignment(Schema.Assignment assn)
 	{
@@ -65,9 +62,7 @@ public class ClipboardSchema
 	{
 		try 
 		{
-			JSONObject jgroup = obj.optJSONObject("group");
-			if (jgroup == null) return null;
-			return parseGroup(jgroup, null);
+			return parseGroup(obj, null);
 		}
 		catch (JSONException ex)
 		{

@@ -52,6 +52,10 @@ import org.json.*;
 
 public class EditSchema
 {
+	// extension filters for FileChooser dialogs
+	private static FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+	private static FileChooser.ExtensionFilter ttlFilter = new FileChooser.ExtensionFilter("TURTLE files (*.ttl)", "*.ttl");
+
 	// ------------ private data ------------	
 
 	private File schemaFile = null;
@@ -207,7 +211,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = Schema.deserialise(file);
+			Schema schema = UtilIO.deserialise(file);
 			loadFile(file, schema);
 		}
 		catch (Exception ex) 
@@ -614,11 +618,9 @@ public class EditSchema
 
 		// serialise-to-file
 		Schema schema = stack.peekSchema();
-		try (OutputStream ostr = new FileOutputStream(schemaFile))
+		try
 		{
-			if (exportTTL) ModelSchema.serialise(schema, ostr);
-			else schema.serialise(ostr);
-
+			UtilIO.serialise(schema, schemaFile);
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
@@ -626,15 +628,19 @@ public class EditSchema
 	public void actionFileOpen(boolean importTTL)
 	{
 		FileChooser chooser = new FileChooser();
+
+		if (importTTL) chooser.getExtensionFilters().add(ttlFilter);
+		else chooser.getExtensionFilters().add(jsonFilter);
+
 		chooser.setTitle("Open Schema Template");
 		if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
-			
+
 		File file = chooser.showOpenDialog(stage);
 		if (file == null) return;
 
 		try
 		{
-			Schema schema = importTTL ? ModelSchema.deserialise(file) : Schema.deserialise(file);
+			Schema schema = UtilIO.deserialise(file);
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
 			edit.loadFile(file, schema);
@@ -687,7 +693,11 @@ public class EditSchema
 	}
 	public void actionFileMerge()
 	{
+		// allow merging in both TURTLE- and JSON-formatted schemata 
 		FileChooser chooser = new FileChooser();
+		chooser.getExtensionFilters().add(ttlFilter);
+		chooser.getExtensionFilters().add(jsonFilter);
+
 		chooser.setTitle("Merge Schema");
 		if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
 		
@@ -695,7 +705,7 @@ public class EditSchema
 		if (file == null) return;
 		
 		Schema addSchema = null;
-		try {addSchema = Schema.deserialise(file);}
+		try {addSchema = UtilIO.deserialise(file);}
 		catch (IOException ex)
 		{
 			ex.printStackTrace();

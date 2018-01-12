@@ -164,7 +164,7 @@ public class Main
 		istr.close();
 		
 		Schema schema = null;
-		if (fn3 != null) schema = ModelSchema.deserialise(new File(fn3));
+		if (fn3 != null) schema = UtilIO.deserialise(new File(fn3));
 
 		Util.writeln("Term counts: [" + sv1.numTerms() + "] -> [" + sv2.numTerms() + "]");
 		Util.writeln("Prefixes: [" + sv1.numPrefixes() + "] -> [" + sv2.numPrefixes() + "]");
@@ -221,13 +221,14 @@ public class Main
 		Util.writeln();
 		
 		Schema[] schemata = new Schema[inputFiles.size()];
-		for (int n = 0; n < schemata.length; n++) schemata[n] = ModelSchema.deserialise(new File(inputFiles.get(n)));
+		for (int n = 0; n < schemata.length; n++) schemata[n] = UtilIO.deserialise(new File(inputFiles.get(n)));
 		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
-		
+
 		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
-		OutputStream ostr = new FileOutputStream(outputFile);
-		schvoc.serialise(ostr);
-		ostr.close();
+		try (OutputStream ostr = new FileOutputStream(outputFile))
+		{
+			schvoc.serialise(ostr);
+		}
 		Util.writeln("Done.");
 	}
 
