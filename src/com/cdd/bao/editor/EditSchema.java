@@ -610,10 +610,17 @@ public class EditSchema
 		else if (!exportTTL && schemaFile != null)
 		{
 			// if not explicitly exporting, then we coerce save to JSON file
+			File file = null;
 			if (schemaFile.getName().endsWith(".ttl"))
-				schemaFile = new File(schemaFile.getAbsolutePath().replaceFirst("\\.ttl$", ".json"));
+				file = new File(schemaFile.getAbsolutePath().replaceFirst("\\.ttl$", ".json"));
 			else if (!schemaFile.getName().endsWith(".json"))
-				schemaFile = new File(schemaFile.getAbsolutePath() + ".json");
+				file = new File(schemaFile.getAbsolutePath() + ".json");
+
+			if (file != null)
+			{
+				schemaFile = file;
+				updateTitle();
+			}
 		}
 
 		// validity checking
