@@ -211,7 +211,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = UtilIO.deserialise(file);
+			Schema schema = SchemaUtil.deserialise(file);
 			loadFile(file, schema);
 		}
 		catch (Exception ex) 
@@ -636,7 +636,7 @@ public class EditSchema
 		Schema schema = stack.peekSchema();
 		try
 		{
-			UtilIO.serialise(schema, schemaFile);
+			SchemaUtil.serialise(schema, schemaFile);
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
@@ -656,7 +656,7 @@ public class EditSchema
 
 		try
 		{
-			Schema schema = UtilIO.deserialise(file);
+			Schema schema = SchemaUtil.deserialise(file);
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
 			edit.loadFile(file, schema);
@@ -721,7 +721,7 @@ public class EditSchema
 		if (file == null) return;
 		
 		Schema addSchema = null;
-		try {addSchema = UtilIO.deserialise(file);}
+		try {addSchema = SchemaUtil.deserialise(file);}
 		catch (IOException ex)
 		{
 			ex.printStackTrace();

@@ -177,6 +177,27 @@ public class SchemaUtil
 		}
 	}
 	
+	public static Schema deserialise(File file) throws IOException
+	{
+		Schema schema = null;
+
+		if (file.getName().endsWith(".ttl")) schema = ModelSchema.deserialise(file);
+		else if (file.getName().endsWith(".json")) schema = Schema.deserialise(file);
+		else throw new IOException("Can only deserialise from .ttl or .json format.");
+		
+		return schema;
+	}
+
+	public static void serialise(Schema schema, File file) throws IOException
+	{
+		try (OutputStream ostr = new FileOutputStream(file))
+		{
+			if (file.getName().endsWith(".ttl")) ModelSchema.serialise(schema, ostr);
+			else if (file.getName().endsWith(".json")) schema.serialise(ostr);
+			else throw new IOException("Should serialise to .ttl or .json format only.");
+		}
+	}
+
 	// ------------ private methods ------------	
 
 }
