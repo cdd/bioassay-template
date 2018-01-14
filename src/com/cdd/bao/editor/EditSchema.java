@@ -327,8 +327,8 @@ public class EditSchema
 		addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
 		addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
 		menuFile.getItems().add(new SeparatorMenuItem());
-		addMenu(menuFile, "Import TTL", null).setOnAction(event -> actionFileOpen(true));
-		addMenu(menuFile, "Export TTL", null).setOnAction(event -> actionFileSave(true, true));
+		addMenu(menuFile, "Import RDF (Turtle)", null).setOnAction(event -> actionFileOpen(true));
+		addMenu(menuFile, "Export RDF (Turtle)", null).setOnAction(event -> actionFileSave(true, true));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
 		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
@@ -607,9 +607,18 @@ public class EditSchema
 			schemaFile = file;
 			updateTitle();
 		}
-		
+		else if (!exportTTL && schemaFile != null)
+		{
+			// if not explicitly exporting, then we coerce save to JSON file
+			if (schemaFile.getName().endsWith(".ttl"))
+				schemaFile = new File(schemaFile.getAbsolutePath().replaceFirst("\\.ttl$", ".json"));
+			else if (!schemaFile.getName().endsWith(".json"))
+				schemaFile = new File(schemaFile.getAbsolutePath() + ".json");
+		}
+
 		// validity checking
 		if (schemaFile == null) return;
+
 		if (!schemaFile.getAbsoluteFile().getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
 			UtilGUI.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
