@@ -23,7 +23,7 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
-import com.cdd.bao.util.Lineup;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -160,7 +160,7 @@ public class CompareVocabTree
 	private void setupTree() throws IOException
 	{
 		InputStream istr = new FileInputStream(file);
-		SchemaVocab oldsv = SchemaVocab.deserialise(istr, new Schema[0]); // note: giving no schemata works for this purpose
+		SchemaVocab oldsv = SchemaVocab.deserialise(istr, new Schema[]{this.schema}); // use current schema to read in dump  
 		istr.close();
 
 		// list of (tree1, tree2) tuples to be compared
@@ -169,30 +169,26 @@ public class CompareVocabTree
 		// note: only shows trees on both sides
 		for (SchemaVocab.StoredTree tree1 : oldsv.getTrees()) for (SchemaVocab.StoredTree tree2 : schvoc.getTrees())
 		{
+			// skip if trees do not share same prefix or are not at same relative location 
 			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || !tree1.locator.equals(tree2.locator)) continue;
 
-			String rootUri1 = (tree1.tree.getFlat().length <= 0) ? null : tree1.tree.getFlat()[0].uri;
-			String rootUri2 = (tree2.tree.getFlat().length <= 0) ? null : tree2.tree.getFlat()[0].uri;
-			if (!StringUtils.equals(rootUri1, rootUri2))
-			{
-				// reference tree (from disk file) is null here and will be identified in following loop
-				comparables.add(new OldNewPair(null, tree2));
-				continue;
-			}
-			comparables.add(new OldNewPair(tree1, tree2));
+			SchemaVocab.StoredTree old = (!StringUtils.equals(tree1.propURI, tree2.propURI)) ? null : tree1;
+			comparables.add(new OldNewPair(old, tree2));
 		}
 
 		List<OldNewPair> reordered = OldNewPair.reordered(comparables);
 		for (SchemaVocab.StoredTree tree1 : oldsv.getTrees()) for (OldNewPair onp : reordered)
 		{
 			SchemaVocab.StoredTree tree2 = onp.tree2;
+
+			// skip if trees do not share same prefix or are at same relative location (since then they do not match) 
 			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || tree1.locator.equals(tree2.locator)) continue;
 
-			String rootUri1 = (tree1.tree.getFlat().length <= 0) ? null : tree1.tree.getFlat()[0].uri;
-			String rootUri2 = (tree2.tree.getFlat().length <= 0) ? null : tree2.tree.getFlat()[0].uri;
-			if (!StringUtils.equals(rootUri1, rootUri2)) continue;
-
-			onp.tree1 = tree1;
+			if (StringUtils.equals(tree1.propURI, tree2.propURI))
+			{
+				onp.tree1 = tree1;
+				break;
+			}
 		}
 
 		populateDiffTree(oldsv, comparables);
@@ -204,6 +200,11 @@ public class CompareVocabTree
 		{
 			SchemaVocab.StoredTree tree1 = onp.tree1;
 			SchemaVocab.StoredTree tree2 = onp.tree2;
+			if (tree1 == null || tree2 == null)
+			{
+				Util.errmsg("Cannot compare null trees.");
+				continue;
+			}
 
 			Set<String> terms1 = new HashSet<>(), terms2 = new HashSet<>();
 			for (SchemaTree.Node node : tree1.tree.getFlat()) terms1.add(node.uri);
