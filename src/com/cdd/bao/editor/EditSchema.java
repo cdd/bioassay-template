@@ -224,7 +224,10 @@ public class EditSchema
 	// loads a file with an already-parsed schema
 	public void loadFile(File file, Schema schema)
 	{
-		schemaFile = file;
+		// coerce "current file" to null when dealing with TURTLE import
+		if (file.getName().endsWith(".ttl")) schemaFile = null;
+		else schemaFile = file;
+		
 		stack.setSchema(schema);
 		updateTitle();
 		rebuildTree();
@@ -595,6 +598,9 @@ public class EditSchema
 		if (promptNew || schemaFile == null)
 		{
 			FileChooser chooser = new FileChooser();
+			if (exportTTL) chooser.getExtensionFilters().add(ttlFilter);
+			else chooser.getExtensionFilters().add(jsonFilter);
+
 			chooser.setTitle("Save Schema Template");
 			if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
 			
@@ -606,21 +612,6 @@ public class EditSchema
 
 			schemaFile = file;
 			updateTitle();
-		}
-		else if (!exportTTL && schemaFile != null)
-		{
-			// if not explicitly exporting, then we coerce save to JSON file
-			File file = null;
-			if (schemaFile.getName().endsWith(".ttl"))
-				file = new File(schemaFile.getAbsolutePath().replaceFirst("\\.ttl$", ".json"));
-			else if (!schemaFile.getName().endsWith(".json"))
-				file = new File(schemaFile.getAbsolutePath() + ".json");
-
-			if (file != null)
-			{
-				schemaFile = file;
-				updateTitle();
-			}
 		}
 
 		// validity checking
