@@ -42,6 +42,8 @@ public class SchemaVocab
 	{
 		public String schemaPrefix; // unique identifier for the template
 		public String locator; // the assignment branch locator in the template
+		public String propURI; // together with groupNest, uniquely identifies
+		public String[] groupNest; // an assignment part of a schema dumped to a file 
 		public Assignment assignment;
 		public SchemaTree tree;
 	}
@@ -68,6 +70,8 @@ public class SchemaVocab
 					StoredTree stored = new StoredTree();
 					stored.schemaPrefix = templates[n].getSchemaPrefix();
 					stored.locator = templates[n].locatorID(assn);
+					stored.propURI = assn.propURI;
+					stored.groupNest = assn.groupNest();
 					stored.assignment = assn;
 					stored.tree = new SchemaTree(assn, vocab);
 					treeList.add(stored);
@@ -146,7 +150,12 @@ public class SchemaVocab
 			StoredTree stored = treeList.get(n);
 			data.writeUTF(stored.schemaPrefix);
 			data.writeUTF(stored.locator);
-			
+			data.writeUTF(stored.assignment.propURI);
+
+			String[] groupNest = stored.assignment.groupNest();
+			data.writeInt(groupNest.length);
+			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
 			for (SchemaTree.Node node : flat)
@@ -212,6 +221,11 @@ public class SchemaVocab
 			StoredTree stored = new StoredTree();
 			stored.schemaPrefix = data.readUTF();
 			stored.locator = data.readUTF();
+			stored.propURI = data.readUTF();
+
+			int lenGroupNest = data.readInt();
+			stored.groupNest = new String[lenGroupNest];
+			for (int k = 0; k < stored.groupNest.length; ++k) stored.groupNest[k] = data.readUTF();
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
