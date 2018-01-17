@@ -195,12 +195,38 @@ public class SchemaUtil
 		}
 	}
 
-	// tries to read a schema file, and be smart about the format	
+	// tries to read a schema file, and be smart about the format	 (which is relatively easy because we have the file extension)
 	public static SerialData deserialise(File file) throws IOException
 	{
 		if (file.getName().endsWith(".json")) return new SerialData(SerialFormat.JSON, Schema.deserialise(file));
 		else if (file.getName().endsWith(".ttl")) return new SerialData(SerialFormat.TTL, ModelSchema.deserialise(file));
 		else throw new IOException("Can only deserialise from .ttl or .json format.");
+	}
+	
+	// deserialisation with unknown format, given that the type is not known
+	public static SerialData deserialise(InputStream istr) throws IOException
+	{
+		// because we're only switching between JSON and TTL, and JSON always has to start with '{' as the very first character, this is as far as
+		// we need to read ahead before deciding which parser to commit to; if we subsequently add more ambiguous types, it may be necessary to
+		// stuff the whole thing into a temporary buffer and sequentially test each option until one works
+
+		BufferedInputStream bstr = istr instanceof BufferedInputStream ? (BufferedInputStream)istr : new BufferedInputStream(istr);
+		bstr.mark(1);
+		
+		int firstByte = bstr.read();
+		if (firstByte < 0) throw new IOException("Empty stream/blank file.");
+		bstr.reset();
+		
+		if (firstByte == '{')
+		{
+			// assuming JSON
+			return new SerialData(SerialFormat.JSON, Schema.deserialise(bstr));
+		}
+		else
+		{
+			// assuming TTL
+			return new SerialData(SerialFormat.TTL, ModelSchema.deserialise(bstr));
+		}
 	}
 
 	// writes a schema to the given stream, using the requested format
