@@ -77,8 +77,16 @@ public class CompareVocabTree
 
 			if (item.direction == 0)
 			{
-				setStyle("-fx-text-fill: black;");
-				setText(item.assn.name);
+				if (item.assn != null)
+				{
+					setStyle("-fx-text-fill: black;");
+					setText(item.assn.name);
+				}
+				else
+				{
+					setStyle("-fx-text-fill: red; -fx-font-family: arial;");
+					setText("Removed: " + item.valueURI);
+				}
 			}
 			else
 			{
@@ -93,6 +101,12 @@ public class CompareVocabTree
 		}
 	}
 
+	private enum DiffType
+	{
+		DIFF_ADDITION,
+		DIFF_DELETION
+	}
+	
 	// ------------ public methods ------------
 
 	public CompareVocabTree(File file, Schema schema)
@@ -163,84 +177,93 @@ public class CompareVocabTree
 		SchemaVocab oldsv = SchemaVocab.deserialise(istr, new Schema[]{this.schema}); // use current schema to read in dump  
 		istr.close();
 
-		// list of (tree1, tree2) tuples to be compared
-		List<OldNewPair> comparables = new ArrayList<>();
+		// map key below: groupNest::propURI, where groupNest is a concatenation of all groups,
+		// from outer-most group, to inner-most, and the join-pattern is "::".
 
-		// note: only shows trees on both sides
-		for (SchemaVocab.StoredTree tree1 : oldsv.getTrees()) for (SchemaVocab.StoredTree tree2 : schvoc.getTrees())
+		Map<String, SchemaVocab.StoredTree> keyToOldTree = new HashMap<>();
+		for (SchemaVocab.StoredTree tree : oldsv.getTrees()) keyToOldTree.put(keyFromTree(tree), tree);
+
+		// iterate through current trees, finding deletions and additions
+		for (SchemaVocab.StoredTree curTree : schvoc.getTrees())
 		{
-			// skip if trees do not share same prefix or are not at same relative location 
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || !tree1.locator.equals(tree2.locator)) continue;
+			String curKey = keyFromTree(curTree);
+			TreeItem<Item> diffParent = attachToDiffTree(curTree);
 
-			SchemaVocab.StoredTree old = (!StringUtils.equals(tree1.propURI, tree2.propURI)) ? null : tree1;
-			comparables.add(new OldNewPair(old, tree2));
-		}
-
-		List<OldNewPair> reordered = OldNewPair.reordered(comparables);
-		for (SchemaVocab.StoredTree tree1 : oldsv.getTrees()) for (OldNewPair onp : reordered)
-		{
-			SchemaVocab.StoredTree tree2 = onp.tree2;
-
-			// skip if trees do not share same prefix or are at same relative location (since then they do not match) 
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || tree1.locator.equals(tree2.locator)) continue;
-
-			if (StringUtils.equals(tree1.propURI, tree2.propURI))
+			SchemaVocab.StoredTree oldTree = keyToOldTree.get(curKey);
+			if (oldTree == null)
 			{
-				onp.tree1 = tree1;
-				break;
+				// only additions: new tree
+				Set<String> additions = new HashSet<>();
+				for (SchemaTree.Node node : curTree.tree.getFlat()) additions.add(node.uri);
+				pinToDiffParent(additions, DiffType.DIFF_ADDITION, diffParent, schvoc);
+			}
+			else
+			{
+				// tree revisions only: additions, deletions, or both
+				Set<String> terms1 = new HashSet<>(), terms2 = new HashSet<>();
+				for (SchemaTree.Node node : oldTree.tree.getFlat()) terms1.add(node.uri);
+				for (SchemaTree.Node node : curTree.tree.getFlat()) terms2.add(node.uri);
+
+				Set<String> deletions = new TreeSet<>(), additions = new TreeSet<>();
+				for (String uri : terms1) if (!terms2.contains(uri)) deletions.add(uri);
+				for (String uri : terms2) if (!terms1.contains(uri)) additions.add(uri);
+
+				pinToDiffParent(deletions, DiffType.DIFF_DELETION, diffParent, oldsv);
+				pinToDiffParent(additions, DiffType.DIFF_ADDITION, diffParent, schvoc);
 			}
 		}
 
-		populateDiffTree(oldsv, comparables);
+		Map<String, SchemaVocab.StoredTree> keyToNewTree = new HashMap<>();
+		for (SchemaVocab.StoredTree tree : schvoc.getTrees()) keyToNewTree.put(keyFromTree(tree), tree);
+
+		// detect tree deletions
+		for (SchemaVocab.StoredTree oldTree : oldsv.getTrees())
+		{
+			String oldKey = keyFromTree(oldTree);
+			SchemaVocab.StoredTree newTree = keyToNewTree.get(oldKey);
+			if (newTree == null)
+			{
+				// only deletions: old tree
+				TreeItem<Item> diffParent = attachToDiffTree(oldTree);
+				Set<String> deletions = new HashSet<>();
+				for (SchemaTree.Node node : oldTree.tree.getFlat()) deletions.add(node.uri);
+				pinToDiffParent(deletions, DiffType.DIFF_DELETION, diffParent, oldsv);
+			}
+		}
 	}
 
-	private void populateDiffTree(SchemaVocab oldsv, List<OldNewPair> comparables)
+	private String keyFromTree(SchemaVocab.StoredTree tree)
 	{
-		for (OldNewPair onp : comparables)
+		StringBuilder key = new StringBuilder();
+		for (int k = 0; k < tree.groupNest.length; ++k) key.append(tree.groupNest[k]).append("::");
+		key.append(tree.propURI);
+		return key.toString();
+	}
+
+	// return handle to newly created TreeItem now attached to diff tree
+	private TreeItem<Item> attachToDiffTree(SchemaVocab.StoredTree tree)
+	{
+		Item parent = new Item();
+		TreeItem<Item> treeParent = new TreeItem<>(parent);
+		parent.assn = tree.assignment;
+		parent.valueURI = tree.propURI;
+		treeRoot.getChildren().add(treeParent);
+		return treeParent;
+	}
+
+	private void pinToDiffParent(Set<String> revisions, DiffType diffType, TreeItem<Item> parent, SchemaVocab sv)
+	{
+		for (String uri : revisions)
 		{
-			SchemaVocab.StoredTree tree1 = onp.tree1;
-			SchemaVocab.StoredTree tree2 = onp.tree2;
-			if (tree1 == null || tree2 == null)
-			{
-				Util.errmsg("Cannot compare null trees.");
-				continue;
-			}
-
-			Set<String> terms1 = new HashSet<>(), terms2 = new HashSet<>();
-			for (SchemaTree.Node node : tree1.tree.getFlat()) terms1.add(node.uri);
-			for (SchemaTree.Node node : tree2.tree.getFlat()) terms2.add(node.uri);
-
-			Set<String> extra1 = new TreeSet<>(), extra2 = new TreeSet<>();
-			for (String uri : terms1) if (!terms2.contains(uri)) extra1.add(uri);	// deletions
-			for (String uri : terms2) if (!terms1.contains(uri)) extra2.add(uri);	// additions
-			
-			Item parent = new Item();
-			TreeItem<Item> treeParent = new TreeItem<>(parent);
-			parent.assn = tree2.assignment;
-			treeRoot.getChildren().add(treeParent);
-
-			for (String uri : extra1)
-			{
-				Item term = new Item();
-				TreeItem<Item> treeTerm = new TreeItem<>(term);
-				term.direction = -1;
-				term.valueURI = uri;
-				term.valueLabel = oldsv.getLabel(uri);
-				treeParent.getChildren().add(treeTerm);
-			}			
-
-			for (String uri : extra2)
-			{
-				Item term = new Item();
-				TreeItem<Item> treeTerm = new TreeItem<>(term);
-				term.direction = 1;
-				term.valueURI = uri;
-				term.valueLabel = schvoc.getLabel(uri);
-				treeParent.getChildren().add(treeTerm);
-			}
+			Item term = new Item();
+			TreeItem<Item> treeTerm = new TreeItem<>(term);
+			term.direction = (diffType == DiffType.DIFF_DELETION) ? -1 : 1;
+			term.valueURI = uri;
+			term.valueLabel = sv.getLabel(uri);
+			parent.getChildren().add(treeTerm);
 		}
 	}
-	
+
 	private void writeExport() throws IOException
 	{
 		OutputStream ostr = new FileOutputStream(file);
