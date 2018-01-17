@@ -41,7 +41,6 @@ public class SchemaVocab
 	public final static class StoredTree
 	{
 		public String schemaPrefix; // unique identifier for the template
-		public String locator; // the assignment branch locator in the template
 		public String propURI; // together with groupNest, uniquely identifies
 		public String[] groupNest; // an assignment part of a schema dumped to a file 
 		public Assignment assignment;
@@ -69,7 +68,6 @@ public class SchemaVocab
 				{
 					StoredTree stored = new StoredTree();
 					stored.schemaPrefix = templates[n].getSchemaPrefix();
-					stored.locator = templates[n].locatorID(assn);
 					stored.propURI = assn.propURI;
 					stored.groupNest = assn.groupNest();
 					stored.assignment = assn;
@@ -149,7 +147,6 @@ public class SchemaVocab
 		{
 			StoredTree stored = treeList.get(n);
 			data.writeUTF(stored.schemaPrefix);
-			data.writeUTF(stored.locator);
 			data.writeUTF(stored.assignment.propURI);
 
 			String[] groupNest = stored.assignment.groupNest();
@@ -220,7 +217,6 @@ public class SchemaVocab
 		{
 			StoredTree stored = new StoredTree();
 			stored.schemaPrefix = data.readUTF();
-			stored.locator = data.readUTF();
 			stored.propURI = data.readUTF();
 
 			int lenGroupNest = data.readInt();
@@ -229,7 +225,9 @@ public class SchemaVocab
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
-				stored.assignment = schema.obtainAssignment(stored.locator);
+				// arbitrarily choose the first assignment in case several matches are found 
+				Assignment[] asmtFound = schema.findAssignmentByProperty(stored.propURI, stored.groupNest);
+				stored.assignment = asmtFound.length > 0 ? asmtFound[0] : null;
 				break;
 			}
 			
@@ -303,7 +301,7 @@ public class SchemaVocab
 		for (StoredTree stored : treeList)
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
-			Util.writeln("Schema [" + stored.schemaPrefix + "], locator: " + stored.locator + ", name:" + assn.name);
+			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + assn.name);
 			int maxDepth = 0;
 			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)
