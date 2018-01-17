@@ -27,6 +27,7 @@ import java.io.*;
 import org.apache.commons.lang3.*;
 
 import com.cdd.bao.template.*;
+import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
@@ -148,7 +149,7 @@ public class Main
 		Util.writeln("    --onto {files...}");
 		Util.writeln("    --excl {files...}");
 	}
-	
+
 	private static void diffVocab(String[] options) throws Exception
 	{
 		String fn1 = options[0], fn2 = options[1], fn3 = options.length >= 3 ? options[2] : null;
@@ -172,15 +173,21 @@ public class Main
 		// note: only shows trees on both sides
 		for (SchemaVocab.StoredTree tree1 : sv1.getTrees()) for (SchemaVocab.StoredTree tree2 : sv2.getTrees())
 		{
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || !tree1.locator.equals(tree2.locator)) continue;
-			
-			String info = "locator: " + tree1.locator;
+			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix)
+				|| !tree1.propURI.equals(tree2.propURI)
+				|| !Arrays.equals(tree1.groupNest, tree2.groupNest)) continue;
+
+			String info = "propURI: " + tree1.propURI;
 			if (schema != null && tree1.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
-				Schema.Assignment assn = schema.obtainAssignment(tree1.locator);
-				info = "assignment: " + assn.name + " (locator: " + tree1.locator + ")";
+				Assignment[] asmtFound = schema.findAssignmentByProperty(tree1.propURI, tree1.groupNest);
+				if (asmtFound.length > 0)
+				{
+					Schema.Assignment assn = asmtFound.length > 0 ? asmtFound[0] : null;
+					info = "assignment: " + assn.name + " (propURI: " + tree1.propURI + ")";
+				}
 			}
-			
+
 			Util.writeln("Schema [" + tree1.schemaPrefix + "], " + info);
 			Set<String> terms1 = new HashSet<>(), terms2 = new HashSet<>();
 			for (SchemaTree.Node node : tree1.tree.getFlat()) terms1.add(node.uri);
@@ -192,12 +199,12 @@ public class Main
 
 			Util.writeln("    terms removed: " + extra1.size());
 			for (String uri : extra1) Util.writeln("        <" + uri + "> " + sv1.getLabel(uri));
-			
+
 			Util.writeln("    terms added: " + extra2.size());
 			for (String uri : extra2) Util.writeln("        <" + uri + "> " + sv2.getLabel(uri));
 		}
 	}      
-	
+
 	// compiles one-or-more schema files into a single vocabulary dump
 	private static void compileSchema(String[] options) throws Exception
 	{
