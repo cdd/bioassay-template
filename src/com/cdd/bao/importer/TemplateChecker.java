@@ -49,7 +49,7 @@ public class TemplateChecker
 	
 	public void perform() throws IOException, JSONException
 	{
-		schema = SchemaUtil.deserialise(new File(fn));
+		schema = SchemaUtil.deserialise(new File(fn)).schema;
 		Util.writeln("Loaded schema: <" + schema.getSchemaPrefix() + ">");
 		
 		vocab = new Vocabulary();

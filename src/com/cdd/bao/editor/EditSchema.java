@@ -211,8 +211,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = SchemaUtil.deserialise(file);
-			loadFile(file, schema);
+			loadFile(file, SchemaUtil.deserialise(file));
 		}
 		catch (Exception ex) 
 		{
@@ -222,13 +221,11 @@ public class EditSchema
 	}
 	
 	// loads a file with an already-parsed schema
-	public void loadFile(File file, Schema schema)
+	public void loadFile(File file, SchemaUtil.SerialData serial)
 	{
-		// coerce "current file" to null when dealing with TURTLE import
-		if (file.getName().endsWith(".ttl")) schemaFile = null;
-		else schemaFile = file;
+		if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = file; else schemaFile = null;
 		
-		stack.setSchema(schema);
+		stack.setSchema(serial.schema);
 		updateTitle();
 		rebuildTree();
 	}
@@ -627,7 +624,10 @@ public class EditSchema
 		Schema schema = stack.peekSchema();
 		try
 		{
-			SchemaUtil.serialise(schema, schemaFile);
+			try (OutputStream ostr = new FileOutputStream(schemaFile))
+			{
+				SchemaUtil.serialise(schema, SchemaUtil.SerialFormat.JSON, ostr);
+			}
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
@@ -647,10 +647,10 @@ public class EditSchema
 
 		try
 		{
-			Schema schema = SchemaUtil.deserialise(file);
+			SchemaUtil.SerialData serial = SchemaUtil.deserialise(file);
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
-			edit.loadFile(file, schema);
+			edit.loadFile(file, serial);
 			stage.show();
 		}
 		catch (IOException ex)
@@ -712,7 +712,7 @@ public class EditSchema
 		if (file == null) return;
 		
 		Schema addSchema = null;
-		try {addSchema = SchemaUtil.deserialise(file);}
+		try {addSchema = SchemaUtil.deserialise(file).schema;}
 		catch (IOException ex)
 		{
 			ex.printStackTrace();

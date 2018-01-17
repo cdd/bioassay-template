@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -164,7 +164,7 @@ public class Main
 		istr.close();
 		
 		Schema schema = null;
-		if (fn3 != null) schema = SchemaUtil.deserialise(new File(fn3));
+		if (fn3 != null) schema = SchemaUtil.deserialise(new File(fn3)).schema;
 
 		Util.writeln("Term counts: [" + sv1.numTerms() + "] -> [" + sv2.numTerms() + "]");
 		Util.writeln("Prefixes: [" + sv1.numPrefixes() + "] -> [" + sv2.numPrefixes() + "]");
@@ -221,7 +221,7 @@ public class Main
 		Util.writeln();
 		
 		Schema[] schemata = new Schema[inputFiles.size()];
-		for (int n = 0; n < schemata.length; n++) schemata[n] = SchemaUtil.deserialise(new File(inputFiles.get(n)));
+		for (int n = 0; n < schemata.length; n++) schemata[n] = SchemaUtil.deserialise(new File(inputFiles.get(n))).schema;
 		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
 
 		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");

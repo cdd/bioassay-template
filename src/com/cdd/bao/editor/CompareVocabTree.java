@@ -64,6 +64,12 @@ public class CompareVocabTree
 		String valueURI, valueLabel;
 	}
 	
+	private enum DiffType
+	{
+		ADDITION,
+		DELETION
+	}	
+	
 	private TreeItem<Item> treeRoot = new TreeItem<>(new Item());
 	private TreeView<Item> treeView = new TreeView<>(treeRoot);
 	
@@ -99,12 +105,6 @@ public class CompareVocabTree
 				setText(label);
 			}
 		}
-	}
-
-	private enum DiffType
-	{
-		DIFF_ADDITION,
-		DIFF_DELETION
 	}
 	
 	// ------------ public methods ------------
@@ -154,8 +154,8 @@ public class CompareVocabTree
 	
 	private static final class OldNewPair
 	{
-		SchemaVocab.StoredTree tree1;	// old
-		SchemaVocab.StoredTree tree2;	// new
+		SchemaVocab.StoredTree tree1; // old
+		SchemaVocab.StoredTree tree2; // new
 		
 		public OldNewPair(SchemaVocab.StoredTree tree1, SchemaVocab.StoredTree tree2)
 		{
@@ -195,7 +195,7 @@ public class CompareVocabTree
 				// only additions: new tree
 				Set<String> additions = new HashSet<>();
 				for (SchemaTree.Node node : curTree.tree.getFlat()) additions.add(node.uri);
-				pinToDiffParent(additions, DiffType.DIFF_ADDITION, diffParent, schvoc);
+				pinToDiffParent(additions, DiffType.ADDITION, diffParent, schvoc);
 			}
 			else
 			{
@@ -208,8 +208,8 @@ public class CompareVocabTree
 				for (String uri : terms1) if (!terms2.contains(uri)) deletions.add(uri);
 				for (String uri : terms2) if (!terms1.contains(uri)) additions.add(uri);
 
-				pinToDiffParent(deletions, DiffType.DIFF_DELETION, diffParent, oldsv);
-				pinToDiffParent(additions, DiffType.DIFF_ADDITION, diffParent, schvoc);
+				pinToDiffParent(deletions, DiffType.DELETION, diffParent, oldsv);
+				pinToDiffParent(additions, DiffType.ADDITION, diffParent, schvoc);
 			}
 		}
 
@@ -227,7 +227,7 @@ public class CompareVocabTree
 				TreeItem<Item> diffParent = attachToDiffTree(oldTree);
 				Set<String> deletions = new HashSet<>();
 				for (SchemaTree.Node node : oldTree.tree.getFlat()) deletions.add(node.uri);
-				pinToDiffParent(deletions, DiffType.DIFF_DELETION, diffParent, oldsv);
+				pinToDiffParent(deletions, DiffType.DELETION, diffParent, oldsv);
 			}
 		}
 	}
@@ -257,7 +257,7 @@ public class CompareVocabTree
 		{
 			Item term = new Item();
 			TreeItem<Item> treeTerm = new TreeItem<>(term);
-			term.direction = (diffType == DiffType.DIFF_DELETION) ? -1 : 1;
+			term.direction = diffType == DiffType.DELETION ? -1 : 1;
 			term.valueURI = uri;
 			term.valueLabel = sv.getLabel(uri);
 			parent.getChildren().add(treeTerm);

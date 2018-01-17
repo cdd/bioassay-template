@@ -177,25 +177,37 @@ public class SchemaUtil
 		}
 	}
 	
-	public static Schema deserialise(File file) throws IOException
+	public enum SerialFormat
 	{
-		Schema schema = null;
-
-		if (file.getName().endsWith(".ttl")) schema = ModelSchema.deserialise(file);
-		else if (file.getName().endsWith(".json")) schema = Schema.deserialise(file);
-		else throw new IOException("Can only deserialise from .ttl or .json format.");
+		JSON,
+		TTL
+	}
+	
+	public static final class SerialData
+	{
+		public SerialFormat format;
+		public Schema schema;
 		
-		return schema;
+		public SerialData(SerialFormat format, Schema schema)
+		{
+			this.format = format;
+			this.schema = schema;
+		}
 	}
 
-	public static void serialise(Schema schema, File file) throws IOException
+	// tries to read a schema file, and be smart about the format	
+	public static SerialData deserialise(File file) throws IOException
 	{
-		try (OutputStream ostr = new FileOutputStream(file))
-		{
-			if (file.getName().endsWith(".ttl")) ModelSchema.serialise(schema, ostr);
-			else if (file.getName().endsWith(".json")) schema.serialise(ostr);
-			else throw new IOException("Should serialise to .ttl or .json format only.");
-		}
+		if (file.getName().endsWith(".json")) return new SerialData(SerialFormat.JSON, Schema.deserialise(file));
+		else if (file.getName().endsWith(".ttl")) return new SerialData(SerialFormat.TTL, ModelSchema.deserialise(file));
+		else throw new IOException("Can only deserialise from .ttl or .json format.");
+	}
+
+	// writes a schema to the given stream, using the requested format
+	public static void serialise(Schema schema, SerialFormat format, OutputStream ostr) throws IOException
+	{
+		if (format == SerialFormat.JSON) schema.serialise(ostr);
+		else if (format == SerialFormat.TTL) ModelSchema.serialise(schema, ostr);
 	}
 
 	// ------------ private methods ------------	

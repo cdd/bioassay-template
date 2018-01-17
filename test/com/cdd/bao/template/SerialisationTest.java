@@ -40,10 +40,10 @@ public class SerialisationTest
 	@Before
 	public void setup() throws IOException
 	{
-		this.schemaFromJSON = SchemaUtil.deserialise(new File("data/template/schema.json"));
+		this.schemaFromJSON = SchemaUtil.deserialise(new File("data/template/schema.json")).schema;
 		assumeTrue(schemaFromJSON != null);
 
-		this.schemaFromTTL = SchemaUtil.deserialise(new File("data/template/schema.ttl"));
+		this.schemaFromTTL = SchemaUtil.deserialise(new File("data/template/schema.ttl")).schema;
 		assumeTrue(schemaFromTTL != null);
 	}
 
@@ -79,10 +79,13 @@ public class SerialisationTest
 	public void testSerialisationToJSONFile() throws IOException
 	{
 		File tmpFile = File.createTempFile("testSerialisationToFile", ".json");
-		SchemaUtil.serialise(schemaFromJSON, tmpFile);
+		try (OutputStream ostr = new FileOutputStream(tmpFile))
+		{
+			SchemaUtil.serialise(schemaFromJSON, SchemaUtil.SerialFormat.JSON, ostr);
+		}
 
 		// deserialise file to schema
-		Schema schema2 = SchemaUtil.deserialise(tmpFile);
+		Schema schema2 = SchemaUtil.deserialise(tmpFile).schema;
 		tmpFile.delete();
 
 		assertTrue("Schema do not match (destination file in JSON).", schemaFromJSON.equals(schema2));
@@ -92,10 +95,13 @@ public class SerialisationTest
 	public void testSerialisationToTTLFile() throws IOException
 	{
 		File tmpFile = File.createTempFile("testSerialisationToFile", ".ttl");
-		SchemaUtil.serialise(schemaFromJSON, tmpFile);
+		try (OutputStream ostr = new FileOutputStream(tmpFile))
+		{
+			SchemaUtil.serialise(schemaFromJSON, SchemaUtil.SerialFormat.TTL, ostr);
+		}
 
 		// deserialise file to schema
-		Schema schema2 = SchemaUtil.deserialise(tmpFile);
+		Schema schema2 = SchemaUtil.deserialise(tmpFile).schema;
 		tmpFile.delete();
 
 		assertTrue("Schema do not match (destination file in TURTLE).", schemaFromJSON.equals(schema2));
