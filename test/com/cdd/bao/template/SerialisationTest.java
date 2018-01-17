@@ -86,9 +86,16 @@ public class SerialisationTest
 
 		// deserialise file to schema
 		Schema schema2 = SchemaUtil.deserialise(tmpFile).schema;
-		tmpFile.delete();
+		assertTrue("Schema does not match (destination file in JSON).", schemaFromJSON.equals(schema2));
+		
+		// deserialise without filename clue
+		try (InputStream istr = new FileInputStream(tmpFile))
+		{
+			Schema schema3 = SchemaUtil.deserialise(istr).schema;
+			assertTrue("Schema stream does not match (destination file in JSON).", schemaFromJSON.equals(schema2));
+		}
 
-		assertTrue("Schema do not match (destination file in JSON).", schemaFromJSON.equals(schema2));
+		tmpFile.delete();
 	}
 	
 	@Test
@@ -102,8 +109,15 @@ public class SerialisationTest
 
 		// deserialise file to schema
 		Schema schema2 = SchemaUtil.deserialise(tmpFile).schema;
-		tmpFile.delete();
+		assertTrue("Schema does not match (destination file in Turtle).", schemaFromJSON.equals(schema2));
 
-		assertTrue("Schema do not match (destination file in TURTLE).", schemaFromJSON.equals(schema2));
+		// deserialise without filename clue
+		try (InputStream istr = new FileInputStream(tmpFile))
+		{
+			Schema schema3 = SchemaUtil.deserialise(istr).schema;
+			assertTrue("Schema stream does not match (destination file in Turtle).", schemaFromJSON.equals(schema2));
+		}
+
+		tmpFile.delete();
 	}
 }
