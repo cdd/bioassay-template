@@ -1,7 +1,7 @@
 /*
 	BioAssay Express (BAE)
 
-	(c) 2016-2017 Collaborative Drug Discovery Inc.
+	(c) 2016-2018 Collaborative Drug Discovery Inc.
 */
 
 package com.cdd.bao.template;
@@ -24,6 +24,9 @@ import java.io.*;
 
 public class SchemaVocab
 {
+	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
+	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	
 	private String[] prefixes;
 
 	public final static class StoredTerm
@@ -41,7 +44,8 @@ public class SchemaVocab
 	public final static class StoredTree
 	{
 		public String schemaPrefix; // unique identifier for the template
-		public String locator; // the assignment branch locator in the template
+		public String propURI; // together with groupNest, uniquely identifies
+		public String[] groupNest; // an assignment part of a schema dumped to a file 
 		public Assignment assignment;
 		public SchemaTree tree;
 	}
@@ -67,7 +71,8 @@ public class SchemaVocab
 				{
 					StoredTree stored = new StoredTree();
 					stored.schemaPrefix = templates[n].getSchemaPrefix();
-					stored.locator = templates[n].locatorID(assn);
+					stored.propURI = assn.propURI;
+					stored.groupNest = assn.groupNest();
 					stored.assignment = assn;
 					stored.tree = new SchemaTree(assn, vocab);
 					treeList.add(stored);
@@ -112,6 +117,9 @@ public class SchemaVocab
 	{
 		DataOutputStream data = new DataOutputStream(ostr);
 		
+		data.writeInt(MAGIC_NUMBER);
+		data.writeInt(CURRENT_VERSION);
+		
 		data.writeInt(prefixes.length);
 		for (String pfx : prefixes) data.writeUTF(pfx);
 		
@@ -145,8 +153,12 @@ public class SchemaVocab
 		{
 			StoredTree stored = treeList.get(n);
 			data.writeUTF(stored.schemaPrefix);
-			data.writeUTF(stored.locator);
-			
+			data.writeUTF(stored.assignment.propURI);
+
+			String[] groupNest = stored.assignment.groupNest();
+			data.writeInt(groupNest.length);
+			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
 			for (SchemaTree.Node node : flat)
@@ -160,6 +172,7 @@ public class SchemaVocab
 				data.writeBoolean(node.isExplicit);
 			}
 		}
+		data.flush();
 	}
 	
 	// read the raw binary content; a list of all available templates needs to be provided; note that the loaded trees
@@ -168,6 +181,12 @@ public class SchemaVocab
 	public static SchemaVocab deserialise(InputStream istr, Schema[] templates) throws IOException
 	{
 		DataInputStream data = new DataInputStream(istr);
+	
+		int magic = data.readInt();
+		if (magic != MAGIC_NUMBER) throw new IOException("Not a vocabulary file.");
+		
+		int version = data.readInt();
+		if (version != CURRENT_VERSION) throw new IOException("Vocabulary file is the wrong version.");
 	
 		SchemaVocab sv = new SchemaVocab();
 		
@@ -210,11 +229,17 @@ public class SchemaVocab
 		{
 			StoredTree stored = new StoredTree();
 			stored.schemaPrefix = data.readUTF();
-			stored.locator = data.readUTF();
+			stored.propURI = data.readUTF();
+
+			int lenGroupNest = data.readInt();
+			stored.groupNest = new String[lenGroupNest];
+			for (int k = 0; k < stored.groupNest.length; ++k) stored.groupNest[k] = data.readUTF();
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
-				stored.assignment = schema.obtainAssignment(stored.locator);
+				// arbitrarily choose the first assignment in case several matches are found 
+				Assignment[] asmtFound = schema.findAssignmentByProperty(stored.propURI, stored.groupNest);
+				stored.assignment = asmtFound.length > 0 ? asmtFound[0] : null;
 				break;
 			}
 			
@@ -288,7 +313,7 @@ public class SchemaVocab
 		for (StoredTree stored : treeList)
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
-			Util.writeln("Schema [" + stored.schemaPrefix + "], locator: " + stored.locator + ", name:" + assn.name);
+			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + assn.name);
 			int maxDepth = 0;
 			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)

@@ -52,6 +52,10 @@ import org.json.*;
 
 public class EditSchema
 {
+	// extension filters for FileChooser dialogs
+	private static FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+	private static FileChooser.ExtensionFilter ttlFilter = new FileChooser.ExtensionFilter("TURTLE files (*.ttl)", "*.ttl");
+
 	// ------------ private data ------------	
 
 	private File schemaFile = null;
@@ -207,8 +211,7 @@ public class EditSchema
 	{
 		try
 		{
-			Schema schema = ModelSchema.deserialise(file);
-			loadFile(file, schema);
+			loadFile(file, SchemaUtil.deserialise(file));
 		}
 		catch (Exception ex) 
 		{
@@ -218,10 +221,11 @@ public class EditSchema
 	}
 	
 	// loads a file with an already-parsed schema
-	public void loadFile(File file, Schema schema)
+	public void loadFile(File file, SchemaUtil.SerialData serial)
 	{
-		schemaFile = file;
-		stack.setSchema(schema);
+		if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = file; else schemaFile = null;
+		
+		stack.setSchema(serial.schema);
 		updateTitle();
 		rebuildTree();
 	}
@@ -317,11 +321,14 @@ public class EditSchema
 		final KeyCombination.Modifier cmd = KeyCombination.SHORTCUT_DOWN, shift = KeyCombination.SHIFT_DOWN, alt = KeyCombination.ALT_DOWN;
 	
 		addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
-		addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen());
-		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false));
-		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true));
+		addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen(false));
+		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false, false));
+		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true, false));
 		addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
 		addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
+		menuFile.getItems().add(new SeparatorMenuItem());
+		addMenu(menuFile, "Import RDF (Turtle)", null).setOnAction(event -> actionFileOpen(true));
+		addMenu(menuFile, "Export RDF (Turtle)", null).setOnAction(event -> actionFileSave(true, true));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
 		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
@@ -580,7 +587,7 @@ public class EditSchema
 		EditSchema edit = new EditSchema(stage);
 		stage.show();
 	}
-	public void actionFileSave(boolean promptNew)
+	public void actionFileSave(boolean promptNew, boolean exportTTL)
 	{
 		pullDetail();
 	
@@ -588,56 +595,62 @@ public class EditSchema
 		if (promptNew || schemaFile == null)
 		{
 			FileChooser chooser = new FileChooser();
+			if (exportTTL) chooser.getExtensionFilters().add(ttlFilter);
+			else chooser.getExtensionFilters().add(jsonFilter);
+
 			chooser.setTitle("Save Schema Template");
 			if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
 			
 			File file = chooser.showSaveDialog(stage);
 			if (file == null) return;
-			
-			if (!file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
+
+			if (exportTTL && !file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
+			else if (!exportTTL && !file.getName().endsWith(".json")) file = new File(file.getAbsolutePath() + ".json");
 
 			schemaFile = file;
 			updateTitle();
 		}
-		
+
 		// validity checking
 		if (schemaFile == null) return;
+
 		if (!schemaFile.getAbsoluteFile().getParentFile().canWrite() || (schemaFile.exists() && !schemaFile.canWrite()))
 		{
 			UtilGUI.informMessage("Cannot Save", "Not able to write to file: " + schemaFile.getAbsolutePath());
 			return;
 		}
-	
+
 		// serialise-to-file
 		Schema schema = stack.peekSchema();
-		try 
+		try
 		{
-			//schema.serialise(System.out);
-			
-			OutputStream ostr = new FileOutputStream(schemaFile);
-			ModelSchema.serialise(schema, ostr);
-			ostr.close();
-			
+			try (OutputStream ostr = new FileOutputStream(schemaFile))
+			{
+				SchemaUtil.serialise(schema, SchemaUtil.SerialFormat.JSON, ostr);
+			}
 			stack.setDirty(false);
 		}
 		catch (Exception ex) {ex.printStackTrace();}
 	}
-	public void actionFileOpen()
+	public void actionFileOpen(boolean importTTL)
 	{
 		FileChooser chooser = new FileChooser();
+
+		if (importTTL) chooser.getExtensionFilters().add(ttlFilter);
+		else chooser.getExtensionFilters().add(jsonFilter);
+
 		chooser.setTitle("Open Schema Template");
 		if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
-			
+
 		File file = chooser.showOpenDialog(stage);
 		if (file == null) return;
-		
+
 		try
 		{
-			Schema schema = ModelSchema.deserialise(file);
-		
+			SchemaUtil.SerialData serial = SchemaUtil.deserialise(file);
 			Stage stage = new Stage();
 			EditSchema edit = new EditSchema(stage);
-			edit.loadFile(file, schema);
+			edit.loadFile(file, serial);
 			stage.show();
 		}
 		catch (IOException ex)
@@ -676,11 +689,9 @@ public class EditSchema
 		sv.debugSummary();
 		Util.writeln("-------------------------");
 		
-		try
+		try (OutputStream ostr = new FileOutputStream(file))
 		{
-			OutputStream ostr = new FileOutputStream(file);
 			sv.serialise(ostr);
-			ostr.close();
 		}
 		catch (IOException ex) {ex.printStackTrace();}
 		
@@ -689,7 +700,11 @@ public class EditSchema
 	}
 	public void actionFileMerge()
 	{
+		// allow merging in both TURTLE- and JSON-formatted schemata 
 		FileChooser chooser = new FileChooser();
+		chooser.getExtensionFilters().add(ttlFilter);
+		chooser.getExtensionFilters().add(jsonFilter);
+
 		chooser.setTitle("Merge Schema");
 		if (schemaFile != null) chooser.setInitialDirectory(schemaFile.getParentFile());
 		
@@ -697,7 +712,7 @@ public class EditSchema
 		if (file == null) return;
 		
 		Schema addSchema = null;
-		try {addSchema = ModelSchema.deserialise(file);}
+		try {addSchema = SchemaUtil.deserialise(file).schema;}
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
