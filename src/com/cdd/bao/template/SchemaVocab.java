@@ -1,7 +1,7 @@
 /*
 	BioAssay Express (BAE)
 
-	(c) 2016-2017 Collaborative Drug Discovery Inc.
+	(c) 2016-2018 Collaborative Drug Discovery Inc.
 */
 
 package com.cdd.bao.template;
@@ -24,6 +24,9 @@ import java.io.*;
 
 public class SchemaVocab
 {
+	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
+	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	
 	private String[] prefixes;
 
 	public final static class StoredTerm
@@ -114,6 +117,9 @@ public class SchemaVocab
 	{
 		DataOutputStream data = new DataOutputStream(ostr);
 		
+		data.writeInt(MAGIC_NUMBER);
+		data.writeInt(CURRENT_VERSION);
+		
 		data.writeInt(prefixes.length);
 		for (String pfx : prefixes) data.writeUTF(pfx);
 		
@@ -175,6 +181,12 @@ public class SchemaVocab
 	public static SchemaVocab deserialise(InputStream istr, Schema[] templates) throws IOException
 	{
 		DataInputStream data = new DataInputStream(istr);
+	
+		int magic = data.readInt();
+		if (magic != MAGIC_NUMBER) throw new IOException("Not a vocabulary file.");
+		
+		int version = data.readInt();
+		if (version != CURRENT_VERSION) throw new IOException("Vocabulary file is the wrong version.");
 	
 		SchemaVocab sv = new SchemaVocab();
 		
