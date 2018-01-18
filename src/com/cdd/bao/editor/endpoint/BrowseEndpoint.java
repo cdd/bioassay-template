@@ -216,7 +216,7 @@ public class BrowseEndpoint
 
 		Stage stage = new Stage();
 		EditSchema edit = new EditSchema(stage);
-		edit.loadFile(null, branch.schema);
+		edit.loadFile(null, new SchemaUtil.SerialData(SchemaUtil.SerialFormat.JSON, branch.schema));
 		stage.show();
 	}
 	

@@ -131,7 +131,7 @@
 	<target name="junit" depends="test-compile" description="run junit">
 		<junit printsummary="on" showoutput="yes" haltonfailure="yes" fork="false" forkmode="once" reloading="false" maxmemory="1024m">
 			<classpath>
-				<path refid="classpath.main" />
+				<path refid="project.class.path" />
 				<path refid="classpath.test" />
 				<pathelement location="${test.build.dir}" />
 			</classpath>
