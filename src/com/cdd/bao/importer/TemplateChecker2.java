@@ -36,7 +36,6 @@ import org.json.*;
 
 public class TemplateChecker2
 {
-	private String fn;
 	private Schema schema;
 	private Vocabulary vocab;
 
@@ -50,12 +49,35 @@ public class TemplateChecker2
 		{
 			this(groupNest, null, issue);
 		}
-
 		public Diagnostic(List<String> groupNest, String propURI, String issue)
 		{
 			this.groupNest = groupNest.toArray(new String[groupNest.size()]);
 			this.propURI = propURI;
 			this.issue = issue;
+		}
+		public String[] getGroupNest()
+		{
+			return groupNest;
+		}
+		public String getPropURI()
+		{
+			return propURI;
+		}
+		public String getIssue()
+		{
+			return issue;
+		}
+
+		// output should look like:
+		//     groupNest :: propURI :: issue
+		// where groupNest is a concatenation of all parents to the node where the diagnostic issue occurs
+		public String toString()
+		{
+			StringBuilder sb = new StringBuilder();
+			for (int k = 0; k < groupNest.length; ++k) sb.append(groupNest[k]).append("::");
+			sb.append(propURI).append("::");
+			sb.append(issue);
+			return sb.toString();
 		}
 	}
 
@@ -63,11 +85,21 @@ public class TemplateChecker2
 
 	// ------------ public methods ------------
 
-	public TemplateChecker2(String fn)
+	public TemplateChecker2(String fn) throws IOException, JSONException
 	{
-		this.fn = fn;
+		this(new File(fn));
 	}
-
+	public TemplateChecker2(File schemaFile) throws IOException, JSONException
+	{
+		try (InputStream is = new FileInputStream(schemaFile))
+		{
+			this.schema = SchemaUtil.deserialise(is).schema;
+		}
+	}
+	public TemplateChecker2(Schema schema)
+	{
+		this.schema = schema;
+	}
 	public List<Diagnostic> getDiagnostics()
 	{
 		return Collections.unmodifiableList(this.diagnostics);
@@ -75,8 +107,6 @@ public class TemplateChecker2
 	
 	public void perform() throws IOException, JSONException
 	{
-		schema = ModelSchema.deserialise(new File(fn));
-		
 		vocab = new Vocabulary();
 		vocab.addListener(new Vocabulary.Listener()
 		{

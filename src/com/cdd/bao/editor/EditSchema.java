@@ -25,6 +25,7 @@ import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.editor.endpoint.*;
+import com.cdd.bao.importer.*;
 
 import java.io.*;
 import java.net.*;
@@ -147,7 +148,7 @@ public class EditSchema
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
 		sp1.getChildren().add(treeView);
 		sp2.getChildren().add(detail);
-		
+
 		splitter = new SplitPane();
 		splitter.setOrientation(Orientation.HORIZONTAL);
 		splitter.getItems().addAll(sp1, sp2);
@@ -175,6 +176,7 @@ public class EditSchema
 		
 		rebuildTree();
 
+		treeView.getSelectionModel().select(0);
 		Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		stage.setOnCloseRequest(event -> 
@@ -343,6 +345,7 @@ public class EditSchema
 		addMenu(menuFileGraphics, "_Values", null).setOnAction(event -> actionFileGraphicsValues());
 		menuFile.getItems().add(menuFileGraphics);
 		addMenu(menuFile, "Assay Stats", null).setOnAction(event -> actionFileAssayStats());
+		addMenu(menuFile, "Validate Schema Structure", null).setOnAction(event -> actionFileValidateSchemaStructure());
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
 		addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -880,6 +883,49 @@ public class EditSchema
 		area.setPrefHeight(500);
 		showdlg.getDialogPane().setContent(area);
 		
+		showdlg.getDialogPane().getButtonTypes().addAll(new ButtonType("OK", ButtonBar.ButtonData.OK_DONE));
+		showdlg.setResultConverter(buttonType -> true);
+		showdlg.showAndWait();
+	}
+	public void actionFileValidateSchemaStructure()
+	{
+		Schema schema = stack.getSchema();
+		TreeItem<Branch> item = currentBranch();
+		Branch branch = item == null ? null : item.getValue();
+		if (schema == null || branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
+		{
+			UtilGUI.informMessage("Validate Schema Structure", "Please load a non-trivial schema.");
+			return;
+		}
+
+		TemplateChecker2 tc2 = new TemplateChecker2(schema);
+		try {tc2.perform();}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			UtilGUI.informWarning("Validate Schema Structure", "Failed to validate schema.");
+			return;
+		}
+
+		StringBuilder issuesFound = new StringBuilder();
+		tc2.getDiagnostics().forEach(d -> issuesFound.append(d.toString()).append("\n"));
+
+		// dialog that displays diagnostics
+		Dialog<Boolean> showdlg = new Dialog<>();
+		showdlg.setTitle("Validate Schema Structure");
+
+		String txtBody = null;
+		if (issuesFound.length() > 0)
+		{
+			issuesFound.setLength(issuesFound.length() - 1); // truncate final newline
+			txtBody = "Errors found in schema structure:\n\n" + issuesFound.toString();
+		}
+		else txtBody = "No errors found in schema structure.";
+
+		TextArea area = new TextArea(txtBody);
+		area.setWrapText(true);
+		showdlg.getDialogPane().setContent(area);
+
 		showdlg.getDialogPane().getButtonTypes().addAll(new ButtonType("OK", ButtonBar.ButtonData.OK_DONE));
 		showdlg.setResultConverter(buttonType -> true);
 		showdlg.showAndWait();
