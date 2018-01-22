@@ -248,7 +248,31 @@ public class Main
 			return;
 		}
 		String fn = options[0];
-		TemplateChecker chk = new TemplateChecker(fn);
+		TemplateChecker2 chk = new TemplateChecker2(fn, diagnostics ->
+		{
+			Util.writeln("");
+			String lastGroupName = null, lastAssn = null;
+			for (TemplateChecker2.Diagnostic d : diagnostics)
+			{
+				List<Schema.Group> groupNest = d.getGroupNest();
+				int indent = 2 * groupNest.size();
+				String indstr = Util.rep(' ', indent);
+
+				int lastIdx = groupNest.size() > 0 ? (groupNest.size() - 1) : -1;
+				String trailingGroupName = lastIdx < 0 ? null : (groupNest.get(lastIdx) != null ? groupNest.get(lastIdx).name : null);
+				if (!StringUtils.equals(lastGroupName, trailingGroupName))
+				{
+					Util.writeln(indstr + "---- Group: [" + trailingGroupName + "] ----");
+					lastGroupName = trailingGroupName;
+				}
+				if (d.getPropURI() != null && !StringUtils.equals(lastAssn, d.getPropURI()))
+				{
+					Util.writeln(indstr + "---- Assignment: [" + d.getPropURI() + "] ----");
+					lastAssn = d.getPropURI();
+				}
+				Util.writeln(indstr + d.getIssue());
+			}
+		});
 		chk.perform();
 	}
 	

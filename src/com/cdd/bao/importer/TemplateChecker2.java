@@ -27,6 +27,8 @@ import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
+
 import org.json.*;
 
 /*
@@ -38,24 +40,25 @@ public class TemplateChecker2
 {
 	private Schema schema;
 	private Vocabulary vocab;
+	private Consumer<List<Diagnostic>> consumer;
 
 	public static final class Diagnostic
 	{
-		String[] groupNest; // nested group location of issue in schema tree
+		List<Group> groupNest; // nested group location of issue in schema tree
 		String propURI; // URI if issue triggered within assignment; null otherwise
 		String issue; // diagnostic message describing issue
 
-		public Diagnostic(List<String> groupNest, String issue)
+		public Diagnostic(List<Group> groupNest, String issue)
 		{
 			this(groupNest, null, issue);
 		}
-		public Diagnostic(List<String> groupNest, String propURI, String issue)
+		public Diagnostic(List<Group> groupNest, String propURI, String issue)
 		{
-			this.groupNest = groupNest.toArray(new String[groupNest.size()]);
+			this.groupNest = Collections.unmodifiableList(groupNest);
 			this.propURI = propURI;
 			this.issue = issue;
 		}
-		public String[] getGroupNest()
+		public List<Group> getGroupNest()
 		{
 			return groupNest;
 		}
@@ -74,7 +77,7 @@ public class TemplateChecker2
 		public String toString()
 		{
 			StringBuilder sb = new StringBuilder();
-			for (int k = 0; k < groupNest.length; ++k) sb.append(groupNest[k]).append("::");
+			for (Group g : groupNest) sb.append(g != null ? g.name : "").append("::");
 			sb.append(propURI).append("::");
 			sb.append(issue);
 			return sb.toString();
@@ -85,26 +88,24 @@ public class TemplateChecker2
 
 	// ------------ public methods ------------
 
-	public TemplateChecker2(String fn) throws IOException, JSONException
+	public TemplateChecker2(String fn, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
 	{
-		this(new File(fn));
+		this(new File(fn), consumer);
 	}
-	public TemplateChecker2(File schemaFile) throws IOException, JSONException
+	public TemplateChecker2(File schemaFile, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
 	{
 		try (InputStream is = new FileInputStream(schemaFile))
 		{
 			this.schema = SchemaUtil.deserialise(is).schema;
+			this.consumer = consumer;
 		}
 	}
-	public TemplateChecker2(Schema schema)
+	public TemplateChecker2(Schema schema, Consumer<List<Diagnostic>> consumer)
 	{
 		this.schema = schema;
+		this.consumer = consumer;
 	}
-	public List<Diagnostic> getDiagnostics()
-	{
-		return Collections.unmodifiableList(this.diagnostics);
-	}
-	
+
 	public void perform() throws IOException, JSONException
 	{
 		vocab = new Vocabulary();
@@ -114,26 +115,26 @@ public class TemplateChecker2
 			public void vocabLoadingException(Exception ex) {ex.printStackTrace();}
 		});
 		vocab.load(null, null);
-		
-		List<String> groupNest = new ArrayList<>();
+
+		List<Group> groupNest = new ArrayList<>();
 		checkGroup(groupNest, schema.getRoot());
+
+		// here we propagate diagnostics to logic owned by the consumer
+		consumer.accept(Collections.unmodifiableList(this.diagnostics));
 	}
 
 	// ------------ private methods ------------
 
-	private void checkGroup(List<String> groupNest, Group group)
+	private void checkGroup(List<Group> groupNest, Group group)
 	{
+		groupNest.add(group);
+
 		if (Util.isBlank(group.name)) diagnostics.add(new Diagnostic(groupNest, "group name should not be blank"));
 
 		if (group.parent == null) {} // don't care
-		else if (Util.isBlank(group.groupURI))
-		{
-			groupNest.add(null); // use null in the absence of a groupURI 
-			diagnostics.add(new Diagnostic(groupNest, "group has no URI"));
-		}
+		else if (Util.isBlank(group.groupURI)) diagnostics.add(new Diagnostic(groupNest, "group has no URI"));
 		else
 		{
-			groupNest.add(group.groupURI);
 			if (!vocab.hasPropertyURI(group.groupURI))
 				diagnostics.add(new Diagnostic(groupNest, "group URI <" + group.groupURI + "> not a known property"));
 		}
@@ -198,6 +199,7 @@ public class TemplateChecker2
 			else usedURI.add(subgrp.groupURI);
 		}
 
-		for (Group subgrp : group.subGroups) checkGroup(groupNest, subgrp);
+		// copy groupNest before passing as argument to avoid conflict between invocations of checkGroup
+		for (Group subgrp : group.subGroups) checkGroup(new ArrayList<>(groupNest), subgrp);
 	}
 }

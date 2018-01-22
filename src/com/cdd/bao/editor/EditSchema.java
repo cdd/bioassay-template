@@ -898,7 +898,12 @@ public class EditSchema
 			return;
 		}
 
-		TemplateChecker2 tc2 = new TemplateChecker2(schema);
+		StringBuilder issuesFound = new StringBuilder();
+		TemplateChecker2 tc2 = new TemplateChecker2(schema, diagnostics ->
+		{
+			diagnostics.forEach(d -> issuesFound.append(d.toString()).append("\n"));
+		});
+
 		try {tc2.perform();}
 		catch (Exception ex)
 		{
@@ -906,9 +911,6 @@ public class EditSchema
 			UtilGUI.informWarning("Validate Schema Structure", "Failed to validate schema.");
 			return;
 		}
-
-		StringBuilder issuesFound = new StringBuilder();
-		tc2.getDiagnostics().forEach(d -> issuesFound.append(d.toString()).append("\n"));
 
 		// dialog that displays diagnostics
 		Dialog<Boolean> showdlg = new Dialog<>();
@@ -950,7 +952,7 @@ public class EditSchema
 		}
 	
 		pullDetail();
-	
+
 		Schema schema = stack.getSchema();
 		Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
 		Schema.Group newGroup = schema.appendGroup(parent, new Schema.Group(null, ""));
