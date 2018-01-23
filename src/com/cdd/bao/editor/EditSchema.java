@@ -24,6 +24,7 @@ package com.cdd.bao.editor;
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.validator.*;
 import com.cdd.bao.editor.endpoint.*;
 
 import java.io.*;
@@ -147,7 +148,7 @@ public class EditSchema
 		StackPane sp1 = new StackPane(), sp2 = new StackPane();
 		sp1.getChildren().add(treeView);
 		sp2.getChildren().add(detail);
-		
+
 		splitter = new SplitPane();
 		splitter.setOrientation(Orientation.HORIZONTAL);
 		splitter.getItems().addAll(sp1, sp2);
@@ -175,6 +176,7 @@ public class EditSchema
 		
 		rebuildTree();
 
+		treeView.getSelectionModel().select(0);
 		Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		stage.setOnCloseRequest(event -> 
@@ -343,6 +345,7 @@ public class EditSchema
 		addMenu(menuFileGraphics, "_Values", null).setOnAction(event -> actionFileGraphicsValues());
 		menuFile.getItems().add(menuFileGraphics);
 		addMenu(menuFile, "Assay Stats", null).setOnAction(event -> actionFileAssayStats());
+		addMenu(menuFile, "Validate Schema Structure", null).setOnAction(event -> actionFileValidateSchemaStructure());
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "_Close", new KeyCharacterCombination("W", cmd)).setOnAction(event -> actionFileClose());
 		addMenu(menuFile, "_Quit", new KeyCharacterCombination("Q", cmd)).setOnAction(event -> actionFileQuit());
@@ -884,6 +887,51 @@ public class EditSchema
 		showdlg.setResultConverter(buttonType -> true);
 		showdlg.showAndWait();
 	}
+	public void actionFileValidateSchemaStructure()
+	{
+		Schema schema = stack.getSchema();
+		TreeItem<Branch> item = currentBranch();
+		Branch branch = item == null ? null : item.getValue();
+		if (schema == null || branch == null || (branch.group == null && branch.assignment == null && branch.assay == null))
+		{
+			UtilGUI.informMessage("Validate Schema Structure", "Please load a non-trivial schema.");
+			return;
+		}
+
+		StringBuilder issuesFound = new StringBuilder();
+		TemplateChecker chk = new TemplateChecker(schema, diagnostics ->
+		{
+			diagnostics.forEach(d -> issuesFound.append(d.toString()).append("\n"));
+		});
+
+		try {chk.perform();}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			UtilGUI.informWarning("Validate Schema Structure", "Failed to validate schema.");
+			return;
+		}
+
+		// dialog that displays diagnostics
+		Dialog<Boolean> showdlg = new Dialog<>();
+		showdlg.setTitle("Validate Schema Structure");
+
+		String txtBody = null;
+		if (issuesFound.length() > 0)
+		{
+			issuesFound.setLength(issuesFound.length() - 1); // truncate final newline
+			txtBody = "Errors found in schema structure:\n\n" + issuesFound.toString();
+		}
+		else txtBody = "No errors found in schema structure.";
+
+		TextArea area = new TextArea(txtBody);
+		area.setWrapText(true);
+		showdlg.getDialogPane().setContent(area);
+
+		showdlg.getDialogPane().getButtonTypes().addAll(new ButtonType("OK", ButtonBar.ButtonData.OK_DONE));
+		showdlg.setResultConverter(buttonType -> true);
+		showdlg.showAndWait();
+	}
 	public void actionFileClose()
 	{
 		if (!confirmClose()) return;
@@ -904,7 +952,7 @@ public class EditSchema
 		}
 	
 		pullDetail();
-	
+
 		Schema schema = stack.getSchema();
 		Schema.Group parent = schema.obtainGroup(item.getValue().locatorID);
 		Schema.Group newGroup = schema.appendGroup(parent, new Schema.Group(null, ""));

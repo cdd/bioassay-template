@@ -29,6 +29,7 @@ import org.apache.commons.lang3.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.validator.*;
 import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
 
@@ -248,7 +249,31 @@ public class Main
 			return;
 		}
 		String fn = options[0];
-		TemplateChecker chk = new TemplateChecker(fn);
+		TemplateChecker chk = new TemplateChecker(fn, diagnostics ->
+		{
+			Util.writeln("");
+			String lastGroupName = null, lastAssn = null;
+			for (TemplateChecker.Diagnostic d : diagnostics)
+			{
+				List<Schema.Group> groupNest = d.groupNest;
+				int indent = 2 * groupNest.size();
+				String indstr = Util.rep(' ', indent);
+
+				int lastIdx = groupNest.size() > 0 ? (groupNest.size() - 1) : -1;
+				String trailingGroupName = lastIdx < 0 ? null : (groupNest.get(lastIdx) != null ? groupNest.get(lastIdx).name : null);
+				if (!StringUtils.equals(lastGroupName, trailingGroupName))
+				{
+					Util.writeln(indstr + "---- Group: [" + trailingGroupName + "] ----");
+					lastGroupName = trailingGroupName;
+				}
+				if (d.propURI != null && !StringUtils.equals(lastAssn, d.propURI))
+				{
+					Util.writeln(indstr + "---- Assignment: [" + d.propURI + "] ----");
+					lastAssn = d.propURI;
+				}
+				Util.writeln(indstr + "** " + d.issue);
+			}
+		});
 		chk.perform();
 	}
 	
