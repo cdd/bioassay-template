@@ -255,7 +255,7 @@ public class Main
 			String lastGroupName = null, lastAssn = null;
 			for (TemplateChecker.Diagnostic d : diagnostics)
 			{
-				List<Schema.Group> groupNest = d.getGroupNest();
+				List<Schema.Group> groupNest = d.groupNest;
 				int indent = 2 * groupNest.size();
 				String indstr = Util.rep(' ', indent);
 
@@ -266,12 +266,12 @@ public class Main
 					Util.writeln(indstr + "---- Group: [" + trailingGroupName + "] ----");
 					lastGroupName = trailingGroupName;
 				}
-				if (d.getPropURI() != null && !StringUtils.equals(lastAssn, d.getPropURI()))
+				if (d.propURI != null && !StringUtils.equals(lastAssn, d.propURI))
 				{
-					Util.writeln(indstr + "---- Assignment: [" + d.getPropURI() + "] ----");
-					lastAssn = d.getPropURI();
+					Util.writeln(indstr + "---- Assignment: [" + d.propURI + "] ----");
+					lastAssn = d.propURI;
 				}
-				Util.writeln(indstr + "** " + d.getIssue());
+				Util.writeln(indstr + "** " + d.issue);
 			}
 		});
 		chk.perform();

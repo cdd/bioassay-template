@@ -44,9 +44,9 @@ public class TemplateChecker
 
 	public static final class Diagnostic
 	{
-		List<Group> groupNest; // nested group location of issue in schema tree
-		String propURI; // URI if issue triggered within assignment; null otherwise
-		String issue; // diagnostic message describing issue
+		public List<Group> groupNest; // nested group location of issue in schema tree
+		public String propURI; // URI if issue triggered within assignment; null otherwise
+		public String issue; // diagnostic message describing issue
 
 		public Diagnostic(List<Group> groupNest, String issue)
 		{
@@ -57,18 +57,6 @@ public class TemplateChecker
 			this.groupNest = Collections.unmodifiableList(groupNest);
 			this.propURI = propURI;
 			this.issue = issue;
-		}
-		public List<Group> getGroupNest()
-		{
-			return groupNest;
-		}
-		public String getPropURI()
-		{
-			return propURI;
-		}
-		public String getIssue()
-		{
-			return issue;
 		}
 
 		// output should look like:
