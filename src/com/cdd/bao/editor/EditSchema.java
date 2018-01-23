@@ -24,8 +24,8 @@ package com.cdd.bao.editor;
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.validator.*;
 import com.cdd.bao.editor.endpoint.*;
-import com.cdd.bao.importer.*;
 
 import java.io.*;
 import java.net.*;
@@ -899,12 +899,12 @@ public class EditSchema
 		}
 
 		StringBuilder issuesFound = new StringBuilder();
-		TemplateChecker2 tc2 = new TemplateChecker2(schema, diagnostics ->
+		TemplateChecker chk = new TemplateChecker(schema, diagnostics ->
 		{
 			diagnostics.forEach(d -> issuesFound.append(d.toString()).append("\n"));
 		});
 
-		try {tc2.perform();}
+		try {chk.perform();}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();

@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.importer;
+package com.cdd.bao.validator;
 
 import com.cdd.bao.template.*;
 import static com.cdd.bao.template.Schema.*;
@@ -36,7 +36,7 @@ import org.json.*;
 	further down the line.
 */
 
-public class TemplateChecker2
+public class TemplateChecker
 {
 	private Schema schema;
 	private Vocabulary vocab;
@@ -88,11 +88,11 @@ public class TemplateChecker2
 
 	// ------------ public methods ------------
 
-	public TemplateChecker2(String fn, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
+	public TemplateChecker(String fn, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
 	{
 		this(new File(fn), consumer);
 	}
-	public TemplateChecker2(File schemaFile, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
+	public TemplateChecker(File schemaFile, Consumer<List<Diagnostic>> consumer) throws IOException, JSONException
 	{
 		try (InputStream is = new FileInputStream(schemaFile))
 		{
@@ -100,7 +100,7 @@ public class TemplateChecker2
 			this.consumer = consumer;
 		}
 	}
-	public TemplateChecker2(Schema schema, Consumer<List<Diagnostic>> consumer)
+	public TemplateChecker(Schema schema, Consumer<List<Diagnostic>> consumer)
 	{
 		this.schema = schema;
 		this.consumer = consumer;

@@ -29,6 +29,7 @@ import org.apache.commons.lang3.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.validator.*;
 import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
 
@@ -248,11 +249,11 @@ public class Main
 			return;
 		}
 		String fn = options[0];
-		TemplateChecker2 chk = new TemplateChecker2(fn, diagnostics ->
+		TemplateChecker chk = new TemplateChecker(fn, diagnostics ->
 		{
 			Util.writeln("");
 			String lastGroupName = null, lastAssn = null;
-			for (TemplateChecker2.Diagnostic d : diagnostics)
+			for (TemplateChecker.Diagnostic d : diagnostics)
 			{
 				List<Schema.Group> groupNest = d.getGroupNest();
 				int indent = 2 * groupNest.size();
@@ -270,7 +271,7 @@ public class Main
 					Util.writeln(indstr + "---- Assignment: [" + d.getPropURI() + "] ----");
 					lastAssn = d.getPropURI();
 				}
-				Util.writeln(indstr + d.getIssue());
+				Util.writeln(indstr + "** " + d.getIssue());
 			}
 		});
 		chk.perform();
