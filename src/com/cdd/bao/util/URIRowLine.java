@@ -59,23 +59,6 @@ public class URIRowLine extends RowLine
 		Button lookupUriBtn = new Button("Lookup");
 		lookupUriBtn.setOnAction(event -> this.delegate.actionLookupName(focusIndex));
 
-		// tooltip: abbreviated uri + alternate labels
-		if (uri != null)
-		{
-			String afterLastSlash = StringUtils.substringAfterLast(uri, "/");
-			String abbreviatedUri = StringUtils.isEmpty(afterLastSlash) ? uri : afterLastSlash; // fall back to uri if no slash
-			StringBuilder tipText = new StringBuilder("Abbrev: " + abbreviatedUri);
-
-			Vocabulary v = Vocabulary.globalInstance();
-			if (v.isLoaded())
-			{
-				String[] altLabels = v.getAltLabels(uri);
-				if (altLabels != null && altLabels.length > 0)
-					tipText.append("\n\n" + "Other labels: " + StringUtils.join(altLabels, ", "));
-			}
-			lookupUriBtn.setTooltip(new Tooltip(tipText.toString()));
-		}
-
 		this.add(tfURI, 1);
 		this.add(lookupUriBtn, 0);
 	}

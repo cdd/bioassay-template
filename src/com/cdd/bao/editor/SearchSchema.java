@@ -38,9 +38,10 @@ import javafx.scene.control.*;
 public class SearchSchema
 {
 	// houses search state to facilitate stepping through results
-	public static class State
+	public final static class State
 	{
 		String searchText;
+		boolean useDescr;
 		int index;
 		List<TreeItem<Branch>> found;
 	}
@@ -67,7 +68,7 @@ public class SearchSchema
 	}
 
 	// return list of nodes that match search text
-	public static List<TreeItem<Branch>> find(TreeView<Branch> treeView, String searchText)
+	public static List<TreeItem<Branch>> find(TreeView<Branch> treeView, String searchText, boolean useDescr)
 	{
 		List<TreeItem<Branch>> found = new ArrayList<>();
 		Deque<TreeItem<Branch>> stack = new ArrayDeque<>();
@@ -81,12 +82,14 @@ public class SearchSchema
 			if (curBranch.group != null)
 			{
 				Schema.Group sg = curBranch.group;
-				if (isMatch(sg.groupURI, sg.name, sg.descr, searchText)) found.add(curItem);
+				String descr = useDescr ? sg.descr : null;
+				if (isMatch(sg.groupURI, sg.name, descr, searchText)) found.add(curItem);
 			}
 			else if (curBranch.assignment != null) 
 			{
 				Schema.Assignment asmt = curBranch.assignment;
-				if (isMatch(asmt.propURI, asmt.name, asmt.descr, searchText)) found.add(curItem);
+				String descr = useDescr ? asmt.descr : null;
+				if (isMatch(asmt.propURI, asmt.name, descr, searchText)) found.add(curItem);
 			}
 			for (TreeItem<Branch> ti : curItem.getChildren()) stack.addFirst(ti);
 		}
