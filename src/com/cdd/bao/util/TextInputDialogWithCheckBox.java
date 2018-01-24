@@ -28,6 +28,10 @@ import javafx.scene.control.ButtonBar.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+/*
+	TextInputDialogWithCheckBox:  dialog like TextInputDialog, but with optional checkbox. 
+*/
+
 public class TextInputDialogWithCheckBox extends Dialog<String>
 {
 	private final GridPane grid;
