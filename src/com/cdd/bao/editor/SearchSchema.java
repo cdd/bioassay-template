@@ -23,6 +23,8 @@ package com.cdd.bao.editor;
 
 import java.util.*;
 
+import org.apache.commons.lang3.*;
+
 import com.cdd.bao.editor.EditSchema.*;
 import com.cdd.bao.template.*;
 
@@ -46,9 +48,22 @@ public class SearchSchema
 	// return true if search text matches any of uri, name, or description
 	private static boolean isMatch(String uri, String name, String descr, String searchText)
 	{
-		return uri != null && uri.indexOf(searchText) >= 0 || 
-			   name != null && name.indexOf(searchText) >= 0 ||
-			   descr != null && descr.indexOf(searchText) >= 0;
+		boolean match = (uri != null && StringUtils.indexOfIgnoreCase(uri, searchText) >= 0) 
+						|| (name != null && StringUtils.indexOfIgnoreCase(name, searchText) >= 0)
+						|| (descr != null && StringUtils.indexOfIgnoreCase(descr, searchText) >= 0);
+
+		Vocabulary v = Vocabulary.globalInstance();
+		if (!match && v.isLoaded() && uri != null)
+		{
+			// try matching alternate labels
+			String[] altLabels = v.getAltLabels(uri);
+			if (altLabels != null)
+			{
+				for (int k = 0; k < altLabels.length; ++k)
+					if (StringUtils.indexOfIgnoreCase(altLabels[k], searchText) >= 0) return true;
+			}
+		}
+		return match;
 	}
 
 	// return list of nodes that match search text
