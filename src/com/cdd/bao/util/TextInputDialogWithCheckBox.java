@@ -29,7 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 /*
-	TextInputDialogWithCheckBox:  dialog like TextInputDialog, but with optional checkbox. 
+	TextInputDialogWithCheckBox:  dialog like TextInputDialog, with optional checkbox. 
 */
 
 public class TextInputDialogWithCheckBox extends Dialog<String>
