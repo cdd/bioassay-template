@@ -23,6 +23,8 @@ package com.cdd.bao.editor;
 
 import java.util.*;
 
+import org.apache.commons.lang3.*;
+
 import com.cdd.bao.editor.EditSchema.*;
 import com.cdd.bao.template.*;
 
@@ -36,9 +38,10 @@ import javafx.scene.control.*;
 public class SearchSchema
 {
 	// houses search state to facilitate stepping through results
-	public static class State
+	public final static class State
 	{
 		String searchText;
+		boolean useDescr;
 		int index;
 		List<TreeItem<Branch>> found;
 	}
@@ -46,13 +49,26 @@ public class SearchSchema
 	// return true if search text matches any of uri, name, or description
 	private static boolean isMatch(String uri, String name, String descr, String searchText)
 	{
-		return uri != null && uri.indexOf(searchText) >= 0 || 
-			   name != null && name.indexOf(searchText) >= 0 ||
-			   descr != null && descr.indexOf(searchText) >= 0;
+		boolean match = (uri != null && StringUtils.indexOfIgnoreCase(uri, searchText) >= 0) 
+						|| (name != null && StringUtils.indexOfIgnoreCase(name, searchText) >= 0)
+						|| (descr != null && StringUtils.indexOfIgnoreCase(descr, searchText) >= 0);
+
+		Vocabulary v = Vocabulary.globalInstance();
+		if (!match && v.isLoaded() && uri != null)
+		{
+			// try matching alternate labels
+			String[] altLabels = v.getAltLabels(uri);
+			if (altLabels != null)
+			{
+				for (int k = 0; k < altLabels.length; ++k)
+					if (StringUtils.indexOfIgnoreCase(altLabels[k], searchText) >= 0) return true;
+			}
+		}
+		return match;
 	}
 
 	// return list of nodes that match search text
-	public static List<TreeItem<Branch>> find(TreeView<Branch> treeView, String searchText)
+	public static List<TreeItem<Branch>> find(TreeView<Branch> treeView, String searchText, boolean useDescr)
 	{
 		List<TreeItem<Branch>> found = new ArrayList<>();
 		Deque<TreeItem<Branch>> stack = new ArrayDeque<>();
@@ -66,12 +82,14 @@ public class SearchSchema
 			if (curBranch.group != null)
 			{
 				Schema.Group sg = curBranch.group;
-				if (isMatch(sg.groupURI, sg.name, sg.descr, searchText)) found.add(curItem);
+				String descr = useDescr ? sg.descr : null;
+				if (isMatch(sg.groupURI, sg.name, descr, searchText)) found.add(curItem);
 			}
 			else if (curBranch.assignment != null) 
 			{
 				Schema.Assignment asmt = curBranch.assignment;
-				if (isMatch(asmt.propURI, asmt.name, asmt.descr, searchText)) found.add(curItem);
+				String descr = useDescr ? asmt.descr : null;
+				if (isMatch(asmt.propURI, asmt.name, descr, searchText)) found.add(curItem);
 			}
 			for (TreeItem<Branch> ti : curItem.getChildren()) stack.addFirst(ti);
 		}

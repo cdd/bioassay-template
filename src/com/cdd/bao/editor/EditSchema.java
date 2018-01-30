@@ -1181,7 +1181,7 @@ public class EditSchema
 		ButtonType okBtnType = new ButtonType("Find Next", ButtonData.NEXT_FORWARD);
 		ButtonType cancelBtnType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-		TextInputDialog findDiag = new TextInputDialog();
+		TextInputDialogWithCheckBox findDiag = new TextInputDialogWithCheckBox("", "Include descriptions in search?");
 		findDiag.getDialogPane().getButtonTypes().setAll(okBtnType, cancelBtnType);
 		findDiag.setTitle("Find group or assignment");
 		findDiag.setHeaderText("Enter text fragment from group or assignment.");
@@ -1189,16 +1189,19 @@ public class EditSchema
 		final Button okBtn = (Button)findDiag.getDialogPane().lookupButton(okBtnType);
 		okBtn.addEventFilter(ActionEvent.ACTION, event ->
 		{
-			// if empty search text, do nothing; otherwise, initiate search
+			// if empty search text, do nothing
 			String searchText = findDiag.getEditor().getText();
+			boolean useDescr = findDiag.getCheckbox().isSelected();
 			if (!StringUtils.isEmpty(searchText))
 			{
-				if (!StringUtils.equals(searchText, state.searchText))
+				// perform search when new text is entered or if the checkbox was toggled
+				if (!StringUtils.equals(searchText, state.searchText) || useDescr != state.useDescr)
 				{
 					// reset state
 					state.searchText = searchText;
+					state.useDescr = useDescr;
 					state.index = 0;
-					state.found = SearchSchema.find(treeView, searchText);
+					state.found = SearchSchema.find(treeView, searchText, useDescr);
 				}
 				else if (state.found.size() > 0)
 					state.index = ++state.index % state.found.size();
