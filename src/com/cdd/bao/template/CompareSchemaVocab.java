@@ -36,13 +36,14 @@ public class CompareSchemaVocab
 	public enum DiffType
 	{
 		ADDITION,
-		DELETION
+		DELETION,
+		NONE
 	}	
 
 	public static final class DiffInfo
 	{
 		public Schema.Assignment assn;
-		public int direction;
+		public DiffType direction;
 		public String valueURI, valueLabel;
 	}
 
@@ -80,9 +81,11 @@ public class CompareSchemaVocab
 		for (SchemaVocab.StoredTree curTree : newsv.getTrees())
 		{
 			String curKey = keyFromTree(curTree);
-			TreeNode<DiffInfo> diffParent = attachToDiffTree(curTree);
-
 			SchemaVocab.StoredTree oldTree = keyToOldTree.get(curKey);
+			
+			DiffType diffType = (oldTree == null) ? DiffType.ADDITION : DiffType.NONE;
+			TreeNode<DiffInfo> diffParent = attachToDiffTree(curTree, diffType);
+
 			if (oldTree == null)
 			{
 				// only additions: new tree
@@ -117,7 +120,7 @@ public class CompareSchemaVocab
 			if (newTree == null)
 			{
 				// only deletions: old tree
-				TreeNode<DiffInfo> diffParent = attachToDiffTree(oldTree);
+				TreeNode<DiffInfo> diffParent = attachToDiffTree(oldTree, DiffType.DELETION);
 				Set<String> deletions = new HashSet<>();
 				for (SchemaTree.Node node : oldTree.tree.getFlat()) deletions.add(node.uri);
 				pinToDiffParent(deletions, DiffType.DELETION, diffParent, oldsv);
@@ -134,11 +137,12 @@ public class CompareSchemaVocab
 	}
 
 	// return handle to newly created TreeNode now attached to diff tree
-	private TreeNode<DiffInfo> attachToDiffTree(SchemaVocab.StoredTree tree)
+	private TreeNode<DiffInfo> attachToDiffTree(SchemaVocab.StoredTree tree, DiffType diffType)
 	{
 		DiffInfo parent = new DiffInfo();
 		TreeNode<DiffInfo> treeParent = new TreeNode<>();
 		treeParent.data = parent;
+		parent.direction = diffType;
 		parent.assn = tree.assignment;
 		parent.valueURI = tree.propURI;
 		treeRoot.children.add(treeParent);
@@ -152,7 +156,7 @@ public class CompareSchemaVocab
 			DiffInfo term = new DiffInfo();
 			TreeNode<DiffInfo> treeTerm = new TreeNode<>();
 			treeTerm.data = term;
-			term.direction = diffType == DiffType.DELETION ? -1 : 1;
+			term.direction = diffType;
 			term.valueURI = uri;
 			term.valueLabel = sv.getLabel(uri);
 			parent.children.add(treeTerm);

@@ -65,32 +65,28 @@ public class CompareVocabTree
 			
 			if (item == null) return;
 
-			if (item.direction == 0)
+			if (item.direction == DiffType.NONE)
 			{
-				if (item.assn != null)
-				{
-					setStyle("-fx-text-fill: black;");
-					setText(item.assn.name);
-				}
-				else
-				{
-					setStyle("-fx-text-fill: red; -fx-font-family: arial;");
-					setText("Removed: " + item.valueURI);
-				}
+				setStyle("-fx-text-fill: black;");
+				if (item.assn != null) setText(item.assn.name);
+				else setText(item.valueURI);
 			}
 			else
 			{
-				String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
+				String style = (item.direction == DiffType.DELETION) ? "-fx-text-fill: red;"
+								: (item.direction == DiffType.ADDITION) ? "-fx-text-fill: green;" : "";
 				style += "-fx-font-family: arial;";
-				String label = item.direction < 0 ? "Removed: " : "Added: ";
-				label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
+
+				StringBuilder label = new StringBuilder((item.direction == DiffType.DELETION) ? "Removed: " : "Added: ");
+				if (item.valueLabel != null) label.append(item.valueLabel + " ");
+				label.append("<" + ModelSchema.collapsePrefix(item.valueURI) + ">"); 
 
 				setStyle(style);
-				setText(label);
+				setText(label.toString());
 			}
 		}
 	}
-	
+
 	// ------------ public methods ------------
 
 	public CompareVocabTree(File file, Schema schema)
