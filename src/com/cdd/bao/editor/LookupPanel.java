@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -24,9 +24,12 @@ package com.cdd.bao.editor;
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.Lineup;
+import com.cdd.bao.util.RowLine;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.commons.lang3.StringUtils;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -58,12 +61,14 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	public static final class Resource
 	{
 		public String uri, label, descr;
+		public String[] altLabels;
 		public boolean beingUsed;
 		
-		public Resource(String uri, String label, String descr)
+		public Resource(String uri, String label, String[] altLabels, String descr)
 		{
 			this.uri = uri;
 			this.label = label == null ? "" : label;
+			this.altLabels = altLabels == null ? new String[0] : altLabels;
 			this.descr = descr == null ? "" : descr;
 		}
 	};
@@ -73,6 +78,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	private Tab tabList = new Tab("List"), tabTree = new Tab("Hierarchy");
 
 	private TextField fieldSearch = new TextField();
+	private CheckBox includeAltLabels = new CheckBox();
 	private TableView<Resource> tableList = new TableView<>();
 
 	private TreeItem<Vocabulary.Branch> treeRoot = new TreeItem<>(new Vocabulary.Branch(null, null));
@@ -209,11 +215,11 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 	{
 		vocab = Vocabulary.globalInstance();
 		hier = isProperty ? vocab.getPropertyHierarchy() : vocab.getValueHierarchy();
-		
+
 		String[] source = isProperty ? vocab.getPropertyURIs() : vocab.getValueURIs();
 		for (String uri : source)
 		{
-			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getDescr(uri));
+			Resource res = new Resource(uri, vocab.getLabel(uri), vocab.getAltLabels(uri), vocab.getDescr(uri));
 			res.beingUsed = usedURI.contains(uri);
 			resources.add(res);
 		}
@@ -221,27 +227,37 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 
 	private void setupList(String searchText)
 	{
-		Lineup line = new Lineup(PADDING);
-		line.add(fieldSearch, "Search:", 1, 0);
- 
+		RowLine searchRow = new RowLine(PADDING + 3);
+		Label searchTitle = new Label("Search:");
+		searchRow.add(searchTitle, 0);
+		searchRow.add(fieldSearch, 1);
+
+		includeAltLabels.setText("Include other labels in search");
+		includeAltLabels.setSelected(true);
+		searchRow.add(includeAltLabels, 0);
+
 		tableList.setEditable(false);
-		
+
 		TableColumn<Resource, String> colUsed = new TableColumn<>("U");
 		colUsed.setMinWidth(20);
 		colUsed.setPrefWidth(20);
-		colUsed.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : "");});
+		colUsed.setCellValueFactory(resource -> new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : ""));
 		
 		TableColumn<Resource, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-		colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri));});
-		 
+		colURI.setCellValueFactory(resource -> new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri)));
+
 		TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
-		colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().label);});
-		
+		colLabel.setCellValueFactory(resource -> new SimpleStringProperty(resource.getValue().label));
+
 		TableColumn<Resource, String> colDescr = new TableColumn<>("Description");
 		colDescr.setMinWidth(400);
-		colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
+		colDescr.setCellValueFactory(resource -> new SimpleStringProperty(cleanupDescription(resource.getValue().descr)));
+
+		TableColumn<Resource, String> colAltLabels = new TableColumn<>("Other Labels");
+		colAltLabels.setMinWidth(200);
+		colAltLabels.setCellValueFactory(resource -> new SimpleStringProperty(StringUtils.join(resource.getValue().altLabels, ",")));
 
 		tableList.setMinHeight(450);        
 		tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -249,14 +265,15 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		tableList.getColumns().add(colURI);
 		tableList.getColumns().add(colLabel);
 		tableList.getColumns().add(colDescr);
+		tableList.getColumns().add(colAltLabels);
 		tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
-		
+
 		BorderPane pane = new BorderPane();
 		pane.setPrefSize(800, 500);
 		pane.setMaxHeight(Double.MAX_VALUE);
 		pane.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-		BorderPane.setMargin(line, new Insets(0, 0, PADDING, 0));
-		pane.setTop(line);
+		BorderPane.setMargin(searchRow, new Insets(0, 0, PADDING, 0));
+		pane.setTop(searchRow);
 		pane.setCenter(tableList);
 		
 		tabList.setContent(pane);
@@ -264,8 +281,19 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		fieldSearch.setText(searchText);
 		fieldSearch.textProperty().addListener((observable, oldValue, newValue) -> 
 		{
-			tableList.setItems(FXCollections.observableArrayList(searchedSubset(newValue)));
+			updateTableList(newValue);
 		});
+
+		// coerce update to results list whenever checkbox for alternate labels is toggled
+		includeAltLabels.selectedProperty().addListener((observable, oldValue, newValue) -> 
+		{
+			updateTableList(fieldSearch.getText());
+		});
+	}
+	
+	private void updateTableList(String searchText)
+	{
+		tableList.setItems(FXCollections.observableArrayList(searchedSubset(searchText)));
 	}
 
 	private void setupTree(String searchText)
@@ -319,15 +347,15 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		else if (tabber.getSelectionModel().getSelectedItem() == tabTree)
 		{
 			List<TreeItem<Vocabulary.Branch>> list = treeView.getSelectionModel().getSelectedItems();
-			
 			List<LookupPanel.Resource> ret = new ArrayList<>();
+
 			for (int n = 0; n < list.size(); n++)
 			{
 				Vocabulary.Branch branch = list.get(n).getValue();
 				
 				if (multi && usedURI.contains(branch.uri)) continue;
 				
-				ret.add(new Resource(branch.uri, branch.label, vocab.getDescr(branch.uri)));
+				ret.add(new Resource(branch.uri, branch.label, vocab.getAltLabels(branch.uri), vocab.getDescr(branch.uri)));
 			}
 			return ret.toArray(new LookupPanel.Resource[ret.size()]);
 		}
@@ -346,6 +374,14 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		{
 			if (res.label.toLowerCase().indexOf(searchLC) >= 0 || res.uri.toLowerCase().indexOf(searchLC) >= 0 ||
 				res.descr.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
+			else if (includeAltLabels.isSelected())
+			{
+				for (int k = 0; k < res.altLabels.length; k++) if (res.altLabels[k].toLowerCase().indexOf(searchLC) >= 0)
+				{
+					subset.add(res);
+					break;
+				}
+			}
 		}
 		return subset;
 	}
