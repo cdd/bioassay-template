@@ -8,6 +8,13 @@
         "assignments": 
         [
             {
+                "name": "assay title",
+                "descr": "A short summary description of the assay.",
+                "propURI": "http://www.bioassayontology.org/bao#BAO_0002853",
+                "suggestions": "string",
+                "values": []
+            }, 
+            {
                 "name": "bioassay type",
                 "descr": "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc.",
                 "propURI": "http://www.bioassayontology.org/bao#BAO_0002854",
