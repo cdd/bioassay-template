@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -233,7 +233,7 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		searchRow.add(fieldSearch, 1);
 
 		includeAltLabels.setText("Include other labels in search");
-		includeAltLabels.setSelected(false); // off by default
+		includeAltLabels.setSelected(true);
 		searchRow.add(includeAltLabels, 0);
 
 		tableList.setEditable(false);
@@ -241,26 +241,23 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 		TableColumn<Resource, String> colUsed = new TableColumn<>("U");
 		colUsed.setMinWidth(20);
 		colUsed.setPrefWidth(20);
-		colUsed.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : "");});
+		colUsed.setCellValueFactory(resource -> new SimpleStringProperty(resource.getValue().beingUsed ? "\u2713" : ""));
 		
 		TableColumn<Resource, String> colURI = new TableColumn<>("URI");
 		colURI.setMinWidth(150);
-		colURI.setCellValueFactory(resource -> {return new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri));});
+		colURI.setCellValueFactory(resource -> new SimpleStringProperty(ModelSchema.collapsePrefix(resource.getValue().uri)));
 
 		TableColumn<Resource, String> colLabel = new TableColumn<>("Label");
 		colLabel.setMinWidth(200);
-		colLabel.setCellValueFactory(resource -> {return new SimpleStringProperty(resource.getValue().label);});
+		colLabel.setCellValueFactory(resource -> new SimpleStringProperty(resource.getValue().label));
 
 		TableColumn<Resource, String> colDescr = new TableColumn<>("Description");
 		colDescr.setMinWidth(400);
-		colDescr.setCellValueFactory(resource -> {return new SimpleStringProperty(cleanupDescription(resource.getValue().descr));});
+		colDescr.setCellValueFactory(resource -> new SimpleStringProperty(cleanupDescription(resource.getValue().descr)));
 
 		TableColumn<Resource, String> colAltLabels = new TableColumn<>("Other Labels");
 		colAltLabels.setMinWidth(200);
-		colAltLabels.setCellValueFactory(resource ->
-		{
-			return new SimpleStringProperty(StringUtils.join(resource.getValue().altLabels, ","));
-		});
+		colAltLabels.setCellValueFactory(resource -> new SimpleStringProperty(StringUtils.join(resource.getValue().altLabels, ",")));
 
 		tableList.setMinHeight(450);        
 		tableList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -379,12 +376,11 @@ public class LookupPanel extends Dialog<LookupPanel.Resource[]>
 				res.descr.toLowerCase().indexOf(searchLC) >= 0) subset.add(res);
 			else if (includeAltLabels.isSelected())
 			{
-				for (int k = 0; k < res.altLabels.length; ++k)
-					if (res.altLabels[k].toLowerCase().indexOf(searchLC) >= 0)
-					{
-						subset.add(res);
-						break;
-					}
+				for (int k = 0; k < res.altLabels.length; k++) if (res.altLabels[k].toLowerCase().indexOf(searchLC) >= 0)
+				{
+					subset.add(res);
+					break;
+				}
 			}
 		}
 		return subset;
