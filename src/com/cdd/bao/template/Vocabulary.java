@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -390,17 +390,23 @@ public class Vocabulary
 		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
 		Property notSubClass = model.createProperty(ModelSchema.PFX_BAT + "notSubClass");
+		Resource resEliminated = model.createResource(ModelSchema.PFX_BAT + "eliminated");
 		
 		Set<String> anyProp = new HashSet<>(), anyValue = new HashSet<>();
 
 		// pull out subclass cancellation directives
-		Set<String> classBreakers = new HashSet<>();
+		Set<String> classBreakers = new HashSet<>(), eliminatedTerms = new HashSet<>();
 		for (StmtIterator iter = model.listStatements(null, notSubClass, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
 			Resource subject = stmt.getSubject();
 			Resource object = stmt.getObject().asResource();
 			classBreakers.add(subject.getURI() + "::" + object.getURI());
+		}
+		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			eliminatedTerms.add(stmt.getSubject().getURI());
 		}
 
 		// iterate over the list looking for label definitions
@@ -413,6 +419,7 @@ public class Vocabulary
 			RDFNode object = stmt.getObject();
 
 			if (!subject.isURIResource() || !predicate.isURIResource()) continue;
+			if (eliminatedTerms.contains(subject.getURI())) continue;
 
 			// separately collect everything that's part of the class/property hierarchy
 			if (predicate.equals(subPropOf) && object.isURIResource())
@@ -491,6 +498,8 @@ public class Vocabulary
 		{
 			Statement stmt = iter.next();
 			String uri = stmt.getSubject().getURI(), label = stmt.getObject().asLiteral().getString();
+			if (eliminatedTerms.contains(uri)) continue;
+			
 			uriToLabel.put(uri, label);
 			String[] list = labelToURI.get(label);
 			if (list != null)
@@ -531,6 +540,8 @@ public class Vocabulary
 			{
 				Statement st = it.next();
 				String uri = st.getSubject().getURI();
+				if (eliminatedTerms.contains(uri)) continue;
+
 				if (properties.uriToBranch.containsKey(uri)) continue;
 				String label = uriToLabel.get(uri);
 				if (label == null) continue;
