@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -569,7 +569,7 @@ public class ModelSchema
 		if (label == null) return null;
 		if (label.length() == 0) label = "unnamed";
 		
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (String bit : label.split(" "))
 		{
 			if (bit.length() == 0) continue;

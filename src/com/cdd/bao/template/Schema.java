@@ -104,7 +104,7 @@ public class Schema
 		}
 		
 		// render
-		private void outputAsString(StringBuffer buff, int indent)
+		private void outputAsString(StringBuilder buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
 			buff.append("[" + name + "] <" + groupURI + "> (" + descr + ")\n");
@@ -213,7 +213,7 @@ public class Schema
 			return nest.toArray(new String[nest.size()]);
 		}
 		
-		private void outputAsString(StringBuffer buff, int indent)
+		private void outputAsString(StringBuilder buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
 			buff.append("<" + name + "> " + propURI + " (" + descr + ")\n");
@@ -485,7 +485,7 @@ public class Schema
 	// produces a human-readable definition of the schema, mainly for debugging
 	public String toString()
 	{
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		root.outputAsString(buff, 0);
 		// !! and assays...
 		return buff.toString();
@@ -503,7 +503,7 @@ public class Schema
 			group = group.parent;
 		}
 		
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (int n = 0; n < seq.size(); n++) buff.append(seq.get(n) + ":");
 		return buff.toString();
 	}

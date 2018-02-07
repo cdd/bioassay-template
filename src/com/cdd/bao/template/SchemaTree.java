@@ -97,7 +97,7 @@ public class SchemaTree
 	// returns a text representation of the tree (for debugging purposes)
 	public String toString()
 	{
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (Node node : flat)
 		{
 			for (int n = 0; n < node.depth; n++) buff.append("* ");
