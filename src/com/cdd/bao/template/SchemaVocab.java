@@ -295,6 +295,13 @@ public class SchemaVocab
 		if (idx < 0) return null;
 		return termList[idx].label;
 	}
+	public String[] getAltLabels(String uri)
+	{
+		if (uri == null) return null;
+		int idx = termLookup.getOrDefault(uri, -1);
+		if (idx < 0) return null;
+		return termList[idx].altLabels;
+	}
 	public String getDescr(String uri)
 	{
 		if (uri == null) return null;
