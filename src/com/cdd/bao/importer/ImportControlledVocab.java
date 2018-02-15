@@ -438,7 +438,7 @@ public class ImportControlledVocab
 		String choice = null;
 		while (true)
 		{
-			Util.write("Choose: " );
+			Util.write("Choose: ");
 			choice = scanner.nextLine();
 			int num = Util.safeInt(choice, -1);
 			if (Util.isBlank(choice) || num >= 0 && num <= highNum) break;

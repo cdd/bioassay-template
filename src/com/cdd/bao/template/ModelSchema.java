@@ -42,6 +42,7 @@ public class ModelSchema
 	public static final String PFX_BAT = "http://www.bioassayontology.org/bat#"; // BioAssay Template
 	public static final String PFX_BAS = "http://www.bioassayontology.org/bas#"; // BioAssay Schema (used as the default)
 	public static final String PFX_BAE = "http://www.bioassayexpress.org/bae#"; // BioAssay Express (for provisional terms)
+	public static final String PFX_SOURCE = "http://www.bioassayexpress.org/sources#"; // assay origination
 	
 	public static final String PFX_OBO = "http://purl.obolibrary.org/obo/";
 	public static final String PFX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -92,6 +93,7 @@ public class ModelSchema
 	public static final String SUGGESTIONS_STRING = "suggestionsString"; // use string literals
 	public static final String SUGGESTIONS_NUMBER = "suggestionsNumber"; // use number-formatted literals
 	public static final String SUGGESTIONS_INTEGER = "suggestionsInteger"; // use integer-formatted literals
+	public static final String SUGGESTIONS_DATE = "suggestionsDate"; // use dates
 
 	private Vocabulary vocab; // local instance of the BAO ontology: often initialised on demand/background thread
 	private int watermark = 1; // autogenned next editable identifier
@@ -105,8 +107,8 @@ public class ModelSchema
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
 	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
-	private Property suggestionsURL, suggestionsID;
-	private Property suggestionsString, suggestionsNumber, suggestionsInteger;
+	private Property suggestionsURL, suggestionsID, suggestionsString;
+	private Property suggestionsNumber, suggestionsInteger, suggestionsDate;
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
@@ -125,6 +127,7 @@ public class ModelSchema
 		"bat:", PFX_BAT,
 		"bas:", PFX_BAS,
 		"bae:", PFX_BAE,
+		"src:", PFX_SOURCE,
 		"obo:", PFX_OBO,
 		"rdf:", PFX_RDF,
 		"rdfs:", PFX_RDFS,
@@ -240,6 +243,7 @@ public class ModelSchema
 		model.setNsPrefix("bao", PFX_BAO);
 		model.setNsPrefix("bat", PFX_BAT);
 		model.setNsPrefix("bas", schema.getSchemaPrefix());
+		model.setNsPrefix("src", PFX_SOURCE);
 		model.setNsPrefix("obo", PFX_OBO);
 		model.setNsPrefix("rdfs", PFX_RDFS);
 		model.setNsPrefix("xsd", PFX_XSD);
@@ -278,6 +282,7 @@ public class ModelSchema
 		suggestionsString = model.createProperty(PFX_BAT + SUGGESTIONS_STRING);
 		suggestionsNumber = model.createProperty(PFX_BAT + SUGGESTIONS_NUMBER);
 		suggestionsInteger = model.createProperty(PFX_BAT + SUGGESTIONS_INTEGER);
+		suggestionsDate = model.createProperty(PFX_BAT + SUGGESTIONS_DATE);
 
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();
@@ -341,7 +346,7 @@ public class ModelSchema
 		int order = 0;
 		String pfx = schema.getSchemaPrefix();
 		
- 		for (Assignment assn : group.assignments)
+		for (Assignment assn : group.assignments)
 		{
 			String name = turnLabelIntoName(assn.name);
 						
@@ -361,6 +366,7 @@ public class ModelSchema
 			else if (assn.suggestions == Schema.Suggestions.STRING) model.add(objAssn, suggestionsString, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.NUMBER) model.add(objAssn, suggestionsNumber, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.INTEGER) model.add(objAssn, suggestionsInteger, model.createTypedLiteral(true));
+			else if (assn.suggestions == Schema.Suggestions.DATE) model.add(objAssn, suggestionsDate, model.createTypedLiteral(true));
 			
 			int vorder = 0;
 			for (Value val : assn.values)
@@ -489,7 +495,8 @@ public class ModelSchema
 						   findBoolean(objAssn, suggestionsID) ? Schema.Suggestions.ID : 
 						   findBoolean(objAssn, suggestionsString) ? Schema.Suggestions.STRING : 
 						   findBoolean(objAssn, suggestionsNumber) ? Schema.Suggestions.NUMBER : 
-						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : Schema.Suggestions.FULL;
+						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : 
+						   findBoolean(objAssn, suggestionsDate) ? Schema.Suggestions.DATE : Schema.Suggestions.FULL;
 		
 		Map<Object, Integer> order = new HashMap<>();
 

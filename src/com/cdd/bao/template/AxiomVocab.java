@@ -6,19 +6,13 @@
 
 package com.cdd.bao.template;
 
+import com.cdd.bao.axioms.AxiomCollector.*;
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
-import com.cdd.bao.template.AxiomVocab.Rule;
-import com.cdd.bao.template.AxiomVocab.Term;
-import com.cdd.bao.template.AxiomVocab.Type;
 
-import static com.cdd.bao.template.Schema.*;
-import static com.cdd.bao.template.Vocabulary.*;
-import com.cdd.bao.axioms.*;
-import com.cdd.bao.axioms.AxiomCollector.AssayAxioms;
-
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
+import org.apache.commons.lang3.*;
 
 /*
 	AxiomVocab: serialisable collection of "axioms", which are distilled out from various sources to provide useful guidelines
@@ -27,8 +21,6 @@ import java.io.*;
 
 public class AxiomVocab
 {
-	private String[] prefixes;
-	
 	public enum Type
 	{
 		LIMIT(1),
@@ -39,9 +31,14 @@ public class AxiomVocab
 		private final int raw;
 		Type(int raw) {this.raw = raw;}
 		public int raw() {return this.raw;}
+		public static Type valueOf(int rawVal)
+		{
+			for (Type t : values()) if (t.raw == rawVal) return t;
+			return LIMIT;
+		}
 	}
 	
-	public class Term
+	public static class Term
 	{
 		//public String branchURI;
 		public String valueURI;
@@ -66,17 +63,22 @@ public class AxiomVocab
 			this.wholeBranch = wholeBranch;
 		}
 		
+		@Override
 		public String toString()
 		{
-			String termString = "";
-			
-			termString += "value URI: [" + valueURI + "] ";// + "branch URI: [" + branchURI + "] " ;
-			
-			return termString;
+			return "valueURI: [" + ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch + "]";
+		}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj == null || !(obj instanceof Term)) return false;
+			Term other = (Term)obj;
+			return Util.safeString(valueURI).equals(Util.safeString(other.valueURI)) && wholeBranch == other.wholeBranch;
 		}
 	}
 	
-	public class Rule
+	public static class Rule
 	{
 		public Type type;
 
@@ -86,22 +88,45 @@ public class AxiomVocab
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
 
-		public String toString()
+		public Rule() {}
+		public Rule(Type type, Term subject) {this(type, subject, null);}
+		public Rule(Type type, Term subject, Term[] impact)
 		{
-			String ruleString = "";
-
-			if (type.equals(Type.LIMIT)) ruleString += "LIMIT type axiom \n";
-			else if (type.equals(Type.EXCLUDE))	ruleString += "EXCLUDE type axiom \n";
-			else if (type.equals(Type.REQUIRED)) ruleString += "REQUIRED type axiom \n";
-			else if (type.equals(Type.BLANK)) ruleString += "BLANK type axiom \n";
-
-			ruleString += "Subject = [" + subject + "]";
-
-			ruleString += "Objects = [" + impact[0].toString() + "]\n";
-
-			return ruleString;
+			this.type = type;
+			this.subject = subject;
+			this.impact = impact;
 		}
 
+		@Override
+		public String toString()
+		{
+			StringBuilder str = new StringBuilder();
+
+			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
+			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
+			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
+			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
+
+			str.append("subject: [" + subject + "]");
+			str.append("impacts: [");
+			for (int n = 0; n < ArrayUtils.getLength(impact); n++) str.append((n == 0 ? "" : ",") + impact[n]);
+			str.append("])");
+
+			return str.toString();
+		}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj == null || !(obj instanceof Rule)) return false;
+			Rule other = (Rule)obj;
+			if (type != other.type) return false;
+			if ((subject == null && other.subject != null) || (subject != null && !subject.equals(other.subject))) return false;
+			int sz = ArrayUtils.getLength(impact);
+			if (sz != ArrayUtils.getLength(other.impact)) return false;
+			for (int n = 0; n < sz; n++) if (!impact[n].equals(other.impact[n])) return false;
+			return true;
+		}
 	}
 	private List<Rule> rules = new ArrayList<>();
 
@@ -119,6 +144,12 @@ public class AxiomVocab
 	public void setRule(int idx, Rule rule) {rules.set(idx, rule);}
 	
 	// write the content as raw binary
+	public void serialise(File file) throws IOException
+	{
+		OutputStream ostr = new FileOutputStream(file);
+		serialise(ostr);
+		ostr.close();
+	}
 	public void serialise(OutputStream ostr) throws IOException
 	{		
 		// compose a unique list of URIs, for brevity purposes
@@ -139,7 +170,7 @@ public class AxiomVocab
 
 		// make a list of unique prefixes
 		List<String> pfxList = new ArrayList<>();
-		Map<String, Integer> pfxMap = new HashMap<>();
+		Map<String, Integer> pfxMap = new LinkedHashMap<>();
 		for (String uri : termSet)
 		{
 			int i = Math.max(uri.lastIndexOf('/'), uri.lastIndexOf('#'));
@@ -196,75 +227,46 @@ public class AxiomVocab
 		}
 	}
 	
-	public static AxiomVocab deserialise(InputStream istr, Schema[] templates) throws IOException
+	// parse out the raw binary into a living object
+	public static AxiomVocab deserialise(File file) throws IOException
+	{
+		InputStream istr = new FileInputStream(file);
+		try {return deserialise(istr);}
+		finally {istr.close();}
+	}
+	public static AxiomVocab deserialise(InputStream istr) throws IOException
 	{
 		AxiomVocab av = new AxiomVocab();
 
 		DataInputStream data = new DataInputStream(istr);
 	
-		/* TODO: adapt this code (originally from SchemaVocab), to mirror the serialisation
-		
 		int nprefix = data.readInt();
-		sv.prefixes = new String[nprefix];
-		for (int n = 0; n < nprefix; n++) sv.prefixes[n] = data.readUTF();
-
+		String[] pfxList = new String[nprefix];
+		for (int n = 0; n < nprefix; n++) pfxList[n] = data.readUTF();
+				
 		int nterm = data.readInt();
-		sv.termList = new StoredTerm[nterm];
-		for (int n = 0; n < nterm; n++)
+		String[] termList = new String[nterm];
+		for (int n = 0; n < nterm; n++) 
 		{
-			StoredTerm term = new StoredTerm();
 			int pfx = data.readInt();
-			term.uri = data.readUTF();
-			if (pfx >= 0) term.uri = sv.prefixes[pfx] + term.uri;
-			term.label = data.readUTF();
-			term.descr = data.readUTF();
-			sv.termList[n] = term;
-			sv.termLookup.put(term.uri, n);
+			String str = data.readUTF();
+			termList[n] = pfx < 0 ? str : pfxList[pfx] + str;
 		}
 		
-		int ntree = data.readInt();
-		for (int n = 0; n < ntree; n++)
+		int nrule = data.readInt();
+		for (int n = 0; n < nrule; n++)
 		{
-			StoredTree stored = new StoredTree();
-			stored.schemaPrefix = data.readUTF();
-			stored.locator = data.readUTF();
+			Rule r = new Rule();
+			r.type = Type.valueOf(data.readInt());
+			r.subject = new Term(data.readUTF(), data.readBoolean());
 			
-			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
-			{
-				stored.assignment = schema.obtainAssignment(stored.locator);
-				break;
-			}
+			int nimpact = data.readInt();
+			r.impact = new Term[nimpact];
+			for (int i = 0; i < nimpact; i++) r.impact[i] = new Term(data.readUTF(), data.readBoolean());
 			
-			int nflat = data.readInt();
-			SchemaTree.Node[] flat = new SchemaTree.Node[nflat];
-			for (int i = 0; i < nflat; i++)
-			{
-				SchemaTree.Node node = new SchemaTree.Node();
-				int termidx = data.readInt();
-				node.uri = sv.termList[termidx].uri;
-				node.label = sv.termList[termidx].label;
-				node.descr = sv.termList[termidx].descr;
-				
-				node.depth = data.readInt();
-				node.parentIndex = data.readInt();
-				node.childCount = data.readInt();
-				node.schemaCount = data.readInt();
-				node.inSchema = data.readBoolean();
-				node.isExplicit = data.readBoolean();
-				
-				if (node.parentIndex >= 0)
-				{
-					node.parent = flat[node.parentIndex];
-					node.parent.children.add(node);
-				}
-				
-				flat[i] = node;
-			}
-			stored.tree = new SchemaTree(flat, stored.assignment);
-			
-			sv.treeList.add(stored);
-		}*/
-		
+			av.addRule(r);
+		}
+
 		return av;
 	}
 	

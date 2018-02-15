@@ -27,6 +27,8 @@ import com.cdd.bao.util.*;
 import java.io.*;
 import java.util.*;
 
+import org.json.*;
+
 /*
 	Schema: functionality for encapsulating a "BioAssay Template" document and some number of accompanying annotated
 	assays. The datastructure matches a portion of the semantic triples that represent the same thing, but once it
@@ -72,8 +74,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
-			return (name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
-					assignments.equals(other.assignments) && subGroups.equals(other.subGroups));
+			return name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
+					assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
 		}
 		
 		@Override
@@ -137,6 +139,7 @@ public class Schema
 		STRING, // preferred value type is a string literal, of arbitrary format
 		NUMBER, // preferred value type is a numeric iteral of arbitrary precision
 		INTEGER, // preferred value type is a literal that evaluates to an integer
+		DATE, // preferred value type is a date
 	}
 
 	// an "assignment" is an instruction to associate a bioassay (subject) with a value (object) via a property (predicate); the datastructure
@@ -171,8 +174,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Assignment other = (Assignment)o;
-			return (name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
-					suggestions == other.suggestions && values.equals(other.values));
+			return name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
+					suggestions == other.suggestions && values.equals(other.values);
 		}
 
 		@Override
@@ -799,6 +802,65 @@ public class Schema
 		}
 		return list;
 	}
+	
+	// ------------ serialisation ------------
+	
+	// the default serialisation format is JSON, which is highly convenient; there are other options though (such as RDF triples), provided
+	// by other classes
+	
+	public static Schema deserialise(File file) throws IOException
+	{
+		try (Reader rdr = new FileReader(file))
+		{
+			Schema schema = deserialise(rdr);
+			return schema;
+		}
+		catch (IOException ex) {throw new IOException("Loading schema file failed [" + file.getAbsolutePath() + "].", ex);}
+	}
+	public static Schema deserialise(InputStream istr) throws IOException
+	{
+		return deserialise(new InputStreamReader(istr));
+	}
+	public static Schema deserialise(Reader rdr) throws IOException
+	{
+		try
+		{
+			JSONObject json = new JSONObject(new JSONTokener(rdr));
+			Schema schema = new Schema();
+			schema.setSchemaPrefix(json.getString("schemaPrefix"));
+			
+			JSONObject jsonRoot = json.getJSONObject("root");
+			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+			return schema;
+		}
+		catch (JSONException ex)
+		{
+			// all errors percolate up to here, from invalid JSON to missing parts of the JSON hierarchy; one size fits all
+			// error message will suffice
+			throw new IOException("Not a valid JSON-formatted schema.");
+		}
+	}
+	
+	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
+	public void serialise(File file) throws IOException
+	{
+		try (Writer wtr = new BufferedWriter(new FileWriter(file)))
+		{
+			serialise(wtr);
+		}
+	}
+	public void serialise(OutputStream ostr) throws IOException
+	{
+		serialise(new OutputStreamWriter(ostr));
+	}
+	public void serialise(Writer wtr) throws IOException
+	{
+		JSONObject json = new JSONObject();
+		json.put("schemaPrefix", schemaPrefix);
+		json.put("root", ClipboardSchema.composeGroup(root));
+		wtr.write(json.toString(4));
+		wtr.flush();
+	}	
 	
 	// ------------ private methods ------------	
 

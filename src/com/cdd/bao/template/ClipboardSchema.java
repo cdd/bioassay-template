@@ -23,7 +23,6 @@ package com.cdd.bao.template;
 
 import com.cdd.bao.*;
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
 
 import java.io.*;
 import java.util.*;
@@ -41,10 +40,7 @@ public class ClipboardSchema
 	// turns a group/assignment/assay into a JSON object which can be conveniently unpacked later
 	public static JSONObject composeGroup(Schema.Group group)
 	{
-		JSONObject branch = new JSONObject();
-		try {branch.put("group", formatGroup(group));}
-		catch (JSONException ex) {}
-		return branch;
+		return formatGroup(group);
 	}
 	public static JSONObject composeAssignment(Schema.Assignment assn)
 	{
@@ -66,9 +62,7 @@ public class ClipboardSchema
 	{
 		try 
 		{
-			JSONObject jgroup = obj.optJSONObject("group");
-			if (jgroup == null) return null;
-			return parseGroup(jgroup, null);
+			return parseGroup(obj, null);
 		}
 		catch (JSONException ex)
 		{
@@ -169,16 +163,8 @@ public class ClipboardSchema
 		json.put("name", assn.name);
 		json.put("descr", assn.descr);
 		json.put("propURI", assn.propURI);
+		json.put("suggestions", assn.suggestions.toString().toLowerCase());
 
-		if (assn.suggestions == Schema.Suggestions.FULL) json.put("suggestionsFull", true);
-		else if (assn.suggestions == Schema.Suggestions.DISABLED) json.put("suggestionsDisabled", true);
-		else if (assn.suggestions == Schema.Suggestions.FIELD) json.put("suggestionsField", true);
-		else if (assn.suggestions == Schema.Suggestions.URL) json.put("suggestionsURI", true);
-		else if (assn.suggestions == Schema.Suggestions.ID) json.put("suggestionsID", true);
-		else if (assn.suggestions == Schema.Suggestions.STRING) json.put("suggestionsString", true);
-		else if (assn.suggestions == Schema.Suggestions.NUMBER) json.put("suggestionsNumber", true);
-		else if (assn.suggestions == Schema.Suggestions.INTEGER) json.put("suggestionsInteger", true);
-		
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
 		{
@@ -260,14 +246,12 @@ public class ClipboardSchema
 		Schema.Assignment assn = new Schema.Assignment(parent, json.getString("name"), json.getString("propURI"));
 		assn.descr = json.optString("descr", "");
 		
-		if (json.optBoolean("suggestionsFull", false)) assn.suggestions = Schema.Suggestions.FULL;
-		else if (json.optBoolean("suggestionsDisabled", false)) assn.suggestions = Schema.Suggestions.DISABLED;
-		else if (json.optBoolean("suggestionsField", false)) assn.suggestions = Schema.Suggestions.FIELD;
-		else if (json.optBoolean("suggestionsURL", false)) assn.suggestions = Schema.Suggestions.URL;
-		else if (json.optBoolean("suggestionsID", false)) assn.suggestions = Schema.Suggestions.ID;
-		else if (json.optBoolean("suggestionsString", false)) assn.suggestions = Schema.Suggestions.STRING;
-		else if (json.optBoolean("suggestionsNumber", false)) assn.suggestions = Schema.Suggestions.NUMBER;
-		else if (json.optBoolean("suggestionsInteger", false)) assn.suggestions = Schema.Suggestions.INTEGER;
+		String suggestValue = json.optString("suggestions");
+		if (Util.notBlank(suggestValue))
+		{
+			try {assn.suggestions = Schema.Suggestions.valueOf(suggestValue.toUpperCase());}
+			catch (IllegalArgumentException ex) {} // silent fail: leave it as default (see class definition)
+		}
 		
 		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)

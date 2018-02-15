@@ -9,7 +9,7 @@ Released under the Gnu Public License 2.0
 
 Based on Java 8 using Eclipse, JavaFX and Apache Jena.
 
-The [BioAssay Ontology](http://bioassayontology.org) is included as part of the distribution.
+The [BioAssay Ontology](http://bioassayontology.org) is included as part of the distribution. Latest content can be obtained from the [GitHub repository](https://github.com/BioAssayOntology/BAO/releases).
 
 This project has been described in the scientific literature:
 A.M. Clark, N.K. Litterman, J.E. Kranz, P. Gund, K. Gregory, B.A. Bunin. _BioAssay templates for the semantic web_. PeerJ Computer Science **2**:e61 (2016) [link](http://doi.org/10.7717/peerj-cs.61)
@@ -35,11 +35,11 @@ included in the project.
 To get started quickly without compiling, download two files:
 
   * the pre-built package: [pkg/BioAssayTemplate.jar](https://github.com/cdd/bioassay-template/blob/master/pkg/BioAssayTemplate.jar)
-  * the Common Assay Template: [data/template/schema.ttl](https://github.com/cdd/bioassay-template/blob/master/data/template/schema.ttl)
+  * the Common Assay Template: [data/template/schema.json](https://github.com/cdd/bioassay-template/blob/master/data/template/schema.json)
   
 Run the application by double clicking on the `BioAssayTemplate.jar` file within the appropriate file manager tool, or run it with the
 command line syntax: `java -jar BioAssayTemplate.jar`. As long as you have Java 8 installed, the interface should appear, with a blank 
-schema window as the default. Use File|Open to locate and load the `schema.ttl` file.
+schema window as the default. Use File|Open to locate and load the `schema.json` file.
 
 When executing a build version with raw Java `.class` files, it is useful to add the command line parameter 
 `-Dlog4j.configuration=file:cfg/log4j.properties` in order to prevent the logging mechanism from complaining needlessly.

@@ -131,7 +131,7 @@ public class BrowseEndpoint
 		Platform.runLater(() -> treeView.getFocusModel().focus(treeView.getSelectionModel().getSelectedIndex()));  // for some reason it defaults to not the first item
 		
 		new Thread(() -> backgroundLoadTemplates()).start();
- 	}
+	}
 
 	public TreeView<Branch> getTreeView() {return treeView;}
 
@@ -216,7 +216,7 @@ public class BrowseEndpoint
 
 		Stage stage = new Stage();
 		EditSchema edit = new EditSchema(stage);
-		edit.loadFile(null, branch.schema);
+		edit.loadFile(null, new SchemaUtil.SerialData(SchemaUtil.SerialFormat.JSON, branch.schema));
 		stage.show();
 	}
 	

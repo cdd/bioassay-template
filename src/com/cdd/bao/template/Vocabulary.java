@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -33,6 +33,7 @@ import java.util.zip.*;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
+import org.apache.commons.lang3.*;
 
 /*
 	Loads and stores the current list of vocabulary terms. Basically, it pulls in the local definition of the
@@ -49,12 +50,16 @@ public class Vocabulary
 	private Map<String, String> uriToLabel = new TreeMap<>(); // labels for each URI (one-to-one)
 	private Map<String, String[]> labelToURI = new TreeMap<>(); // URIs for each label (one-to-many)
 	private Map<String, String> uriToDescr = new HashMap<>(); // descriptions for each URI (many are absent)
+	private Map<String, String[]> uriToExternalURLs = new HashMap<>();
+	private Map<String, String[]> uriToAlternateLabels = new HashMap<>();
+	private Map<String, String> uriToPubChemSource = new HashMap<>();
+	private Map<String, Boolean> uriToPubChemImport = new HashMap<>();
 	// URIs that are known to be involved in property & class relationships, respectively
 	private Set<String> uriProperties = new HashSet<>(), uriValues = new HashSet<>();
 	private Map<String, String[]> equivalence = new HashMap<>(); // interchangeable URIs: A->[B] means that all terms [B] are noted as being the same
 	private Set<String> prefParent = new HashSet<>(); // preferred parent URIs: when building the tree, and there's a choice between equivalences
 	
-	private final String SEP = "::";
+	private static final String SEP = "::";
 	
 	public static class Branch
 	{
@@ -237,6 +242,10 @@ public class Vocabulary
 	// fetches the label/description for a given URI; if there is none, returns null
 	public String getLabel(String uri) {return uriToLabel.get(uri);}
 	public String getDescr(String uri) {return uriToDescr.get(uri);}
+	public String[] getAltLabels(String uri) {return uriToAlternateLabels.get(uri);}
+	public String[] getExternalURLs(String uri) {return uriToExternalURLs.get(uri);}
+	public String getPubChemSource(String uri) {return uriToPubChemSource.get(uri);}
+	public boolean getPubChemImport(String uri) {return uriToPubChemImport.getOrDefault(uri, false);} // changes null to false
 	
 	// finds the URI that matches a given label; singular version tries to disambiguate if there are multiple URIs sharing
 	// the same label (there are a few of these)
@@ -370,21 +379,34 @@ public class Vocabulary
 		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
 		Property subPropOf = model.createProperty(ModelSchema.PFX_RDFS + "subPropertyOf");
 		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+		Property pubchemImport = model.createProperty(ModelSchema.PFX_BAE + "pubchemImport");
+		Property pubchemSource = model.createProperty(ModelSchema.PFX_BAE + "pubchemSource");
+		Property externalURL = model.createProperty(ModelSchema.PFX_BAE + "externalURL");
+		Property altLabel1 = model.createProperty(ModelSchema.PFX_BAE + "altLabel");
+		Property altLabel2 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000118");
+		Property altLabel3 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000111");
+		Property altLabel4 = model.createProperty("http://www.ebi.ac.uk/efo/alternative_term");
 		Property rdfType = model.createProperty(ModelSchema.PFX_RDF + "type");
 		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
 		Property notSubClass = model.createProperty(ModelSchema.PFX_BAT + "notSubClass");
+		Resource resEliminated = model.createResource(ModelSchema.PFX_BAT + "eliminated");
 		
 		Set<String> anyProp = new HashSet<>(), anyValue = new HashSet<>();
 
 		// pull out subclass cancellation directives
-		Set<String> classBreakers = new HashSet<>();
+		Set<String> classBreakers = new HashSet<>(), eliminatedTerms = new HashSet<>();
 		for (StmtIterator iter = model.listStatements(null, notSubClass, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
 			Resource subject = stmt.getSubject();
 			Resource object = stmt.getObject().asResource();
 			classBreakers.add(subject.getURI() + "::" + object.getURI());
+		}
+		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			eliminatedTerms.add(stmt.getSubject().getURI());
 		}
 
 		// iterate over the list looking for label definitions
@@ -397,6 +419,7 @@ public class Vocabulary
 			RDFNode object = stmt.getObject();
 
 			if (!subject.isURIResource() || !predicate.isURIResource()) continue;
+			if (eliminatedTerms.contains(subject.getURI())) continue;
 
 			// separately collect everything that's part of the class/property hierarchy
 			if (predicate.equals(subPropOf) && object.isURIResource())
@@ -423,17 +446,29 @@ public class Vocabulary
 			{
 				uriToLabel.put(uri, label);
 				String[] list = labelToURI.get(label);
-				if (list != null)
-				{
-					list = Arrays.copyOf(list, list.length + 1);
-					list[list.length - 1] = uri;
-					labelToURI.put(label, list);
-				}
-				else labelToURI.put(label, new String[]{uri});
+				labelToURI.put(label, ArrayUtils.add(list, uri));
 			}
 			else if (predicate.equals(propDescr))
 			{
 				uriToDescr.put(uri, label);
+			}
+			else if (predicate.equals(pubchemSource))
+			{
+				uriToPubChemSource.put(uri, label);
+			}
+			else if (predicate.equals(pubchemImport))
+			{
+				uriToPubChemImport.put(uri, object.asLiteral().getBoolean());
+			}
+			else if (predicate.equals(externalURL))
+			{
+				String[] list = uriToExternalURLs.get(uri);
+				uriToExternalURLs.put(uri, ArrayUtils.add(list, label));
+			}
+			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
+			{
+				String[] list = uriToAlternateLabels.get(uri);
+				if (!ArrayUtils.contains(list, label)) uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
 			}
 		}
 		
@@ -463,6 +498,8 @@ public class Vocabulary
 		{
 			Statement stmt = iter.next();
 			String uri = stmt.getSubject().getURI(), label = stmt.getObject().asLiteral().getString();
+			if (eliminatedTerms.contains(uri)) continue;
+			
 			uriToLabel.put(uri, label);
 			String[] list = labelToURI.get(label);
 			if (list != null)
@@ -503,6 +540,8 @@ public class Vocabulary
 			{
 				Statement st = it.next();
 				String uri = st.getSubject().getURI();
+				if (eliminatedTerms.contains(uri)) continue;
+
 				if (properties.uriToBranch.containsKey(uri)) continue;
 				String label = uriToLabel.get(uri);
 				if (label == null) continue;

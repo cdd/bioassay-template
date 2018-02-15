@@ -1,15 +1,15 @@
 /*
 	BioAssay Express (BAE)
 
-	(c) 2016-2017 Collaborative Drug Discovery Inc.
+	(c) 2016-2018 Collaborative Drug Discovery Inc.
 */
 
 package com.cdd.bao.template;
 
 import com.cdd.bao.util.*;
-import com.cdd.bao.template.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
+import org.apache.commons.lang3.*;
 
 import java.util.*;
 import java.io.*;
@@ -24,12 +24,19 @@ import java.io.*;
 
 public class SchemaVocab
 {
+	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
+	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	
 	private String[] prefixes;
 
 	public final static class StoredTerm
 	{
 		public String uri;
 		public String label, descr;
+		public String[] altLabels;
+		public String[] externalURLs;
+		public String pubchemSource;
+		public boolean pubchemImport;
 	}
 	private StoredTerm[] termList;
 	private Map<String, Integer> termLookup = new HashMap<>(); // uri-to-index into termList
@@ -37,13 +44,14 @@ public class SchemaVocab
 	public final static class StoredTree
 	{
 		public String schemaPrefix; // unique identifier for the template
-		public String locator; // the assignment branch locator in the template
+		public String propURI; // together with groupNest, uniquely identifies
+		public String[] groupNest; // an assignment part of a schema dumped to a file 
 		public Assignment assignment;
 		public SchemaTree tree;
 	}
 	private List<StoredTree> treeList = new ArrayList<>();
 		
-	private final String SEP = "::";
+	private static final String SEP = "::";
 
 	// ------------ public methods ------------
 
@@ -63,7 +71,8 @@ public class SchemaVocab
 				{
 					StoredTree stored = new StoredTree();
 					stored.schemaPrefix = templates[n].getSchemaPrefix();
-					stored.locator = templates[n].locatorID(assn);
+					stored.propURI = assn.propURI;
+					stored.groupNest = assn.groupNest();
 					stored.assignment = assn;
 					stored.tree = new SchemaTree(assn, vocab);
 					treeList.add(stored);
@@ -88,6 +97,10 @@ public class SchemaVocab
 			termList[n].uri = termURI[n];
 			termList[n].label = vocab.getLabel(termURI[n]);
 			termList[n].descr = vocab.getDescr(termURI[n]);
+			termList[n].altLabels = ArrayUtils.removeElement(vocab.getAltLabels(termURI[n]), termList[n].label);
+			termList[n].externalURLs = vocab.getExternalURLs(termURI[n]);
+			termList[n].pubchemSource = vocab.getPubChemSource(termURI[n]);	
+			termList[n].pubchemImport = vocab.getPubChemImport(termURI[n]);
 
 			termLookup.put(termURI[n], n);
 		}
@@ -103,6 +116,9 @@ public class SchemaVocab
 	public void serialise(OutputStream ostr) throws IOException
 	{
 		DataOutputStream data = new DataOutputStream(ostr);
+		
+		data.writeInt(MAGIC_NUMBER);
+		data.writeInt(CURRENT_VERSION);
 		
 		data.writeInt(prefixes.length);
 		for (String pfx : prefixes) data.writeUTF(pfx);
@@ -122,6 +138,14 @@ public class SchemaVocab
 			data.writeUTF(uri);
 			data.writeUTF(term.label == null ? "" : term.label);
 			data.writeUTF(term.descr == null ? "" : term.descr);
+			
+			data.writeInt(Util.length(term.altLabels));
+			if (term.altLabels != null) for (String label : term.altLabels) data.writeUTF(label);
+			data.writeInt(Util.length(term.externalURLs));
+			if (term.externalURLs != null) for (String url : term.externalURLs) data.writeUTF(url);
+			
+			data.writeUTF(term.pubchemSource == null ? "" : term.pubchemSource);
+			data.writeBoolean(term.pubchemImport);
 		}
 		
 		data.writeInt(treeList.size());
@@ -129,8 +153,12 @@ public class SchemaVocab
 		{
 			StoredTree stored = treeList.get(n);
 			data.writeUTF(stored.schemaPrefix);
-			data.writeUTF(stored.locator);
-			
+			data.writeUTF(stored.assignment.propURI);
+
+			String[] groupNest = stored.assignment.groupNest();
+			data.writeInt(groupNest.length);
+			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
 			for (SchemaTree.Node node : flat)
@@ -144,6 +172,7 @@ public class SchemaVocab
 				data.writeBoolean(node.isExplicit);
 			}
 		}
+		data.flush();
 	}
 	
 	// read the raw binary content; a list of all available templates needs to be provided; note that the loaded trees
@@ -152,6 +181,12 @@ public class SchemaVocab
 	public static SchemaVocab deserialise(InputStream istr, Schema[] templates) throws IOException
 	{
 		DataInputStream data = new DataInputStream(istr);
+	
+		int magic = data.readInt();
+		if (magic != MAGIC_NUMBER) throw new IOException("Not a vocabulary file.");
+		
+		int version = data.readInt();
+		if (version != CURRENT_VERSION) throw new IOException("Vocabulary file is the wrong version.");
 	
 		SchemaVocab sv = new SchemaVocab();
 		
@@ -169,6 +204,22 @@ public class SchemaVocab
 			if (pfx >= 0) term.uri = sv.prefixes[pfx] + term.uri;
 			term.label = data.readUTF();
 			term.descr = data.readUTF();
+			
+			int numAltLabels = data.readInt();
+			if (numAltLabels > 0)
+			{
+				term.altLabels = new String[numAltLabels];
+				for (int i = 0; i < numAltLabels; i++) term.altLabels[i] = data.readUTF();
+			}
+			int numURLs = data.readInt();
+			if (numURLs > 0)
+			{
+				term.externalURLs = new String[numURLs];
+				for (int i = 0; i < numURLs; i++) term.externalURLs[i] = data.readUTF();
+			}
+			term.pubchemSource = data.readUTF();
+			term.pubchemImport = data.readBoolean();
+			
 			sv.termList[n] = term;
 			sv.termLookup.put(term.uri, n);
 		}
@@ -178,11 +229,17 @@ public class SchemaVocab
 		{
 			StoredTree stored = new StoredTree();
 			stored.schemaPrefix = data.readUTF();
-			stored.locator = data.readUTF();
+			stored.propURI = data.readUTF();
+
+			int lenGroupNest = data.readInt();
+			stored.groupNest = new String[lenGroupNest];
+			for (int k = 0; k < stored.groupNest.length; ++k) stored.groupNest[k] = data.readUTF();
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
-				stored.assignment = schema.obtainAssignment(stored.locator);
+				// arbitrarily choose the first assignment in case several matches are found 
+				Assignment[] asmtFound = schema.findAssignmentByProperty(stored.propURI, stored.groupNest);
+				stored.assignment = asmtFound.length > 0 ? asmtFound[0] : null;
 				break;
 			}
 			
@@ -195,6 +252,11 @@ public class SchemaVocab
 				node.uri = sv.termList[termidx].uri;
 				node.label = sv.termList[termidx].label;
 				node.descr = sv.termList[termidx].descr;
+
+				node.altLabels = sv.termList[termidx].altLabels;
+				node.externalURLs = sv.termList[termidx].externalURLs;
+				node.pubchemSource = sv.termList[termidx].pubchemSource;
+				node.pubchemImport = sv.termList[termidx].pubchemImport;
 				
 				node.depth = data.readInt();
 				node.parentIndex = data.readInt();
@@ -251,8 +313,9 @@ public class SchemaVocab
 		for (StoredTree stored : treeList)
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
-			Util.writeln("Schema [" + stored.schemaPrefix + "], locator: " + stored.locator + ", name:" + assn.name);
-			int maxDepth = 0, depths[] = new int[20];
+			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + assn.name);
+			int maxDepth = 0;
+			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)
 			{
 				maxDepth = Math.max(maxDepth, node.depth);

@@ -818,11 +818,11 @@ public class AxiomCollector
 		ArrayList<Rule> axioms2Rules = new ArrayList();
 		AxiomVocab A = new AxiomVocab();
 
-		Rule newRule = A.new Rule();
+		Rule newRule = new Rule();
 
 		for (AssayAxioms axiom : assayAxiomsMap.keySet())
 		{
-			Term subject = A.new Term(axiom.getClassURI(),true);
+			Term subject = new Term(axiom.getClassURI(),true);
 			//System.out.println("I am here" + subject);
 
 			String[] objURIs = new String[1];
@@ -833,7 +833,7 @@ public class AxiomCollector
 			//if(objURIs[i] !=null)
 			//impact[i] = A.new Term(objURIs[i]);
 			//}
-			impact[0] = A.new Term(objURIs[0],true);
+			impact[0] = new Term(objURIs[0],true);
 			newRule.subject = subject;
 			newRule.impact = impact;
 			newRule.type = Type.LIMIT;

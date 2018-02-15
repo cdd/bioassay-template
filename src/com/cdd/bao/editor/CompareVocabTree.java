@@ -23,13 +23,12 @@ package com.cdd.bao.editor;
 
 import com.cdd.bao.*;
 import com.cdd.bao.template.*;
-import com.cdd.bao.util.Lineup;
+import com.cdd.bao.template.CompareSchemaVocab.*;
+import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
 
-import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
@@ -41,7 +40,7 @@ import javafx.application.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.*;
-import javafx.event.ActionEvent;
+import javafx.event.*;
 import javafx.geometry.*;
 import javafx.util.*;
 
@@ -53,41 +52,37 @@ import javafx.util.*;
 public class CompareVocabTree
 {
 	private File file;
-	private Schema schema;
-	private SchemaVocab schvoc;
+	private SchemaVocab oldsv, newsv;
 	
-	private static final class Item
+	private TreeItem<DiffInfo> treeRoot = new TreeItem<>(new DiffInfo());
+	private TreeView<DiffInfo> treeView = new TreeView<>(treeRoot);
+
+	private final class HierarchyTreeCell extends TreeCell<DiffInfo>
 	{
-		Schema.Assignment assn;
-		int direction;
-		String valueURI, valueLabel;
-	}
-	
-	private TreeItem<Item> treeRoot = new TreeItem<>(new Item());
-	private TreeView<Item> treeView = new TreeView<>(treeRoot);
-	
-	private final class HierarchyTreeCell extends TreeCell<Item>
-	{
-		public void updateItem(Item item, boolean empty)
+		public void updateItem(DiffInfo item, boolean empty)
 		{
 			super.updateItem(item, empty);
 			
 			if (item == null) return;
 
-			if (item.direction == 0)
+			if (item.direction == DiffType.NONE)
 			{
 				setStyle("-fx-text-fill: black;");
-				setText(item.assn.name);
+				if (item.assn != null) setText(item.assn.name);
+				else setText(item.valueURI);
 			}
 			else
 			{
-				String style = item.direction < 0 ? "-fx-text-fill: red;" : item.direction > 0 ? "-fx-text-fill: green;" : "";
+				String style = (item.direction == DiffType.DELETION) ? "-fx-text-fill: red;"
+								: (item.direction == DiffType.ADDITION) ? "-fx-text-fill: green;" : "";
 				style += "-fx-font-family: arial;";
-				String label = item.direction < 0 ? "Removed: " : "Added: ";
-				label += item.valueLabel + " <" + ModelSchema.collapsePrefix(item.valueURI) + ">"; 
+
+				StringBuilder label = new StringBuilder((item.direction == DiffType.DELETION) ? "Removed: " : "Added: ");
+				if (item.valueLabel != null) label.append(item.valueLabel + " ");
+				label.append("<" + ModelSchema.collapsePrefix(item.valueURI) + ">"); 
 
 				setStyle(style);
-				setText(label);
+				setText(label.toString());
 			}
 		}
 	}
@@ -96,18 +91,29 @@ public class CompareVocabTree
 
 	public CompareVocabTree(File file, Schema schema)
 	{
+		this.treeView.setShowRoot(false);
+		this.treeView.setCellFactory(p -> new HierarchyTreeCell());
+
+		this.newsv = new SchemaVocab(Vocabulary.globalInstance(), new Schema[]{schema});
 		this.file = file;
-		this.schema = schema;
-		
-		schvoc = new SchemaVocab(Vocabulary.globalInstance(), new Schema[]{schema});
-	
-		treeView.setShowRoot(false);
-		treeView.setCellFactory((p) -> new HierarchyTreeCell());
-		
-		try {setupTree();}
-		catch (IOException ex) {ex.printStackTrace();}
+
+		try (InputStream istr = new FileInputStream(file))
+		{
+			SchemaVocab oldsv = SchemaVocab.deserialise(istr, new Schema[]{schema}); // use current schema to read in dump
+			CompareSchemaVocab compareSchVocabs = new CompareSchemaVocab(oldsv, newsv);
+			TreeNode<DiffInfo> diff = compareSchVocabs.getDiffTree();
+			setupDiffTree(diff);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void show()
 	{
 		Stage stage = new Stage();
@@ -134,59 +140,32 @@ public class CompareVocabTree
 		stage.setScene(new Scene(root, 700, 700));
 		stage.show();
 	}
-	
+
 	// ------------ private methods ------------
 
-	private void setupTree() throws IOException
+	// assume diff-tree of depth 2 and populate javafx treeview accordingly 
+	private void setupDiffTree(TreeNode<DiffInfo> diff)
 	{
-		InputStream istr = new FileInputStream(file);
-		SchemaVocab oldsv = SchemaVocab.deserialise(istr, new Schema[0]); // note: giving no schemata works for this purpose
-		istr.close();
-		
-		// note: only shows trees on both sides
-		for (SchemaVocab.StoredTree tree1 : oldsv.getTrees()) for (SchemaVocab.StoredTree tree2 : schvoc.getTrees())
+		for (TreeNode<DiffInfo> assn : diff.children) if (assn.data != null)
 		{
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) || !tree1.locator.equals(tree2.locator)) continue;
-			
-			Set<String> terms1 = new HashSet<>(), terms2 = new HashSet<>();
-			for (SchemaTree.Node node : tree1.tree.getFlat()) terms1.add(node.uri);
-			for (SchemaTree.Node node : tree2.tree.getFlat()) terms2.add(node.uri);
-
-			Set<String> extra1 = new TreeSet<>(), extra2 = new TreeSet<>();
-			for (String uri : terms1) if (!terms2.contains(uri)) extra1.add(uri);
-			for (String uri : terms2) if (!terms1.contains(uri)) extra2.add(uri);
-			
-			Item parent = new Item();
-			TreeItem<Item> treeParent = new TreeItem<>(parent);
-			parent.assn = tree2.assignment;
+			// add assignments
+			TreeItem<DiffInfo> treeParent = new TreeItem<>(assn.data);
 			treeRoot.getChildren().add(treeParent);
 
-			for (String uri : extra1)
+			// add terms
+			for (TreeNode<DiffInfo> term : assn.children)
 			{
-				Item term = new Item();
-				TreeItem<Item> treeTerm = new TreeItem<>(term);
-				term.direction = -1;
-				term.valueURI = uri;
-				term.valueLabel = oldsv.getLabel(uri);
-				treeParent.getChildren().add(treeTerm);
-			}			
-
-			for (String uri : extra2)
-			{
-				Item term = new Item();
-				TreeItem<Item> treeTerm = new TreeItem<>(term);
-				term.direction = 1;
-				term.valueURI = uri;
-				term.valueLabel = schvoc.getLabel(uri);
+				TreeItem<DiffInfo> treeTerm = new TreeItem<>(term.data);
 				treeParent.getChildren().add(treeTerm);
 			}
 		}
 	}
-	
+
 	private void writeExport() throws IOException
 	{
-		OutputStream ostr = new FileOutputStream(file);
-		schvoc.serialise(ostr);
-		ostr.close();
+		try (OutputStream ostr = new FileOutputStream(file))
+		{
+			if (newsv != null) newsv.serialise(ostr);
+		}
 	}
 }
