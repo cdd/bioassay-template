@@ -1,24 +1,37 @@
+/*
+ * BioAssay Ontology Annotator Tools
+ * 
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2.0
+ * as published by the Free Software Foundation:
+ * 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.cdd.bao.axioms;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.io.*;
+import com.cdd.bao.axioms.AxiomCollector.*;
+import com.cdd.bao.template.*;
+import com.cdd.bao.util.*;
 
-import org.apache.commons.lang3.*;
+import java.io.*;
+import java.util.*;
+
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.apache.jena.util.iterator.*;
-
-import com.cdd.bao.template.*;
-import com.cdd.bao.util.*;
-import com.cdd.bao.axioms.AxiomCollector.AssayAxiomsAll;
-import com.cdd.bao.axioms.AxiomCollector.AssayAxiomsSome;
-import com.cdd.bao.editor.*;
+import org.json.*;
 
 /*
 	This class is to read axioms into a file and group them based on class
@@ -36,15 +49,15 @@ public class ScanAxioms
 	public Schema schema;
 	public SchemaVocab schvoc;
 
-	public static Map<String,String> uriToLabel = new HashMap<String,String>();
-	public Map<String,List<Statement>> anonStatements = new HashMap<>();
+	public static Map<String, String> uriToLabel = new HashMap<String, String>();
+	public Map<String, List<Statement>> anonStatements = new HashMap<>();
 	//public Map<String, String> allAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> someAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> inversePropertiesMap = new HashMap<String, String>();
 
-	public static Map<String,Set<String>> onlyAxioms = new TreeMap<>();
-	public Map<String,Set<String>> someAxioms = new TreeMap<>();
-	public Map<String,Set<String>> inverseProperties = new TreeMap<>();
+	public static Map<String, Set<String>> onlyAxioms = new TreeMap<>();
+	public Map<String, Set<String>> someAxioms = new TreeMap<>();
+	public Map<String, Set<String>> inverseProperties = new TreeMap<>();
 
 	public int numProperties = 0;
 	public int hasInverseCounter = 0;
@@ -60,17 +73,17 @@ public class ScanAxioms
 	public static ArrayList axiomsForSome = new ArrayList<AssayAxiomsSome>();
 
 	public String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-					"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-					"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-					"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-					"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-					"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"};
+			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
+			"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
+			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"};
 
 	public ArrayList<String> redundantURIsList = new ArrayList<String>(Arrays.asList(redundantURIs));
 
 	public AxiomCollector ac = new AxiomCollector();
 
-	Map<String,Integer> propTypeCount = new TreeMap<>();
+	Map<String, Integer> propTypeCount = new TreeMap<>();
 
 	public ScanAxioms()
 	{
@@ -135,7 +148,7 @@ public class ScanAxioms
 		}
 		Util.writeln("    total triples inferred: " + numTriples);
 
-		Map<String,Set<String>> axioms = new TreeMap<>();
+		Map<String, Set<String>> axioms = new TreeMap<>();
 
 		Util.writeln("Extracting class labels...");
 
@@ -188,7 +201,7 @@ public class ScanAxioms
 
 		// fill in missing labels (this probably shouldn't be necessary, but...)
 		Property propLabel = ontology.createProperty(ModelSchema.PFX_RDFS + "label");
-		for (StmtIterator iter = ontology.listStatements(null, propLabel, (RDFNode) null); iter.hasNext();)
+		for (StmtIterator iter = ontology.listStatements(null, propLabel, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
 			Resource subject = stmt.getSubject();
@@ -226,9 +239,9 @@ public class ScanAxioms
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
-						OntClass v = (OntClass) av.getAllValuesFrom();
+						OntClass v = (OntClass)av.getAllValuesFrom();
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
@@ -264,7 +277,7 @@ public class ScanAxioms
 						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
 
 						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-						axiomsForAll.add(new AssayAxiomsAll(o.getURI(),p.getURI(),objectURIs,"only",uriArray));
+						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 
 						//o.URI --> class URI
 						//p.URI --> property URI
@@ -275,9 +288,9 @@ public class ScanAxioms
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
-						OntClass v = (OntClass) av.getSomeValuesFrom();
+						OntClass v = (OntClass)av.getSomeValuesFrom();
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
@@ -310,13 +323,13 @@ public class ScanAxioms
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
 						if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
-							axiomsForSome.add(new AssayAxiomsSome(o.getURI(),p.getURI(),objectURIs,"some",uriArray));
+							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int maximum = av.getMaxCardinality();
 
@@ -329,7 +342,7 @@ public class ScanAxioms
 					else if (r.isMinCardinalityRestriction())
 					{
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int minimum = av.getMinCardinality();
 
@@ -342,7 +355,7 @@ public class ScanAxioms
 					else if (r.isCardinalityRestriction())
 					{
 						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int cardinality = av.getCardinality();
 
@@ -374,9 +387,9 @@ public class ScanAxioms
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
-						OntClass v = (OntClass) av.getAllValuesFrom();
+						OntClass v = (OntClass)av.getAllValuesFrom();
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
@@ -407,7 +420,7 @@ public class ScanAxioms
 						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
 
 						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-						axiomsForAll.add(new AssayAxiomsAll(o.getURI(),p.getURI(),objectURIs,"only",uriArray));
+						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 
 						//o.URI --> class URI
 						//p.URI --> property URI
@@ -418,9 +431,9 @@ public class ScanAxioms
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
-						OntClass v = (OntClass) av.getSomeValuesFrom();
+						OntClass v = (OntClass)av.getSomeValuesFrom();
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
@@ -453,13 +466,13 @@ public class ScanAxioms
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
 						if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
-							axiomsForSome.add(new AssayAxiomsSome(o.getURI(),p.getURI(),objectURIs,"some",uriArray));
+							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int maximum = av.getMaxCardinality();
 
@@ -472,7 +485,7 @@ public class ScanAxioms
 					else if (r.isMinCardinalityRestriction())
 					{
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int minimum = av.getMinCardinality();
 
@@ -485,7 +498,7 @@ public class ScanAxioms
 					else if (r.isCardinalityRestriction())
 					{
 						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = (OntProperty) av.getOnProperty();
+						OntProperty p = (OntProperty)av.getOnProperty();
 						String pname = nameNode(p);
 						int cardinality = av.getCardinality();
 
@@ -572,7 +585,7 @@ public class ScanAxioms
 	}
 
 	// adds a value to a list-within-map
-	private boolean putAdd(Map<String,Set<String>> map, String key, String val)
+	private boolean putAdd(Map<String, Set<String>> map, String key, String val)
 	{
 		Set<String> values = map.get(key);
 		if (values == null) map.put(key, values = new HashSet<>());
@@ -581,7 +594,7 @@ public class ScanAxioms
 		return true;
 	}
 
-	private void putAdd(Map<String,List<Statement>> map, String key, Statement stmt)
+	private void putAdd(Map<String, List<Statement>> map, String key, Statement stmt)
 	{
 		List<Statement> values = map.get(key);
 		if (values == null) map.put(key, values = new ArrayList<>());
@@ -623,8 +636,10 @@ public class ScanAxioms
 				if (prop.equals(rdfType)) continue;
 				RDFNode object = stmt.getObject();
 				if (!object.isResource()) continue;
-				if (!object.isAnon()) sequence.add(object.asResource());
-				else anonymous.add(object.asResource());
+				if (!object.isAnon())
+					sequence.add(object.asResource());
+				else
+					anonymous.add(object.asResource());
 			}
 		}
 		return sequence.toArray(new Resource[sequence.size()]);

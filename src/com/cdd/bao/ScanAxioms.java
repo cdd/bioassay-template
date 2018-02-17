@@ -388,7 +388,10 @@ public class ScanAxioms
 				if (prop.equals(rdfType)) continue;
 				RDFNode object = stmt.getObject();
 				if (!object.isResource()) continue;
-				if (!object.isAnon()) sequence.add(object.asResource()); else anonymous.add(object.asResource());
+				if (!object.isAnon())
+					sequence.add(object.asResource());
+				else
+					anonymous.add(object.asResource());
 			}
 		}
 		return sequence.toArray(new Resource[sequence.size()]);

@@ -301,29 +301,26 @@ public class AxiomVocab
 		return axioms2Rules;
 	}*/
 	
-	public ArrayList<Rule> createRules(Map<AssayAxioms,String> axiomMap)
+	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap)
 	{
-
 		//assayAxiomsMap<axiom, axiomsClassURI>
-		Map<AssayAxioms,String> assayAxiomsMap = axiomMap;
-		ArrayList<Rule> axioms2Rules = new ArrayList();
-		
+		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
+		ArrayList<Rule> axioms2Rules = new ArrayList<>();
 
 		Rule newRule = new Rule();
 
 		for (AssayAxioms axiom : assayAxiomsMap.keySet())
 		{
 			Term subject = new Term(axiom.getClassURI(), true);
-			
 
 			String[] objURIs = axiom.uriArray;
 			//objURIs[0] = axiom.getObjectURIs();
 			Term[] impact = new Term[objURIs.length];
-			
-			for(int i = objURIs.length-1; i>=0; i-- )
+
+			for (int i = objURIs.length - 1; i >= 0; i--)
 			{
-				if(objURIs[i] !=null)
-					impact[i] = new Term(objURIs[i],true);
+				if (objURIs[i] != null)
+					impact[i] = new Term(objURIs[i], true);
 			}
 			//impact[0] = new Term("" + objURIs[0]);
 			newRule.subject = subject;
@@ -335,7 +332,6 @@ public class AxiomVocab
 		System.out.println(axioms2Rules.toString());
 		return axioms2Rules;
 	}
-	
 	
 	//add rule method, currently all the rules we have extracted fall into the LIMIT category
 

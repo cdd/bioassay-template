@@ -141,16 +141,20 @@ public class Main
 		
 		
 		ScanAxioms s = new ScanAxioms();
-		try {
+		try
+		{
 			s.exec();
-		} catch (OntologyException | JSONException | IOException e1) {
-			// TODO Auto-generated catch block
+		} 
+		catch (OntologyException | JSONException | IOException e1) 
+		{
 			e1.printStackTrace();
 		}
+
 		AxiomCollector ac;
 		ac = new AxiomCollector();
 		
-		try {
+		try
+		{
 			AxiomCollector.serialiseAxiom();
 			AxiomCollector.serialiseAxiomSome();
 			//AxiomCollector.findAllAxiomsOfAssay();
@@ -158,15 +162,13 @@ public class Main
 			//AxiomCollector.createAllAxiomsPerURI();
 			//AxiomCollector.createMethodAxiomsPerURI();
 			
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ac.mergeAxiomMaps();
-		
-		
-		
-		
 	}
 	
 	public static void printHelp()

@@ -1,53 +1,58 @@
+/*
+ * BioAssay Ontology Annotator Tools
+ * 
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2.0
+ * as published by the Free Software Foundation:
+ * 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.cdd.bao.axioms;
 
+import com.cdd.bao.template.*;
+import com.cdd.bao.template.AxiomVocab.*;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.cdd.bao.axioms.AxiomCollector.AssayAxioms;
-import com.cdd.bao.template.AxiomVocab;
-import com.cdd.bao.template.AxiomVocab.Rule;
-import com.cdd.bao.template.AxiomVocab.Term;
-import com.cdd.bao.template.AxiomVocab.Type;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.jsonldjava.core.RDFDataset.Node;
-import com.cdd.bao.template.AxiomVocab.Term;
+import org.json.*;
 
 public class AxiomCollector
 {
 
 	public static String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-					"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-					"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-					"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-					"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-					"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
-					"http://www.bioassayontology.org/bao#BAO_0000019", "http://www.bioassayontology.org/bao#BAO_0000029"};
+			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
+			"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
+			"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
+			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
+			"http://www.bioassayontology.org/bao#BAO_0000019", "http://www.bioassayontology.org/bao#BAO_0000029"};
 
-	public static Map<String,Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
+	public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
 
-	public static Map<String,String> uriToLabel = ScanAxioms.uriToLabel;
+	public static Map<String, String> uriToLabel = ScanAxioms.uriToLabel;
 
 	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
 	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
 
-	public static ArrayList<AssayAxiomsAll> nonRedundantAxiomsForAll = new ArrayList<AssayAxiomsAll>();
-	public static ArrayList<AssayAxiomsSome> nonRedundantAxiomsForSome = new ArrayList<AssayAxiomsSome>();
-	public static HashMap someAxiomsMap = new HashMap<String,AssayAxiomsSome>();
-	public static HashMap allAxiomsMap = new HashMap<String,AssayAxiomsAll>();
-	public static HashMap axiomMap = new HashMap<String,ArrayList<String>>();
+	public static ArrayList<AssayAxiomsAll> nonRedundantAxiomsForAll = new ArrayList<>();
+	public static ArrayList<AssayAxiomsSome> nonRedundantAxiomsForSome = new ArrayList<>();
+	public static Map someAxiomsMap = new HashMap<String, AssayAxiomsSome>();
+	public static Map allAxiomsMap = new HashMap<String, AssayAxiomsAll>();
+	public static Map axiomMap = new HashMap<String, ArrayList<String>>();
 
 	//Alright so axiom elimination is two parts in Alex's mind:
 	// first eliminate the URIs that are already in the common assay template
@@ -117,8 +122,8 @@ public class AxiomCollector
 
 			AssayAxioms genAxiom = null;
 
-			genAxiom = new AssayAxioms(onlyAxiom.getClassLabel(),onlyAxiom.getClassLabel(),onlyAxiom.getAxiomType(),onlyAxiom.getPredicateLabel(),
-							onlyAxiom.getPredicateURI(),onlyAxiom.getObjectLabels(),onlyAxiom.getObjectURIs());
+			genAxiom = new AssayAxioms(onlyAxiom.getClassLabel(), onlyAxiom.getClassLabel(), onlyAxiom.getAxiomType(), onlyAxiom.getPredicateLabel(),
+					onlyAxiom.getPredicateURI(), onlyAxiom.getObjectLabels(), onlyAxiom.getObjectURIs());
 
 			return genAxiom;
 
@@ -186,7 +191,8 @@ public class AxiomCollector
 				currentURI.replaceAll(currentURI, "");
 				currentURI += "\t redundant axiom";
 			}
-			else currentURI = this.objectURIs;
+			else
+				currentURI = this.objectURIs;
 
 			return currentURI;
 		}
@@ -294,8 +300,8 @@ public class AxiomCollector
 
 			AssayAxioms genAxiom = null;
 
-			genAxiom = new AssayAxioms(someAxiom.getClassLabel(),someAxiom.getClassLabel(),someAxiom.getAxiomType(),someAxiom.getPredicateLabel(),
-							someAxiom.getPredicateURI(),someAxiom.getObjectLabels(),someAxiom.getObjectURIs());
+			genAxiom = new AssayAxioms(someAxiom.getClassLabel(), someAxiom.getClassLabel(), someAxiom.getAxiomType(), someAxiom.getPredicateLabel(),
+					someAxiom.getPredicateURI(), someAxiom.getObjectLabels(), someAxiom.getObjectURIs());
 
 			return genAxiom;
 
@@ -319,7 +325,8 @@ public class AxiomCollector
 				currentURI.replaceAll(currentURI, "");
 				currentURI += "\t redundant axiom";
 			}
-			else currentURI = this.objectURIs;
+			else
+				currentURI = this.objectURIs;
 
 			return currentURI;
 		}
@@ -503,7 +510,8 @@ public class AxiomCollector
 				currentURI.replaceAll(currentURI, "");
 				currentURI += "\t redundant axiom";
 			}
-			else currentURI = this.objectURIs;
+			else
+				currentURI = this.objectURIs;
 
 			return currentURI;
 		}
@@ -578,8 +586,8 @@ public class AxiomCollector
 					json.put("objectLabels", axiom.labelsFromURIArray(axiom.getURIArray()));
 					json.put("axiomType", axiom.getAxiomType());
 					//public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType,String[] uriArray)
-					nonRedundantAxiomsForAll.add(new AssayAxiomsAll(axiom.getClassURI(),axiom.getPredicateURI(),axiom.getObjectURIs(),axiom.getAxiomType(),
-									axiom.getURIArray()));
+					nonRedundantAxiomsForAll.add(new AssayAxiomsAll(axiom.getClassURI(), axiom.getPredicateURI(), axiom.getObjectURIs(), axiom.getAxiomType(),
+							axiom.getURIArray()));
 
 					jsonFinal.put(json);
 				}
@@ -627,8 +635,8 @@ public class AxiomCollector
 					//json.put("objectURI", axiom.eliminateRedundantURIs());
 					//json.put("objectLabels", axiom.getObjectLabels());
 					json.put("axiomType", axiom.getAxiomType());
-					nonRedundantAxiomsForSome.add(new AssayAxiomsSome(axiom.getClassURI(),axiom.getPredicateURI(),axiom.getObjectURIs(),axiom.getAxiomType(),
-									axiom.getURIArray()));
+					nonRedundantAxiomsForSome.add(new AssayAxiomsSome(axiom.getClassURI(), axiom.getPredicateURI(), axiom.getObjectURIs(), axiom.getAxiomType(),
+							axiom.getURIArray()));
 
 					jsonFinal.put(json);
 				}
@@ -655,9 +663,9 @@ public class AxiomCollector
 
 	public void mergeAxiomMaps()
 	{
-		Map<AssayAxioms,String> mapClass2Axioms = new HashMap<AssayAxioms,String>();
-		Map<AssayAxiomsAll,String> mapAll = new HashMap<AssayAxiomsAll,String>();
-		Map<AssayAxiomsSome,String> mapSome = new HashMap<AssayAxiomsSome,String>();
+		Map<AssayAxioms, String> mapClass2Axioms = new HashMap<AssayAxioms, String>();
+		Map<AssayAxiomsAll, String> mapAll = new HashMap<AssayAxiomsAll, String>();
+		Map<AssayAxiomsSome, String> mapSome = new HashMap<AssayAxiomsSome, String>();
 
 		for (AssayAxiomsSome axiom : axiomsForSome)
 		{
@@ -810,19 +818,19 @@ public class AxiomCollector
 
 	}
 
-	public ArrayList<Rule> createRules(Map<AssayAxioms,String> axiomMap)
+	public ArrayList<Rule> createRules(Map<AssayAxioms, String> axiomMap)
 	{
 
 		//assayAxiomsMap<axiom, axiomsClassURI>
-		Map<AssayAxioms,String> assayAxiomsMap = axiomMap;
+		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
 		ArrayList<Rule> axioms2Rules = new ArrayList();
-		AxiomVocab A = new AxiomVocab();
+		AxiomVocab axvocab = new AxiomVocab();
 
 		Rule newRule = new Rule();
 
 		for (AssayAxioms axiom : assayAxiomsMap.keySet())
 		{
-			Term subject = new Term(axiom.getClassURI(),true);
+			Term subject = new Term(axiom.getClassURI(), true);
 			//System.out.println("I am here" + subject);
 
 			String[] objURIs = new String[1];
@@ -833,7 +841,7 @@ public class AxiomCollector
 			//if(objURIs[i] !=null)
 			//impact[i] = A.new Term(objURIs[i]);
 			//}
-			impact[0] = new Term(objURIs[0],true);
+			impact[0] = new Term(objURIs[0], true);
 			newRule.subject = subject;
 			newRule.impact = impact;
 			newRule.type = Type.LIMIT;
