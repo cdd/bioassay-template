@@ -25,6 +25,7 @@ import java.util.*;
 import java.io.*;
 
 import org.apache.commons.lang3.*;
+import org.json.*;
 
 import com.cdd.bao.template.*;
 import com.cdd.bao.template.Schema.*;
@@ -143,8 +144,8 @@ public class Main
 		Util.writeln("    geneont {infile} {outfile}");
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
-		Util.writeln("    compile {schema*.ttl} {vocab.dump}");
-		Util.writeln("    check {schema.ttl}");
+		Util.writeln("    compile {schema*.json} {vocab.dump/json}");
+		Util.writeln("    check {schema.json}");
 		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
 		Util.writeln("    --onto {files...}");
@@ -235,7 +236,23 @@ public class Main
 		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
 		try (OutputStream ostr = new FileOutputStream(outputFile))
 		{
-			schvoc.serialise(ostr);
+			if (outputFile.endsWith(".json"))
+			{
+				JSONArray templates = new JSONArray();
+				for (Schema schema : schemata)
+				{
+					SchemaVocab subset = schvoc.singleTemplate(schema.getSchemaPrefix());
+				
+					JSONObject json = new JSONObject();
+					json.put("schemaPrefix", schema.getSchemaPrefix());
+					json.put("root", ClipboardSchema.composeGroup(schema.getRoot(), subset));
+					templates.put(json);
+				}
+				Writer wtr = new BufferedWriter(new OutputStreamWriter(ostr));
+				templates.write(wtr);
+				wtr.flush();
+			}
+			else schvoc.serialise(ostr);
 		}
 		Util.writeln("Done.");
 	}

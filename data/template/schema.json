@@ -776,6 +776,13 @@
                 "propURI": "http://www.bioassayontology.org/bao#BAO_0000539",
                 "suggestions": "id",
                 "values": []
+            }, 
+            {
+                "name": "status",
+                "descr": "Curation workflow status of the assay.",
+                "propURI": "http://purl.org/spar/pso/withStatus",
+                "suggestions": "full",
+                "values": []
             }
         ],
         "subGroups": 
