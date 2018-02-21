@@ -366,7 +366,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				}
 			}
 		}
-		else if (assignment != null || group != null)
+		else if (assignment != null || group != null && fieldURI != null)
 		{
 			if (!Vocabulary.globalInstance().isLoaded()) return;
 			LookupPanel lookup = new LookupPanel(true, fieldName.getText(), new HashSet<>(), new HashSet<>(), false);
