@@ -97,7 +97,7 @@ public class SchemaTree
 	// returns a text representation of the tree (for debugging purposes)
 	public String toString()
 	{
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (Node node : flat)
 		{
 			for (int n = 0; n < node.depth; n++) buff.append("* ");
@@ -210,7 +210,15 @@ public class SchemaTree
 		}
 
 		// grab all of the branches from the original hierarchy: start by populating the new tree; then fill in the parents; then fill in the children
-		for (Branch br : hier.uriToBranch.values()) if (everything.contains(br.uri)) tree.put(br.uri, new Node(br, vocab.getDescr(br.uri)));
+		for (Branch br : hier.uriToBranch.values()) if (everything.contains(br.uri)) 
+		{
+			Node node = new Node(br, vocab.getDescr(br.uri));
+			node.altLabels = vocab.getAltLabels(br.uri);
+			node.externalURLs = vocab.getExternalURLs(br.uri);
+			node.pubchemSource = vocab.getPubChemSource(br.uri);
+			node.pubchemImport = vocab.getPubChemImport(br.uri);
+			tree.put(br.uri, node);
+		}
 		for (Node node : tree.values())
 		{
 			node.inSchema = includeBranch.contains(node.uri);

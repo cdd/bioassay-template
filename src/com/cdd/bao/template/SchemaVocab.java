@@ -112,6 +112,17 @@ public class SchemaVocab
 		for (String pfx : prefixes) Util.writeln("    " + pfx);*/
 	}
 	
+	// returns an instance that has only the trees for the indicated schema prefix
+	public SchemaVocab singleTemplate(String schemaPrefix)
+	{
+		SchemaVocab dup = new SchemaVocab();
+		dup.prefixes = new String[]{schemaPrefix};
+		dup.termList = Arrays.copyOf(termList, termList.length);
+		for (int n = 0; n < termList.length; n++) dup.termLookup.put(termList[n].uri, n);
+		for (StoredTree tree : treeList) if (tree.schemaPrefix.equals(schemaPrefix)) dup.treeList.add(tree);
+		return dup;
+	}
+	
 	// write the content as raw binary
 	public void serialise(OutputStream ostr) throws IOException
 	{
@@ -294,6 +305,13 @@ public class SchemaVocab
 		int idx = termLookup.getOrDefault(uri, -1);
 		if (idx < 0) return null;
 		return termList[idx].label;
+	}
+	public String[] getAltLabels(String uri)
+	{
+		if (uri == null) return null;
+		int idx = termLookup.getOrDefault(uri, -1);
+		if (idx < 0) return null;
+		return termList[idx].altLabels;
 	}
 	public String getDescr(String uri)
 	{

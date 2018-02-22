@@ -59,8 +59,13 @@
 	</target>
 
 	<target name="pkgAPI" depends="buildAPI" description="generate the package without the GUI">
-		<jar jarfile="pkg/BioAssayTemplateAPI.jar" basedir="bin">
-			<fileset dir="bin" excludes="com/cdd/bao/editor/**,com/cdd/bao/importer/**,com/cdd/bao/*.class" />
+		<jar jarfile="pkg/BioAssayTemplateAPI.jar">
+			<fileset dir="bin">
+				<include name="com/cdd/bao/template/**" />
+				<include name="com/cdd/bao/util/Util.class" />
+				<include name="com/cdd/bao/validator/TemplateChecker*.class" />
+				<include name="org/json/**" />
+			</fileset>
 			<zipgroupfileset dir="lib" includes="*.jar" />
 		</jar>
 	</target>

@@ -26,6 +26,8 @@ import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
+
+import org.apache.commons.lang3.*;
 import org.json.*;
 
 /*
@@ -37,15 +39,19 @@ public class ClipboardSchema
 {
 	// ------------ public methods ------------	
 
-	// turns a group/assignment/assay into a JSON object which can be conveniently unpacked later
-	public static JSONObject composeGroup(Schema.Group group)
+	// turns a group/assignment/assay into a JSON object which can be conveniently unpacked later; note that the optional
+	// SchemaVocab instance is should be non-null if a full readout of the schema tree is desired (and note also that it should
+	// contain just a single schema)
+	public static JSONObject composeGroup(Schema.Group group) {return composeGroup(group, null);}
+	public static JSONObject composeGroup(Schema.Group group, SchemaVocab schvoc)
 	{
-		return formatGroup(group);
+		return formatGroup(group, schvoc);
 	}
-	public static JSONObject composeAssignment(Schema.Assignment assn)
+	public static JSONObject composeAssignment(Schema.Assignment assn) {return composeAssignment(assn, null);}
+	public static JSONObject composeAssignment(Schema.Assignment assn, SchemaVocab schvoc)
 	{
 		JSONObject branch = new JSONObject();
-		try {branch.put("assignment", formatAssignment(assn));} 
+		try {branch.put("assignment", formatAssignment(assn, schvoc));} 
 		catch (JSONException ex) {}
 		return branch;
 	}
@@ -136,7 +142,7 @@ public class ClipboardSchema
 	
 	// ------------ private methods ------------	
 
-	private static JSONObject formatGroup(Schema.Group group) throws JSONException
+	private static JSONObject formatGroup(Schema.Group group, SchemaVocab schvoc) throws JSONException
 	{
 		JSONObject json = new JSONObject();
 		json.put("name", group.name);
@@ -146,18 +152,18 @@ public class ClipboardSchema
 		JSONArray jassignments = new JSONArray(), jsubgroups = new JSONArray();
 		for (Schema.Assignment assn : group.assignments)
 		{
-			jassignments.put(formatAssignment(assn));
+			jassignments.put(formatAssignment(assn, schvoc));
 		}
 		json.put("assignments", jassignments);
 		for (Schema.Group subgrp : group.subGroups)
 		{
-			jsubgroups.put(formatGroup(subgrp));
+			jsubgroups.put(formatGroup(subgrp, schvoc));
 		}
 		json.put("subGroups", jsubgroups);
 		
 		return json;
 	}
-	private static JSONObject formatAssignment(Schema.Assignment assn) throws JSONException
+	private static JSONObject formatAssignment(Schema.Assignment assn, SchemaVocab schvoc) throws JSONException
 	{
 		JSONObject json = new JSONObject();
 		json.put("name", assn.name);
@@ -179,7 +185,32 @@ public class ClipboardSchema
 		}
 		json.put("values", jvalues);
 		
+		if (schvoc != null) 
+		{
+			String[] groupNest = assn.groupNest();
+			for (SchemaVocab.StoredTree tree : schvoc.getTrees()) if (assn.propURI.equals(tree.propURI) && Objects.deepEquals(groupNest, tree.groupNest))
+			{
+				json.put("tree", formatTree(tree.tree));
+				break;
+			}
+		}
+		
 		return json;
+	}
+	private static JSONArray formatTree(SchemaTree tree)
+	{
+		JSONArray jsonList = new JSONArray();
+		for (SchemaTree.Node node : tree.getFlat())
+		{
+			JSONObject json = new JSONObject();
+			json.put("parent", node.parentIndex);
+			json.put("uri", node.uri);
+			json.put("label", node.label);
+			//json.put("descr", node.descr); (too much)
+			if (node.altLabels != null) json.put("altLabels", node.altLabels);
+			jsonList.put(json);
+		}
+		return jsonList;
 	}
 	private static JSONObject formatAssay(Schema.Assay assay) throws JSONException
 	{

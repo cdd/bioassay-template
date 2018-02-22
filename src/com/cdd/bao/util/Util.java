@@ -305,7 +305,7 @@ public class Util
 		if (list == null || list.length == 0) return null;
 		if (list.length == 1) return list[0];
 		if (list.length == 2) return list[0] + sep + list[1];
-		StringBuffer buff = new StringBuffer(list[0]);
+		StringBuilder buff = new StringBuilder(list[0]);
 		for (int n = 1; n < list.length; n++)
 		{
 			buff.append(sep);
@@ -325,7 +325,7 @@ public class Util
 		if (list == null || list.length == 0) return null;
 		if (list.length == 1) return String.valueOf(list[0]);
 		if (list.length == 2) return list[0] + sep + list[1];
-		StringBuffer buff = new StringBuffer(String.valueOf(list[0]));
+		StringBuilder buff = new StringBuilder(String.valueOf(list[0]));
 		for (int n = 1; n < list.length; n++)
 		{
 			buff.append(sep);
@@ -903,7 +903,7 @@ public class Util
 	{
 		if (len == 0) return "";
 		if (len == 1) return str;
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		for (int n = 0; n < len; n++) buff.append(str);
 		return buff.toString();
 	}
