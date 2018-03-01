@@ -220,6 +220,7 @@ public class Schema
 		}
 		public String keyPropGroupValue(String value)
 		{
+			value = value.replaceAll(SEP, "\\:\\:"); // this is commonly a URI, but can also be plain text in the case of labels
 			return Schema.keyPropGroupValue(propURI, groupNest(), value);
 		}
 		
