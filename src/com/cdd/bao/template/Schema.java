@@ -213,6 +213,16 @@ public class Schema
 			return nest.toArray(new String[nest.size()]);
 		}
 		
+		// convenient shortcuts for turning into a key
+		public String keyPropGroup()
+		{
+			return Schema.keyPropGroup(propURI, groupNest());
+		}
+		public String keyPropGroupValue(String value)
+		{
+			return Schema.keyPropGroupValue(propURI, groupNest(), value);
+		}
+		
 		private void outputAsString(StringBuilder buff, int indent)
 		{
 			for (int n = 0; n < indent; n++) buff.append("  ");
@@ -675,6 +685,17 @@ public class Schema
 	public static boolean compatiblePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
 	{
 		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
+	}
+	
+	// convenience methods for combining parts of assignments/annotations to make string identifiers
+	private final static String SEP = "::";
+	public static String keyPropGroup(String propURI, String[] groupNest)
+	{
+		return propURI + SEP + (groupNest == null ? "" : String.join(SEP, groupNest));
+	}
+	public static String keyPropGroupValue(String propURI, String[] groupNest, String value)
+	{
+		return propURI + SEP + (groupNest == null ? "" : String.join(SEP, groupNest)) + SEP + value;
 	}
 	
 	// adding of content
