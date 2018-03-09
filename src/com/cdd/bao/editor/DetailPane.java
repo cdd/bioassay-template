@@ -60,6 +60,8 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private VBox vbox = new VBox(PADDING);
 	
 	private TextField fieldPrefix = null;
+	private CheckBox chkIsBranch = null;
+	private TextField fieldBranches = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private URIRowLine fieldURI = null;
@@ -161,6 +163,17 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	public String extractPrefix()
 	{
 		return group == null || group.parent != null ? null : fieldPrefix.getText();
+	}
+
+	// fetches the current definition of branch groups
+	public String[] extractBranchGroups()
+	{
+		if (group == null || group.parent != null || !chkIsBranch.isSelected()) return null;
+		String txt = fieldBranches.getText();
+		if (txt.length() == 0) return new String[0];
+		String[] list = txt.split(",");
+		for (int n = 0; n < list.length; n++) list[n] = ModelSchema.expandPrefix(list[n]);
+		return list;
 	}
 
 	// extracts a representation of the content from the current widgets; note that these return null if nothing has changed (or if it's not that content type)
@@ -440,7 +453,18 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			fieldPrefix = new TextField(schema.getSchemaPrefix());
 			fieldPrefix.setPrefWidth(300);
 			line.add(fieldPrefix, "Prefix:", 1, 0);
-	
+			
+			boolean isBranch = schema.getBranchGroups() != null;
+			chkIsBranch = new CheckBox("Branch template");
+			chkIsBranch.setSelected(isBranch);
+			fieldBranches = new TextField();
+			fieldBranches.setMaxWidth(Double.MAX_VALUE);
+			if (isBranch) fieldBranches.setText(String.join(",", schema.getBranchGroups()));
+			fieldBranches.setDisable(!isBranch);
+			line.add(RowLine.pair(PADDING, chkIsBranch, 0, fieldBranches, 1), "", 1, 0);
+			
+			chkIsBranch.setOnAction(event -> fieldBranches.setDisable(!chkIsBranch.isSelected()));		
+				
 			vbox.getChildren().add(line);
 		}
 		

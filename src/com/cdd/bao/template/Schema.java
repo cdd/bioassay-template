@@ -441,7 +441,7 @@ public class Schema
 	private String schemaPrefix = ModelSchema.PFX_BAS;
 	
 	// for normal templates, branch groups is null; if defined, it refers to a list of eligible groupURI values that this template
-	// may be nested underneath; an array member of null refers to the root
+	// may be nested underneath; an empty array means root only; any member of the array that is null/blank also refers to the root
 	private String[] branchGroups = null;
 	
 	// ------------ public methods ------------	
@@ -473,6 +473,7 @@ public class Schema
 	{
 		Schema dup = new Schema();
 		dup.schemaPrefix = schemaPrefix;
+		dup.branchGroups = branchGroups == null ? null : Arrays.copyOf(branchGroups, branchGroups.length);
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
@@ -482,7 +483,7 @@ public class Schema
 	public String getSchemaPrefix() {return schemaPrefix;}
 	public void setSchemaPrefix(String prefix) {schemaPrefix = prefix;}
 	
-	// access to branch groups (null = regular template)
+	// access to branch groups (null = regular template, empty array = root only)
 	public String[] getBranchGroups() {return branchGroups;}
 	public void setBranchGroups(String[] groups) {branchGroups = groups;}
 	
@@ -857,7 +858,11 @@ public class Schema
 		{
 			JSONObject json = new JSONObject(new JSONTokener(rdr));
 			Schema schema = new Schema();
+
 			schema.setSchemaPrefix(json.getString("schemaPrefix"));
+			
+			JSONArray branchGroups = json.optJSONArray("branchGroups");
+			if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
 			
 			JSONObject jsonRoot = json.getJSONObject("root");
 			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
@@ -887,6 +892,7 @@ public class Schema
 	{
 		JSONObject json = new JSONObject();
 		json.put("schemaPrefix", schemaPrefix);
+		if (branchGroups != null) json.put("branchGroups", branchGroups);
 		json.put("root", ClipboardSchema.composeGroup(root));
 		wtr.write(json.toString(4));
 		wtr.flush();

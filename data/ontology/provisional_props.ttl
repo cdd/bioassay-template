@@ -310,31 +310,41 @@ bao:BAX_0000053
 
 bao:BAX_0000054
   rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
   rdfs:label "has positive control" ;
+  #URI: http://dev3.ccs.miami.edu:8080/ontolobridge#ONTB_000000044
+  #CURIE: ONTB_000000044
+  #requestID:44
   obo:IAO_0000115 ""
   .
 
 bao:BAX_0000055
   rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
   rdfs:label "has negative control" ;
+  #URI: http://dev3.ccs.miami.edu:8080/ontolobridge#ONTB_000000045
+  #CURIE: ONTB_000000045
+  #requestID:45
   obo:IAO_0000115 ""
   .
 
 bao:BAX_0000056
   rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
   rdfs:label "has background control" ;
   obo:IAO_0000115 ""
   .
 
 bao:BAX_0000057
   rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
   rdfs:label "has reference compound" ;
   obo:IAO_0000115 ""
   .
 
 bao:BAX_0000058
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "has control details" ;
+  rdfs:label "has plate control" ;
   obo:IAO_0000115 ""
   .
 

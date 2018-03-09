@@ -81,7 +81,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 							   branch.group != null ? branch.group.name : 
 							   branch.assignment != null ? branch.assignment.name : 
 							   branch.assay != null ? branch.assay.name : "?";
-			
 				if (label.length() == 0)
 				{
 					label = "unnamed";
