@@ -119,7 +119,7 @@ bao:BAX_0000021
 bao:BAX_0000022
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has control summary" ;
-  obo:IAO_0000115 "Contains descriptors of the controls (positive, negaitve, background, etc) used in the assay."
+  obo:IAO_0000115 "Contains descriptors of the controls (positive, negative, background, etc) used in the assay."
   .
 
 bao:BAX_0000023
@@ -307,3 +307,34 @@ bao:BAX_0000053
   rdfs:label "has assay data processing method" ;
   obo:IAO_0000115 "Contains descriptor(s) of methods used to process the measurement into the result or endpoint data reported as the final outcome."
   .
+
+bao:BAX_0000054
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has positive control" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000055
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has negative control" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000056
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has background control" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000057
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has reference compound" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000058
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has control details" ;
+  obo:IAO_0000115 ""
+  .
+
