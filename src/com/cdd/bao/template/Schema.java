@@ -440,6 +440,10 @@ public class Schema
 	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
 	private String schemaPrefix = ModelSchema.PFX_BAS;
 	
+	// for normal templates, branch groups is null; if defined, it refers to a list of eligible groupURI values that this template
+	// may be nested underneath; an array member of null refers to the root
+	private String[] branchGroups = null;
+	
 	// ------------ public methods ------------	
 
 	public Schema()
@@ -477,6 +481,10 @@ public class Schema
 	// access to the schema prefix, which serves as the namespace
 	public String getSchemaPrefix() {return schemaPrefix;}
 	public void setSchemaPrefix(String prefix) {schemaPrefix = prefix;}
+	
+	// access to branch groups (null = regular template)
+	public String[] getBranchGroups() {return branchGroups;}
+	public void setBranchGroups(String[] groups) {branchGroups = groups;}
 	
 	// returns the top level group: all of the assignments and subgroups are considered to be
 	// connected to the primary assay description, and the root's category name is a description of this

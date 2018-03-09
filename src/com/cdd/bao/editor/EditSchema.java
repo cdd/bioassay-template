@@ -118,10 +118,21 @@ public class EditSchema
 
 	// ------------ public methods ------------	
 
-	public EditSchema(Stage stage)
+	public EditSchema(Stage stage, File load)
 	{
 		this.stage = stage;
-
+		
+		if (load != null)
+		{
+			try
+			{
+				SchemaUtil.SerialData serial = SchemaUtil.deserialise(load);
+				if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = load;
+				stack.setSchema(serial.schema);
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
+	
 		if (MainApplication.icon != null) stage.getIcons().add(MainApplication.icon);
 
 		menuBar = new MenuBar();
@@ -226,7 +237,7 @@ public class EditSchema
 	public void loadFile(File file, SchemaUtil.SerialData serial)
 	{
 		if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = file; else schemaFile = null;
-		
+
 		stack.setSchema(serial.schema);
 		updateTitle();
 		rebuildTree();
@@ -241,7 +252,6 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null || item.getValue() == null) return;
 		updateBranchGroup(item.getValue(), modGroup);
-		
 	}
 	public void updateBranchGroup(Branch branch, Schema.Group modGroup)
 	{
@@ -417,14 +427,15 @@ public class EditSchema
 		
 		treeTemplate.setValue(new Branch(this, root, schema.locatorID(root)));
 		fillTreeGroup(schema, root, treeTemplate);
-		
+		detail.setGroup(schema, schema.getRoot(), true);
+
 		for (int n = 0; n < schema.numAssays(); n++)
 		{
 			Schema.Assay assay = schema.getAssay(n);
 			TreeItem<Branch> item = new TreeItem<>(new Branch(this, assay, schema.locatorID(assay)));
 			treeAssays.getChildren().add(item);
 		}
-		
+				
 		currentlyRebuilding = false;
 	}
 	
@@ -486,6 +497,7 @@ public class EditSchema
 		{
 			// if root, check prefix first
 			String prefix = detail.extractPrefix();
+			boolean modPrefix = false;
 			if (prefix != null)
 			{
 				prefix = prefix.trim();
@@ -496,17 +508,18 @@ public class EditSchema
 					catch (Exception ex)
 					{
 						//informMessage("Invalid URI", "Prefix is not a valid URI: " + prefix);
-						return;
+						//return;
 					}
 					Schema schema = stack.getSchema();
 					schema.setSchemaPrefix(prefix);
 					stack.setSchema(schema);
+					modPrefix = true;
 				}
 			}
 			
 			// then handle the group content
 			Schema.Group modGroup = detail.extractGroup();
-			if (modGroup == null) return;
+			if (!modPrefix && modGroup == null) return;
 
 			updateBranchGroup(branch, modGroup);
 
@@ -587,7 +600,7 @@ public class EditSchema
 	public void actionFileNew()
 	{
 		Stage stage = new Stage();
-		EditSchema edit = new EditSchema(stage);
+		EditSchema edit = new EditSchema(stage, null);
 		stage.show();
 	}
 	public void actionFileSave(boolean promptNew, boolean exportTTL)
@@ -652,8 +665,7 @@ public class EditSchema
 		{
 			SchemaUtil.SerialData serial = SchemaUtil.deserialise(file);
 			Stage stage = new Stage();
-			EditSchema edit = new EditSchema(stage);
-			edit.loadFile(file, serial);
+			EditSchema edit = new EditSchema(stage, file);
 			stage.show();
 		}
 		catch (IOException ex)

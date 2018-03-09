@@ -25,6 +25,9 @@ import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 
 import java.util.*;
+
+import javax.management.*;
+
 import javafx.application.*;
 import javafx.geometry.*;
 import javafx.scene.*;
@@ -165,13 +168,20 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	{
 		if (group == null) return null;
 	
-		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && 
-			group.groupURI.equals(fieldURI == null ? "" : ModelSchema.expandPrefix(fieldURI.getText()))) return null;
+		boolean sameGroup = true;
+		if (fieldURI != null)
+		{
+			String userURI = ModelSchema.expandPrefix(fieldURI.getText());
+			sameGroup = userURI.equals(Util.safeString(group.groupURI));
+		}
+		
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
-		mod.groupURI = ModelSchema.expandPrefix(fieldURI.getText());
+		mod.groupURI = fieldURI == null ? null : ModelSchema.expandPrefix(fieldURI.getText());
+		
 		return mod;
 	}
 	public Schema.Assignment extractAssignment()
