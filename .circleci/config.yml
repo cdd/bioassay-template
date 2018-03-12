@@ -18,6 +18,6 @@ jobs:
           name: Trigger bioassay-data build
           command: |
             if [ "${CIRCLE_BRANCH}" == "build_to_S3" ]; then
-              aws s3 cp bax/pkg/BioAssayTemplate.jar s3://cdd-bioassay-template
-              aws s3 cp bax/pkg/BioAssayTemplateAPI.jar s3://cdd-bioassay-template
+              cd ~/bax/pkg; aws s3 cp BioAssayTemplate.jar s3://cdd-bioassay-template
+              cd ~/bax/pkg; aws s3 cp BioAssayTemplateAPI.jar s3://cdd-bioassay-template
             fi
