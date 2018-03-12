@@ -21,11 +21,11 @@
 
 package com.cdd.bao.template;
 
-import com.cdd.bao.template.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
 import java.io.*;
+
 import org.junit.*;
 
 /*

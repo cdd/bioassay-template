@@ -26,8 +26,6 @@ import com.cdd.bao.util.*;
 
 import java.util.*;
 
-import javax.management.*;
-
 import javafx.application.*;
 import javafx.geometry.*;
 import javafx.scene.*;
@@ -35,9 +33,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
+
+import org.apache.commons.lang3.*;
 
 /*
 	Detail: shows an object from the schema, and makes it editable.
@@ -365,8 +365,8 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		
 		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
 		if (label == null) {actionLookupName(); return;}
-		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(label);
-		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(descr);
+		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(StringUtils.trim(label));
+		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(StringUtils.trim(descr));
 	}
 	public void actionLookupName(int focusIndex)
 	{
@@ -383,9 +383,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				LookupPanel.Resource[] res = result.get();
 				if (res != null && res.length > 0)
 				{
-					vw.fieldURI.setText(res[0].uri);
-					if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(res[0].label);
-					if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(res[0].descr);
+					vw.fieldURI.setText(StringUtils.trim(res[0].uri));
+					if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(StringUtils.trim(res[0].label));
+					if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(StringUtils.trim(res[0].descr));
 				}
 			}
 		}
@@ -400,9 +400,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				LookupPanel.Resource[] res = result.get();
 				if (res != null && res.length >= 1)
 				{
-					fieldURI.setText(res[0].uri);
-					if (fieldName.getText().length() == 0) fieldName.setText(res[0].label);
-					if (fieldDescr.getText().length() == 0) fieldDescr.setText(res[0].descr);
+					fieldURI.setText(StringUtils.trim(res[0].uri));
+					if (fieldName.getText().length() == 0) fieldName.setText(StringUtils.trim(res[0].label));
+					if (fieldDescr.getText().length() == 0) fieldDescr.setText(StringUtils.trim(res[0].descr));
 				}
 			}
 		}
@@ -450,7 +450,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			notes.setMaxWidth(Double.MAX_VALUE);
 			line.add(notes, null, 1, 0, Lineup.NOINDENT);
 	
-			fieldPrefix = new TextField(schema.getSchemaPrefix());
+			fieldPrefix = new TextField(StringUtils.trim(schema.getSchemaPrefix()));
 			fieldPrefix.setPrefWidth(300);
 			line.add(fieldPrefix, "Prefix:", 1, 0);
 			
@@ -475,7 +475,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(group.name);
+		fieldName = new TextField(StringUtils.trim(group.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short name for the group"));
@@ -526,7 +526,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(assignment.name);
+		fieldName = new TextField(StringUtils.trim(assignment.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short name for the assignment"));
@@ -634,7 +634,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			vw.fieldURI = new URIRowLine(val.uri, "The URI for this assignment value", n, PADDING, this);
 			vw.line.add(vw.fieldURI, "URI:", 1, 0);
 
-			vw.fieldName = new TextField(val.name);
+			vw.fieldName = new TextField(StringUtils.trim(val.name));
 			vw.fieldName.setPrefWidth(350);
 			observeFocus(vw.fieldName, n);
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
@@ -686,7 +686,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(assay.name);
+		fieldName = new TextField(StringUtils.trim(assay.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short label for the assay being annotated"));
@@ -837,12 +837,12 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			}
 			else if (annot.value != null)
 			{
-				btn.setText(annot.value.name);
+				btn.setText(StringUtils.trim(annot.value.name));
 				btn.setStyle("-fx-base: #000080; -fx-text-fill: white;");
 			}
 			else // annot.literal != null
 			{
-				btn.setText('"' + annot.literal + '"');
+				btn.setText('"' + StringUtils.trim(annot.literal) + '"');
 				btn.setStyle("-fx-base: #FFFFD0;");
 			}
 	
