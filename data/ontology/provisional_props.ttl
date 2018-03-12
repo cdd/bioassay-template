@@ -348,3 +348,15 @@ bao:BAX_0000058
   obo:IAO_0000115 ""
   .
 
+bao:BAX_0000059
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has screened entity details" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000060
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has delivery method" ;
+  obo:IAO_0000115 ""
+  .
+

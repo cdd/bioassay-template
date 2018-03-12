@@ -516,8 +516,9 @@ public class EditSchema
 			String newPrefix = detail.extractPrefix();
 			if (newPrefix != null)
 			{
-				newPrefix = prefix.trim();
+				newPrefix = newPrefix.trim();
 				if (!newPrefix.endsWith("#")) newPrefix += "#";
+				if (!newPrefix.equals(prefix)) {prefix = newPrefix; modHeader = true;}
 			}
 			String[] newGroups = detail.extractBranchGroups();
 			if (!Arrays.equals(branchGroups, newGroups)) {branchGroups = newGroups; modHeader = true;}
