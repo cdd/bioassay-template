@@ -15,6 +15,7 @@ hs_err_pid*
 #bin/
 #pkg/
 pkg/BioAssayTemplateAPI.jar
+pkg/BioAssayTemplate.jar
 
 /bin/
 run*.sh
