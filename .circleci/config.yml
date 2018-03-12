@@ -7,6 +7,8 @@ jobs:
       - image: circleci/openjdk:8
     working_directory: ~/bax
     steps:
+      - run: sudo apt-get install python3-pip
+      - run: sudo pip3 install awscli
       - checkout
       - run: ls -alh
       - run: cd ~/bax; ant clean check pkgAPI
