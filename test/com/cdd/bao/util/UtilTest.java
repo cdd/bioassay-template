@@ -34,6 +34,26 @@ import org.junit.*;
 public class UtilTest
 {
 	@Test
+	public void testLength()
+	{
+		assertEquals("handling of null", 0, Util.length(null));
+		assertEquals("handling of null", 0, Util.length(new int[0]));
+		assertEquals("handling of null", 3, Util.length(new int[]{1, 2, 3}));
+	}
+
+	@Test
+	public void testPrimByte()
+	{
+		List<Byte> list = Arrays.asList((byte)1, (byte)2, (byte)3, (byte)4);
+		byte[] primArray = Util.primByte(list);
+		assertArrayEquals(new byte[]{1, 2, 3, 4}, primArray);
+
+		Set<Byte> set = new TreeSet<>(list);
+		primArray = Util.primByte(set);
+		assertArrayEquals(new byte[]{1, 2, 3, 4}, primArray);
+	}
+
+	@Test
 	public void testPrimInt()
 	{
 		List<Integer> list = Arrays.asList(1, 2, 3, 4);
@@ -115,5 +135,462 @@ public class UtilTest
 		Set<String> set = new TreeSet<>(list);
 		primArray = Util.primString(set);
 		assertArrayEquals(new String[]{"a", "b", "c"}, primArray);
+	}
+
+	@Test
+	public void testArrayStr()
+	{
+		int[] intArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(intArr));
+		assertEquals("null handling", "{null}", Util.arrayStrHex(intArr));
+		intArr = new int[]{1, 2, 3, 4};
+		assertEquals("1,2,3,4", Util.arrayStr(intArr));
+		assertEquals("0x00000400,0x00000001,0x00000000,0xffffffff,0xfffffc00", Util.arrayStrHex(new int[]{1024, 1, 0, -1, -1024}));
+
+		long[] longArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(longArr));
+		longArr = new long[]{2, 3, 4, 1};
+		assertEquals("2,3,4,1", Util.arrayStr(longArr));
+
+		float[] floatArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(floatArr));
+		floatArr = new float[]{3, 4, 1, 2};
+		assertEquals("3.0,4.0,1.0,2.0", Util.arrayStr(floatArr));
+		assertEquals("6.0,8.0,2.0,4.0", Util.arrayStr(floatArr, 2));
+
+		double[] doubleArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(doubleArr));
+		doubleArr = new double[]{4, 1, 2, 3};
+		assertEquals("4.0,1.0,2.0,3.0", Util.arrayStr(doubleArr));
+		assertEquals("12.0,3.0,6.0,9.0", Util.arrayStr(doubleArr, 3));
+
+		String[] stringArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(stringArr));
+		stringArr = new String[]{"a", "b", "c", "d"};
+		assertEquals("\"a\",\"b\",\"c\",\"d\"", Util.arrayStr(stringArr));
+
+		boolean[] boolArr = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(boolArr));
+		boolArr = new boolean[]{true, false, false, true};
+		assertEquals("{1001}", Util.arrayStr(boolArr));
+
+		int[][] intArr2D = null;
+		assertEquals("null handling", "{null}", Util.arrayStr(intArr2D));
+		intArr2D = new int[3][];
+		intArr2D[0] = null;
+		intArr2D[1] = new int[]{1};
+		intArr2D[2] = new int[]{1, 2};
+		assertEquals("{null}{1}{1,2}", Util.arrayStr(intArr2D));
+	}
+
+	@Test
+	public void testJoin()
+	{
+		assertEquals(null, Util.join((String[])null, ","));
+		assertEquals(null, Util.join(new String[0], ","));
+		assertEquals("a", Util.join(new String[]{"a"}, ","));
+		assertEquals("a,b", Util.join(new String[]{"a", "b"}, ","));
+		assertEquals("a,b,c,d", Util.join(new String[]{"a", "b", "c", "d"}, ","));
+
+		assertEquals(null, Util.join((int[])null, ","));
+		assertEquals(null, Util.join(new int[0], ","));
+		assertEquals("1", Util.join(new int[]{1}, ","));
+		assertEquals("1,2", Util.join(new int[]{1, 2}, ","));
+		assertEquals("1,2,3,4", Util.join(new int[]{1, 2, 3, 4}, ","));
+	}
+
+	@Test
+	public void testIsNumeric()
+	{
+		assertTrue(Util.isNumeric("1.0"));
+		assertTrue(Util.isNumeric("12"));
+		assertTrue(Util.isNumeric("3.1415"));
+		assertTrue(Util.isNumeric("-3.1415"));
+
+		assertFalse(Util.isNumeric("abc"));
+		assertFalse(Util.isNumeric(" 3.1415"));
+		assertFalse(Util.isNumeric("+3.1415"));
+		assertFalse(Util.isNumeric("3.1415 "));
+	}
+
+	@Test
+	public void testSafeConversion()
+	{
+		assertEquals(123, Util.safeInt("123"));
+		assertEquals("Default for null values", 0, Util.safeInt(null));
+		assertEquals("Default for non-numeric strings", 0, Util.safeInt("abc"));
+
+		assertEquals(123, Util.safeInt("123", 11));
+		assertEquals("Default for null values", 11, Util.safeInt(null, 11));
+		assertEquals("Default for non-numeric strings", 11, Util.safeInt("abc", 11));
+
+		assertEquals(123L, Util.safeLong("123"));
+		assertEquals("Default for null values", 0, Util.safeLong(null));
+		assertEquals("Default for non-numeric strings", 0, Util.safeLong("abc"));
+
+		assertEquals(123L, Util.safeLong("123", 11));
+		assertEquals("Default for null values", 11L, Util.safeLong(null, 11L));
+		assertEquals("Default for non-numeric strings", 11L, Util.safeLong("abc", 11L));
+
+		assertEquals(3.14f, Util.safeFloat("3.14"), 0.001);
+		assertEquals("Default for null values", 0.0f, Util.safeFloat(null), 0.001);
+		assertEquals("Default for non-numeric strings", 0.0f, Util.safeFloat("abc"), 0.001);
+
+		assertEquals(3.14f, Util.safeFloat("3.14", 11.0f), 0.001);
+		assertEquals("Default for null values", 11.0f, Util.safeFloat(null, 11.0f), 0.001);
+		assertEquals("Default for non-numeric strings", 11.0f, Util.safeFloat("abc", 11.0f), 0.001);
+
+		assertEquals(3.14, Util.safeDouble("3.14"), 0.001);
+		assertEquals("Default for null values", 0.0, Util.safeDouble(null), 0.001);
+		assertEquals("Default for non-numeric strings", 0.0, Util.safeDouble("abc"), 0.001);
+
+		assertEquals(3.14, Util.safeDouble("3.14", 11.0), 0.001);
+		assertEquals("Default for null values", 11.0, Util.safeDouble(null, 11.0), 0.001);
+		assertEquals("Default for non-numeric strings", 11.0, Util.safeDouble("abc", 11.0), 0.001);
+	}
+
+	@Test
+	public void testSafeStringHandling()
+	{
+		assertEquals("null handling", "", Util.safeString((String)null));
+		assertEquals("", Util.safeString(""));
+		assertEquals("abc", Util.safeString("abc"));
+
+		assertEquals(null, Util.nullOrString((String)null));
+		assertEquals(null, Util.nullOrString(""));
+		assertEquals("abc", Util.nullOrString("abc"));
+
+		assertTrue(null, Util.isBlank((String)null));
+		assertTrue(null, Util.isBlank(""));
+		assertFalse("abc", Util.isBlank("abc"));
+
+		assertFalse(null, Util.notBlank((String)null));
+		assertFalse(null, Util.notBlank(""));
+		assertTrue("abc", Util.notBlank("abc"));
+
+		assertTrue(Util.equals((String)null, (String)null));
+		assertTrue(Util.equals((String)null, ""));
+		assertFalse(Util.equals((String)null, "abc"));
+		assertTrue(Util.equals("", (String)null));
+		assertFalse(Util.equals("abc", (String)null));
+
+		assertFalse(Util.equals("abc", "def"));
+		assertTrue(Util.equals("abc", "abc"));
+	}
+
+	@Test
+	public void testFormatDouble()
+	{
+		assertEquals("100000", Util.formatDouble(100000.0));
+		assertEquals("100000.1", Util.formatDouble(100000.1));
+		assertEquals("100000.12345", Util.formatDouble(100000.12345));
+		assertEquals("1e+40", Util.formatDouble(1e40));
+		assertEquals("0.001", Util.formatDouble(0.001));
+		assertEquals("1e-11", Util.formatDouble(0.00000000001));
+
+		assertEquals("1", Util.formatDouble(1, 3));
+		assertEquals("0.123", Util.formatDouble(0.1234, 3));
+		assertEquals("0.0123", Util.formatDouble(0.01234, 3));
+		assertEquals("0.00123", Util.formatDouble(0.001234, 3));
+		assertEquals("0.000123", Util.formatDouble(0.0001234, 3));
+		assertEquals("12", Util.formatDouble(12, 3));
+		assertEquals("123", Util.formatDouble(123, 3));
+		assertEquals("1.23e+03", Util.formatDouble(1234, 3));
+		assertEquals("1.24e+03", Util.formatDouble(1236, 3));
+		assertEquals("1.00e+05", Util.formatDouble(100000.0, 3));
+		assertEquals("1.00e+05", Util.formatDouble(100000.1, 3));
+		assertEquals("1.01e+05", Util.formatDouble(100999, 3));
+		assertEquals("1.00e+40", Util.formatDouble(1e40, 3));
+		assertEquals("1.00e+100", Util.formatDouble(1e100, 3));
+		assertEquals("1.00e-11", Util.formatDouble(0.00000000001, 3));
+	}
+
+	@Test
+	public void testNumberHandling()
+	{
+		assertEquals(0L, Util.unsigned(0));
+		assertEquals(1L, Util.unsigned(1));
+		assertEquals(2L, Util.unsigned(2));
+		assertEquals(4294967295L, Util.unsigned(-1));
+		assertEquals(4294967294L, Util.unsigned(-2));
+
+		assertEquals(0, Util.iround(0.1f));
+		assertEquals(0, Util.iround(0.4f));
+		assertEquals(1, Util.iround(0.5f));
+		assertEquals(1, Util.iround(0.8f));
+		assertEquals(0, Util.iround(-0.1f));
+		assertEquals(0, Util.iround(-0.4f));
+		assertEquals(0, Util.iround(-0.5f));
+		assertEquals(-1, Util.iround(-0.8f));
+
+		assertEquals(0, Util.iround(0.1));
+		assertEquals(0, Util.iround(0.4));
+		assertEquals(1, Util.iround(0.5));
+		assertEquals(1, Util.iround(0.8));
+		assertEquals(0, Util.iround(-0.1));
+		assertEquals(0, Util.iround(-0.4));
+		assertEquals(0, Util.iround(-0.5));
+		assertEquals(-1, Util.iround(-0.8));
+
+		assertEquals(0, Util.ifloor(0.1f));
+		assertEquals(0, Util.ifloor(0.8f));
+		assertEquals(1, Util.ifloor(1.1f));
+		assertEquals(-1, Util.ifloor(-0.1f));
+		assertEquals(-2, Util.ifloor(-1.1f));
+
+		assertEquals(0, Util.ifloor(0.1));
+		assertEquals(0, Util.ifloor(0.8));
+		assertEquals(1, Util.ifloor(1.1));
+		assertEquals(-1, Util.ifloor(-0.1));
+		assertEquals(-2, Util.ifloor(-1.1));
+
+		assertEquals(1, Util.iceil(0.1f));
+		assertEquals(1, Util.iceil(0.8f));
+		assertEquals(2, Util.iceil(1.1f));
+		assertEquals(0, Util.iceil(-0.1f));
+		assertEquals(-1, Util.iceil(-1.1f));
+
+		assertEquals(1, Util.iceil(0.1));
+		assertEquals(1, Util.iceil(0.8));
+		assertEquals(2, Util.iceil(1.1));
+		assertEquals(0, Util.iceil(-0.1));
+		assertEquals(-1, Util.iceil(-1.1));
+
+		assertEquals(0f, Util.ffloor(0.1f), 0.001);
+		assertEquals(0f, Util.ffloor(0.8f), 0.001);
+		assertEquals(1f, Util.ffloor(1.1f), 0.001);
+		assertEquals(-1f, Util.ffloor(-0.1f), 0.001);
+		assertEquals(-2f, Util.ffloor(-1.1f), 0.001);
+
+		assertEquals(1f, Util.fceil(0.1f), 0.001);
+		assertEquals(1f, Util.fceil(0.8f), 0.001);
+		assertEquals(2f, Util.fceil(1.1f), 0.001);
+		assertEquals(0f, Util.fceil(-0.1f), 0.001);
+		assertEquals(-1f, Util.fceil(-1.1f), 0.001);
+
+		assertEquals(9, Util.sqr(3));
+		assertEquals(0, Util.sqr(0));
+		assertEquals(9, Util.sqr(-3));
+
+		assertEquals(9f, Util.sqr(3f), 0.001);
+		assertEquals(0f, Util.sqr(0f), 0.001);
+		assertEquals(9f, Util.sqr(-3f), 0.001);
+
+		assertEquals(9.0, Util.sqr(3.0), 0.001);
+		assertEquals(0.0, Util.sqr(0.0), 0.001);
+		assertEquals(9.0, Util.sqr(-3.0), 0.001);
+
+		assertEquals(25, Util.norm2(3, 4));
+		assertEquals(25f, Util.norm2(3f, 4f), 0.001);
+		assertEquals(29f, Util.norm2(3f, 4f, 2f), 0.001);
+		assertEquals(25.0, Util.norm2(3.0, 4.0), 0.001);
+		assertEquals(29.0, Util.norm2(3.0, 4.0, 2.0), 0.001);
+
+		assertEquals(5.0, Util.norm(3.0, 4.0), 0.001);
+		assertEquals(Math.sqrt(29.0), Util.norm(3.0, 4.0, 2.0), 0.001);
+
+		assertEquals(5.0, Util.norm(-3.0f, -4.0f), 0.001);
+		assertEquals(3.0, Util.norm(-3.0f, 0.0f), 0.001);
+		assertEquals(4.0, Util.norm(0.0f, -4.0f), 0.001);
+		assertEquals(Math.sqrt(29.0), Util.norm(3.0f, 4.0f, 2.0f), 0.001);
+
+		assertEquals(1.0, Util.divZ(0.0f), 0.0001);
+		assertEquals(0.5, Util.divZ(2.0f), 0.0001);
+		assertEquals(Float.POSITIVE_INFINITY, Util.divZ(1e-40f), 0.0001);
+
+		assertEquals(1.0, Util.divZ(0.0), 0.0001);
+		assertEquals(0.5, Util.divZ(2.0), 0.0001);
+		assertEquals(1e40, Util.divZ(1e-40), 0.0001);
+
+		assertEquals(-1, Util.signum(-4));
+		assertEquals(0, Util.signum(0));
+		assertEquals(1, Util.signum(2));
+		assertEquals(-1, Util.signum(-4.0f));
+		assertEquals(0, Util.signum(0.0f));
+		assertEquals(1, Util.signum(2.0f));
+		assertEquals(-1, Util.signum(-4.0));
+		assertEquals(0, Util.signum(0.0));
+		assertEquals(1, Util.signum(2.0));
+	}
+
+	@Test
+	public void testAngleManipulations()
+	{
+		for (double angle : new double[]{0.0, Math.PI, 0.369})
+		{
+			String msg = "angle " + angle;
+			assertEquals(msg, angle, Util.angleNorm(angle), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle + Util.TWOPI), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle + 2 * Util.TWOPI), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle - Util.TWOPI), 0.001);
+		}
+		assertEquals(Math.PI, Util.angleNorm(-Math.PI), 0.001);
+
+		for (float angle : new float[]{0.0f, Util.PI_F, 0.369f})
+		{
+			String msg = "angle " + angle;
+			assertEquals(msg, angle, Util.angleNorm(angle), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle + Util.TWOPI_F), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle + 2 * Util.TWOPI_F), 0.001);
+			assertEquals(msg, angle, Util.angleNorm(angle - Util.TWOPI_F), 0.001);
+		}
+		assertEquals(Util.PI_F, Util.angleNorm(-Util.PI_F), 0.001);
+
+		assertEquals(-0.5 * Math.PI, Util.angleDiff(0, 0.5 * Math.PI), 0.001);
+		assertEquals(0.5 * Math.PI, Util.angleDiff(0, 1.5 * Math.PI), 0.001);
+		assertEquals(0.5 * Math.PI, Util.angleDiff(0.5 * Math.PI, 0), 0.001);
+		assertEquals(-0.5 * Math.PI, Util.angleDiff(1.5 * Math.PI, 0), 0.001);
+		assertEquals(Math.PI, Util.angleDiff(1.5 * Math.PI, -1.5 * Math.PI), 0.001);
+		assertEquals(Math.PI, Util.angleDiff(-1.5 * Math.PI, 1.5 * Math.PI), 0.001);
+		assertEquals(Math.PI - 0.1, Util.angleDiff(1.5 * Math.PI, -1.5 * Math.PI + 0.1), 0.001);
+		assertEquals(-Math.PI + 0.1, Util.angleDiff(-1.5 * Math.PI + 0.1, 1.5 * Math.PI), 0.001);
+
+		assertEquals(-0.5 * Util.PI_F, Util.angleDiff(0f, 0.5f * Util.PI_F), 0.001);
+		assertEquals(0.5 * Util.PI_F, Util.angleDiff(0f, 1.5f * Util.PI_F), 0.001);
+		assertEquals(0.5 * Util.PI_F, Util.angleDiff(0.5f * Util.PI_F, 0f), 0.001);
+		assertEquals(-0.5 * Util.PI_F, Util.angleDiff(1.5f * Util.PI_F, 0f), 0.001);
+		assertEquals(Util.PI_F, Util.angleDiff(1.5f * Util.PI_F, -1.5f * Util.PI_F), 0.001);
+		assertEquals(Util.PI_F - 0.1, Util.angleDiff(1.5f * Util.PI_F, -1.5f * Util.PI_F + 0.1f), 0.001);
+		assertEquals(-Util.PI_F + 0.1, Util.angleDiff(-1.5f * Util.PI_F + 0.1f, 1.5f * Util.PI_F), 0.001);
+	}
+
+	@Test
+	public void testAngleManipulationsDeg()
+	{
+		for (double angle : new double[]{0.0, 180, 45})
+		{
+			String msg = "angle " + angle;
+			assertEquals(msg, angle, Util.angleNormDeg(angle), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle + 360), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle + 720), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle - 360), 0.001);
+		}
+		assertEquals(180, Util.angleNormDeg(-180), 0.001);
+
+		for (float angle : new float[]{0.0f, Util.PI_F, 0.369f})
+		{
+			String msg = "angle " + angle;
+			assertEquals(msg, angle, Util.angleNormDeg(angle), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle + 360f), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle + 720f), 0.001);
+			assertEquals(msg, angle, Util.angleNormDeg(angle - 360f), 0.001);
+		}
+		assertEquals(180f, Util.angleNormDeg(-180f), 0.001);
+
+		assertEquals(-90, Util.angleDiffDeg(0.0, 90.0), 0.001);
+		assertEquals(90, Util.angleDiffDeg(0.0, 270.0), 0.001);
+		assertEquals(90, Util.angleDiffDeg(90.0, 0.0), 0.001);
+		assertEquals(-90, Util.angleDiffDeg(270.0, 0.0), 0.001);
+		assertEquals(170, Util.angleDiffDeg(270.0, -260.0), 0.001);
+		assertEquals(-170, Util.angleDiffDeg(-260.0, 270.0), 0.001);
+
+		assertEquals(-90, Util.angleDiffDeg(0.0f, 90.0f), 0.001);
+		assertEquals(90, Util.angleDiffDeg(0.0f, 270.0f), 0.001);
+		assertEquals(90, Util.angleDiffDeg(90.0f, 0.0f), 0.001);
+		assertEquals(-90, Util.angleDiffDeg(270.0f, 0.0f), 0.001);
+		assertEquals(170, Util.angleDiffDeg(270.0f, -260.0f), 0.001);
+		assertEquals(-170, Util.angleDiffDeg(-260.0f, 270.0f), 0.001);
+	}
+
+	@Test
+	public void testColorHandling()
+	{
+		assertEquals("#000001", Util.colourHTML(0x1));
+		assertEquals("#000101", Util.colourHTML(0x101));
+		assertEquals("#010101", Util.colourHTML(0x10101));
+		assertEquals("#ffffff", Util.colourHTML(0xffffff));
+	}
+
+	@Test
+	public void testStringHandling()
+	{
+		assertEquals("     1", Util.intrpad(1, 6));
+		assertEquals("xxxxx1", Util.intrpad(1, 6, 'x'));
+		assertEquals("123456", Util.intrpad(123456, 6, 'x'));
+		assertEquals("123456", Util.intrpad(1234567, 6, 'x'));
+
+		assertEquals("xxxxx1", Util.strrpad("1", 6, 'x'));
+		assertEquals("123456", Util.strrpad("123456", 6, 'x'));
+		assertEquals("123456", Util.strrpad("1234567", 6, 'x'));
+
+		assertEquals("1xxxxx", Util.padstr("1", 6, 'x'));
+		assertEquals("123456", Util.padstr("123456", 6, 'x'));
+		assertEquals("123456", Util.padstr("1234567", 6, 'x'));
+
+		assertEquals("", Util.rep("ab", 0));
+		assertEquals("ab", Util.rep("ab", 1));
+		assertEquals("abab", Util.rep("ab", 2));
+		assertEquals("ababab", Util.rep("ab", 3));
+
+		boolean[] mask = new boolean[]{false, true, false, true, false};
+		assertArrayEquals(new String[]{"a", "c", "e"}, Util.split("abcde", mask));
+		mask = new boolean[]{false, false, false, false, false};
+		assertArrayEquals(new String[]{"abcde"}, Util.split("abcde", mask));
+		mask = new boolean[]{true, true, true, true, true};
+		assertArrayEquals(new String[]{"", "", "", "", "", ""}, Util.split("abcde", mask));
+		mask = new boolean[]{true, false, false, false, true};
+		assertArrayEquals(new String[]{"", "bcd", ""}, Util.split("abcde", mask));
+
+		assertArrayEquals(new String[]{"ab", "c", "de"}, Util.split("ab c de", ' '));
+		assertArrayEquals(new String[]{"ab", "", "de"}, Util.split("ab  de", ' '));
+
+		assertArrayEquals(new String[]{"ab", "c-de"}, Util.split("ab c-de", " "));
+		assertArrayEquals(new String[]{"ab", "c", "de"}, Util.split("ab c-de", " -"));
+
+		assertArrayEquals(new String[]{"ab", "cde"}, Util.splitLines("ab\ncde"));
+		assertArrayEquals(new String[]{"ab", "cde"}, Util.splitLines("ab\r\ncde"));
+	}
+
+	@Test
+	public void testFileHandling()
+	{
+		assertEquals("/", Util.parentDir("/"));
+		assertEquals("/abc/def/", Util.parentDir("/abc/def/ghi.txt"));
+		assertEquals("/abc/", Util.parentDir("/abc/def/"));
+		assertEquals("/", Util.parentDir("/abc"));
+		assertEquals("/", Util.parentDir("abc"));
+
+		assertEquals("ghi.txt", Util.fileName("/abc/def/ghi.txt"));
+		assertEquals("ghi.txt", Util.fileName("ghi.txt"));
+
+		assertEquals("txt", Util.fileSuffix("ghi.txt"));
+		assertEquals("", Util.fileSuffix("ghi"));
+
+		assertEquals("/abc/def/ghi", Util.fileWithoutSuffix("/abc/def/ghi.txt"));
+		assertEquals("/abc/def/ghi", Util.fileWithoutSuffix("/abc/def/ghi"));
+		assertEquals("/abc/def.ignore/ghi", Util.fileWithoutSuffix("/abc/def.ignore/ghi"));
+		assertEquals("ghi", Util.fileWithoutSuffix("ghi.txt"));
+
+		assertEquals("/abc/def_001.txt", Util.insertPreSuffix("/abc/def.txt", "_001"));
+		assertEquals("/abc/def_001", Util.insertPreSuffix("/abc/def", "_001"));
+	}
+
+	@Test
+	public void testPacked()
+	{
+		String[] s = new String[]{null, "a", null, "b", "", "c", null};
+		assertEquals(4, Util.packedLength(s));
+		assertEquals(0, Util.packedLength((Object[])null));
+		assertEquals(0, Util.packedLength(new Object[0]));
+
+		String[] packed = new String[]{null, null, null, null};
+		Util.packArray(s, packed);
+		assertEquals("a", packed[0]);
+		assertEquals("b", packed[1]);
+		assertEquals("", packed[2]);
+		assertEquals("c", packed[3]);
+	}
+
+	@Test
+	public void testMiscellaneous()
+	{
+		Map<String, Integer> counts = new HashMap<>();
+		assertEquals(1, Util.incr(counts, "a"));
+		assertEquals(2, Util.incr(counts, "a"));
+		assertEquals(1, Util.incr(counts, "b"));
+
+		List<Integer> list = Arrays.asList(1, 2, 3);
+		Util.swap(list, 0, 1);
+		assertEquals(Arrays.asList(2, 1, 3), list);
 	}
 }

@@ -99,23 +99,13 @@ public class Util
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 	
 	/**
-	 * Converts a list of Byte objects directly to a primitive array.
+	 * Converts a collection of Byte objects directly to a primitive array.
 	 */
-	public static byte[] primByte(List<Byte> vec) 
+	public static byte[] primByte(Collection<Byte> coll) 
 	{
-		byte[] arr = new byte[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Z objects directly to a primitive array.
-	 */
-	public static byte[] primByte(Set<Byte> set) 
-	{
-		byte[] arr = new byte[set.size()];
+		byte[] arr = new byte[coll.size()]; 
 		int n = 0;
-		for (byte v : set) arr[n++] = v;
+		for (byte v : coll) arr[n++] = v;
 		return arr;
 	}
 
@@ -243,9 +233,9 @@ public class Util
 	public static String arrayStr(String[] arr)
 	{
 		if (arr == null) return "{null}";
-		String str = "";
-		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + "\"" + arr[n] + "\"";
-		return str;
+		StringJoiner sj = new StringJoiner("\",\"", "\"", "\"");
+		for (String s : arr) sj.add(s);
+		return sj.toString();
 	}
 	
 	/**
@@ -254,9 +244,9 @@ public class Util
 	public static String arrayStr(boolean[] arr)
 	{
 		if (arr == null) return "{null}";
-		String str = "{";
-		for (int n = 0; n < arr.length; n++) str += arr[n] ? "1" : "0";
-		return str + "}";
+		StringJoiner sj = new StringJoiner("", "{", "}");
+		for (boolean b : arr) sj.add(b ? "1" : "0");
+		return sj.toString();
 	}
 	
 	/**
@@ -305,13 +295,9 @@ public class Util
 		if (list == null || list.length == 0) return null;
 		if (list.length == 1) return list[0];
 		if (list.length == 2) return list[0] + sep + list[1];
-		StringBuilder buff = new StringBuilder(list[0]);
-		for (int n = 1; n < list.length; n++)
-		{
-			buff.append(sep);
-			buff.append(list[n]);
-		}
-		return buff.toString();
+		StringJoiner sj = new StringJoiner(sep);
+		for (String s : list) sj.add(s);
+		return sj.toString();
 	}
 	
 	/**
@@ -345,7 +331,7 @@ public class Util
 		{
 			long v = arr[n] >= 0 ? arr[n] : ((arr[n] & 0x7FFFFFFF) | (1L << 31));
 			String hex = Long.toString(v, 16);
-			str += (n > 0 ? "," : "") + "0x" + padstr(hex, 8, '0');
+			str += (n > 0 ? "," : "") + "0x" + strrpad(hex, 8, '0');
 		}
 		return str;
 	}
@@ -369,7 +355,7 @@ public class Util
 	public static int safeInt(String str, int def) 
 	{
 		if (str == null) return def;
-		try {return Integer.valueOf(str).intValue();} 
+		try {return Integer.parseInt(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -387,7 +373,7 @@ public class Util
 	public static long safeLong(String str, long def) 
 	{
 		if (str == null) return def;
-		try {return Long.valueOf(str).longValue();} 
+		try {return Long.parseLong(str);}
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -405,7 +391,7 @@ public class Util
 	public static float safeFloat(String str, float def) 
 	{
 		if (str == null) return def;
-		try {return Float.valueOf(str).floatValue();} 
+		try {return Float.parseFloat(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -423,7 +409,7 @@ public class Util
 	public static double safeDouble(String str, double def) 
 	{
 		if (str == null) return def;
-		try {return Double.valueOf(str).doubleValue();} 
+		try {return Double.parseDouble(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -475,9 +461,10 @@ public class Util
 	 */
 	public static String formatDouble(double val, int maxSigFig)
 	{
-		String str = String.format("%." + maxSigFig + "g", val);
+		String fmt = "%." + maxSigFig + "g";
+		String str = String.format(fmt, val);
 		if (str.indexOf('.') < 0) return str;
-		while (str.endsWith("0")) str = str.substring(0, str.length() - 1);
+		if (str.indexOf('e') < 0) while (str.endsWith("0")) str = str.substring(0, str.length() - 1);
 		if (str.endsWith(".")) str = str.substring(0, str.length() - 1);
 		return str;
 	}
@@ -598,12 +585,12 @@ public class Util
 	public static float norm(float x, float y, float z) {return (float)Math.sqrt(x * x + y * y + z * z);}
 	
 	/**
-	 * Returns the reciprocal of a number, or zero if undefined.
+	 * Returns the reciprocal of a number, or one if undefined.
 	 */
 	public static double divZ(double z) {return z == 0 ? 1 : 1 / z;}
 	
 	/**
-	 * Returns the reciprocal of a number, or zero if undefined.
+	 * Returns the reciprocal of a number, or one if undefined.
 	 */
 	public static float divZ(float z) {return z == 0 ? 1 : 1 / z;}
 	
@@ -724,7 +711,7 @@ public class Util
 	 */
 	public static double angleNormDeg(double th)
 	{
-		if (th == -180) return th = 180;
+		if (th == -180) return 180;
 		if (th < -180)
 		{
 			int mod = Util.iceil((-th - 180) * (1.0 / 360));
@@ -743,7 +730,7 @@ public class Util
 	 */
 	public static float angleNormDeg(float th)
 	{
-		if (th == -180) return th = 180;
+		if (th == -180) return 180;
 		if (th < -180)
 		{
 			int mod = Util.iceil((-th - 180) * (1f / 360));
