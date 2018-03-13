@@ -21,7 +21,6 @@
 
 package com.cdd.bao.util;
 
-import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
@@ -99,23 +98,13 @@ public class Util
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 	
 	/**
-	 * Converts a list of Byte objects directly to a primitive array.
+	 * Converts a collection of Byte objects directly to a primitive array.
 	 */
-	public static byte[] primByte(List<Byte> vec) 
+	public static byte[] primByte(Collection<Byte> coll) 
 	{
-		byte[] arr = new byte[vec.size()]; 
-		for (int n = 0; n < arr.length; n++) arr[n] = vec.get(n); 
-		return arr;
-	}
-
-	/**
-	 * Converts a set of Z objects directly to a primitive array.
-	 */
-	public static byte[] primByte(Set<Byte> set) 
-	{
-		byte[] arr = new byte[set.size()];
+		byte[] arr = new byte[coll.size()]; 
 		int n = 0;
-		for (byte v : set) arr[n++] = v;
+		for (byte v : coll) arr[n++] = v;
 		return arr;
 	}
 
@@ -243,9 +232,9 @@ public class Util
 	public static String arrayStr(String[] arr)
 	{
 		if (arr == null) return "{null}";
-		String str = "";
-		for (int n = 0; n < arr.length; n++) str += (n > 0 ? "," : "") + "\"" + arr[n] + "\"";
-		return str;
+		StringJoiner sj = new StringJoiner("\",\"", "\"", "\"");
+		for (String s : arr) sj.add(s);
+		return sj.toString();
 	}
 	
 	/**
@@ -254,9 +243,9 @@ public class Util
 	public static String arrayStr(boolean[] arr)
 	{
 		if (arr == null) return "{null}";
-		String str = "{";
-		for (int n = 0; n < arr.length; n++) str += arr[n] ? "1" : "0";
-		return str + "}";
+		StringJoiner sj = new StringJoiner("", "{", "}");
+		for (boolean b : arr) sj.add(b ? "1" : "0");
+		return sj.toString();
 	}
 	
 	/**
@@ -305,13 +294,9 @@ public class Util
 		if (list == null || list.length == 0) return null;
 		if (list.length == 1) return list[0];
 		if (list.length == 2) return list[0] + sep + list[1];
-		StringBuilder buff = new StringBuilder(list[0]);
-		for (int n = 1; n < list.length; n++)
-		{
-			buff.append(sep);
-			buff.append(list[n]);
-		}
-		return buff.toString();
+		StringJoiner sj = new StringJoiner(sep);
+		for (String s : list) sj.add(s);
+		return sj.toString();
 	}
 	
 	/**
@@ -335,22 +320,6 @@ public class Util
 	}
 	
 	/**
-	 * Converts an array to a human-readable string, where each value is represented as an 8-digit padded hex string.
-	 */
-	public static String arrayStrHex(int[] arr)
-	{
-		if (arr == null) return "{null}";
-		String str = "";
-		for (int n = 0; n < arr.length; n++)
-		{
-			long v = arr[n] >= 0 ? arr[n] : ((arr[n] & 0x7FFFFFFF) | (1L << 31));
-			String hex = Long.toString(v, 16);
-			str += (n > 0 ? "," : "") + "0x" + padstr(hex, 8, '0');
-		}
-		return str;
-	}
-	
-	/**
 	 * Returns true if the given string represents a parseable numeric value, either integer or floating point.
 	 */
 	public static boolean isNumeric(String str)
@@ -369,7 +338,7 @@ public class Util
 	public static int safeInt(String str, int def) 
 	{
 		if (str == null) return def;
-		try {return Integer.valueOf(str).intValue();} 
+		try {return Integer.parseInt(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -387,7 +356,7 @@ public class Util
 	public static long safeLong(String str, long def) 
 	{
 		if (str == null) return def;
-		try {return Long.valueOf(str).longValue();} 
+		try {return Long.parseLong(str);}
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -405,7 +374,7 @@ public class Util
 	public static float safeFloat(String str, float def) 
 	{
 		if (str == null) return def;
-		try {return Float.valueOf(str).floatValue();} 
+		try {return Float.parseFloat(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -423,7 +392,7 @@ public class Util
 	public static double safeDouble(String str, double def) 
 	{
 		if (str == null) return def;
-		try {return Double.valueOf(str).doubleValue();} 
+		try {return Double.parseDouble(str);} 
 		catch (NumberFormatException e) {return def;}
 	}
 	
@@ -475,9 +444,10 @@ public class Util
 	 */
 	public static String formatDouble(double val, int maxSigFig)
 	{
-		String str = String.format("%." + maxSigFig + "g", val);
+		String fmt = "%." + maxSigFig + "g";
+		String str = String.format(fmt, val);
 		if (str.indexOf('.') < 0) return str;
-		while (str.endsWith("0")) str = str.substring(0, str.length() - 1);
+		if (str.indexOf('e') < 0) while (str.endsWith("0")) str = str.substring(0, str.length() - 1);
 		if (str.endsWith(".")) str = str.substring(0, str.length() - 1);
 		return str;
 	}
@@ -598,12 +568,12 @@ public class Util
 	public static float norm(float x, float y, float z) {return (float)Math.sqrt(x * x + y * y + z * z);}
 	
 	/**
-	 * Returns the reciprocal of a number, or zero if undefined.
+	 * Returns the reciprocal of a number, or one if undefined.
 	 */
 	public static double divZ(double z) {return z == 0 ? 1 : 1 / z;}
 	
 	/**
-	 * Returns the reciprocal of a number, or zero if undefined.
+	 * Returns the reciprocal of a number, or one if undefined.
 	 */
 	public static float divZ(float z) {return z == 0 ? 1 : 1 / z;}
 	
@@ -724,7 +694,7 @@ public class Util
 	 */
 	public static double angleNormDeg(double th)
 	{
-		if (th == -180) return th = 180;
+		if (th == -180) return 180;
 		if (th < -180)
 		{
 			int mod = Util.iceil((-th - 180) * (1.0 / 360));
@@ -743,7 +713,7 @@ public class Util
 	 */
 	public static float angleNormDeg(float th)
 	{
-		if (th == -180) return th = 180;
+		if (th == -180) return 180;
 		if (th < -180)
 		{
 			int mod = Util.iceil((-th - 180) * (1f / 360));
@@ -790,97 +760,7 @@ public class Util
 		String str = Integer.toHexString(col);
 		return "#" + rep('0', 6 - str.length()) + str;
 	}
-	
-	/**
-	 * Merges two Color instances, to return a new Color with averaged values for red, green & blue.
-	 */
-	public static Color mergeCols(Color col1, Color col2)
-	{
-		int r = col1.getRed() + col2.getRed(), g = col1.getGreen() + col2.getGreen(), b = col1.getBlue() + col2.getBlue();
-		return new Color(r / 2, g / 2, b / 2);
-	}
-	
-	/**
-	 * Converts an integer colour of the form 0xTTRRGGBB into the Color object.
-	 */
-	public static Color intToCol(int trgb)
-	{
-		int t = (trgb >> 24) & 0xFF, r = (trgb >> 16) & 0xFF, g = (trgb >> 8) & 0xFF, b = trgb & 0xFF;
-		return new Color(r, g, b, 0xFF - t);
-	}
-	
-	/**
-	 * Converts a Color object into an integer colour specifier of the form 0xTTRRGGBB.
-	 */
-	public static int colToInt(Color col)
-	{
-		int t = 0xFF - col.getAlpha(), r = col.getRed(), g = col.getGreen(), b = col.getBlue();
-		return (t << 24) | (r << 16) | (g << 8) | b;
-	}
-	
-	/**
-	 * Takes a colour of the form 0xTTRRGGBB and applies the offset for each of the three colour channels, making sure
-	 * each is still in the single byte range.
-	 * @param col original colour in 0xTTRRGGBB format
-	 * @param dr value to add to the red channel
-	 * @param dg value to add to the green channel
-	 * @param db value to add to the blue channel
-	 */
-	public static int tintCol(int col, int dr, int dg, int db)
-	{
-		float r = ((col >> 16) & 0xFF) + dr, g = ((col >> 8) & 0xFF) + dg, b = (col & 0xFF) + db;
-		if (r < 0) {g -= r; b -= r; r = 0;}
-		if (g < 0) {r -= g; b -= g; g = 0;}
-		if (b < 0) {r -= b; g -= b; b = 0;}
-		if (r < 0) r = 0;
-		if (g < 0) g = 0;
-		if (r > 255) {float m = 255.0f / r; r = 255; g *= m; b *= m;}
-		if (g > 255) {float m = 255.0f / g; g = 255; r *= m; b *= m;}
-		if (b > 255) {float m = 255.0f / b; b = 255; r *= m; g *= m;}
-		return (col & 0xFF000000) | (Util.iround(r) << 16) | (Util.iround(r) << 8) | Util.iround(b);
-	}
-	
-	/**
-	 * Converts the given integer into a string by adding spaces to the left.
-	 * @param val number to be formatted
-	 * @param len total length desired for the result
-	 * */
-	public static String intrpad(int val, int len) {return intrpad(val, len, ' ');}
-	
-	/**
-	 * Converts the given integer into a string by adding the necessary number of characters to the left.
-	 * @param val number to be formatted
-	 * @param len total length desired for the result
-	 * @param ch character to be prepended
-	 */
-	public static String intrpad(int val, int len, char ch)
-	{
-		String str = Integer.toString(val);
-		str = rep(ch, len - str.length()) + str;
-		if (str.length() > len) str = str.substring(0, len);
-		return str;
-	}
-	
-	/**
-	 * Pads the string to be right justified, by adding the given number of characters to the left.
-	 * */
-	public static String strrpad(String str, int len, char ch)
-	{
-		str = rep(ch, len - str.length()) + str;
-		if (str.length() > len) str = str.substring(0, len);
-		return str;
-	}
-	
-	/**
-	 * Pads the string by adding a specified numbers of characters to the right.
-	 */
-	public static String padstr(String str, int len, char ch)
-	{
-		if (str.length() == len) return str;
-		if (str.length() > len) return str.substring(0, len);
-		return str + rep(ch, len - str.length());
-	}
-	
+		
 	/**
 	 * Repeats the given character a certain number of times.
 	 * @param ch character to repeat
@@ -907,118 +787,7 @@ public class Util
 		for (int n = 0; n < len; n++) buff.append(str);
 		return buff.toString();
 	}
-	
-	/**
-	 * Splits up a string according to a supplied mask.
-	 * @param str string to be split
-	 * @param mask an array of size equal to length of string, for which true means that the character is to be used to split
-	 * @return an array of separated strings of size at least 1
-	 */
-	public static String[] split(String str, final boolean[] sepmask)
-	{
-		int sz = 1;
-		for (int n = 0; n < str.length(); n++) if (sepmask[n]) sz++;
-		if (sz == 1) return new String[]{str};
-		
-		String[] ret = new String[sz];
-		sz = 0;
-		for (int n = 0, last = 0; n <= str.length(); n++) if (n == str.length() || sepmask[n])
-		{
-			ret[sz++] = str.substring(last, n);
-			last = n + 1;
-		}
-		return ret;
-	}
-	
-	/**
-	 * Splits a string by exactly one possible character.
-	 * @param str string to be split
-	 * @param ch character to split by
-	 */
-	public static String[] split(String str, char sep)
-	{
-		final boolean[] sepmask = new boolean[str.length()];
-		for (int n = 0; n < str.length(); n++) sepmask[n] = str.charAt(n) == sep;
-		return split(str, sepmask);
-	}
-	
-	/** 
-	 * Splits a string based on a list of possible splitting characters (literals, not a regular expression).
-	 * @param str string to be split
-	 * @param seplist list of possible split characters (literal)
-	 */
-	public static String[] split(String str, String seplist)
-	{
-		boolean[] sepmask = new boolean[str.length()];
-		for (int n = 0; n < str.length(); n++) sepmask[n] = seplist.indexOf(str.charAt(n)) >= 0;
-		return split(str, sepmask);
-	}
-	
-	/**
-	 * Splits a string by linebreaks, being tolerant of Unix vs. Windows formats.
-	 */
-	public static String[] splitLines(String str)
-	{
-		return str.split("\\r?\\n");
-	}
-	
-	/**
-	 * Returns the "parent" directory of the given file; if this is already a directory (ends with "/"), rolls it back one further,
-	 * unless it is already down to "/", in which case it returns the input. If there is no directory, returns a null string. 
-	 * No checking is done for validity or file existence
-	 */
-	public static String parentDir(String fn)
-	{
-		if (fn.equals("/")) return fn;
-		if (fn.endsWith("/")) fn = fn.substring(0, fn.length() - 1);
-		int i = fn.lastIndexOf('/');
-		if (i < 0) return "/";
-		return fn.substring(0, i + 1);
-	}
-	
-	/**
-	 * Returns the given file without any directory prefix.
-	 */
-	public static String fileName(String fn)
-	{
-		int i = fn.lastIndexOf('/');
-		if (i >= 0) return fn.substring(i + 1);
-		return fn;
-	}
-	
-	/**
-	 * Returns the suffix of the file, if any; e.g. "foo.bar" will return "bar".
-	 */
-	public static String fileSuffix(String fn)
-	{
-		fn = fileName(fn);
-		int i = fn.lastIndexOf('.');
-		if (i >= 0) return fn.substring(i + 1);
-		return "";
-	}
-	
-	/**
-	 * If the filename has a suffix, returns the same without; e.g. "/wibble/foo.bar" will return "/wibble/foo".
-	 */
-	public static String fileWithoutSuffix(String fn)
-	{
-		int i = fn.lastIndexOf('.'), j = fn.lastIndexOf('/');
-		if (i < 0 || i < j) return fn;
-		return fn.substring(0, i);
-	}
-	
-	/**
-	 * Adds something before the file suffix, e.g. adding "_001" to "foo.bar" will return "foo_001.bar".
-	 * @param fn original filename
-	 * @param psfx presuffix to insert before the file suffix
-	 */
-	public static String insertPreSuffix(String fn, String psfx)
-	{
-		int i = fn.lastIndexOf('.');
-		if (i < 0) i = fn.length();
-		return fn.substring(0, i) + psfx + fn.substring(i);
-	}
-	
+			
 	public static final String UTF8 = "UTF-8";
 	
 	/**
@@ -1051,76 +820,7 @@ public class Util
 	{
 		if (rdr instanceof BufferedReader) return (BufferedReader)rdr;
 		return new BufferedReader(rdr);
-	}
-	
-	/**
-	 * Closes a stream and ignores any exceptions. Useful for within catch blocks.
-	 */
-	public static void silentClose(InputStream istr)
-	{
-		try {if (istr != null) istr.close();} 
-		catch (IOException ex) {}
-	}
-	
-	/**
-	 * Closes a stream and ignores any exceptions. Useful for within catch blocks.
-	 */
-	public static void silentClose(OutputStream ostr)
-	{
-		try {if (ostr != null) ostr.close();} 
-		catch (IOException ex) {}
-	}
-	
-	/**
-	 * Closes a stream and ignores any exceptions. Useful for within catch blocks.
-	 */
-	public static void silentClose(Reader rdr)
-	{
-		try {if (rdr != null) rdr.close();} 
-		catch (IOException ex) {}
-	}
-	
-	/**
-	 * Closes a stream and ignores any exceptions. Useful for within catch blocks.
-	 */
-	public static void silentClose(Writer wtr)
-	{
-		try {if (wtr != null) wtr.close();} 
-		catch (IOException ex) {}
-	}
-	
-	/**
-	 * Convenience method for determining the number of days since the beginning of 1970, GMT.
-	 */
-	public static int daysSince1970()
-	{
-		long time = new Date().getTime(); // in milliseconds
-		final long DIVIDER = 1000 * 60 * 60 * 24;
-		return (int)(time / DIVIDER);
-	}
-	
-	/**
-	 * Returns the number of non-null objects in an array.
-	 */
-	public static int packedLength(Object[] loose)
-	{
-		if (loose == null || loose.length == 0) return 0;
-		int len = 0;
-		for (int n = loose.length - 1; n >= 0; n--) if (loose[n] != null) len++;
-		return len;
-	}
-	
-	/**
-	 * Packs one array into another by removing nulls.
-	 * @param loose the array with the source content, may contain nulls
-	 * @param packed the destination array, which must be long enough to contain all the non-null objects
-	 */
-	public static void packArray(Object[] loose, Object[] packed)
-	{
-		if (loose == null) return;
-		int len = 0;
-		for (int n = 0; n < loose.length; n++) if (loose[n] != null) packed[len++] = loose[n];
-	}
+	}	
 	
 	/**
 	 * Opens a file resource which may be incorporated into the current .jar file, or it may be a file relative to the current
@@ -1144,7 +844,6 @@ public class Util
 		if (istr == null) throw new IOException("Missing resource: " + fn);
 		return istr;
 	}
-	
 	
 	/**
 	 * Increments the value corresponding to a mapped key: if the value does not currently exist or is null, will set it to 1.
