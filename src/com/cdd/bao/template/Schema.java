@@ -440,6 +440,10 @@ public class Schema
 	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
 	private String schemaPrefix = ModelSchema.PFX_BAS;
 	
+	// for normal templates, branch groups is null; if defined, it refers to a list of eligible groupURI values that this template
+	// may be nested underneath; an empty array means root only; any member of the array that is null/blank also refers to the root
+	private String[] branchGroups = null;
+	
 	// ------------ public methods ------------	
 
 	public Schema()
@@ -469,6 +473,7 @@ public class Schema
 	{
 		Schema dup = new Schema();
 		dup.schemaPrefix = schemaPrefix;
+		dup.branchGroups = branchGroups == null ? null : Arrays.copyOf(branchGroups, branchGroups.length);
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
@@ -477,6 +482,10 @@ public class Schema
 	// access to the schema prefix, which serves as the namespace
 	public String getSchemaPrefix() {return schemaPrefix;}
 	public void setSchemaPrefix(String prefix) {schemaPrefix = prefix;}
+	
+	// access to branch groups (null = regular template, empty array = root only)
+	public String[] getBranchGroups() {return branchGroups;}
+	public void setBranchGroups(String[] groups) {branchGroups = groups;}
 	
 	// returns the top level group: all of the assignments and subgroups are considered to be
 	// connected to the primary assay description, and the root's category name is a description of this
@@ -849,7 +858,11 @@ public class Schema
 		{
 			JSONObject json = new JSONObject(new JSONTokener(rdr));
 			Schema schema = new Schema();
+
 			schema.setSchemaPrefix(json.getString("schemaPrefix"));
+			
+			JSONArray branchGroups = json.optJSONArray("branchGroups");
+			if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
 			
 			JSONObject jsonRoot = json.getJSONObject("root");
 			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
@@ -879,6 +892,7 @@ public class Schema
 	{
 		JSONObject json = new JSONObject();
 		json.put("schemaPrefix", schemaPrefix);
+		if (branchGroups != null) json.put("branchGroups", branchGroups);
 		json.put("root", ClipboardSchema.composeGroup(root));
 		wtr.write(json.toString(4));
 		wtr.flush();

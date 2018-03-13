@@ -215,7 +215,7 @@ public class BrowseEndpoint
 		if (branch == null || branch.schema == null) return;
 
 		Stage stage = new Stage();
-		EditSchema edit = new EditSchema(stage);
+		EditSchema edit = new EditSchema(stage, null);
 		edit.loadFile(null, new SchemaUtil.SerialData(SchemaUtil.SerialFormat.JSON, branch.schema));
 		stage.show();
 	}

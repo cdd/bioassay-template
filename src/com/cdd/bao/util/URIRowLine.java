@@ -40,8 +40,8 @@ public class URIRowLine extends RowLine
 
 	private TextField getURITextField()
 	{
-		for (Node n : getChildren())
-			if (n instanceof TextField) return (TextField)n;
+		for (Node node : getChildren())
+			if (node instanceof TextField) return (TextField)node;
 
 		return null;
 	}

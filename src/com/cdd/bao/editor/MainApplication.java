@@ -62,7 +62,7 @@ public class MainApplication extends Application
 	public void start(Stage primaryStage)
 	{
 		// open a main window: either a new schema or an existing one
-		EditSchema edit = new EditSchema(primaryStage);
+		EditSchema edit = null;
 		for (String fn : getParameters().getUnnamed())
 		{
 			File f = new File(fn);
@@ -71,9 +71,10 @@ public class MainApplication extends Application
 				Util.writeln("File not found: " + f.getPath());
 				return;
 			}
-			edit.loadFile(f);
+			edit = new EditSchema(primaryStage, f);
 			break;
 		}
+		if (edit == null) edit = new EditSchema(primaryStage, null);
 		
 		final Stage stage = primaryStage;
 		Platform.runLater(() -> stage.show());
