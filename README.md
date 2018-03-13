@@ -23,7 +23,7 @@ The project is a continuation of the work begun in:
 "Fast and accurate semantic annotation of bioassays exploiting a hybrid of machine learning and user confirmation":
 Alex M. Clark; Barry A. Bunin; Nadia K. Litterman; Stephan C. Schürer; Ubbo Visser, _PeerJ_ 524 (2014) [link](https://peerj.com/articles/524)
 
-A second manuscript, which describes this application, has been submitted to _PeerJ_, and is currently under review.
+A second manuscript, which describes this application, has been published in _PeerJ CompSci_ [link](https://peerj.com/articles/cs-61/)
 
 Installation
 ============
