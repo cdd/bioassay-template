@@ -34,7 +34,7 @@ included in the project.
 
 To get started quickly without compiling, download two files:
 
-  * the pre-built package: [pkg/BioAssayTemplate.jar](https://github.com/cdd/bioassay-template/blob/master/pkg/BioAssayTemplate.jar)
+  * the pre-built package: [pkg/BioAssayTemplate.jar](https://s3.us-east-2.amazonaws.com/cdd-bioassay-template/lib/BioAssayTemplate.jar)
   * the Common Assay Template: [data/template/schema.json](https://github.com/cdd/bioassay-template/blob/master/data/template/schema.json)
   
 Run the application by double clicking on the `BioAssayTemplate.jar` file within the appropriate file manager tool, or run it with the
