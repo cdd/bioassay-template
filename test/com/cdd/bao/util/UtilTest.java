@@ -142,10 +142,8 @@ public class UtilTest
 	{
 		int[] intArr = null;
 		assertEquals("null handling", "{null}", Util.arrayStr(intArr));
-		assertEquals("null handling", "{null}", Util.arrayStrHex(intArr));
 		intArr = new int[]{1, 2, 3, 4};
 		assertEquals("1,2,3,4", Util.arrayStr(intArr));
-		assertEquals("0x00000400,0x00000001,0x00000000,0xffffffff,0xfffffc00", Util.arrayStrHex(new int[]{1024, 1, 0, -1, -1024}));
 
 		long[] longArr = null;
 		assertEquals("null handling", "{null}", Util.arrayStr(longArr));
@@ -504,81 +502,10 @@ public class UtilTest
 	@Test
 	public void testStringHandling()
 	{
-		assertEquals("     1", Util.intrpad(1, 6));
-		assertEquals("xxxxx1", Util.intrpad(1, 6, 'x'));
-		assertEquals("123456", Util.intrpad(123456, 6, 'x'));
-		assertEquals("123456", Util.intrpad(1234567, 6, 'x'));
-
-		assertEquals("xxxxx1", Util.strrpad("1", 6, 'x'));
-		assertEquals("123456", Util.strrpad("123456", 6, 'x'));
-		assertEquals("123456", Util.strrpad("1234567", 6, 'x'));
-
-		assertEquals("1xxxxx", Util.padstr("1", 6, 'x'));
-		assertEquals("123456", Util.padstr("123456", 6, 'x'));
-		assertEquals("123456", Util.padstr("1234567", 6, 'x'));
-
 		assertEquals("", Util.rep("ab", 0));
 		assertEquals("ab", Util.rep("ab", 1));
 		assertEquals("abab", Util.rep("ab", 2));
 		assertEquals("ababab", Util.rep("ab", 3));
-
-		boolean[] mask = new boolean[]{false, true, false, true, false};
-		assertArrayEquals(new String[]{"a", "c", "e"}, Util.split("abcde", mask));
-		mask = new boolean[]{false, false, false, false, false};
-		assertArrayEquals(new String[]{"abcde"}, Util.split("abcde", mask));
-		mask = new boolean[]{true, true, true, true, true};
-		assertArrayEquals(new String[]{"", "", "", "", "", ""}, Util.split("abcde", mask));
-		mask = new boolean[]{true, false, false, false, true};
-		assertArrayEquals(new String[]{"", "bcd", ""}, Util.split("abcde", mask));
-
-		assertArrayEquals(new String[]{"ab", "c", "de"}, Util.split("ab c de", ' '));
-		assertArrayEquals(new String[]{"ab", "", "de"}, Util.split("ab  de", ' '));
-
-		assertArrayEquals(new String[]{"ab", "c-de"}, Util.split("ab c-de", " "));
-		assertArrayEquals(new String[]{"ab", "c", "de"}, Util.split("ab c-de", " -"));
-
-		assertArrayEquals(new String[]{"ab", "cde"}, Util.splitLines("ab\ncde"));
-		assertArrayEquals(new String[]{"ab", "cde"}, Util.splitLines("ab\r\ncde"));
-	}
-
-	@Test
-	public void testFileHandling()
-	{
-		assertEquals("/", Util.parentDir("/"));
-		assertEquals("/abc/def/", Util.parentDir("/abc/def/ghi.txt"));
-		assertEquals("/abc/", Util.parentDir("/abc/def/"));
-		assertEquals("/", Util.parentDir("/abc"));
-		assertEquals("/", Util.parentDir("abc"));
-
-		assertEquals("ghi.txt", Util.fileName("/abc/def/ghi.txt"));
-		assertEquals("ghi.txt", Util.fileName("ghi.txt"));
-
-		assertEquals("txt", Util.fileSuffix("ghi.txt"));
-		assertEquals("", Util.fileSuffix("ghi"));
-
-		assertEquals("/abc/def/ghi", Util.fileWithoutSuffix("/abc/def/ghi.txt"));
-		assertEquals("/abc/def/ghi", Util.fileWithoutSuffix("/abc/def/ghi"));
-		assertEquals("/abc/def.ignore/ghi", Util.fileWithoutSuffix("/abc/def.ignore/ghi"));
-		assertEquals("ghi", Util.fileWithoutSuffix("ghi.txt"));
-
-		assertEquals("/abc/def_001.txt", Util.insertPreSuffix("/abc/def.txt", "_001"));
-		assertEquals("/abc/def_001", Util.insertPreSuffix("/abc/def", "_001"));
-	}
-
-	@Test
-	public void testPacked()
-	{
-		String[] s = new String[]{null, "a", null, "b", "", "c", null};
-		assertEquals(4, Util.packedLength(s));
-		assertEquals(0, Util.packedLength((Object[])null));
-		assertEquals(0, Util.packedLength(new Object[0]));
-
-		String[] packed = new String[]{null, null, null, null};
-		Util.packArray(s, packed);
-		assertEquals("a", packed[0]);
-		assertEquals("b", packed[1]);
-		assertEquals("", packed[2]);
-		assertEquals("c", packed[3]);
 	}
 
 	@Test
