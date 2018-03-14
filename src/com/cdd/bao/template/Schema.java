@@ -625,6 +625,20 @@ public class Schema
 		return null;
 	}
 	
+	// returns the first group that matches the sequence of nesting URIs, or null if none
+	public Group findGroupByNest(String[] groupNest)
+	{
+		if (Util.length(groupNest) == 0) return root;
+
+		Group grp = root;
+		found: for (int n = 0; n < groupNest.length; n++)
+		{
+			for (Group look : grp.subGroups) if (groupNest[n].equals(look.groupURI)) {grp = look; continue found;}
+			return null;
+		}
+		return grp;
+	}
+	
 	// returns all of the assignments that match the given property URI, or empty list if none; if the groupNest parameter is given, it will
 	// make sure that the nested hierarchy of groupURIs match the parameter (otherwise it will be ignored)
 	public Assignment[] findAssignmentByProperty(String propURI) {return findAssignmentByProperty(propURI, null);}
