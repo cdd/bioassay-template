@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2017-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -92,7 +92,7 @@ public class SerialisationTest
 		try (InputStream istr = new FileInputStream(tmpFile))
 		{
 			Schema schema3 = SchemaUtil.deserialise(istr).schema;
-			assertTrue("Schema stream does not match (destination file in JSON).", schemaFromJSON.equals(schema2));
+			assertTrue("Schema stream does not match (destination file in JSON).", schemaFromJSON.equals(schema3));
 		}
 
 		tmpFile.delete();
@@ -115,7 +115,7 @@ public class SerialisationTest
 		try (InputStream istr = new FileInputStream(tmpFile))
 		{
 			Schema schema3 = SchemaUtil.deserialise(istr).schema;
-			assertTrue("Schema stream does not match (destination file in Turtle).", schemaFromJSON.equals(schema2));
+			assertTrue("Schema stream does not match (destination file in Turtle).", schemaFromJSON.equals(schema3));
 		}
 
 		tmpFile.delete();
