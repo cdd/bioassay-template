@@ -244,7 +244,7 @@ public class SchemaVocab
 
 			int lenGroupNest = data.readInt();
 			stored.groupNest = new String[lenGroupNest];
-			for (int k = 0; k < stored.groupNest.length; ++k) stored.groupNest[k] = data.readUTF();
+			for (int i = 0; i < stored.groupNest.length; i++) stored.groupNest[i] = data.readUTF();
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
