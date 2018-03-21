@@ -360,3 +360,39 @@ bao:BAX_0000060
   obo:IAO_0000115 ""
   .
 
+bao:BAX_0000061
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses buffer" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000062
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses solvent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000063
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses reducing agent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000064
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses detergent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000065
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses carrier protein" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000066
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses metal salt" ;
+  obo:IAO_0000115 ""
+  .
+
