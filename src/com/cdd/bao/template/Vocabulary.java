@@ -383,9 +383,9 @@ public class Vocabulary
 		for (StmtIterator iter = model.listStatements(null, batRemapTo, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String srcUri = stmt.getSubject().getURI();
-			String dstUri = stmt.getObject().asResource().getURI();
-			remappings.put(srcUri, dstUri);
+			String srcURI = stmt.getSubject().getURI();
+			String dstURI = stmt.getObject().asResource().getURI();
+			remappings.put(srcURI, dstURI);
 		}
 		RemappingChecker.validateRemappings(remappings); // throws exception if cycle detected in remappings
 
@@ -420,6 +420,8 @@ public class Vocabulary
 			String objURI = remapIfAny(object.getURI());
 			classBreakers.add(subjURI + "::" + objURI);
 		}
+		// !! SEQUENCE BELOW isn't right: terms explicitly eliminated don't need to be remapped; all of the keys in the remap
+		// are logically *also* eliminated from the tree-building process... so probably just add them to the elimination list
 		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
