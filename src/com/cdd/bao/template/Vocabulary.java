@@ -741,14 +741,9 @@ public class Vocabulary
 
 	// if input URI is remapped, then return last URI in remapping sequence; otherwise, simply return the input URI
 	// NOTE: assume that there is no cycle in remappings by the time this method is invoked
-	private String remapIfAny(String lastUri)
+	private String remapIfAny(String uri)
 	{
-		String nextUri = remappings.get(lastUri);
-		while (nextUri != null)
-		{
-			lastUri = nextUri;
-			nextUri = remappings.get(nextUri);
-		}
-		return lastUri;
+		while (remappings.containsKey(uri)) uri = remappings.get(uri);
+		return uri;
 	}
 }

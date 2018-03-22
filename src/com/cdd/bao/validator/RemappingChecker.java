@@ -32,17 +32,14 @@ public class RemappingChecker
 	public static void validateRemappings(Map<String, String> remappings) throws RemappingException
 	{
 		List<String> dependencies = new ArrayList<>();
-		for (String prevUri : remappings.keySet())
+		for (String uri : remappings.keySet())
 		{
 			dependencies.clear();
-			while (true)
+			while (remappings.containsKey(uri))
 			{
-				String nextUri = remappings.get(prevUri);
-				if (nextUri == null) break;
-				if (dependencies.contains(nextUri)) throw new RemappingException(dependencies);
-				dependencies.add(prevUri);
-				prevUri = nextUri;
-	        	}
+				uri = remappings.get(uri);
+				if (!dependencies.add(uri)) throw new RemappingException(dependencies);
+			}
 		}
 	}
 }
