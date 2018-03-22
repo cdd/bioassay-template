@@ -39,7 +39,8 @@ public class RemappingChecker
 			while (remappings.containsKey(uri))
 			{
 				uri = remappings.get(uri);
-				if (!dependencies.add(uri)) throw new IOException(buildMessage(dependencies));
+				if (dependencies.contains(uri)) throw new IOException(buildMessage(dependencies));
+				dependencies.add(uri);
 			}
 		}
 	}
