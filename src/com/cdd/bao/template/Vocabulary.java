@@ -23,6 +23,7 @@ package com.cdd.bao.template;
 
 import com.cdd.bao.*;
 import com.cdd.bao.util.*;
+import com.cdd.bao.validator.*;
 
 import java.io.*;
 import java.net.*;
@@ -58,6 +59,8 @@ public class Vocabulary
 	private Set<String> uriProperties = new HashSet<>(), uriValues = new HashSet<>();
 	private Map<String, String[]> equivalence = new HashMap<>(); // interchangeable URIs: A->[B] means that all terms [B] are noted as being the same
 	private Set<String> prefParent = new HashSet<>(); // preferred parent URIs: when building the tree, and there's a choice between equivalences
+
+	private Map<String, String> remappings = new HashMap<>();
 	
 	private static final String SEP = "::";
 	
@@ -287,7 +290,7 @@ public class Vocabulary
 	
 	// ------------ private methods ------------
 
-	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException
+	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException, RemappingException
 	{
 		Model model = ModelFactory.createDefaultModel();
 
@@ -374,7 +377,18 @@ public class Vocabulary
 			float progress = (float)progressSize / totalSize;
 			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
 		}
-	
+
+		// find remappings, as distinguished from reparenting via preferredParent
+		Property batRemapTo = model.createProperty(ModelSchema.PFX_BAT + "remapTo");
+		for (StmtIterator iter = model.listStatements(null, batRemapTo, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			String srcUri = stmt.getSubject().getURI();
+			String dstUri = stmt.getObject().asResource().getURI();
+			remappings.put(srcUri, dstUri);
+		}
+		RemappingChecker.validateRemappings(remappings); // throws exception if cycle detected in remappings
+
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
 		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
 		Property subPropOf = model.createProperty(ModelSchema.PFX_RDFS + "subPropertyOf");
@@ -401,12 +415,16 @@ public class Vocabulary
 			Statement stmt = iter.next();
 			Resource subject = stmt.getSubject();
 			Resource object = stmt.getObject().asResource();
-			classBreakers.add(subject.getURI() + "::" + object.getURI());
+
+			String subjURI = remapIfAny(subject.getURI());
+			String objURI = remapIfAny(object.getURI());
+			classBreakers.add(subjURI + "::" + objURI);
 		}
 		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			eliminatedTerms.add(stmt.getSubject().getURI());
+			String eliminatedURI = remapIfAny(stmt.getSubject().getURI());
+			eliminatedTerms.add(eliminatedURI);
 		}
 
 		// iterate over the list looking for label definitions
@@ -418,66 +436,69 @@ public class Vocabulary
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();
 
+			String subjURI = remapIfAny(subject.getURI());
+			String objURI = remapIfAny(object.asResource().getURI());
+
 			if (!subject.isURIResource() || !predicate.isURIResource()) continue;
-			if (eliminatedTerms.contains(subject.getURI())) continue;
+			if (eliminatedTerms.contains(subjURI)) continue;
 
 			// separately collect everything that's part of the class/property hierarchy
 			if (predicate.equals(subPropOf) && object.isURIResource())
 			{
-				anyProp.add(object.asResource().getURI());
-				anyProp.add(subject.getURI());
+				anyProp.add(objURI);
+				anyProp.add(subjURI);
 			}
 			else if (predicate.equals(subClassOf) && object.isURIResource())
 			{
-				anyValue.add(object.asResource().getURI());
-				anyValue.add(subject.getURI());
+				anyValue.add(objURI);
+				anyValue.add(subjURI);
 			}
 			else if (predicate.equals(rdfType) && (object.equals(owlDataType) || object.equals(owlObjProp)))
 			{
-				anyProp.add(subject.getURI());
+				anyProp.add(subjURI);
 			}
 			
 			if (!object.isLiteral()) continue;
 
-			String uri = subject.getURI();
 			String label = object.asLiteral().getString();
 
 			if (predicate.equals(propLabel))
 			{
-				uriToLabel.put(uri, label);
+				uriToLabel.put(subjURI, label);
 				String[] list = labelToURI.get(label);
-				labelToURI.put(label, ArrayUtils.add(list, uri));
+				labelToURI.put(label, ArrayUtils.add(list, subjURI));
 			}
 			else if (predicate.equals(propDescr))
 			{
-				uriToDescr.put(uri, label);
+				uriToDescr.put(subjURI, label);
 			}
 			else if (predicate.equals(pubchemSource))
 			{
-				uriToPubChemSource.put(uri, label);
+				uriToPubChemSource.put(subjURI, label);
 			}
 			else if (predicate.equals(pubchemImport))
 			{
-				uriToPubChemImport.put(uri, object.asLiteral().getBoolean());
+				uriToPubChemImport.put(subjURI, object.asLiteral().getBoolean());
 			}
 			else if (predicate.equals(externalURL))
 			{
-				String[] list = uriToExternalURLs.get(uri);
-				uriToExternalURLs.put(uri, ArrayUtils.add(list, label));
+				String[] list = uriToExternalURLs.get(subjURI);
+				uriToExternalURLs.put(subjURI, ArrayUtils.add(list, label));
 			}
 			else if (predicate.equals(altLabel1) || predicate.equals(altLabel2) || predicate.equals(altLabel3) || predicate.equals(altLabel4))
 			{
-				String[] list = uriToAlternateLabels.get(uri);
-				if (!ArrayUtils.contains(list, label)) uriToAlternateLabels.put(uri, ArrayUtils.add(list, label));
+				String[] list = uriToAlternateLabels.get(subjURI);
+				if (!ArrayUtils.contains(list, label)) uriToAlternateLabels.put(subjURI, ArrayUtils.add(list, label));
 			}
 		}
-		
+
 		// pull out the equivalences
 		Property owlEquivalence = model.createProperty(ModelSchema.PFX_OWL + "equivalentClass");
 		for (StmtIterator iter = model.listStatements(null, owlEquivalence, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String uri1 = stmt.getSubject().getURI(), uri2 = stmt.getObject().asResource().getURI();
+			String uri1 = remapIfAny(stmt.getSubject().getURI());
+			String uri2 = remapIfAny(stmt.getObject().asResource().getURI());
 			if (uri1 == null || uri2 == null) continue;
 			addEquivalence(uri1, uri2);
 			addEquivalence(uri2, uri1);
@@ -488,16 +509,18 @@ public class Vocabulary
 		for (StmtIterator iter = model.listStatements(null, rdfType, batPref); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String uri = stmt.getSubject().getURI();
+			String uri = remapIfAny(stmt.getSubject().getURI());
 			prefParent.add(uri);
 		}
-		
+
 		// final labels: these are used to override existing labels - otherwise conflicts can introduce an order dependency
 		Property batLabel = model.createProperty(ModelSchema.PFX_BAT + "finalLabel");
 		for (StmtIterator iter = model.listStatements(null, batLabel, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String uri = stmt.getSubject().getURI(), label = stmt.getObject().asLiteral().getString();
+			String uri = remapIfAny(stmt.getSubject().getURI());
+			String label = stmt.getObject().asLiteral().getString();
+
 			if (eliminatedTerms.contains(uri)) continue;
 			
 			uriToLabel.put(uri, label);
@@ -539,7 +562,7 @@ public class Vocabulary
 			for (StmtIterator it = model.listStatements(null, rdfType, pass == 0 ? owlDataType : owlObjProp); it.hasNext();)
 			{
 				Statement st = it.next();
-				String uri = st.getSubject().getURI();
+				String uri = remapIfAny(st.getSubject().getURI());
 				if (eliminatedTerms.contains(uri)) continue;
 
 				if (properties.uriToBranch.containsKey(uri)) continue;
@@ -571,7 +594,8 @@ public class Vocabulary
 			for (StmtIterator it = model.listStatements(null, verb, (RDFNode)null); it.hasNext();)
 			{
 				Statement st = it.next();
-				String uriChild = st.getSubject().toString(), uriParent = st.getObject().toString();
+				String uriChild = remapIfAny(st.getSubject().toString());
+				String uriParent = remapIfAny(st.getObject().toString());
 				
 				if (uriChild.equals(uriParent)) continue; // yes this really does happen (ontology bug)
 
@@ -713,5 +737,18 @@ public class Vocabulary
 			equivalence.put(uri1, other);
 		}
 		else equivalence.put(uri1, new String[]{uri2});
+	}
+
+	// if input URI is remapped, then return last URI in remapping sequence; otherwise, simply return the input URI
+	// NOTE: assume that there is no cycle in remappings by the time this method is invoked
+	private String remapIfAny(String lastUri)
+	{
+		String nextUri = remappings.get(lastUri);
+		while (nextUri != null)
+		{
+			lastUri = nextUri;
+			nextUri = remappings.get(nextUri);
+		}
+		return lastUri;
 	}
 }
