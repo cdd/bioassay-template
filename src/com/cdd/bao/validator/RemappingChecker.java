@@ -53,7 +53,7 @@ public class RemappingChecker
 		boolean appendCommand = false;
 		for (String t : terms)
 		{
-			if (appendCommand) sb.append(", ");
+			if (appendCommand) sb.append(" => ");
 			sb.append(t);
 			appendCommand = true;
 		}

@@ -420,14 +420,14 @@ public class Vocabulary
 			String objURI = remapIfAny(object.getURI());
 			classBreakers.add(subjURI + "::" + objURI);
 		}
-		// !! SEQUENCE BELOW isn't right: terms explicitly eliminated don't need to be remapped; all of the keys in the remap
-		// are logically *also* eliminated from the tree-building process... so probably just add them to the elimination list
 		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String eliminatedURI = remapIfAny(stmt.getSubject().getURI());
-			eliminatedTerms.add(eliminatedURI);
+			List<String> eliminatedURIs = remapSequenceIfAny(stmt.getSubject().getURI());
+			for (String elimURI : eliminatedURIs) eliminatedTerms.add(elimURI);
 		}
+		// all remapped terms are eliminated by implication
+		for (String elimURI : remappings.keySet()) eliminatedTerms.add(elimURI);
 
 		// iterate over the list looking for label definitions
 		for (StmtIterator iter = model.listStatements(); iter.hasNext();)
@@ -747,5 +747,18 @@ public class Vocabulary
 	{
 		while (remappings.containsKey(uri)) uri = remappings.get(uri);
 		return uri;
+	}
+
+	// return sequence of remapping terms up through the penultimate term in the chain
+	private List<String> remapSequenceIfAny(String uri)
+	{
+		List<String> seq = new ArrayList<>();
+		while (remappings.containsKey(uri))
+		{
+			seq.add(uri);
+			uri = remappings.get(uri);
+		}
+		if (seq.size() <= 0) seq.add(uri); // no remapping chain, just include input URI
+		return seq;
 	}
 }
