@@ -290,7 +290,7 @@ public class Vocabulary
 	
 	// ------------ private methods ------------
 
-	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException, RemappingException
+	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException
 	{
 		Model model = ModelFactory.createDefaultModel();
 

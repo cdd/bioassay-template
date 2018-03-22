@@ -21,6 +21,7 @@
 
 package com.cdd.bao.validator;
 
+import java.io.*;
 import java.util.*;
 
 /*
@@ -29,7 +30,7 @@ import java.util.*;
 
 public class RemappingChecker
 {
-	public static void validateRemappings(Map<String, String> remappings) throws RemappingException
+	public static void validateRemappings(Map<String, String> remappings) throws IOException
 	{
 		List<String> dependencies = new ArrayList<>();
 		for (String uri : remappings.keySet())
@@ -38,8 +39,23 @@ public class RemappingChecker
 			while (remappings.containsKey(uri))
 			{
 				uri = remappings.get(uri);
-				if (!dependencies.add(uri)) throw new RemappingException(dependencies);
+				if (!dependencies.add(uri)) throw new IOException(buildMessage(dependencies));
 			}
 		}
+	}
+
+	private static String buildMessage(List<String> terms)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Cannot load vocabulary because the following remapped terms lead to a cycle: ");
+
+		boolean appendCommand = false;
+		for (String t : terms)
+		{
+			if (appendCommand) sb.append(", ");
+			sb.append(t);
+			appendCommand = true;
+		}
+		return sb.toString();
 	}
 }
