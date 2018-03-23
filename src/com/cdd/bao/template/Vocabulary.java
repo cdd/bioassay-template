@@ -423,11 +423,9 @@ public class Vocabulary
 		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			List<String> eliminatedURIs = remapSequenceIfAny(stmt.getSubject().getURI());
-			for (String elimURI : eliminatedURIs) eliminatedTerms.add(elimURI);
+			eliminatedTerms.add(stmt.getSubject().getURI());
 		}
-		// all remapped terms are eliminated by implication
-		for (String elimURI : remappings.keySet()) eliminatedTerms.add(elimURI);
+		eliminatedTerms.addAll(remappings.keySet()); // all remapped terms are eliminated by implication
 
 		// iterate over the list looking for label definitions
 		for (StmtIterator iter = model.listStatements(); iter.hasNext();)
@@ -747,18 +745,5 @@ public class Vocabulary
 	{
 		while (remappings.containsKey(uri)) uri = remappings.get(uri);
 		return uri;
-	}
-
-	// return sequence of remapping terms up through the penultimate term in the chain
-	private List<String> remapSequenceIfAny(String uri)
-	{
-		List<String> seq = new ArrayList<>();
-		while (remappings.containsKey(uri))
-		{
-			seq.add(uri);
-			uri = remappings.get(uri);
-		}
-		if (seq.size() <= 0) seq.add(uri); // no remapping chain, just include input URI
-		return seq;
 	}
 }
