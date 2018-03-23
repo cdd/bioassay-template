@@ -32,6 +32,9 @@ public class RemappingChecker
 {
 	public static void validateRemappings(Map<String, String> remappings) throws IOException
 	{
+		// prohibit null-terminated chains
+		if (remappings.values().contains(null)) throw new IOException("Null-terminated remappings are not allowed.");
+
 		List<String> dependencies = new ArrayList<>();
 		for (String uri : remappings.keySet())
 		{
