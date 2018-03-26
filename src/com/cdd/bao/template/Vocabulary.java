@@ -383,8 +383,13 @@ public class Vocabulary
 		for (StmtIterator iter = model.listStatements(null, batRemapTo, (RDFNode)null); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
-			String srcURI = stmt.getSubject().getURI();
-			String dstURI = stmt.getObject().asResource().getURI();
+			Resource subject = stmt.getSubject();
+			RDFNode object = stmt.getObject();
+
+			if (!object.isResource()) throw new IOException(ModelSchema.PFX_BAT + "remapTo directive requires a resource as the object.");
+
+			String srcURI = subject.getURI();
+			String dstURI = object.asResource().getURI();
 			remappings.put(srcURI, dstURI);
 		}
 		RemappingChecker.validateRemappings(remappings); // throws exception if cycle detected in remappings
@@ -436,8 +441,10 @@ public class Vocabulary
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();
 
+			if (predicate.equals(batRemapTo) && remappings.containsKey(subject.getURI())) continue;
+
 			String subjURI = remapIfAny(subject.getURI());
-			String objURI = remapIfAny(object.asResource().getURI());
+			String objURI = object.isURIResource() ? remapIfAny(object.asResource().getURI()) : null;
 
 			if (!subject.isURIResource() || !predicate.isURIResource()) continue;
 			if (eliminatedTerms.contains(subjURI)) continue;
