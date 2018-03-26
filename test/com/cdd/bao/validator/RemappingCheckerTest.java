@@ -40,8 +40,8 @@ public class RemappingCheckerTest
 		// a => b (valid)
 		Map<String, String> chain = new HashMap<>();
 		chain.put("a", "b");
-		try { RemappingChecker.validateRemappings(chain); }
-		catch (IOException ioe) { assertTrue("No exception should occur here!", false); }
+		try {RemappingChecker.validateRemappings(chain);}
+		catch (IOException ioe) {assertTrue("No exception should occur here!", false);}
 		assertTrue("Invalid chain leads to cycle.", true);
 	}
 
@@ -52,8 +52,8 @@ public class RemappingCheckerTest
 		Map<String, String> chain = new HashMap<>();
 		chain.put("a", "b");
 		chain.put("b", "c");
-		try { RemappingChecker.validateRemappings(chain); }
-		catch (IOException ioe) { assertTrue("No exception should occur here!", false); }
+		try {RemappingChecker.validateRemappings(chain);}
+		catch (IOException ioe) {assertTrue("No exception should occur here!", false);}
 		assertTrue("Invalid chain leads to cycle.", true);
 	}
 
@@ -67,7 +67,7 @@ public class RemappingCheckerTest
 		chain.put("b", "c");
 		chain.put("d", "e");
 		chain.put("e", "d");
-		try { RemappingChecker.validateRemappings(chain); }
+		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
 			assertTrue("Should detect cycle in input chains and throw IOException.", true);
@@ -82,7 +82,7 @@ public class RemappingCheckerTest
 		// a => a (invalid)
 		Map<String, String> chain = new HashMap<>();
 		chain.put("a", "a");
-		try { RemappingChecker.validateRemappings(chain); }
+		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
 			assertTrue("Should detect cycle in input chain and throw IOException.", true);
@@ -97,7 +97,7 @@ public class RemappingCheckerTest
 		// a => null (invalid)
 		Map<String, String> chain = new HashMap<>();
 		chain.put("a", null);
-		try { RemappingChecker.validateRemappings(chain); }
+		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
 			assertTrue("Null-terminated chain was not detected!", true);
@@ -116,7 +116,7 @@ public class RemappingCheckerTest
 		chain.put("c", "d");
 		chain.put("d", "e");
 		chain.put("e", "c");
-		try { RemappingChecker.validateRemappings(chain); }
+		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
 			assertTrue("Should detect cycle in input chains and throw IOException.", true);

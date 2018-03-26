@@ -72,6 +72,7 @@
 
 	<target name="clean" description="clean up">
 		<delete dir="bin" />
+		<delete dir="build" />
 		<delete dir="pkg" />
 	</target>
 

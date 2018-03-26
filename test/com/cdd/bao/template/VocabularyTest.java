@@ -21,8 +21,6 @@
 
 package com.cdd.bao.template;
 
-import static org.junit.Assert.assertTrue;
-
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
@@ -43,21 +41,27 @@ public class VocabularyTest
 	@Before
 	public void setup()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(System.getProperty("user.dir"));
-		sb.append(File.separator);
-		sb.append("test");
-		sb.append(File.separator);
-		sb.append("testData");
-		testDataDir = new File(sb.toString());
+		testDataDir = new File(System.getProperty("user.dir") + "/build/test/testData");
 	}
 
 	@Test
-	public void testLoadFooBarOntology()
+	public void testLoadTestOntology() throws IOException
 	{
 		Vocabulary vocab = new Vocabulary();
-		try { vocab.load(testDataDir.getCanonicalPath(), null); }
-		catch (IOException ioe) {}
+		vocab.load(testDataDir.getCanonicalPath(), null);
+		
+		Vocabulary.Hierarchy hier = vocab.getValueHierarchy();
+		for (Vocabulary.Branch branch : hier.rootBranches)
+		{
+			assertTrue("root label should contain \"Foo\"", (branch.label != null && branch.label.contains("Foo")));
+			assertTrue("remapping should result in a single child branch", branch.children.size() == 1);
+
+			for (Vocabulary.Branch child : branch.children)
+			{
+				assertTrue("root should have child branch", child.label != null);
+				assertTrue("child label should contain \"Bar\"", (child.label.contains("Bar")));
+			}
+		}
 		assertTrue("Test", true);
 	}
 }

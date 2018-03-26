@@ -6,4 +6,21 @@
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
 
-obo:CHEBI_101086 bat:remapTo obo:CHEBI_102248 .
+bat:foo
+	rdfs:label "Foo parent class" ;
+	rdf:type owl:Class
+	.
+
+bat:bar1
+	rdfs:label "Bar1 child class" ;
+	rdfs:subClassOf bat:foo
+	.
+
+bat:bar2
+	rdfs:label "Bar2 child class" ;
+	rdfs:subClassOf bat:foo
+	.
+
+bat:bar2
+	bat:remapTo bat:bar1
+	.
