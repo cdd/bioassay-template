@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.bioassayontology.org/bao/bao_complete_merged.ow#"
+     xml:base="http://www.bioassayontology.org/bao/bao_complete_merged.ow"
+     xmlns:core="http://purl.obolibrary.org/obo/uberon/core#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:oboInOwl="http://www.geneontology.org/formats/oboInOwl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bat="http://www.bioassayontology.org/bat#"
+     xmlns:obo="http://purl.obolibrary.org/obo/">
+
+    <owl:Class rdf:about="bat;foo_owl">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Foo_owl parent class</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="bat;bar1_owl">
+        <rdfs:subClassOf rdf:resource="bat;foo_owl"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bar1_owl child class</rdfs:label>
+    </owl:Class>
+
+    <owl:Class rdf:about="bat;bar2_owl">
+        <rdfs:subClassOf rdf:resource="bat;foo_owl"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bar2_owl child class</rdfs:label>
+    </owl:Class>
+
+    <owl:ObjectProperty rdf:about="bat;bar2_owl">
+	<bat:remapTo rdf:resource="bat;bar1_owl"/>
+    </owl:ObjectProperty>
+
+</rdf:RDF>
