@@ -61,6 +61,7 @@ public class VocabularyTest
 		if (!foundClassHier) throw new AssertionError("Expected class hierarchy NOT FOUND!");
 	}
 
+	// XXX: this unit test does not yet work
 	@Test
 	public void testEquivalence() throws IOException
 	{
