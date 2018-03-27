@@ -41,8 +41,8 @@ public class RemappingCheckerTest
 		Map<String, String> chain = new HashMap<>();
 		chain.put("a", "b");
 		try {RemappingChecker.validateRemappings(chain);}
-		catch (IOException ioe) {assertTrue("No exception should occur here!", false);}
-		assertTrue("Invalid chain leads to cycle.", true);
+		catch (IOException ioe) {throw new AssertionError("Remappings are not valid!", ioe);}
+		assertTrue("Remappings should be valid.", true);
 	}
 
 	@Test
@@ -53,8 +53,8 @@ public class RemappingCheckerTest
 		chain.put("a", "b");
 		chain.put("b", "c");
 		try {RemappingChecker.validateRemappings(chain);}
-		catch (IOException ioe) {assertTrue("No exception should occur here!", false);}
-		assertTrue("Invalid chain leads to cycle.", true);
+		catch (IOException ioe) {throw new AssertionError("Remappings are not valid!", ioe);}
+		assertTrue("Remappings should be valid.", true);
 	}
 
 	@Test(expected = IOException.class)
@@ -70,10 +70,10 @@ public class RemappingCheckerTest
 		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
-			assertTrue("Should detect cycle in input chains and throw IOException.", true);
+			assertTrue("Should detect cycle in remappings and throw IOException.", true);
 			throw ioe;
 		}
-		assertTrue("Should detect cycle in input chains and throw IOException.", false);
+		throw new AssertionError("Remappings SHOULD NOT be valid!");
 	}
 
 	@Test(expected = IOException.class)
@@ -88,7 +88,7 @@ public class RemappingCheckerTest
 			assertTrue("Should detect cycle in input chain and throw IOException.", true);
 			throw ioe;
 		}
-		assertTrue("Should detect cycle in input chain and throw IOException.", false);
+		throw new AssertionError("Remappings SHOULD NOT be valid!");
 	}
 
 	@Test(expected = IOException.class)
@@ -100,10 +100,10 @@ public class RemappingCheckerTest
 		try {RemappingChecker.validateRemappings(chain);}
 		catch (IOException ioe)
 		{
-			assertTrue("Null-terminated chain was not detected!", true);
+			assertTrue("Should detect null-terminated chain!", true);
 			throw ioe;
 		}
-		assertTrue("Null-terminated chain was not detected!", false);
+		throw new AssertionError("Remappings SHOULD NOT be valid!");
 	}
 
 	@Test(expected = IOException.class)
@@ -122,6 +122,6 @@ public class RemappingCheckerTest
 			assertTrue("Should detect cycle in input chains and throw IOException.", true);
 			throw ioe;
 		}
-		assertTrue("Should detect cycle in input chains and throw IOException.", false);
+		throw new AssertionError("Remappings SHOULD NOT be valid!");
 	}
 }
