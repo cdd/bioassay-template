@@ -158,4 +158,28 @@ public class VocabularyTest
 		}
 		assertTrue("Did not find terms for both pubchemImport and pubchemSource!", foundImport && foundSource);
 	}
+
+	@Test
+	public void testSubPropertyOf() throws IOException
+	{
+		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/subPropertyOf");
+		Vocabulary vocab = new Vocabulary();
+		vocab.load(testEquivDir.getCanonicalPath(), null);
+
+		boolean foundClassHier = false;
+		Vocabulary.Hierarchy hier = vocab.getPropertyHierarchy();
+		assertTrue("Should find exactly one branch hierarchy.", hier.rootBranches.size() == 1);
+
+		for (Vocabulary.Branch branch : hier.rootBranches)
+		{
+			assertTrue("root label should equal \"A1\"", branch.label != null && branch.label.startsWith("A1"));
+			assertTrue("A1 hierarchy should contain single child.", branch.children.size() == 1);
+
+			Vocabulary.Branch child = branch.children.get(0);
+			assertTrue("child label should equal \"B1\"", child.label != null && child.label.startsWith("B1"));
+
+			foundClassHier = true;
+		}
+		if (!foundClassHier) throw new AssertionError("Expected class hierarchy NOT FOUND!");
+	}
 }
