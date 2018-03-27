@@ -117,4 +117,44 @@ public class VocabularyTest
 		String label = vocab.getLabel(allURIs[0]);
 		assertTrue("Expected final label to be \"Apple Bentley Charlie\"", label.equals("Apple Bentley Charlie"));
 	}
+
+	@Test
+	public void testEliminated() throws IOException
+	{
+		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/eliminated");
+		Vocabulary vocab = new Vocabulary();
+		vocab.load(testEquivDir.getCanonicalPath(), null);
+
+		String[] allURIs = vocab.getAllURIs();
+		Util.writeln("allURIs.length=" + allURIs.length);
+		Util.writeln("uri=" + allURIs[0]);
+	}
+
+	@Test
+	public void testPubChemDirectives() throws IOException
+	{
+		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/pubchem");
+		Vocabulary vocab = new Vocabulary();
+		vocab.load(testEquivDir.getCanonicalPath(), null);
+
+		String[] allURIs = vocab.getAllURIs();
+		assertTrue("Should find two URIs, one for pubchemImport and one for pubchemSource.", allURIs.length == 2);
+		
+		boolean foundImport = false, foundSource = false;
+		for (String uri : allURIs)
+		{
+			String label = vocab.getLabel(uri);
+			if (label.contains("Pubchem Import"))
+			{
+				assertTrue("pubchemImport boolean should be true!", vocab.getPubChemImport(uri) == true);
+				foundImport = true;
+			}
+			else if (label.contains("Pubchem Source"))
+			{
+				assertTrue("pubchemSource should be \"JUnit\"!", vocab.getPubChemSource(uri).equals("JUnit"));
+				foundSource = true;
+			}
+		}
+		assertTrue("Did not find terms for both pubchemImport and pubchemSource!", foundImport && foundSource);
+	}
 }
