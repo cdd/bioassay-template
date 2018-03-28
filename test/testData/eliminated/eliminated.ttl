@@ -11,9 +11,9 @@ bat:ToBeEliminated
 	rdf:type owl:Class
 	.
 
-bat:StaleReference
-	rdfs:label "Stale Reference" ;
-	rdfs:subClassOf bat:ToBeEliminated
+bat:NotEliminated
+	rdfs:label "Not Eliminated" ;
+	rdf:type owl:Class
 	.
 
 bat:ToBeEliminated a bat:eliminated .

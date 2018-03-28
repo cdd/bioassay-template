@@ -126,8 +126,10 @@ public class VocabularyTest
 		vocab.load(testEquivDir.getCanonicalPath(), null);
 
 		String[] allURIs = vocab.getAllURIs();
-		Util.writeln("allURIs.length=" + allURIs.length);
-		Util.writeln("uri=" + allURIs[0]);
+		assertTrue("Only one term should exist.", allURIs != null && allURIs.length == 1);
+		
+		String label = vocab.getLabel(allURIs[0]);
+		assertTrue("Did not find the right label for the term.", label.equals("Not Eliminated"));
 	}
 
 	@Test
