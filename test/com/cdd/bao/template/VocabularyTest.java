@@ -141,7 +141,7 @@ public class VocabularyTest
 
 		String[] allURIs = vocab.getAllURIs();
 		assertTrue("Should find two URIs, one for pubchemImport and one for pubchemSource.", allURIs.length == 2);
-		
+
 		boolean foundImport = false, foundSource = false;
 		for (String uri : allURIs)
 		{
@@ -157,7 +157,8 @@ public class VocabularyTest
 				foundSource = true;
 			}
 		}
-		assertTrue("Did not find terms for both pubchemImport and pubchemSource!", foundImport && foundSource);
+		if (!foundImport || !foundSource)
+			throw new AssertionError("Did not find terms for both pubchemImport and pubchemSource!");
 	}
 
 	@Test
