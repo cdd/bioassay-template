@@ -182,4 +182,21 @@ public class VocabularyTest
 		}
 		if (!foundClassHier) throw new AssertionError("Expected class hierarchy NOT FOUND!");
 	}
+
+	@Test
+	public void testAltLabels() throws IOException
+	{
+		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/altLabels");
+		Vocabulary vocab = new Vocabulary();
+		vocab.load(testEquivDir.getCanonicalPath(), null);
+
+		String[] allURIs = vocab.getAllURIs();
+		assertTrue("Should find exactly one URI.", allURIs != null && allURIs.length == 1);
+
+		String[] altLabels = vocab.getAltLabels(allURIs[0]);
+		assertTrue("Should find four alternative labels.", altLabels != null && altLabels.length == 4);
+
+		for (String curLabel : new String[]{"AltLabel #1", "AltLabel #2", "AltLabel #3", "AltLabel #4"})
+			assertTrue("Alternate label \"" + curLabel + "\" NOT FOUND!", ArrayUtils.contains(altLabels, curLabel));
+	}
 }
