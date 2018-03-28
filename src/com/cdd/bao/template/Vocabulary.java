@@ -216,17 +216,26 @@ public class Vocabulary
 			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
 		}
 	}
-	
-	// modified use case which takes an optional directory + optional list of files, which will be combined together (with duplicates
-	// excised); provides a way to conveniently supplement a directory'o'stuff with additional content
-	/*public load(String ontoDir, String[] extraFiles) throws IOException
+
+	// as above, but does not take a directory parameter: only the expicitly indicated files will be loaded; this is intended mainly for testing
+	public void loadExplicit(String[] files) throws IOException
 	{
-		File[] extra = new File[extraFiles == null ? 0 : extraFiles.length];
-		for (int n = 0; n < extra.length; n++) extra[n] = new File(extraFiles[n]);
-		try {loadLabels(new File(ontoDir), extra);}
-		catch (Exception ex) {throw new IOException("Vocabulary loading failed", ex);}
-		finally {loadingComplete = true;}
-	}*/
+		List<File> extra = new ArrayList<>();
+		for (String fn : files) extra.add(new File(fn));
+		try
+		{
+			loadLabels(null, extra.toArray(new File[extra.size()]), new HashSet<>());	
+		}
+		catch (Exception ex) 
+		{
+			throw new IOException("Vocabulary loading failed", ex);
+		}
+		finally 
+		{
+			loadingComplete = true;
+			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, 1);}
+		}
+	}
 	
 	// false if the vocabulary is being loaded (usually in a different thread)
 	public boolean isLoaded() {return loadingComplete;}

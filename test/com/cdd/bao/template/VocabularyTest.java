@@ -26,15 +26,14 @@ import static org.junit.Assume.*;
 
 import java.io.*;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 import org.junit.*;
 
 import com.cdd.bao.template.Vocabulary.*;
 import com.cdd.bao.util.*;
 
 /*
-	Test logic that loads ontologies
+	Test logic that loads ontologies.
 */
 
 public class VocabularyTest
