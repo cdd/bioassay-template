@@ -272,6 +272,9 @@ public class Vocabulary
 	// grab all of the URIs
 	public String[] getAllURIs() {return uriToLabel.keySet().toArray(new String[uriToLabel.size()]);}
 	
+	// grab remappings
+	public Map<String, String> getRemappings() {return Collections.unmodifiableMap(remappings);}
+	
 	// test for existence
 	public int numProperties() {return uriProperties.size();}
 	public int numValues() {return uriValues.size();}
