@@ -31,7 +31,7 @@ import org.junit.*;
 
 public class OntologyReader
 {
-	public static String[] getPathsForTests(String[] fnames) throws IOException
+	public String[] getPathsForTests(String[] fnames) throws IOException
 	{
 		File testDataDir = new File(System.getProperty("user.dir") + "/build/test/testData");
 		

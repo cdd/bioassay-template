@@ -25,6 +25,8 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.*;
 import org.junit.*;
@@ -59,33 +61,6 @@ public class VocabularyTest extends OntologyReader
 		if (!foundClassHier) throw new AssertionError("Expected class hierarchy NOT FOUND!");
 	}
 
-	// XXX: this unit test does not yet work
-	@Test
-	public void testEquivalence() throws IOException
-	{
-		Vocabulary vocab = new Vocabulary();
-		vocab.loadExplicit(getPathsForTests(new String[]{"equivalence.ttl"}));
-
-		boolean foundClassHier = false;
-		Vocabulary.Hierarchy hier = vocab.getValueHierarchy();
-		for (Vocabulary.Branch branch : hier.rootBranches)
-		{
-			Util.writeln("branch.label=" + branch.label + "; branch.children.size=" + branch.children.size());
-			if (branch.label != null && branch.label.equals("A1"))
-			{
-				// assertTrue("equivalence should result in a single parent", branch.children.size() == 2);
-				Vocabulary.Branch c1 = branch.children.get(0);
-				Util.writeln("c1.label=" + c1.label);
-				// Vocabulary.Branch c2 = branch.children.get(1);
-				//assertTrue("B1 and B2 should have same parent",
-				//	(c1.label != null && c1.label.equals("B1") && c2.label != null && c2.label.equals("B2")));
-
-				foundClassHier = true;
-			}
-		}
-		if (!foundClassHier) throw new AssertionError("Expected class hierarchy NOT FOUND!");
-	}
-
 	@Test
 	public void testNotSubClass() throws IOException
 	{
@@ -93,7 +68,6 @@ public class VocabularyTest extends OntologyReader
 		vocab.loadExplicit(getPathsForTests(new String[]{"not-subclass.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
-		Util.writeln("allURIs.length=" + allURIs.length);
 		assertTrue("In total, there should only be 2 toplevel, unrelated classes.", allURIs.length == 2);
 		for (String uri : allURIs)
 			assertTrue("Unrecognized uri \"" + uri + "\"!", StringUtils.endsWith(uri, "A1") || StringUtils.endsWith(uri, "B1"));
