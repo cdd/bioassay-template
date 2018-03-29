@@ -631,7 +631,7 @@ public class Schema
 		if (Util.length(groupNest) == 0) return root;
 
 		Group grp = root;
-		found: for (int n = 0; n < groupNest.length; n++)
+		found: for (int n = groupNest.length - 1; n >= 0; n--)
 		{
 			for (Group look : grp.subGroups) if (groupNest[n].equals(look.groupURI)) {grp = look; continue found;}
 			return null;
