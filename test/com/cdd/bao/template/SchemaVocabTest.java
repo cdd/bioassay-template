@@ -38,14 +38,13 @@ import com.cdd.bao.util.*;
 	Test SchemaVocab.
 */
 
-public class SchemaVocabTest
+public class SchemaVocabTest extends OntologyReader
 {
 	@Test
 	public void testSerialiseWithRemappings() throws IOException
 	{
-		File testRemapDir = new File(System.getProperty("user.dir") + "/build/test/testData/remapTo");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testRemapDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"remap-to.ttl", "remap-to.owl"}));
 
 		SchemaVocab sv = new SchemaVocab(vocab, new Schema[]{});
 		Map<String, SchemaVocab.StoredRemapTo> remappings = sv.getRemappings();

@@ -36,14 +36,13 @@ import com.cdd.bao.util.*;
 	Test logic that loads ontologies.
 */
 
-public class VocabularyTest
+public class VocabularyTest extends OntologyReader
 {
 	@Test
-	public void testRemap() throws IOException
+	public void testRemapTo() throws IOException
 	{
-		File testRemapDir = new File(System.getProperty("user.dir") + "/build/test/testData/remapTo");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testRemapDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"remap-to.ttl", "remap-to.owl"}));
 
 		boolean foundClassHier = false;
 		Vocabulary.Hierarchy hier = vocab.getValueHierarchy();
@@ -64,9 +63,8 @@ public class VocabularyTest
 	@Test
 	public void testEquivalence() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/equivalenceClass");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"equivalence.ttl"}));
 
 		boolean foundClassHier = false;
 		Vocabulary.Hierarchy hier = vocab.getValueHierarchy();
@@ -91,11 +89,11 @@ public class VocabularyTest
 	@Test
 	public void testNotSubClass() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/notSubClass");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"not-subclass.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
+		Util.writeln("allURIs.length=" + allURIs.length);
 		assertTrue("In total, there should only be 2 toplevel, unrelated classes.", allURIs.length == 2);
 		for (String uri : allURIs)
 			assertTrue("Unrecognized uri \"" + uri + "\"!", StringUtils.endsWith(uri, "A1") || StringUtils.endsWith(uri, "B1"));
@@ -107,9 +105,8 @@ public class VocabularyTest
 	@Test
 	public void testFinalLabel() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/finalLabel");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"final-label.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
 		assertTrue("In total, there should only be one toplevel class.", allURIs.length == 1);
@@ -121,9 +118,8 @@ public class VocabularyTest
 	@Test
 	public void testEliminated() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/eliminated");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"eliminated.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
 		assertTrue("Only one term should exist.", allURIs != null && allURIs.length == 1);
@@ -135,9 +131,8 @@ public class VocabularyTest
 	@Test
 	public void testPubChemDirectives() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/pubchem");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"pubchem.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
 		assertTrue("Should find two URIs, one for pubchemImport and one for pubchemSource.", allURIs.length == 2);
@@ -164,9 +159,8 @@ public class VocabularyTest
 	@Test
 	public void testSubPropertyOf() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/subPropertyOf");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"sub-property-of.ttl"}));
 
 		boolean foundClassHier = false;
 		Vocabulary.Hierarchy hier = vocab.getPropertyHierarchy();
@@ -188,9 +182,8 @@ public class VocabularyTest
 	@Test
 	public void testAltLabels() throws IOException
 	{
-		File testEquivDir = new File(System.getProperty("user.dir") + "/build/test/testData/altLabels");
 		Vocabulary vocab = new Vocabulary();
-		vocab.load(testEquivDir.getCanonicalPath(), null);
+		vocab.loadExplicit(getPathsForTests(new String[]{"alt-labels.ttl"}));
 
 		String[] allURIs = vocab.getAllURIs();
 		assertTrue("Should find exactly one URI.", allURIs != null && allURIs.length == 1);
