@@ -360,3 +360,135 @@ bao:BAX_0000060
   obo:IAO_0000115 ""
   .
 
+bao:BAX_0000061
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has organism details" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000062
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has anatomical entity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000063
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has anatomical entity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000064
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has bacteria/virus strain" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000065
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has primary/stem cell" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000066
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "is cell type of" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000067
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has biological sex" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000068
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has organism quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000069
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell culture method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000070
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell line inducer" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000071
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell culture serum" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000072
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has expression modulation method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000073
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell line modification method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000074
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses transfection agent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000075
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses DNA vector" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000076
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses reporter gene" ;
+  obo:IAO_0000115 ""
+  .
+
+
+bao:BAX_0000077
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has molecular quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000078
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has biochemical label" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000079
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000080
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein modification method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000081
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein purity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000082
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has molecular entity potentiator" ;
+  obo:IAO_0000115 ""
+  .
