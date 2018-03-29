@@ -40,7 +40,7 @@ import java.io.*;
 public class SchemaVocab
 {
 	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
-	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	private static final int CURRENT_VERSION = 3; // serialisation version, required to match
 	
 	private String[] prefixes;
 
@@ -326,9 +326,9 @@ public class SchemaVocab
 			
 			sv.treeList.add(stored);
 		}
-		
-		int nRemappings = data.readInt();
-		for (int n = 0; n < nRemappings; ++n)
+
+		int nremappings = data.readInt();
+		for (int n = 0; n < nremappings; ++n)
 		{
 			StoredRemapTo curRemapTo = new StoredRemapTo();
 			curRemapTo.fromURI = data.readUTF();
