@@ -33,18 +33,18 @@ public class OntologyReader
 {
 	public static String[] getPathsForTests(String[] fnames) throws IOException
 	{
-		File testRemapDir = new File(System.getProperty("user.dir") + "/build/test/testData");
+		File testDataDir = new File(System.getProperty("user.dir") + "/build/test/testData");
 		
 		// get list of test ontologies and vet their existence
-		List<String> remapTests = new ArrayList<>();
+		List<String> testOntologies = new ArrayList<>();
 		for (String fn : fnames)
 		{
-			File testOntology = new File(testRemapDir.getCanonicalPath() + "/" + fn);
+			File testOntology = new File(testDataDir.getCanonicalPath() + "/" + fn);
 			if (!testOntology.exists())
 				throw new IOException("Test ontology \"" + testOntology.getCanonicalPath() + "\" does not exist");
-			remapTests.add(testOntology.getCanonicalPath());
+			testOntologies.add(testOntology.getCanonicalPath());
 		}
 
-		return remapTests.toArray(new String[0]);
+		return testOntologies.toArray(new String[0]);
 	}
 }
