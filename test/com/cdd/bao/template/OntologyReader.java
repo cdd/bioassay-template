@@ -23,7 +23,6 @@ package com.cdd.bao.template;
 
 import java.io.*;
 import java.util.*;
-import org.junit.*;
 
 /*
 	Tests that load ontologies defined in TTL or OWL files should inherit this class. 
@@ -33,13 +32,11 @@ public class OntologyReader
 {
 	public String[] getPathsForTests(String[] fnames) throws IOException
 	{
-		File testDataDir = new File(System.getProperty("user.dir") + "/build/test/testData");
-		
 		// get list of test ontologies and vet their existence
 		List<String> testOntologies = new ArrayList<>();
 		for (String fn : fnames)
 		{
-			File testOntology = new File(testDataDir.getCanonicalPath() + "/" + fn);
+			File testOntology = new File(getClass().getClassLoader().getResource("testData/" + fn).getFile());
 			if (!testOntology.exists())
 				throw new IOException("Test ontology \"" + testOntology.getCanonicalPath() + "\" does not exist");
 			testOntologies.add(testOntology.getCanonicalPath());
