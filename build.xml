@@ -63,7 +63,7 @@
 			<fileset dir="bin">
 				<include name="com/cdd/bao/template/**" />
 				<include name="com/cdd/bao/util/Util.class" />
-				<include name="com/cdd/bao/validator/TemplateChecker*.class" />
+				<include name="com/cdd/bao/validator/**" />
 				<include name="org/json/**" />
 			</fileset>
 			<zipgroupfileset dir="lib" includes="*.jar" />
