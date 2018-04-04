@@ -25,7 +25,6 @@ import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 import org.apache.commons.lang3.*;
-import org.slf4j.*;
 
 import java.util.*;
 import java.io.*;
@@ -306,9 +305,9 @@ public class SchemaVocab
 		}
 
 		// log warning whenever any StoredTree contains a null assignment
-		Logger logger = LoggerFactory.getLogger(SchemaVocab.class.getName());
 		for (StoredTree tr : sv.treeList) if (tr.assignment == null)
-			logger.warn("No assignment found for term at " + tr.propURI);
+			Util.writeln("WARNING: unmatched assignment, schema=" + tr.schemaPrefix + 
+						", propURI=" + tr.propURI + ", groupNest=" + Util.arrayStr(tr.groupNest));
 
 		return sv;
 	}
