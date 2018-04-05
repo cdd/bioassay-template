@@ -165,7 +165,7 @@ public class SchemaTree
 			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH) 
 			{
 				includeURI.add(value.uri);
-				updateOneParent(oneParent, hier.uriToBranch.get(value.uri));
+				updateOneParent(oneParent, branch);
 			}
 			else if (value.spec == Specify.EXCLUDE || value.spec == Specify.EXCLUDEBRANCH) 
 			{
