@@ -1,0 +1,19 @@
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+bat:ToBeEliminated
+	rdfs:label "To Be Eliminated" ;
+	rdf:type owl:Class
+	.
+
+bat:NotEliminated
+	rdfs:label "Not Eliminated" ;
+	rdf:type owl:Class
+	.
+
+bat:ToBeEliminated a bat:eliminated .

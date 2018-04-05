@@ -40,7 +40,7 @@ import java.io.*;
 public class SchemaVocab
 {
 	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
-	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	private static final int CURRENT_VERSION = 3; // serialisation version, required to match
 	
 	private String[] prefixes;
 
@@ -65,7 +65,14 @@ public class SchemaVocab
 		public SchemaTree tree;
 	}
 	private List<StoredTree> treeList = new ArrayList<>();
-		
+	
+	public final static class StoredRemapTo
+	{
+		public String fromURI; // original term
+		public String toURI; // new term
+	}
+	private Map<String, StoredRemapTo> remappings = new HashMap<>(); // uri-to-remapping
+
 	private static final String SEP = "::";
 
 	// ------------ public methods ------------
@@ -119,8 +126,16 @@ public class SchemaVocab
 
 			termLookup.put(termURI[n], n);
 		}
-		
 		derivePrefixes();
+
+		// save remappings
+		for (Map.Entry<String, String> rTo : vocab.getRemappings().entrySet())
+		{
+			StoredRemapTo curRemapTo = new StoredRemapTo();
+			curRemapTo.fromURI = rTo.getKey();
+			curRemapTo.toURI = rTo.getValue();
+			remappings.put(curRemapTo.fromURI, curRemapTo);
+		}
 
 		/*Util.writeln("** unique terms: " + allTerms.size());
 		Util.writeln("** prefixes: " + prefixes.length);
@@ -198,6 +213,14 @@ public class SchemaVocab
 				data.writeBoolean(node.isExplicit);
 			}
 		}
+
+		data.writeInt(remappings.size());
+		for (StoredRemapTo rTo : remappings.values())
+		{
+			data.writeUTF(rTo.fromURI);
+			data.writeUTF(rTo.toURI);
+		}
+
 		data.flush();
 	}
 	
@@ -303,6 +326,15 @@ public class SchemaVocab
 			
 			sv.treeList.add(stored);
 		}
+
+		int nremappings = data.readInt();
+		for (int n = 0; n < nremappings; ++n)
+		{
+			StoredRemapTo curRemapTo = new StoredRemapTo();
+			curRemapTo.fromURI = data.readUTF();
+			curRemapTo.toURI = data.readUTF();
+			sv.remappings.put(curRemapTo.fromURI, curRemapTo);
+		}
 		
 		return sv;
 	}
@@ -359,6 +391,9 @@ public class SchemaVocab
 			Util.writeln("    # nodes: " + stored.tree.getFlat().length + ", depths:" + str);
 		}
 	}
+
+	// get remappings
+	public Map<String, StoredRemapTo> getRemappings() {return Collections.unmodifiableMap(remappings);}
 	
 	// information about content: generally just for debugging/stats purposes
 	public int numTerms() {return termList.length;}
