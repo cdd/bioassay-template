@@ -178,7 +178,7 @@ public class SchemaTree
 			}
 		}
 		
-		// as a precaution, remove any container terms from our included set
+		// remove any container terms from our included set
 		includeURI.removeIf(uri -> containerURI.contains(uri));
 
 		// go through the schema definition, and collect the extended collections of things to have or not have
@@ -186,11 +186,12 @@ public class SchemaTree
 		{
 			Branch branch = hier.uriToBranch.get(value.uri);
 			if (branch == null) continue;
-			
-			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH) 
+
+			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH || value.spec == Specify.CONTAINER) 
 			{
 				includeBranch.add(value.uri);
-				if (value.spec == Specify.WHOLEBRANCH) collectBranch(includeBranch, branch, excludeURI);
+				if (value.spec == Specify.WHOLEBRANCH || value.spec == Specify.CONTAINER)
+					collectBranch(includeBranch, branch, excludeURI);
 			}
 			else if (value.spec == Specify.EXCLUDE || value.spec == Specify.EXCLUDEBRANCH) 
 			{
