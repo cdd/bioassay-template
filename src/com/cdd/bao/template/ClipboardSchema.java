@@ -22,7 +22,7 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.*;
-import com.cdd.bao.template.Schema.Specify;
+import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -289,7 +289,7 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
 			val.descr = obj.optString("descr", "");
-			val.spec = Specify.valueOf(obj.optString("spec").toUpperCase());
+			val.spec = Schema.Specify.valueOf(obj.optString("spec", "ITEM").toUpperCase());
 
 			// XXX deprecated format here; to be removed in the future at date TBD
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
