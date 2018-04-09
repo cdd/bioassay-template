@@ -243,7 +243,8 @@ public class Schema
 		ITEM, // the term specified by the URL is explicitly whitelisted
 		EXCLUDE, // explicitly blacklist the term (i.e. exclude it from a branch within which it was previously included)
 		WHOLEBRANCH, // incline the term specified and everything descended from it
-		EXCLUDEBRANCH // exclude a whole branch that had previously been included
+		EXCLUDEBRANCH, // exclude a whole branch that had previously been included
+		CONTAINER // the term thus specified is not explicitly selected
 	}
 
 	// a "value" consists of a URI (in the case of references to a known resource), and descriptive text; an assignment typically has many of these
