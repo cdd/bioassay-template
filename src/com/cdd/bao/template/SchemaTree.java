@@ -154,7 +154,6 @@ public class SchemaTree
 		Set<String> includeBranch = new HashSet<>(); // URIs that have been implicitly requested by virtue of branch
 		Set<String> excludeURI = new HashSet<>(); // URIs that have been explicitly excluded
 		Set<String> excludeBranch = new HashSet<>(); // URIs that have been excluded as part of a branch
-		Set<String> containerURI = new HashSet<>(); // URIs for terms that are not explicitly selected
 		Set<String> everything = new HashSet<>(); // the running tally of "everything" that has been included but not excluded
 
 		// collect the simple excludes/includes first
@@ -174,9 +173,6 @@ public class SchemaTree
 			}
 		}
 		
-		// remove any container terms from our included set
-		includeURI.removeIf(uri -> containerURI.contains(uri));
-
 		// go through the schema definition, and collect the extended collections of things to have or not have
 		for (Value value : assn.values)
 		{
