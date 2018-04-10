@@ -84,18 +84,21 @@ Required properties are:
 * uri
 * name
 * descr
+* spec
 
 The *uri* must be a valid URI, and is almost always found in the underlying ontologies, although this is not required. The *name* and *descr* properties usually match the labels and descriptions for the term, but they are present in the template datastructure so they can be overridden if necessary.
 
-The default meaning of a value is that just that one term should be included for the assignment. However, values  assignment are usually composed by indicating one or several root branches. A value may additionally supply one of the following properties as boolean flags:
+The default meaning of a value is that just that one term should be included for the assignment. However, values  assignment are usually composed by indicating one or several root branches. A value may additionally supply one of the following strings in the *spec* property:
 
+* item
 * wholeBranch
 * exclude
 * excludeBranch
+* container
 
 So, to indicate a whole ontology branch, add `"wholeBranch": true`.
 
-In some cases, it is desirable to include everything in a branch, except for some specific cases. Terms can be excluded by listing them and setting the *exclude* or *excludeBranch* flag.
+In some cases, it is desirable to include everything in a branch, except for some specific cases. Terms can be excluded by listing them and setting the *exclude* or *excludeBranch* flag.  The *item* designation explicitly selects the value, while *container* describes a value in the schema hierarchy that is not selected, but otherwise is the parent (or ancestor) of values that are. 
 
 ## Assays
 

@@ -32,7 +32,7 @@ import org.junit.*;
 	Test for (de)serialisation routines.
 */
 
-public class SerialisationTest
+public class SerialisationTest extends OntologyReader
 {
 	private Schema schemaFromJSON;
 	private Schema schemaFromTTL;
@@ -40,10 +40,11 @@ public class SerialisationTest
 	@Before
 	public void setup() throws IOException
 	{
-		this.schemaFromJSON = SchemaUtil.deserialise(new File("data/template/schema.json")).schema;
+		String[] testSchema = getPathsForTests(new String[]{"schema.json", "schema.ttl"});
+		this.schemaFromJSON = SchemaUtil.deserialise(new File(testSchema[0])).schema;
 		assumeTrue(schemaFromJSON != null);
 
-		this.schemaFromTTL = SchemaUtil.deserialise(new File("data/template/schema.ttl")).schema;
+		this.schemaFromTTL = SchemaUtil.deserialise(new File(testSchema[1])).schema;
 		assumeTrue(schemaFromTTL != null);
 	}
 
