@@ -289,9 +289,12 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
 			val.descr = obj.optString("descr", "");
-			val.spec = Schema.Specify.valueOf(obj.optString("spec", "ITEM").toUpperCase());
+			
+			String strSpec = obj.optString("spec");
+			try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
+			catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
 
-			// XXX deprecated format here; to be removed in the future at date TBD
+			// deprecated format: still reads the old version
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
 			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
 			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;

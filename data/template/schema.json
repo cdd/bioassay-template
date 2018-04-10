@@ -25,25 +25,25 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000008",
                         "name": "bioassay type",
                         "descr": "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -58,55 +58,55 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000015",
                         "name": "bioassay",
                         "descr": "A set of instructions, methodology, operations, required reagents, instruments to carrie out experiments for the purpose of testing the effect of a perturbing agent in a biological model system, measuring one or multiple effect(s) of the agent facilitated by an assay design method translate the perturbation into a detectable signal to arrive at one or multiple endpoint(s) that quantify or qualify the extent of the perturbation.  Bioassay is described by multiple bioassay components: assay format, biology (biological participants in various role and processes), design method, physical detection method / technology, screened entity, and endpoint. Bioassay includes one or multiple measure groups to describe panel, profiling, multiparametric (or multiplexed) assays (assays that measure more than one effect of the perturbagen on the system that is screened).",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000248",
                         "name": "assay kit",
                         "descr": "The title of the kit/biologicals used in the assay.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002933",
                         "name": "experimental specification",
                         "descr": "",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000026",
                         "name": "bioassay specification",
                         "descr": "Description of an experiment carried out for the purpose of screening a perturbing agent in a biological system, measuring the effect of the agents using specified technology, and arriving at endpoints that satisfy particular criteria.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000040",
                         "name": "measure group",
                         "descr": "Measure group is used to group and link multiple (different) sets of experimental results to one bioassay. Measure groups thus facilitate the description of multiparametric (or multiplexed) assays, that measure more than one effect of the perturbagen on the system that is screened. It also facilitate the definition of panel and profiling assays, e.g. assays that test compounds against multiple (protein) targets.\nCompare definition of bioassay.\nMeasure group links to those classes that can vary among different measurements of a panel assay, profiling assay, multiparametric assay, e.g. target, assay design method, physical detection method, endpoint. Measure group is also used to define derived endpoints, for example concentration-response endpoints obtained by curve fitting a set of results from the same compound tested in the same assay at different concentrations.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002185",
                         "name": "measure group specification",
                         "descr": "An abstract concept to group one or more assay readout and allow description of an assay that measures one or more effect of a perturbagen on the biological entity.  This does not define the physical readout method itself, which is captured in assay design, but rather classifies the data being generated by those readouts.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -121,25 +121,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000019",
                         "name": "assay format",
                         "descr": "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -154,31 +154,31 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002202",
                         "name": "assay design method",
                         "descr": "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002429",
                         "name": "assay supporting method",
                         "descr": "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method).",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -193,31 +193,31 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002429",
                         "name": "assay supporting method",
                         "descr": "Assay supporting methods describe the methods to prepare, generate or post-process the assay system or assay screening process.  Such methods include the sample preparation, labeling, data processing, etc., which are required to performing the assay, but do not constitute the actual assay (design method).",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002202",
                         "name": "assay design method",
                         "descr": "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -232,31 +232,31 @@
                         "uri": "http://dto.org/DTO/DTO_000",
                         "name": "BRENDA tissues and cell lines",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://purl.obolibrary.org/obo/CLO_0000001",
                         "name": "cell line cell",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -271,25 +271,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000551",
                         "name": "organism",
                         "descr": "The organism related to the target / meta-target of the bioassay. It includes both bacterium and eukaryote.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -304,31 +304,31 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://purl.obolibrary.org/obo/GO_0008150",
                         "name": "biological process",
                         "descr": "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO).",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://purl.obolibrary.org/obo/GO_0003674",
                         "name": "molecular function",
                         "descr": "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -343,31 +343,31 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0003111",
                         "name": "biological macromolecule",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.drugtargetontology.org/dto/DTO_00200000",
                         "name": "Gene",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.drugtargetontology.org/dto/DTO_00100000",
                         "name": "Protein",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -382,31 +382,31 @@
                         "uri": "http://purl.obolibrary.org/obo/DOID_4",
                         "name": "Disease",
                         "descr": "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.\n",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0003114",
                         "name": "assay biology component",
                         "descr": "",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -421,25 +421,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000074",
                         "name": "mode of action",
                         "descr": "This refers to the effect of the perturbagen on the target of an assay, whether it brings about inhibition, activation, cytotoxicity, etc. ",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -454,25 +454,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000179",
                         "name": "endpoint",
                         "descr": "The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a \"closed\" model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -487,25 +487,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000029",
                         "name": "assay screening campaign stage",
                         "descr": "The assay stage describes the purpose of the assay in an assay campaign.  Assay stage also relates to the order of assays in a screening campaign.  For example the primary assay, which is performed first, identifies hits. The primary hits are then confirmed in a confirmatory assay.  Subsequent secondary assays are run to eliminate compounds that are not of interest or to confirm hits using an alternate design / technology, or to further characterize compounds.\nWhether an assay is run in single concentration or concentration response is defined in the class 'assay measurement throughput quality'.  For example primary assays are typically run in single concentration with single measurements. However, the NCGC runs qHTS primary assays as concentration-response assays.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -520,25 +520,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000512",
                         "name": "assay footprint",
                         "descr": "This describes the physical format such as plate density in which an assay is performed, which is generally a microplate format, but can also be an array format.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -553,25 +553,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000248",
                         "name": "assay kit",
                         "descr": "The title of the kit/biologicals used in the assay.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -586,25 +586,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000035",
                         "name": "physical detection method",
                         "descr": "The physical method (technology) used to measure / readout the effect caused by a perturbagen in the assay environment.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -619,25 +619,25 @@
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000697",
                         "name": "detection instrument",
                         "descr": "The names of equipment used for measurement/readout from an assay, e.g. FLIPR, ViewLux plate reader, PHERAstar, etc.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -652,31 +652,31 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000661",
                         "name": "perturbagen library",
                         "descr": "It is a collection of perturbagens, e.g., compound, siRNA, miRNA, etc, which are sold by different vendors, or generated in academic institutions.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000076",
                         "name": "screened entity",
                         "descr": "",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "container"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -691,7 +691,7 @@
                         "uri": "http://www.bioassayontology.org/taxon#Root",
                         "name": "Faux ProteinID",
                         "descr": "Temporary ontology terms for NCBI Protein GI",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -706,7 +706,7 @@
                         "uri": "http://www.bioassayontology.org/geneid#Root",
                         "name": "Faux GeneID",
                         "descr": "Temporary ontology terms for NCBI Gene ID",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -721,37 +721,37 @@
                         "uri": "http://purl.obolibrary.org/obo/GO_0008150",
                         "name": "biological process",
                         "descr": "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://purl.obolibrary.org/obo/GO_0005575",
                         "name": "cellular component",
                         "descr": "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://purl.obolibrary.org/obo/GO_0003674",
                         "name": "molecular function",
                         "descr": "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
                         "name": "absence",
                         "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "exclude": true
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "exclude": true
+                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -766,7 +766,7 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002934",
                         "name": "PubChem Sources",
                         "descr": "Sources providing data to the NCBI PubChem databases. https://pubchem.ncbi.nlm.nih.gov/source/.",
-                        "wholeBranch": true
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
@@ -804,52 +804,55 @@
                                 "uri": "http://www.bioassayontology.org/bat#Absence",
                                 "name": "absence",
                                 "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                                "wholeBranch": true
+                                "spec": "container"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                                 "name": "not determined",
                                 "descr": "The measurement was not made.",
-                                "exclude": true
+                                "spec": "exclude"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                                 "name": "see Gene ID",
                                 "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                                "exclude": true
+                                "spec": "exclude"
                             }, 
                             {
                                 "uri": "http://purl.obolibrary.org/obo/UO_0000000",
                                 "name": "unit of measurement",
                                 "descr": "It is the definite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.",
-                                "wholeBranch": true
+                                "spec": "wholebranch"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0080023",
                                 "name": "binary unit",
-                                "descr": "A simple binary assessment, such as 'active/ inactive', 'true/ false', etc."
+                                "descr": "A simple binary assessment, such as 'active/ inactive', 'true/ false', etc.",
+                                "spec": "item"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0000101",
                                 "name": "log10 molar",
-                                "descr": "log10 of concentration (in moles)"
+                                "descr": "log10 of concentration (in moles)",
+                                "spec": "item"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0000102",
                                 "name": "negative log10 molar",
-                                "descr": "-log10 of concentration (in moles), often abbreviated as pIC50, pKi, etc."
+                                "descr": "-log10 of concentration (in moles), often abbreviated as pIC50, pKi, etc.",
+                                "spec": "item"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0190001",
                                 "name": "ratio",
                                 "descr": "",
-                                "wholeBranch": true
+                                "spec": "wholebranch"
                             }, 
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0080019",
                                 "name": "rate",
                                 "descr": "",
-                                "wholeBranch": true
+                                "spec": "wholebranch"
                             }
                         ]
                     }, 
@@ -864,7 +867,7 @@
                                 "uri": "http://purl.obolibrary.org/obo/GENEPIO_0001001",
                                 "name": "threshold comparisons",
                                 "descr": "",
-                                "wholeBranch": true
+                                "spec": "wholebranch"
                             }
                         ]
                     }, 

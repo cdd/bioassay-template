@@ -643,7 +643,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			
 			vw.dropSpec = new ComboBox<>();
-			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch");
+			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch", "Container");
 			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1
 					: val.spec == Schema.Specify.EXCLUDE ? 2
 					: val.spec == Schema.Specify.EXCLUDEBRANCH ? 3

@@ -163,7 +163,7 @@ public class SchemaTree
 			Branch branch = hier.uriToBranch.get(value.uri);
 			if (branch == null) continue;
 			
-			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH) 
+			if (value.spec == Specify.ITEM || value.spec == Specify.WHOLEBRANCH || value.spec == Specify.CONTAINER) 
 			{
 				includeURI.add(value.uri);
 				updateOneParent(oneParent, branch);
@@ -171,10 +171,6 @@ public class SchemaTree
 			else if (value.spec == Specify.EXCLUDE || value.spec == Specify.EXCLUDEBRANCH) 
 			{
 				excludeURI.add(value.uri);
-			}
-			else if (value.spec == Specify.CONTAINER)
-			{
-				containerURI.add(value.uri);
 			}
 		}
 		
