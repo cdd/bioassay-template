@@ -224,8 +224,11 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
 				val.descr = vw.fieldDescr.getText();
 				int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
-				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
-						   sel == 3 ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
+				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH
+						 : sel == 2 ? Schema.Specify.EXCLUDE
+						 : sel == 3 ? Schema.Specify.EXCLUDEBRANCH
+						 : sel == 4 ? Schema.Specify.CONTAINER
+						 : Schema.Specify.ITEM;
 				mod.values.add(val);
 			}
 		}
@@ -640,8 +643,12 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			
 			vw.dropSpec = new ComboBox<>();
-			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch");
-			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1 : val.spec == Schema.Specify.EXCLUDE ? 2 : val.spec == Schema.Specify.EXCLUDEBRANCH ? 3 : 0;
+			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch", "Container");
+			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1
+					: val.spec == Schema.Specify.EXCLUDE ? 2
+					: val.spec == Schema.Specify.EXCLUDEBRANCH ? 3
+					: val.spec == Schema.Specify.CONTAINER ? 4
+					: 0; // Schema.Specify.ITEM
 			vw.dropSpec.getSelectionModel().select(sel);
 			observeFocus(vw.dropSpec, n);
 			Tooltip.install(vw.dropSpec, new Tooltip("How to interpret the selected term: include or exclude, singleton or branch."));

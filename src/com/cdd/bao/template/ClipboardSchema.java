@@ -22,6 +22,7 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.*;
+import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -178,9 +179,7 @@ public class ClipboardSchema
 			obj.put("uri", val.uri);
 			obj.put("name", val.name);
 			obj.put("descr", val.descr);
-			if (val.spec == Schema.Specify.EXCLUDE) obj.put("exclude", true);
-			else if (val.spec == Schema.Specify.WHOLEBRANCH) obj.put("wholeBranch", true);
-			else if (val.spec == Schema.Specify.EXCLUDEBRANCH) obj.put("excludeBranch", true);
+			obj.put("spec", val.spec.toString().toLowerCase());
 			jvalues.put(obj);
 		}
 		json.put("values", jvalues);
@@ -290,9 +289,16 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
 			val.descr = obj.optString("descr", "");
+			
+			String strSpec = obj.optString("spec");
+			try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
+			catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
+
+			// deprecated format: still reads the old version
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
 			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
 			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
+
 			assn.values.add(val);
 		}
 		
