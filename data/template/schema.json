@@ -394,7 +394,7 @@
                         "uri": "http://www.bioassayontology.org/bao#BAO_0003114",
                         "name": "assay biology component",
                         "descr": "",
-                        "spec": "container"
+                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bat#Absence",
