@@ -492,3 +492,51 @@ bao:BAX_0000082
   rdfs:label "has molecular entity potentiator" ;
   obo:IAO_0000115 ""
   .
+
+bao:BAX_0000083
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "project name" ;
+  obo:IAO_0000115 "Also called 'screening campaign name'. Each screening campaign, or project, incudes a sequence of (assay) experiments performed to identify a compound (or a series of compounds) with a specific function--usually around a specific phenotypic or molecular target (e.g., pathway, cell or protein).  It includes primary (screening at single concentration), secondary, and confirmatory (dose response) screens, counterscreens, structure activity relationship (SAR) studies, lead optimization, etc."
+  .
+
+bao:BAX_0000084
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay measurement type" ;
+  obo:IAO_0000115 "Endpoint or kinetic?"
+  .
+
+bao:BAX_0000085
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay comment" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000086
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "annotated by (e-mail)" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000087
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay protocol version" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000088
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "source document" ;
+  obo:IAO_0000115 "Link to a document that describes the protocol with prose and diagrams."
+  .
+
+bao:BAX_0000089
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "endpoint normalization method";
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000090
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "filename" ;
+  obo:IAO_0000115 "source file for raw data"
+  .
