@@ -138,7 +138,32 @@ public class SchemaTree
 		}
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
-	
+
+	// tack on value node to this schema tree, leaving the underlying assignment untouched
+	public void addNode(String parentURI, String label, String descr, String uri)
+	{
+		Node parent = tree.get(parentURI);
+
+		// assume flat list has already been calculated
+		Node node = new Node();
+		node.parent = parent;
+		node.depth = parent.depth + 1;
+		node.parentIndex = flat.indexOf(parent);
+		node.uri = uri;
+		node.label = label;
+		node.descr = descr;
+		node.inSchema = false;
+		node.isExplicit = false;
+		tree.put(node.uri, node);
+
+		parent.children.add(node);
+		++parent.childCount;
+
+		// resort after adding node to list
+		list.add(node);
+		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+	}
+
 	// ------------ private methods ------------
 
 	// do the hard work of constructing the tree, and pruning as necessary for presentation purposes
@@ -345,6 +370,4 @@ public class SchemaTree
 		}
 	}
 }
-
-
 
