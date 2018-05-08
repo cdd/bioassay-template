@@ -139,36 +139,59 @@ public class SchemaTree
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
 
+	// parentURIs and candidates are parallel arrays, with each parent URI indicating
+	// the parent term for the corresponding candidate node in candidates; nodes in
+	// candidates should only set the label, description, and uri fields; candidates
+	// should be ordered such that parent nodes are listed before any associated children nodes
+	public void addNodes(List<String> parentURIs, List<Node> candidates)
+	{
+		for (int k = 0; k < parentURIs.size(); k++)
+		{
+			Node parent = tree.get(parentURIs.get(k)), node = candidates.get(k);
+			if (parent != null)
+			{
+				node.parent = parent;
+				node.depth = parent.depth + 1;
+				parent.children.add(node);
+				parent.childCount++;
+			}
+
+			node.inSchema = false;
+			node.isExplicit = false;
+			tree.put(node.uri, node);
+
+			// resort list below after all candidates nodes added
+			list.add(node);
+		}
+
+		// reflatten, recording the proper index of the parent afterwards 
+		flattenTree();
+		for (int k = 0; k < parentURIs.size(); k++)
+		{
+			Node parent = tree.get(parentURIs.get(k)), node = candidates.get(k);
+			if (parent != null) node.parentIndex = flat.indexOf(parent);
+		}
+
+		// resort after adding node to list
+		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+	}
+
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
 	// return newly created null upon success, or null otherwise
 	public Node addNode(String parentURI, String label, String descr, String uri)
 	{
-		Node parent = tree.get(parentURI);
-
-		// assume flat list has already been calculated
 		Node node = new Node();
-		if (parent != null)
-		{
-			node.parent = parent;
-			node.depth = parent.depth + 1;
-			parent.children.add(node);
-			parent.childCount++;
-		}
-
-		node.uri = uri;
 		node.label = label;
 		node.descr = descr;
-		node.inSchema = false;
-		node.isExplicit = false;
-		tree.put(node.uri, node);
+		node.uri = uri;
 
-		// reflatten, recording the proper index of the parent afterwards 
-		flattenTree();
-		if (parent != null) node.parentIndex = flat.indexOf(parent);
+		List<String> parentURIs = new ArrayList<>();
+		parentURIs.add(parentURI);
 
-		// resort after adding node to list
-		list.add(node);
-		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+		List<Node> candidates = new ArrayList<>();
+		candidates.add(node);
+		
+		addNodes(parentURIs, candidates);
 
 		return node;
 	}
