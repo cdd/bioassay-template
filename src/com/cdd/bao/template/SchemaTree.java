@@ -146,18 +146,22 @@ public class SchemaTree
 
 		// assume flat list has already been calculated
 		Node node = new Node();
-		node.parent = parent;
-		node.depth = parent.depth + 1;
-		node.parentIndex = flat.indexOf(parent);
+		if (parent != null)
+		{
+			node.parent = parent;
+			node.depth = parent.depth + 1;
+			node.parentIndex = flat.indexOf(parent);
+
+			parent.children.add(node);
+			++parent.childCount;
+		}
+
 		node.uri = uri;
 		node.label = label;
 		node.descr = descr;
 		node.inSchema = false;
 		node.isExplicit = false;
 		tree.put(node.uri, node);
-
-		parent.children.add(node);
-		++parent.childCount;
 
 		// resort after adding node to list
 		list.add(node);

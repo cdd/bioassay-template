@@ -30,7 +30,6 @@ import java.util.*;
 import org.apache.commons.lang3.*;
 import org.junit.*;
 
-import com.cdd.bao.template.*;
 import com.cdd.bao.template.Vocabulary.*;
 import com.cdd.bao.util.*;
 
