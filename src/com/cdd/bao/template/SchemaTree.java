@@ -150,10 +150,8 @@ public class SchemaTree
 		{
 			node.parent = parent;
 			node.depth = parent.depth + 1;
-			node.parentIndex = flat.indexOf(parent);
-
 			parent.children.add(node);
-			++parent.childCount;
+			parent.childCount++;
 		}
 
 		node.uri = uri;
@@ -162,6 +160,10 @@ public class SchemaTree
 		node.inSchema = false;
 		node.isExplicit = false;
 		tree.put(node.uri, node);
+
+		// reflatten, recording the proper index of the parent afterwards 
+		flattenTree();
+		if (parent != null) node.parentIndex = flat.indexOf(parent);
 
 		// resort after adding node to list
 		list.add(node);
@@ -328,9 +330,7 @@ public class SchemaTree
 		}
 		
 		// perform the flattening: express the tree as a sequence of ordered branches
-		List<Node> roots = new ArrayList<>();
-		for (Node node : tree.values()) if (node.parent == null) roots.add(node);
-		flattenBranch(roots, 0, -1);
+		flattenTree();
 		
 		// prepare the list version, which the same as flattened, except only in-schema items, and in alphabetical order
 		for (Node node : flat) if (node.inSchema) list.add(node);
@@ -360,7 +360,14 @@ public class SchemaTree
 			stack.addAll(br.children);
 		}
 	}
-	
+
+	private void flattenTree()
+	{
+		List<Node> roots = new ArrayList<>();
+		for (Node node : tree.values()) if (node.parent == null) roots.add(node);
+		flattenBranch(roots, 0, -1);
+	}
+
 	// given that the branch nodes have been added into a hashmap, and their parent/child pointers updated, create a linearised version, where each 
 	private void flattenBranch(List<Node> branch, int depth, int parentIndex)
 	{

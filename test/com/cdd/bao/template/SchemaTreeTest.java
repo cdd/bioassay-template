@@ -26,6 +26,7 @@ import static org.junit.Assume.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.*;
 import org.junit.*;
@@ -79,26 +80,12 @@ public class SchemaTreeTest extends OntologyReader
 		verifyNode(provNode, provTerm);
 
 		// verify node in flat array
-		for (SchemaTree.Node node : schemaTree.getFlat())
-		{
-			if (StringUtils.equals(node.uri, provTerm.uri))
-			{
-				verifyNode(node, provTerm);
-				break;
-			}
-		}
+		verifyNodeInCollection(provTerm, schemaTree.getFlat());
 
 		// verify node in list array
-		for (SchemaTree.Node node : schemaTree.getList())
-		{
-			if (StringUtils.equals(node.uri, provTerm.uri))
-			{
-				verifyNode(node, provTerm);
-				break;
-			}
-		}
+		verifyNodeInCollection(provTerm, schemaTree.getList());
 	}
-	
+
 	@Test
 	public void testAddNodeWithMissingParent()
 	{
@@ -114,10 +101,22 @@ public class SchemaTreeTest extends OntologyReader
 		assertTrue(provNode.parent == null);
 	}
 	
-	private static void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)
+	private void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)
 	{
 		assertTrue(provNode != null);
 		assertTrue(StringUtils.equals(provNode.label, provTerm.label));
 		assertTrue(StringUtils.equals(provNode.uri, provTerm.uri));
+	}
+
+	private void verifyNodeInCollection(ProvTerm provTerm, SchemaTree.Node[] arrNodes)
+	{
+		List<SchemaTree.Node> collNodes = Arrays.asList(arrNodes);
+
+		List<SchemaTree.Node> found = collNodes.stream()
+			.filter(node -> StringUtils.equals(node.uri, provTerm.uri))
+			.collect(Collectors.toList());
+		assertEquals("Term should be found only once in the collection.", 1, found.size());
+
+		verifyNode(found.get(0), provTerm);
 	}
 }
