@@ -140,7 +140,8 @@ public class SchemaTree
 	}
 
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
-	public void addNode(String parentURI, String label, String descr, String uri)
+	// return newly created null upon success, or null otherwise
+	public Node addNode(String parentURI, String label, String descr, String uri)
 	{
 		Node parent = tree.get(parentURI);
 
@@ -168,6 +169,8 @@ public class SchemaTree
 		// resort after adding node to list
 		list.add(node);
 		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+
+		return node;
 	}
 
 	// ------------ private methods ------------

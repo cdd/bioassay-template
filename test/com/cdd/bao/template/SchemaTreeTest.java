@@ -71,8 +71,10 @@ public class SchemaTreeTest extends OntologyReader
 		Schema.Group group = schema.getRoot();
 		Assignment assn = group.assignments.get(1); // bioassay type
 
+		// verify new node creation for provisional term
 		SchemaTree schemaTree = new SchemaTree(assn, vocab);
-		schemaTree.addNode(provTerm.parentURI, provTerm.label, provTerm.descr, provTerm.uri);
+		SchemaTree.Node newNode = schemaTree.addNode(provTerm.parentURI, provTerm.label, provTerm.descr, provTerm.uri);
+		assertTrue(newNode != null);
 
 		// verify tree
 		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
