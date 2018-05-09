@@ -96,7 +96,13 @@ public class SchemaVocabTest extends OntologyReader
 		storedTerm.label = "provisional_test";
 		storedTerm.descr = "Test logic that tacks on provisional term to existing schema tree.";
 
+		SchemaVocab.StoredRemapTo srt = new SchemaVocab.StoredRemapTo();
+		srt.fromURI = storedTerm.uri;
+		srt.toURI = "http://www.bioassayontology.org/bat#provisional_test_remapped";
+		
 		Map<String, SchemaVocab.StoredRemapTo> provRemappings = new HashMap<>();
+		provRemappings.put(srt.fromURI, srt);
+
 		List<SchemaVocab.StoredTerm> termList = new ArrayList<>();
 		termList.add(storedTerm);
 
@@ -109,5 +115,9 @@ public class SchemaVocabTest extends OntologyReader
 		assertTrue(otherTerm.uri.equals(storedTerm.uri));
 		assertTrue(sv.getLabel(otherTerm.uri).equals(storedTerm.label));
 		assertTrue(sv.getDescr(otherTerm.uri).equals(storedTerm.descr));
+		
+		Map<String, SchemaVocab.StoredRemapTo> remappings = sv.getRemappings();
+		SchemaVocab.StoredRemapTo srt2 = remappings.get(storedTerm.uri);
+		assertTrue(srt2.toURI.equals(srt.toURI));
 	}
 }
