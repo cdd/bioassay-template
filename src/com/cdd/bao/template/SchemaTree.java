@@ -21,11 +21,14 @@
 
 package com.cdd.bao.template;
 
+import com.cdd.bao.template.SchemaTree.Node;
 import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 
 import java.util.*;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 /*
 	SchemaTree: for a given schema assignment, puts together a tree structure that can be used to present the hierarchy nicely to users.
@@ -61,6 +64,7 @@ public class SchemaTree
 			this.descr = descr;
 		}
 	}
+	
 	private Map<String, Node> tree = new HashMap<>(); // uri-to-node
 	private List<Node> flat = new ArrayList<>(); // ordered by tree structure, i.e. root at the beginning, depth & parentIndex are meaningful
 	private List<Node> list = new ArrayList<>(); // just nodes in the schema, sorted alphabetically (i.e. no tree structure)
@@ -139,15 +143,37 @@ public class SchemaTree
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
 
-	// parentURIs and candidates are parallel arrays, with each parent URI indicating
-	// the parent term for the corresponding candidate node in candidates; nodes in
-	// candidates should only set the label, description, and uri fields; candidates
-	// should be ordered such that parent nodes are listed before any associated children nodes
-	public void addNodes(List<String> parentURIs, List<Node> candidates)
+	// candidates is a list of (parentURI, Node) pairs, where each node is candidate
+	// for this SchemaTree, and should preset label, description, and uri fields
+	// return true if SchemaTree was changed, false otherwise
+	public boolean addNodes(List<Pair<String, Node>> candidates)
 	{
-		for (int k = 0; k < parentURIs.size(); k++)
+		boolean addedNode = false;
+		
+scanParentables:
+		while (!candidates.isEmpty())
 		{
-			Node parent = tree.get(parentURIs.get(k)), node = candidates.get(k);
+			Pair<String, Node> pair = candidates.remove(0);
+			String parentURI = pair.getLeft();
+			Node node = pair.getRight();
+			
+			// scan remaining parentables, checking if node.parentURI is found
+			// if found, put node at end of parentables, and continue;
+			// otherwise, scan this.tree for parent
+
+			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
+			{
+				Pair<String, Node> otherPair = it.next();
+				String otherCandidateURI = otherPair.getRight().uri;
+				if (parentURI.equals(otherCandidateURI))
+				{
+					candidates.add(pair);
+					continue scanParentables;
+				}
+			}
+
+			// get parent from tree, set other properties of node, and add node to tree and list
+			Node parent = tree.get(parentURI);
 			if (parent != null)
 			{
 				node.parent = parent;
@@ -162,38 +188,35 @@ public class SchemaTree
 
 			// resort list below after all candidates nodes added
 			list.add(node);
+			
+			addedNode = true;
 		}
-
-		// reflatten, recording the proper index of the parent afterwards 
-		flattenTree();
-		for (int k = 0; k < parentURIs.size(); k++)
+		if (addedNode)
 		{
-			Node parent = tree.get(parentURIs.get(k)), node = candidates.get(k);
-			if (parent != null) node.parentIndex = flat.indexOf(parent);
+			// reflatten, recording the proper index of the parent afterwards 
+			flattenTree();
+	
+			// resort after adding node to list
+			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
 		}
-
-		// resort after adding node to list
-		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+		return addedNode;
 	}
 
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
-	// return newly created null upon success, or null otherwise
+	// return newly created node upon success, or null otherwise
 	public Node addNode(String parentURI, String label, String descr, String uri)
 	{
 		Node node = new Node();
 		node.label = label;
 		node.descr = descr;
 		node.uri = uri;
-
-		List<String> parentURIs = new ArrayList<>();
-		parentURIs.add(parentURI);
-
-		List<Node> candidates = new ArrayList<>();
-		candidates.add(node);
 		
-		addNodes(parentURIs, candidates);
+		Pair<String, Node> pair = Pair.of(parentURI, node);
+		List<Pair<String, Node>> candidates = new ArrayList<>();
+		candidates.add(pair);
 
-		return node;
+		boolean wasChanged = addNodes(candidates);
+		return wasChanged ? node : null;
 	}
 
 	// ------------ private methods ------------
@@ -407,4 +430,3 @@ public class SchemaTree
 		}
 	}
 }
-
