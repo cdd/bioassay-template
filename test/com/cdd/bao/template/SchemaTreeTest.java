@@ -26,7 +26,7 @@ import static org.junit.Assume.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 import org.apache.commons.lang3.*;
 import org.junit.*;

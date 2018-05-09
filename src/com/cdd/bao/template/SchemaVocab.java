@@ -404,7 +404,7 @@ public class SchemaVocab
 	// update internal data structures to reflect addition of named terms and any related remappings
 	public void addTerms(List<StoredTerm> newTerms, Map<String, StoredRemapTo> newTermRemappings)
 	{
-		StoredTerm[] newTermList = (StoredTerm[]) ArrayUtils.addAll(termList, newTerms);
+		StoredTerm[] newTermList = (StoredTerm[]) ArrayUtils.addAll(termList, newTerms.toArray(new StoredTerm[0]));
 		for (int k = termList.length; k < newTermList.length; k++)
 		{
 			termLookup.put(newTermList[k].uri, new Integer(k));
@@ -412,6 +412,7 @@ public class SchemaVocab
 			StoredRemapTo srt = newTermRemappings.get(newTermList[k].uri);
 			if (srt != null) remappings.put(newTermList[k].uri, srt);
 		}
+		termList = newTermList;
 	}
 	
 	// ------------ private methods ------------

@@ -80,4 +80,34 @@ public class SchemaVocabTest extends OntologyReader
 
 		tmpFile.delete();
 	}
+
+	@Test
+	public void testAddTerms() throws IOException
+	{
+		Vocabulary vocab = new Vocabulary();
+		vocab.loadExplicit(getPathsForTests(new String[]{"bao_complete_merged.owl"}));
+
+		String[] paths = getPathsForTests(new String[]{"schema.json"});
+		Schema schema = SchemaUtil.deserialise(new File(paths[0])).schema;
+		assumeTrue(schema != null);
+
+		SchemaVocab.StoredTerm storedTerm = new SchemaVocab.StoredTerm();
+		storedTerm.uri = "http://www.bioassayontology.org/bat#provisional_test";
+		storedTerm.label = "provisional_test";
+		storedTerm.descr = "Test logic that tacks on provisional term to existing schema tree.";
+
+		Map<String, SchemaVocab.StoredRemapTo> provRemappings = new HashMap<>();
+		List<SchemaVocab.StoredTerm> termList = new ArrayList<>();
+		termList.add(storedTerm);
+
+		SchemaVocab sv = new SchemaVocab(vocab, new Schema[]{schema});
+		int nterms = sv.getTerms().length;
+		sv.addTerms(termList, provRemappings);
+		assertTrue(sv.getTerms().length == (nterms + 1));
+
+		SchemaVocab.StoredTerm otherTerm = sv.getTerm(storedTerm.uri);
+		assertTrue(otherTerm.uri.equals(storedTerm.uri));
+		assertTrue(sv.getLabel(otherTerm.uri).equals(storedTerm.label));
+		assertTrue(sv.getDescr(otherTerm.uri).equals(storedTerm.descr));
+	}
 }
