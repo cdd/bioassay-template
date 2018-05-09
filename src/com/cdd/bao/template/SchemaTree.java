@@ -158,8 +158,7 @@ public class SchemaTree
 		int maxLoops = candidates.size() * candidates.size(); // limit while-loop iterations to O(N^2)
 		boolean addedNode = false;
 
-scanParentables:
-		while (!candidates.isEmpty() && --maxLoops >= 0)
+		scanParentables: while (!candidates.isEmpty() && --maxLoops >= 0)
 		{
 			Pair<String, Node> pair = candidates.remove(0);
 			String parentURI = pair.getLeft();
