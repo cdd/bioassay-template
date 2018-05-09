@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.tuple.*;
 import org.junit.*;
 
 import com.cdd.bao.template.*;
@@ -101,6 +102,38 @@ public class SchemaTreeTest extends OntologyReader
 		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
 		SchemaTree.Node provNode = tree.get(provTerm.uri);
 		assertTrue(provNode.parent == null);
+	}
+	
+	@Test
+	public void testAddNodesWithCycle()
+	{
+		Schema.Group group = schema.getRoot();
+		Assignment assn = group.assignments.get(1); // bioassay type
+		SchemaTree schemaTree = new SchemaTree(assn, vocab);
+
+		// list of provisional terms will contain a cycle
+		ProvTerm provTerm2 = new ProvTerm();
+		provTerm2.parentURI = "http://www.bioassayontology.org/bat#provisional_test";
+		provTerm2.label = "provisional_test2";
+		provTerm2.descr = "Test logic for cycle in list of provisional terms.";
+		provTerm2.uri = "http://www.bioassayontology.org/bat#provisional_test2";
+		
+		// this create a loop
+		provTerm.parentURI = "http://www.bioassayontology.org/bat#provisional_test2";
+
+		List<Pair<String, SchemaTree.Node>> candidates = new ArrayList<>();
+		List<SchemaTree.Node> nodes = new ArrayList<>();
+		for (ProvTerm pt : new ProvTerm[]{provTerm, provTerm2})
+		{
+			SchemaTree.Node stNode = new SchemaTree.Node();
+			stNode.uri = pt.uri;
+			stNode.label = pt.label;
+			stNode.descr = pt.descr;
+			candidates.add(Pair.of(pt.parentURI, stNode));
+		}
+		
+		boolean wasChanged = schemaTree.addNodes(candidates);
+		assertTrue(wasChanged == false);
 	}
 	
 	private void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)

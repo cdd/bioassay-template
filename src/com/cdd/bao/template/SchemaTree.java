@@ -63,8 +63,15 @@ public class SchemaTree
 			label = source.label;
 			this.descr = descr;
 		}
+
+		public String toString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.append("uri=" + uri).append("; label=" + label).append("; descr=" + descr);
+			return sb.toString();
+		}
 	}
-	
+
 	private Map<String, Node> tree = new HashMap<>(); // uri-to-node
 	private List<Node> flat = new ArrayList<>(); // ordered by tree structure, i.e. root at the beginning, depth & parentIndex are meaningful
 	private List<Node> list = new ArrayList<>(); // just nodes in the schema, sorted alphabetically (i.e. no tree structure)
@@ -148,10 +155,11 @@ public class SchemaTree
 	// return true if SchemaTree was changed, false otherwise
 	public boolean addNodes(List<Pair<String, Node>> candidates)
 	{
+		int maxLoops = candidates.size() * candidates.size(); // limit while-loop iterations to O(N^2)
 		boolean addedNode = false;
-		
+
 scanParentables:
-		while (!candidates.isEmpty())
+		while (!candidates.isEmpty() && --maxLoops >= 0)
 		{
 			Pair<String, Node> pair = candidates.remove(0);
 			String parentURI = pair.getLeft();
@@ -191,6 +199,8 @@ scanParentables:
 			
 			addedNode = true;
 		}
+		if (!candidates.isEmpty()) Util.errmsg("There appears to be a cycle in the list of provisional terms: " + candidates);
+
 		if (addedNode)
 		{
 			// reflatten, recording the proper index of the parent afterwards 
