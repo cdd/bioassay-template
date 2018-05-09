@@ -421,6 +421,9 @@ public class SchemaTree
 
 	private void flattenTree()
 	{
+		// flat array will be re-populated below
+		flat.clear();
+
 		List<Node> roots = new ArrayList<>();
 		for (Node node : tree.values()) if (node.parent == null) roots.add(node);
 		flattenBranch(roots, 0, -1);
