@@ -183,8 +183,6 @@ public class SchemaTree
 			}
 			if (cSize == candidates.size()) break; // exit outer loop if no change
 		}
-		if (!candidates.isEmpty())
-			Util.errmsg("Some provisional terms could not be added; check for missing parents or cycles between provisional terms: " + candidates);
 
 		boolean wasChanged = candidates.size() != nodes.size();
 		if (wasChanged)

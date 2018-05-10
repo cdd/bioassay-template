@@ -72,8 +72,11 @@ public class SchemaTreeTest extends OntologyReader
 		Schema.Group group = schema.getRoot();
 		Assignment assn = group.assignments.get(1); // bioassay type
 
-		// verify new node creation for provisional term
 		SchemaTree schemaTree = new SchemaTree(assn, vocab);
+		int flatLength = schemaTree.getFlat().length;
+		int listLength = schemaTree.getList().length;
+
+		// verify new node creation for provisional term
 		SchemaTree.Node newNode = schemaTree.addNode(provTerm.parentURI, provTerm.label, provTerm.descr, provTerm.uri);
 		assertTrue(newNode != null);
 
@@ -83,9 +86,11 @@ public class SchemaTreeTest extends OntologyReader
 		verifyNode(provNode, provTerm);
 
 		// verify node in flat array
+		assertTrue((flatLength + 1) == schemaTree.getFlat().length);
 		verifyNodeInCollection(provTerm, schemaTree.getFlat());
 
 		// verify node in list array
+		assertTrue((listLength + 1) == schemaTree.getList().length);
 		verifyNodeInCollection(provTerm, schemaTree.getList());
 	}
 
