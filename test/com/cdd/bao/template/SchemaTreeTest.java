@@ -101,7 +101,7 @@ public class SchemaTreeTest extends OntologyReader
 		
 		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
 		SchemaTree.Node provNode = tree.get(provTerm.uri);
-		assertTrue(provNode.parent == null);
+		assertTrue(provNode == null);
 	}
 	
 	@Test

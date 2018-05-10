@@ -150,57 +150,44 @@ public class SchemaTree
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
 
-	// candidates is a list of (parentURI, Node) pairs, where each node is candidate
+	// nodes is a list of (parentURI, Node) pairs, where each node is a candidate
 	// for this SchemaTree, and should preset label, description, and uri fields
 	// return true if SchemaTree was changed, false otherwise
-	public boolean addNodes(List<Pair<String, Node>> candidates)
+	public boolean addNodes(List<Pair<String, Node>> nodes)
 	{
-		int maxLoops = candidates.size() * candidates.size(); // limit while-loop iterations to O(N^2)
-		boolean addedNode = false;
-
-		scanParentables: while (!candidates.isEmpty() && --maxLoops >= 0)
+		List<Pair<String, Node>> candidates = new ArrayList<>(nodes); 
+		while (!candidates.isEmpty())
 		{
-			Pair<String, Node> pair = candidates.remove(0);
-			String parentURI = pair.getLeft();
-			Node node = pair.getRight();
-			
-			// scan remaining parentables, checking if node.parentURI is found
-			// if found, put node at end of parentables, and continue;
-			// otherwise, scan this.tree for parent
-
+			int cSize = candidates.size();
 			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
 			{
-				Pair<String, Node> otherPair = it.next();
-				String otherCandidateURI = otherPair.getRight().uri;
-				if (parentURI.equals(otherCandidateURI))
+				Pair<String, Node> pair = it.next();
+				Node parent = tree.get(pair.getLeft());
+				if (parent != null)
 				{
-					candidates.add(pair);
-					continue scanParentables;
+					Node node = pair.getRight();
+					node.parent = parent;
+					node.depth = parent.depth + 1;
+					parent.children.add(node);
+					parent.childCount++;
+	
+					node.inSchema = false;
+					node.isExplicit = false;
+					tree.put(node.uri, node);
+	
+					// resort list below after all candidates nodes added
+					list.add(node);
+					
+					it.remove();
 				}
 			}
-
-			// get parent from tree, set other properties of node, and add node to tree and list
-			Node parent = tree.get(parentURI);
-			if (parent != null)
-			{
-				node.parent = parent;
-				node.depth = parent.depth + 1;
-				parent.children.add(node);
-				parent.childCount++;
-			}
-
-			node.inSchema = false;
-			node.isExplicit = false;
-			tree.put(node.uri, node);
-
-			// resort list below after all candidates nodes added
-			list.add(node);
-			
-			addedNode = true;
+			if (cSize == candidates.size()) break; // exit outer loop if no change
 		}
-		if (!candidates.isEmpty()) Util.errmsg("There appears to be a cycle in the list of provisional terms: " + candidates);
+		if (!candidates.isEmpty())
+			Util.errmsg("Some provisional terms could not be added; check for missing parents or cycles between provisional terms: " + candidates);
 
-		if (addedNode)
+		boolean wasChanged = candidates.size() != nodes.size();
+		if (wasChanged)
 		{
 			// reflatten, recording the proper index of the parent afterwards 
 			flattenTree();
@@ -208,7 +195,7 @@ public class SchemaTree
 			// resort after adding node to list
 			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
 		}
-		return addedNode;
+		return wasChanged;
 	}
 
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
