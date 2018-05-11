@@ -39,7 +39,8 @@ import com.cdd.bao.util.*;
 
 public class SchemaTreeTest extends OntologyReader
 {
-	private static class ProvTerm {
+	private static class ProvTerm
+	{
 		public String parentURI;
 		public String label;
 		public String descr;

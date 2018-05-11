@@ -98,11 +98,6 @@ public class SchemaTree
 			list.add(node);
 		}
 		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
-		
-		//synchronized (mutex)
-		//{
-		//	cached.put(assn, this);
-		//}
 	}
 	
 	// returns the assignment with which it is affiliated
@@ -150,15 +145,14 @@ public class SchemaTree
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
 
-	// nodes is a list of (parentURI, Node) pairs, where each node is a candidate
-	// for this SchemaTree, and should preset label, description, and uri fields
-	// return true if SchemaTree was changed, false otherwise
+	// nodes is a list of (parentURI, Node) pairs, where each node is a candidate for this SchemaTree, and should preset 
+	// label, description, and uri fields return true if SchemaTree was changed, false otherwise
 	public boolean addNodes(List<Pair<String, Node>> nodes)
 	{
 		List<Pair<String, Node>> candidates = new ArrayList<>(nodes); 
 		while (!candidates.isEmpty())
 		{
-			int cSize = candidates.size();
+			int prevSize = candidates.size();
 			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
 			{
 				Pair<String, Node> pair = it.next();
@@ -170,27 +164,23 @@ public class SchemaTree
 					node.depth = parent.depth + 1;
 					parent.children.add(node);
 					parent.childCount++;
-	
 					node.inSchema = false;
 					node.isExplicit = false;
+
 					tree.put(node.uri, node);
-	
-					// resort list below after all candidates nodes added
 					list.add(node);
 					
 					it.remove();
 				}
 			}
-			if (cSize == candidates.size()) break; // exit outer loop if no change
+			if (prevSize == candidates.size()) break; // exit outer loop if no change
 		}
 
 		boolean wasChanged = candidates.size() != nodes.size();
 		if (wasChanged)
 		{
-			// reflatten, recording the proper index of the parent afterwards 
+			// both flat & list need to be updated
 			flattenTree();
-	
-			// resort after adding node to list
 			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
 		}
 		return wasChanged;
@@ -360,10 +350,8 @@ public class SchemaTree
 				if (node.inSchema || node.parent != null) continue;
 				int activeChildren = 0;
 				for (Node child : node.children) if (child.schemaCount > 0 || child.inSchema) activeChildren++;
-				//if (node.parent == null && node.children.size() == 1)
 				if (activeChildren <= 1)
 				{
-					//node.children.get(0).parent = null;
 					for (Node child : node.children) child.parent = null;
 					it.remove();
 					anything = true;
@@ -404,9 +392,9 @@ public class SchemaTree
 		}
 	}
 
+	// recreates the "flat" version of the tree, which represents parent nodes by index position
 	private void flattenTree()
 	{
-		// flat array will be re-populated below
 		flat.clear();
 
 		List<Node> roots = new ArrayList<>();
