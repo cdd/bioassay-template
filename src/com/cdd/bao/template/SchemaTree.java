@@ -21,11 +21,14 @@
 
 package com.cdd.bao.template;
 
+import com.cdd.bao.template.SchemaTree.Node;
 import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
 
 import java.util.*;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 /*
 	SchemaTree: for a given schema assignment, puts together a tree structure that can be used to present the hierarchy nicely to users.
@@ -60,7 +63,15 @@ public class SchemaTree
 			label = source.label;
 			this.descr = descr;
 		}
+
+		public String toString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.append("uri=" + uri).append("; label=" + label).append("; descr=" + descr);
+			return sb.toString();
+		}
 	}
+
 	private Map<String, Node> tree = new HashMap<>(); // uri-to-node
 	private List<Node> flat = new ArrayList<>(); // ordered by tree structure, i.e. root at the beginning, depth & parentIndex are meaningful
 	private List<Node> list = new ArrayList<>(); // just nodes in the schema, sorted alphabetically (i.e. no tree structure)
@@ -87,11 +98,6 @@ public class SchemaTree
 			list.add(node);
 		}
 		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
-		
-		//synchronized (mutex)
-		//{
-		//	cached.put(assn, this);
-		//}
 	}
 	
 	// returns the assignment with which it is affiliated
@@ -138,7 +144,65 @@ public class SchemaTree
 		}
 		return ancestors.toArray(new String[ancestors.size()]);
 	}
-	
+
+	// nodes is a list of (parentURI, Node) pairs, where each node is a candidate for this SchemaTree, and should preset 
+	// label, description, and uri fields return true if SchemaTree was changed, false otherwise
+	public boolean addNodes(List<Pair<String, Node>> nodes)
+	{
+		List<Pair<String, Node>> candidates = new ArrayList<>(nodes); 
+		while (!candidates.isEmpty())
+		{
+			int prevSize = candidates.size();
+			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
+			{
+				Pair<String, Node> pair = it.next();
+				Node parent = tree.get(pair.getLeft());
+				if (parent != null)
+				{
+					Node node = pair.getRight();
+					node.parent = parent;
+					node.depth = parent.depth + 1;
+					parent.children.add(node);
+					parent.childCount++;
+					node.inSchema = false;
+					node.isExplicit = false;
+
+					tree.put(node.uri, node);
+					list.add(node);
+					
+					it.remove();
+				}
+			}
+			if (prevSize == candidates.size()) break; // exit outer loop if no change
+		}
+
+		boolean wasChanged = candidates.size() != nodes.size();
+		if (wasChanged)
+		{
+			// both flat & list need to be updated
+			flattenTree();
+			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+		}
+		return wasChanged;
+	}
+
+	// tack on value node to this schema tree, leaving the underlying assignment untouched
+	// return newly created node upon success, or null otherwise
+	public Node addNode(String parentURI, String label, String descr, String uri)
+	{
+		Node node = new Node();
+		node.label = label;
+		node.descr = descr;
+		node.uri = uri;
+		
+		Pair<String, Node> pair = Pair.of(parentURI, node);
+		List<Pair<String, Node>> candidates = new ArrayList<>();
+		candidates.add(pair);
+
+		boolean wasChanged = addNodes(candidates);
+		return wasChanged ? node : null;
+	}
+
 	// ------------ private methods ------------
 
 	// do the hard work of constructing the tree, and pruning as necessary for presentation purposes
@@ -286,10 +350,8 @@ public class SchemaTree
 				if (node.inSchema || node.parent != null) continue;
 				int activeChildren = 0;
 				for (Node child : node.children) if (child.schemaCount > 0 || child.inSchema) activeChildren++;
-				//if (node.parent == null && node.children.size() == 1)
 				if (activeChildren <= 1)
 				{
-					//node.children.get(0).parent = null;
 					for (Node child : node.children) child.parent = null;
 					it.remove();
 					anything = true;
@@ -299,9 +361,7 @@ public class SchemaTree
 		}
 		
 		// perform the flattening: express the tree as a sequence of ordered branches
-		List<Node> roots = new ArrayList<>();
-		for (Node node : tree.values()) if (node.parent == null) roots.add(node);
-		flattenBranch(roots, 0, -1);
+		flattenTree();
 		
 		// prepare the list version, which the same as flattened, except only in-schema items, and in alphabetical order
 		for (Node node : flat) if (node.inSchema) list.add(node);
@@ -331,7 +391,17 @@ public class SchemaTree
 			stack.addAll(br.children);
 		}
 	}
-	
+
+	// recreates the "flat" version of the tree, which represents parent nodes by index position
+	private void flattenTree()
+	{
+		flat.clear();
+
+		List<Node> roots = new ArrayList<>();
+		for (Node node : tree.values()) if (node.parent == null) roots.add(node);
+		flattenBranch(roots, 0, -1);
+	}
+
 	// given that the branch nodes have been added into a hashmap, and their parent/child pointers updated, create a linearised version, where each 
 	private void flattenBranch(List<Node> branch, int depth, int parentIndex)
 	{
@@ -345,6 +415,3 @@ public class SchemaTree
 		}
 	}
 }
-
-
-
