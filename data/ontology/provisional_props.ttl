@@ -492,3 +492,9 @@ bao:BAX_0000082
   rdfs:label "has molecular entity potentiator" ;
   obo:IAO_0000115 ""
   .
+
+bao:BAX_0000083
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has publication source" ;
+  obo:IAO_0000115 ""
+  .

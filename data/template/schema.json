@@ -4,7 +4,7 @@
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
-        "groupURI": "",
+        "groupURI": "http://www.bioassayontology.org/bao#BAO_0002852",
         "assignments": 
         [
             {
@@ -787,6 +787,13 @@
                 "descr": "Assays belonging to the same project.",
                 "propURI": "http://www.bioassayontology.org/bao#BAO_0000539",
                 "suggestions": "id",
+                "values": []
+            }, 
+            {
+                "name": "publication source",
+                "descr": "Literature publication(s) from whence the assay came.",
+                "propURI": "http://www.bioassayontology.org/bao#BAX_0000083",
+                "suggestions": "url",
                 "values": []
             }
         ],
