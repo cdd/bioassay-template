@@ -4,7 +4,7 @@
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
-        "groupURI": "http://www.bioassayontology.org/bao#BAO_0000185",
+        "groupURI": "http://www.bioassayontology.org/bao#BAX_0000017",
         "assignments": 
         [
             {
@@ -856,6 +856,27 @@
                         "descr": "Defines the value cutoff for active/inactive.",
                         "propURI": "http://www.bioassayontology.org/bao#BAO_0002916",
                         "suggestions": "number",
+                        "values": []
+                    }, 
+                    {
+                        "name": "excitation wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002917",
+                        "suggestions": "full",
+                        "values": []
+                    }, 
+                    {
+                        "name": "emission wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002918",
+                        "suggestions": "full",
+                        "values": []
+                    }, 
+                    {
+                        "name": "absorbance wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002919",
+                        "suggestions": "full",
                         "values": []
                     }
                 ],
