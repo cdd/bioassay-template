@@ -46,6 +46,12 @@ public class Util
 	public static void writeln(String str) {System.out.println(str);}
 	
 	/**
+	 * Writes a string to the console, and adds a carriage return.
+	 * @param str string to write
+	 */
+	public static void writeln(Object obj) {System.out.println(obj);}
+	
+	/**
 	 * Writes a carriage return to the console.
 	 */
 	public static void writeln() {System.out.println();}
