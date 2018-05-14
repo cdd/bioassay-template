@@ -4,7 +4,7 @@
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
-        "groupURI": "http://www.bioassayontology.org/bao#BAO_0002852",
+        "groupURI": "http://www.bioassayontology.org/bao#BAO_0000185",
         "assignments": 
         [
             {
@@ -648,45 +648,6 @@
                 ]
             }, 
             {
-                "name": "perturbagen type",
-                "descr": "Compounds or other perturbagens that modulate diverse biological targets.",
-                "propURI": "http://www.bioassayontology.org/bao#BAO_0000185",
-                "suggestions": "full",
-                "values": 
-                [
-                    {
-                        "uri": "http://www.bioassayontology.org/bao#BAO_0000661",
-                        "name": "perturbagen library",
-                        "descr": "It is a collection of perturbagens, e.g., compound, siRNA, miRNA, etc, which are sold by different vendors, or generated in academic institutions.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bao#BAO_0000076",
-                        "name": "screened entity",
-                        "descr": "",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
-                    }
-                ]
-            }, 
-            {
                 "name": "protein identity",
                 "descr": "Protein identity, from the NCBI reference set.",
                 "propURI": "http://www.bioassayontology.org/bao#BAX_0000012",
@@ -895,6 +856,61 @@
                         "descr": "Defines the value cutoff for active/inactive.",
                         "propURI": "http://www.bioassayontology.org/bao#BAO_0002916",
                         "suggestions": "number",
+                        "values": []
+                    }
+                ],
+                "subGroups": []
+            }, 
+            {
+                "name": "library source",
+                "descr": "Origins of substrates used with the assay.",
+                "groupURI": "http://www.bioassayontology.org/bao#BAX_0000084",
+                "assignments": 
+                [
+                    {
+                        "name": "perturbagen type",
+                        "descr": "Compounds or other perturbagens that modulate diverse biological targets.",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0000185",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0000661",
+                                "name": "perturbagen library",
+                                "descr": "It is a collection of perturbagens, e.g., compound, siRNA, miRNA, etc, which are sold by different vendors, or generated in academic institutions.",
+                                "spec": "container"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0000076",
+                                "name": "screened entity",
+                                "descr": "",
+                                "spec": "container"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bat#Absence",
+                                "name": "absence",
+                                "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
+                                "spec": "container"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bat#NotDetermined",
+                                "name": "not determined",
+                                "descr": "The measurement was not made.",
+                                "spec": "exclude"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
+                                "name": "see Gene ID",
+                                "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
+                                "spec": "exclude"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "reagent provider",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAX_0000085",
+                        "suggestions": "full",
                         "values": []
                     }
                 ],
