@@ -338,4 +338,19 @@ bae:BAE_0000063
   obo:IAO_0000115 "" ;
   .
 
+bae:BAE_0000064
+  rdfs:label "boolean" ;
+  obo:IAO_0000115 "" ;
+  .
 
+bae:BAE_0000065
+  rdfs:label "true" ;
+  rdfs:subClassOf bao:BAE_0000064 ;
+  obo:IAO_0000115 "" ;
+  .
+
+bae:BAE_0000066
+  rdfs:label "false" ;
+  rdfs:subClassOf bao:BAE_0000064 ;
+  obo:IAO_0000115 "" ;
+  .

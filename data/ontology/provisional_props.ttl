@@ -511,3 +511,14 @@ bao:BAX_0000085
   obo:IAO_0000115 ""
   .
 
+bao:BAX_0000086
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has target HELM" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000087
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "is activity inverted" ;
+  obo:IAO_0000115 ""
+  .
