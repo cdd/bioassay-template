@@ -137,11 +137,11 @@ public class SchemaTest
 		Schema.Assignment assn = new Schema.Assignment(g4, "assn", "propURI");
 		Schema.Assignment assn1 = new Schema.Assignment(g1, "assn1", "propURI");
 
-		assertArrayEquals(new String[]{"u3", "u2", "u1"}, g4.groupNest());
+		assertArrayEquals(new String[]{"u3", "u2", "u1"}, Schema.groupNestString(g4.groupNest()));
 		assertArrayEquals(new String[]{"g3", "g2", "g1"}, g4.groupLabel());
-		assertArrayEquals(new String[]{"u4", "u3", "u2", "u1"}, assn.groupNest());
+		assertArrayEquals(new String[]{"u4", "u3", "u2", "u1"}, Schema.groupNestString(assn.groupNest()));
 		assertArrayEquals(new String[]{"g4", "g3", "g2", "g1"}, assn.groupLabel());
-		assertArrayEquals(new String[]{"u1"}, assn1.groupNest());
+		assertArrayEquals(new String[]{"u1"}, Schema.groupNestString(assn1.groupNest()));
 		assertArrayEquals(new String[]{"g1"}, assn1.groupLabel());
 
 		root = new Group(null, "root");
@@ -152,9 +152,9 @@ public class SchemaTest
 		assn = new Schema.Assignment(g4, "assn", "propURI");
 		assn1 = new Schema.Assignment(g1, "assn1", "propURI");
 
-		assertArrayEquals("groups close to the root with missing URI are ignored", new String[]{"u3", "u2"}, g4.groupNest());
+		assertArrayEquals("groups close to the root with missing URI are ignored", new String[]{"u3", "u2"}, Schema.groupNestString(g4.groupNest()));
 		assertArrayEquals("but not in the groupLabel", new String[]{"g3", "g2", "g1"}, g4.groupLabel());
-		assertArrayEquals(new String[]{"u4", "u3", "u2"}, assn.groupNest());
+		assertArrayEquals(new String[]{"u4", "u3", "u2"}, Schema.groupNestString(assn.groupNest()));
 		assertArrayEquals(new String[]{"g4", "g3", "g2", "g1"}, assn.groupLabel());
 	}
 
@@ -344,11 +344,11 @@ public class SchemaTest
 		Group g3a = new Schema.Group(g2a, "g3", "uri3");
 
 		Schema.Assignment assn2 = new Schema.Assignment(g2a, "name", "propURI");
-		assertArrayEquals(new String[]{"uri2"}, assn2.groupNest());
+		assertArrayEquals(new String[]{"uri2"}, Schema.groupNestString(assn2.groupNest()));
 		assertArrayEquals(new String[]{"g2"}, assn2.groupLabel());
 
 		Schema.Assignment assn3 = new Schema.Assignment(g3a, "name", "propURI");
-		assertArrayEquals(new String[]{"uri3", "uri2"}, assn3.groupNest());
+		assertArrayEquals(new String[]{"uri3", "uri2"}, Schema.groupNestString(assn3.groupNest()));
 		assertArrayEquals(new String[]{"g3", "g2"}, assn3.groupLabel());
 
 		Schema.Annotation annot2 = new Schema.Annotation(assn2, "literal");

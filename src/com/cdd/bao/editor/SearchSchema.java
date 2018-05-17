@@ -60,7 +60,7 @@ public class SearchSchema
 			String[] altLabels = v.getAltLabels(uri);
 			if (altLabels != null)
 			{
-				for (int k = 0; k < altLabels.length; ++k)
+				for (int k = 0; k < altLabels.length; k++)
 					if (StringUtils.indexOfIgnoreCase(altLabels[k], searchText) >= 0) return true;
 			}
 		}

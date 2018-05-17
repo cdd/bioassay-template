@@ -60,7 +60,7 @@ public class SchemaVocab
 	{
 		public String schemaPrefix; // unique identifier for the template
 		public String propURI; // together with groupNest, uniquely identifies
-		public String[] groupNest; // an assignment part of a schema dumped to a file 
+		public Position[] groupNest; // an assignment part of a schema dumped to a file 
 		public Assignment assignment;
 		public SchemaTree tree;
 	}
@@ -196,9 +196,9 @@ public class SchemaVocab
 			data.writeUTF(stored.schemaPrefix);
 			data.writeUTF(stored.assignment.propURI);
 
-			String[] groupNest = stored.assignment.groupNest();
+			Position[] groupNest = stored.assignment.groupNest();
 			data.writeInt(groupNest.length);
-			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+			for (int k = 0; k < groupNest.length; k++) data.writeUTF(groupNest[k].uri);
 
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
@@ -281,8 +281,8 @@ public class SchemaVocab
 			stored.propURI = data.readUTF();
 
 			int lenGroupNest = data.readInt();
-			stored.groupNest = new String[lenGroupNest];
-			for (int i = 0; i < stored.groupNest.length; i++) stored.groupNest[i] = data.readUTF();
+			stored.groupNest = new Position[lenGroupNest];
+			for (int i = 0; i < stored.groupNest.length; i++) stored.groupNest[i] = new Position(data.readUTF());
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{

@@ -37,13 +37,47 @@ import org.json.*;
 
 public class Schema
 {
+	// used in an array to reference a group position in its hierarchy; for basic templates, it's just a URI, but in cases where
+	// groups get cloned, the index is important to disambiguate
+	public static final class Position
+	{
+		public String uri; 
+		public int idx = 0;
+		
+		public Position(String uri) 
+		{
+			this.uri = uri;
+		}
+		public Position(String uri, int idx) 
+		{
+			this.uri = uri;
+			this.idx = idx;
+		}
+		@Override
+		public Position clone() {return new Position(uri, idx);}
+		@Override
+		public boolean equals(Object o)
+		{
+			if (o == null || getClass() != o.getClass()) return false;
+			Position other = (Position)o;
+			return uri.equals(other.uri) && idx == other.idx;
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(uri, idx);
+		}
+	}
+
 	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
 	public static final class Group
 	{
 		public Group parent;
 		public String name, descr = "";
-		public String groupURI = "";
+		public String groupURI = ""; // formal identity for the group
+		public int groupIndex = 0; // additional disambiguation, in case of duplicated groups
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
 		
@@ -85,13 +119,14 @@ public class Schema
 		}
 
 		// returns a list of group URIs leading up to (but not including) this one, which can be used to disambiguate beyond just the propURI
-		public String[] groupNest()
+		public Position[] groupNest()
 		{
-			if (parent == null) return new String[0];
-			List<String> nest = new ArrayList<>();
-			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
-			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
-			return nest.toArray(new String[nest.size()]);
+			if (parent == null) return new Position[0];
+			List<Position> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) 
+				nest.add(new Position(look.groupURI == null ? "" : look.groupURI, look.groupIndex));
+			while (nest.size() > 1 && nest.get(nest.size() - 1).uri.equals("")) nest.remove(nest.size() - 1);
+			return nest.toArray(new Position[nest.size()]);
 		}
 		
 		// as above, except compiles the labels rather than URIs
@@ -197,12 +232,13 @@ public class Schema
 		}
 
 		// returns a list of group URIs leading up to this one, which can be used to disambiguate beyond just the propURI
-		public String[] groupNest()
+		public Position[] groupNest()
 		{
-			List<String> nest = new ArrayList<>();
-			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
-			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
-			return nest.toArray(new String[nest.size()]);
+			List<Position> nest = new ArrayList<>();
+			for (Schema.Group look = parent; look.parent != null; look = look.parent) 
+				nest.add(new Position(look.groupURI == null ? "" : look.groupURI, look.groupIndex));
+			while (nest.size() > 1 && nest.get(nest.size() - 1).uri.equals("")) nest.remove(nest.size() - 1);
+			return nest.toArray(new Position[nest.size()]);
 		}
 		
 		// as above, except compiles the labels rather than URIs
@@ -643,7 +679,7 @@ public class Schema
 	// returns all of the assignments that match the given property URI, or empty list if none; if the groupNest parameter is given, it will
 	// make sure that the nested hierarchy of groupURIs match the parameter (otherwise it will be ignored)
 	public Assignment[] findAssignmentByProperty(String propURI) {return findAssignmentByProperty(propURI, null);}
-	public Assignment[] findAssignmentByProperty(String propURI, String[] groupNest)
+	public Assignment[] findAssignmentByProperty(String propURI, Position[] groupNest)
 	{
 		int gsz = Util.length(groupNest);
 		List<Assignment> matches = new ArrayList<>();
@@ -656,7 +692,7 @@ public class Schema
 			{
 				Group look = assn.parent;
 				for (int n = 0; n < gsz && look != null; n++, look = look.parent)
-					if (!groupNest[n].equals(look.groupURI)) continue skip;
+					if (!groupNest[n].uri.equals(look.groupURI) || groupNest[n].idx != look.groupIndex) continue skip;
 				
 				matches.add(assn);
 			}
@@ -690,37 +726,64 @@ public class Schema
 	// call for matching within the same template); "compatible" means that only the defined parts of the group nesting are compared,
 	// which is often useful for inter-template annotation comparisons; note that all of these methods treat groupNests of null & empty
 	// array as the same
-	public static boolean sameGroupNest(String[] groupNest1, String[] groupNest2)
+	public static boolean sameGroupNest(Position[] groupNest1, Position[] groupNest2)
 	{
 		int sz1 = Util.length(groupNest1), sz2 = Util.length(groupNest2);
 		if (sz1 != sz2) return false;
 		for (int n = 0; n < sz1; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
 		return true;
 	}
-	public static boolean compatibleGroupNest(String[] groupNest1, String[] groupNest2)
+	public static boolean compatibleGroupNest(Position[] groupNest1, Position[] groupNest2)
 	{
 		int sz = Math.min(Util.length(groupNest1), Util.length(groupNest2));
-		for (int n = 0; n < sz; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		for (int n = 0; n < sz; n++) 
+		{
+			Position p1 = groupNest1[n], p2 = groupNest2[n];
+			if (!p1.uri.equals(p2.uri)) return false;
+			if (p1.idx > 0 && p2.idx > 0 && p1.idx != p2.idx) return false;
+		}
 		return true;
 	}
-	public static boolean samePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	public static boolean samePropGroupNest(String propURI1, Position[] groupNest1, String propURI2, Position[] groupNest2)
 	{
 		return propURI1.equals(propURI2) && sameGroupNest(groupNest1, groupNest2);
 	}
-	public static boolean compatiblePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
+	public static boolean compatiblePropGroupNest(String propURI1, Position[] groupNest1, String propURI2, Position[] groupNest2)
 	{
 		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
 	}
 	
+	// convenience methods: convert an array of strings to/from the more specific groupNest definition; this ignores the index parameter, assuming
+	// it to be zero, which is fair for many uninstantiated template uses, which exist prior to any opportunity for cloning
+	public static Position[] groupNestPosition(String[] groupNest)
+	{
+		Position[] list = new Position[groupNest == null ? 0 : groupNest.length];
+		for (int n = 0; n < list.length; n++) list[n] = new Position(groupNest[n]);
+		return list;
+	}
+	public static String[] groupNestString(Position[] groupNest)
+	{
+		String[] list = new String[groupNest == null ? 0 : groupNest.length];
+		for (int n = 0; n < list.length; n++) list[n] = groupNest[n].uri;
+		return list;
+	}
+	
 	// convenience methods for combining parts of assignments/annotations to make string identifiers
 	private final static String SEP = "::";
-	public static String keyPropGroup(String propURI, String[] groupNest)
+	public static String keyPropGroup(String propURI, Position[] groupNest)
 	{
-		return propURI + SEP + (groupNest == null ? "" : String.join(SEP, groupNest));
+		String groups = "";
+		if (groupNest != null)
+		{
+			String[] list = new String[groupNest.length];
+			for (int n = 0; n < list.length; n++) list[n] = groupNest[n].uri + "@" + groupNest[n].idx;
+			groups = String.join(SEP, list);
+		}
+		return propURI + SEP + groups;
 	}
-	public static String keyPropGroupValue(String propURI, String[] groupNest, String value)
+	public static String keyPropGroupValue(String propURI, Position[] groupNest, String value)
 	{
-		return propURI + SEP + (groupNest == null ? "" : String.join(SEP, groupNest)) + SEP + value;
+		return keyPropGroup(propURI, groupNest) + SEP + value;
 	}
 	
 	// adding of content

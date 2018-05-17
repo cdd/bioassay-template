@@ -122,7 +122,10 @@ public class ClipboardSchema
 		lines.add("name\t" + assn.name);
 		lines.add("description\t" + assn.descr.replace("\n", " "));
 		lines.add("property URI\t" + assn.propURI);
-		lines.add("group nest\t" + String.join("\t", assn.groupNest()));
+		
+		List<String> nest = new ArrayList<>();
+		for (Position pos : assn.groupNest()) {nest.add(pos.uri); nest.add(String.valueOf(pos.idx));}
+		lines.add("group nest\t" + String.join("\t", nest));
 		lines.add("");
 		lines.add("value hierarchy");
 		lines.add("");
@@ -186,7 +189,7 @@ public class ClipboardSchema
 		
 		if (schvoc != null) 
 		{
-			String[] groupNest = assn.groupNest();
+			Position[] groupNest = assn.groupNest();
 			for (SchemaVocab.StoredTree tree : schvoc.getTrees()) if (assn.propURI.equals(tree.propURI) && Objects.deepEquals(groupNest, tree.groupNest))
 			{
 				json.put("tree", formatTree(tree.tree));
@@ -350,7 +353,11 @@ public class ClipboardSchema
 		cols.add(group.name);
 		cols.add(group.descr.replace("\n", " "));
 		cols.add("");
-		for (String g : group.groupNest()) cols.add(g);
+		for (Position pos : group.groupNest()) 
+		{
+			cols.add(pos.uri);
+			cols.add(String.valueOf(pos.idx));
+		}
 		cols.add(Util.safeString(group.groupURI));
 		lines.add(String.join("\t", cols));
 		
@@ -360,7 +367,11 @@ public class ClipboardSchema
 			cols.add(assn.name);
 			cols.add(assn.descr.replace("\n", " "));
 			cols.add(assn.propURI);
-			for (String g : assn.groupNest()) cols.add(g);
+			for (Position pos : assn.groupNest()) 
+			{
+				cols.add(pos.uri);
+				cols.add(String.valueOf(pos.idx));
+			}
 			lines.add(String.join("\t", cols));
 		}
 		for (Schema.Group subgrp : group.subGroups) formatGroupTSV(lines, subgrp);

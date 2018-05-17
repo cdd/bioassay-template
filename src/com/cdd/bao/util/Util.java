@@ -290,6 +290,17 @@ public class Util
 	}
 	
 	/**
+	 * Converts an array to a human-readable string, for debugging purposes.
+	 */
+	public static String arrayStr(Object[] arr) 
+	{
+		if (arr == null) return "{null}";
+		String str = "";
+		for (int n = 0; n < arr.length; n++) str += arr[n] == null ? "{null}" : "{" + arr[n] + "}";
+		return str;
+	}
+
+	/**
 	 * Joins an array of strings together, in a reasonably performant way.
 	 * @param list strings to join
 	 * @param sep separator to insert between each two strings
