@@ -46,8 +46,8 @@ public class Util
 	public static void writeln(String str) {System.out.println(str);}
 	
 	/**
-	 * Writes a string to the console, and adds a carriage return.
-	 * @param str string to write
+	 * Writes a string representation of object to the console, and adds a carriage return.
+	 * @param obj object to write
 	 */
 	public static void writeln(Object obj) {System.out.println(obj);}
 	
