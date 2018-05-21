@@ -62,6 +62,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private TextField fieldPrefix = null;
 	private CheckBox chkIsBranch = null;
 	private TextField fieldBranches = null;
+	private CheckBox chkDuplicate = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private URIRowLine fieldURI = null;
@@ -188,12 +189,16 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			sameGroup = userURI.equals(Util.safeString(group.groupURI));
 		}
 		
-		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup) return null;
+		boolean canDuplicate = chkDuplicate == null ? false : chkDuplicate.isSelected();
+		
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup &&
+			group.canDuplicate == canDuplicate) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
 		mod.groupURI = fieldURI == null ? null : ModelSchema.expandPrefix(fieldURI.getText());
+		mod.canDuplicate = canDuplicate;
 		
 		return mod;
 	}
@@ -460,6 +465,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			boolean isBranch = schema.getBranchGroups() != null;
 			chkIsBranch = new CheckBox("Branch template");
 			chkIsBranch.setSelected(isBranch);
+			
 			fieldBranches = new TextField();
 			fieldBranches.setMaxWidth(Double.MAX_VALUE);
 			if (isBranch) fieldBranches.setText(String.join(",", schema.getBranchGroups()));
@@ -497,6 +503,10 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		{
 			fieldURI = new URIRowLine(group.groupURI, "The group URI used to disambiguate this group", -1, PADDING, this);
 			line.add(fieldURI, "URI:", 1, 0);
+			
+			chkDuplicate = new CheckBox("Allow duplication");
+			chkDuplicate.setSelected(group.canDuplicate);
+			line.add(chkDuplicate, null);
 		}
 
 		vbox.getChildren().add(line);

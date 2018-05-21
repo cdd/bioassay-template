@@ -152,6 +152,7 @@ public class ClipboardSchema
 		json.put("name", group.name);
 		json.put("descr", group.descr);
 		json.put("groupURI", group.groupURI);
+		if (group.canDuplicate) json.put("canDuplicate", true);
 		
 		JSONArray jassignments = new JSONArray(), jsubgroups = new JSONArray();
 		for (Schema.Assignment assn : group.assignments)
@@ -259,6 +260,7 @@ public class ClipboardSchema
 		Schema.Group group = new Schema.Group(parent, json.getString("name"));
 		group.descr = json.optString("descr", "");
 		group.groupURI = json.optString("groupURI", "");
+		group.canDuplicate = json.optBoolean("canDuplicate", false);
 		
 		JSONArray jassignments = json.getJSONArray("assignments"), jsubgroups = json.getJSONArray("subGroups");
 		for (int n = 0; n < jassignments.length(); n++)

@@ -53,8 +53,10 @@ public class Schema
 			this.uri = uri;
 			this.idx = idx;
 		}
+		
 		@Override
 		public Position clone() {return new Position(uri, idx);}
+		
 		@Override
 		public boolean equals(Object o)
 		{
@@ -78,6 +80,7 @@ public class Schema
 		public String name, descr = "";
 		public String groupURI = ""; // formal identity for the group
 		public int groupIndex = 0; // additional disambiguation, in case of duplicated groups
+		public boolean canDuplicate = false; // if true, permit duplication of the group when used for annotation
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
 		
@@ -92,6 +95,7 @@ public class Schema
 			this.name = name == null ? "" : name;
 			this.groupURI = groupURI == null ? "" : groupURI;
 		}
+		
 		@Override
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
@@ -109,7 +113,7 @@ public class Schema
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
 			return name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
-					assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
+				   canDuplicate == other.canDuplicate && assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
 		}
 		
 		@Override
@@ -161,7 +165,7 @@ public class Schema
 			}
 			return list.toArray(new Assignment[list.size()]);
 		}
-	};
+	}
 
 	// used within assignments: used to indicate how building of models to make suggestions is handled
 	public enum Suggestions
