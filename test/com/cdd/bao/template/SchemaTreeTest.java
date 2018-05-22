@@ -139,7 +139,7 @@ public class SchemaTreeTest extends OntologyReader
 		}
 		
 		List<SchemaTree.Node> added = schemaTree.addNodes(candidates);
-		assertTrue(added.size() > 0);
+		assertTrue(added.size() <= 0);
 	}
 	
 	private void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)
