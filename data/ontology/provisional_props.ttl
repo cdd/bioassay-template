@@ -541,219 +541,213 @@ bao:BAX_0000090
   obo:IAO_0000115 "source file for raw data"
   .
 
-  bao:BAX_0000090
+bao:BAX_0000091
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "filename" ;
-  obo:IAO_0000115 "source file for raw data"
-  .
-
-  bao:BAX_0000091
-  rdf:type owl:DatatypeProperty ;
-  rdfs:label "concentration of target_value" ;
+  rdfs:label "concentration of target value" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000092
+bao:BAX_0000092
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Control Format" ;
-  obo:IAO_0000115 "specifies how controls are placed in wells: rows, columns, or specific wells."
+  rdfs:label "control format" ;
+  obo:IAO_0000115 "Specifies how controls are placed in wells: rows, columns, or specific wells."
   .
 
-  bao:BAX_0000093
+bao:BAX_0000093
   rdf:type owl:DatatypeProperty ;
   rdfs:label "location" ;
-  obo:IAO_0000115 "locations on plate for control"
+  obo:IAO_0000115 "Locations on plate for control."
   .
 
-  bao:BAX_0000094
+bao:BAX_0000094
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has reductant" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000095
+bao:BAX_0000095
   rdf:type owl:DatatypeProperty ;
   rdfs:label "perturbagen summary" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000096
+bao:BAX_0000096
   rdf:type owl:DatatypeProperty ;
   rdfs:label "for natural products" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000097
+bao:BAX_0000097
   rdf:type owl:DatatypeProperty ;
   rdfs:label "detergent" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000098
+bao:BAX_0000098
   rdf:type owl:DatatypeProperty ;
   rdfs:label "dilution factor" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000099
+bao:BAX_0000099
   rdf:type owl:DatatypeProperty ;
   rdfs:label "column time_value" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000100
+bao:BAX_0000100
   rdf:type owl:DatatypeProperty ;
   rdfs:label "compound incubation" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000101
+bao:BAX_0000101
   rdf:type owl:DatatypeProperty ;
   rdfs:label "organism, tissue or cell information" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000102
+bao:BAX_0000102
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "cell density_number" ;
+  rdfs:label "cell density number" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000103
+bao:BAX_0000103
   rdf:type owl:DatatypeProperty ;
   rdfs:label "cell fixation" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000104
+bao:BAX_0000104
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "microbe/ virus-specific" ;
+  rdfs:label "microbe/virus-specific" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000105
+bao:BAX_0000105
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Strain" ;
-  obo:IAO_0000115 "variants of virus,microbe,cell,tissue, whole organism, etc."
+  rdfs:label "strain" ;
+  obo:IAO_0000115 "Variants of virus, microbe, cell, tissue, whole organism, etc."
   .
 
-  bao:BAX_0000106
+bao:BAX_0000106
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Cell Line information" ;
+  rdfs:label "cell line information" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000107
+bao:BAX_0000107
   rdf:type owl:DatatypeProperty ;
   rdfs:label "rescue treatment" ;
   obo:IAO_0000115 "Substance used to alter behavior, searching for synergistic or protective substances."
   .
 
-  bao:BAX_0000108
+bao:BAX_0000108
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Fluorescent Assay Parameters" ;
+  rdfs:label "fluorescent assay parameters" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000108
+bao:BAX_0000108
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "FRET acceptor" ;
+  rdfs:label "has FRET acceptor" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000109
+bao:BAX_0000109
   rdf:type owl:DatatypeProperty ;
   rdfs:label "background fluorophore" ;
-  obo:IAO_0000115 "used as control"
+  obo:IAO_0000115 "Used as control."
   .
 
-  bao:BAX_0000110
+bao:BAX_0000110
   rdf:type owl:DatatypeProperty ;
   rdfs:label "quench" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000111
+bao:BAX_0000111
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has detergent" ;
   obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000112
+bao:BAX_0000112
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "FRET donor" ;
-  obo:IAO_0000115 "has fret donor"
+  rdfs:label "has FRET donor" ;
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000113
+bao:BAX_0000113
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Solvent parameters" ;
-  obo:IAO_0000115 "has Solvent parameters"
+  rdfs:label "has solvent parameters" ;
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000114
+bao:BAX_0000114
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "Kinetic" ;
-  obo:IAO_0000115 "has Kinetic parameters"
+  rdfs:label "has kinetic parameters" ;
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000115
+bao:BAX_0000115
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has software" ;
-  obo:IAO_0000115 "has software"
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000116
+bao:BAX_0000116
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has equation" ;
-  obo:IAO_0000115 "has equation"
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000117
+bao:BAX_0000117
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "has Surface Plasmon Resonance parameters" ;
+  rdfs:label "has surface plasmon resonance parameters" ;
   obo:IAO_0000115 "has Surface Plasmon Resonance parameters"
   .
 
-  bao:BAX_0000118
+bao:BAX_0000118
   rdf:type owl:DatatypeProperty ;
   rdfs:label "binding site count" ;
-  obo:IAO_0000115 "binding site counts for Surface Plasmon Resonance parameters"
+  obo:IAO_0000115 "Binding site counts for Surface Plasmon Resonance parameters."
   .
 
-  bao:BAX_0000119
+bao:BAX_0000119
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has salt" ;
-  obo:IAO_0000115 "has salt"
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000120
+bao:BAX_0000120
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has buffer" ;
-  obo:IAO_0000115 "has buffer"
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000120
+bao:BAX_0000120
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has buffer" ;
-  obo:IAO_0000115 "has buffer"
+  obo:IAO_0000115 ""
   .
 
-  bao:BAX_0000121
+bao:BAX_0000121
   rdf:type owl:DatatypeProperty ;
   rdfs:label "protein highest abundance atomic mass" ;
-  obo:IAO_0000115 "highest abundance atomic mass of uncapped protein for MassSpec tethering assay"
+  obo:IAO_0000115 "Highest abundance atomic mass of uncapped protein for MassSpec tethering assay."
   .
 
-  bao:BAX_0000122
+bao:BAX_0000122
   rdf:type owl:DatatypeProperty ;
   rdfs:label "cap highest abundance atomic mass" ;
-  obo:IAO_0000115 "highest abundance atomic mass of cap, Cystine or BME, for MassSpec tethering assay"
+  obo:IAO_0000115 "Highest abundance atomic mass of cap, Cystine or BME, for MassSpec tethering assay."
   .
 
-  bao:BAX_0000123
+bao:BAX_0000123
   rdf:type owl:DatatypeProperty ;
-  rdfs:label "reaction time (min) ;
-  obo:IAO_0000115 "time (min) allowed for reaction to take place (for kinetic assays)"
+  rdfs:label "reaction time (min)" ;
+  obo:IAO_0000115 "Time (min) allowed for reaction to take place (for kinetic assays)."
   .
 
