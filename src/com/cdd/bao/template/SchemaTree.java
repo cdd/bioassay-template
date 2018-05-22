@@ -200,7 +200,7 @@ public class SchemaTree
 		candidates.add(pair);
 
 		List<Node> added = addNodes(candidates);
-		return (added.size() > 0) ? node : null;
+		return added.size() > 0 ? node : null;
 	}
 
 	// ------------ private methods ------------
