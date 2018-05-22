@@ -310,7 +310,7 @@ bao:BAX_0000053
 
 bao:BAX_0000054
   rdf:type owl:DatatypeProperty ;
-  rdfs:subClassOf bao:BAO_0000740;
+  rdfs:subClassOf bao:BAO_0000740 ;
   rdfs:label "has positive control" ;
   #URI: http://dev3.ccs.miami.edu:8080/ontolobridge#ONTB_000000044
   #CURIE: ONTB_000000044
