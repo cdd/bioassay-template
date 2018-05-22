@@ -21,7 +21,6 @@
 
 package com.cdd.bao.template;
 
-import com.cdd.bao.template.SchemaTree.Node;
 import com.cdd.bao.util.*;
 import static com.cdd.bao.template.Schema.*;
 import static com.cdd.bao.template.Vocabulary.*;
@@ -147,8 +146,10 @@ public class SchemaTree
 
 	// nodes is a list of (parentURI, Node) pairs, where each node is a candidate for this SchemaTree, and should preset 
 	// label, description, and uri fields return true if SchemaTree was changed, false otherwise
-	public boolean addNodes(List<Pair<String, Node>> nodes)
+	public List<Node> addNodes(List<Pair<String, Node>> nodes)
 	{
+		List<Node> wasAdded = new ArrayList<>();
+		
 		List<Pair<String, Node>> candidates = new ArrayList<>(nodes); 
 		while (!candidates.isEmpty())
 		{
@@ -166,6 +167,7 @@ public class SchemaTree
 					parent.childCount++;
 					node.inSchema = false;
 					node.isExplicit = false;
+					wasAdded.add(node);
 
 					tree.put(node.uri, node);
 					list.add(node);
@@ -175,15 +177,13 @@ public class SchemaTree
 			}
 			if (prevSize == candidates.size()) break; // exit outer loop if no change
 		}
-
-		boolean wasChanged = candidates.size() != nodes.size();
-		if (wasChanged)
+		if (wasAdded.size() > 0)
 		{
 			// both flat & list need to be updated
 			flattenTree();
 			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
 		}
-		return wasChanged;
+		return wasAdded;
 	}
 
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
@@ -199,8 +199,8 @@ public class SchemaTree
 		List<Pair<String, Node>> candidates = new ArrayList<>();
 		candidates.add(pair);
 
-		boolean wasChanged = addNodes(candidates);
-		return wasChanged ? node : null;
+		List<Node> added = addNodes(candidates);
+		return (added.size() > 0) ? node : null;
 	}
 
 	// ------------ private methods ------------
