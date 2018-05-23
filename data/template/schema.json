@@ -796,6 +796,7 @@
                 "name": "measurement",
                 "descr": "Compound activity measurements: which field defines activity and how so.",
                 "groupURI": "http://www.bioassayontology.org/bao#BAX_0000017",
+                "canDuplicate": true,
                 "assignments": 
                 [
                     {
