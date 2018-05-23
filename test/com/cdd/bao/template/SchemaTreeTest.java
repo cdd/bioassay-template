@@ -138,8 +138,8 @@ public class SchemaTreeTest extends OntologyReader
 			candidates.add(Pair.of(pt.parentURI, stNode));
 		}
 		
-		boolean wasChanged = schemaTree.addNodes(candidates);
-		assertTrue(wasChanged == false);
+		List<SchemaTree.Node> added = schemaTree.addNodes(candidates);
+		assertTrue(added.size() <= 0);
 	}
 	
 	private void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)
