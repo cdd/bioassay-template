@@ -261,7 +261,7 @@ public class ImportControlledVocab
 		if (num > 0 && num <= assnidx.length)
 		{
 			Schema.Assignment assn = assignments[assnidx[num - 1]];
-			Property prop = Property.create(colName, assn.propURI, Schema.groupNestString(assn.groupNest()));
+			Property prop = Property.create(colName, assn.propURI, assn.groupNest());
 			Util.writeln("Mapping property to: [" + assn.name + "] <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
 			String[] groupLabel = assn.groupLabel();
 			for (int n = 0; n < prop.groupNest.length; n++)
@@ -292,7 +292,7 @@ public class ImportControlledVocab
 			{
 				Schema.Assignment assn = assnList.get(0);
 				Util.writeln("Matched exactly one assignment: [" + assn.name + "]");
-				map.properties.add(Property.create(colName, assn.propURI, Schema.groupNestString(assn.groupNest())));
+				map.properties.add(Property.create(colName, assn.propURI, assn.groupNest()));
 				map.save();
 				return;
 			}
@@ -319,7 +319,7 @@ public class ImportControlledVocab
 				{
 					Schema.Assignment assn = assnList.get(num - 1);
 					Util.writeln("Adding assignment mapping.");
-					map.properties.add(Property.create(colName, assn.propURI, Schema.groupNestString(assn.groupNest())));
+					map.properties.add(Property.create(colName, assn.propURI, assn.groupNest()));
 					map.save();
 					return;
 				}
@@ -331,7 +331,7 @@ public class ImportControlledVocab
 	private void matchValue(Property prop, String key, String value) throws IOException
 	{
 		String[] groupNest = KeywordMapping.expandPrefixes(prop.groupNest);
-		Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(prop.propURI), Schema.groupNestPosition(groupNest));
+		Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(prop.propURI), groupNest);
 		if (assnList.length == 0) return;
 		Schema.Assignment assn = assnList[0];
 	

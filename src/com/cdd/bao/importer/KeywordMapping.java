@@ -522,7 +522,7 @@ public class KeywordMapping
 			String propURI = obj.getString("propURI"), valueURI = obj.optString("valueURI");
 			if (valueURI == null) continue;
 			String[] groupNest = obj.getJSONArray("groupNest").toStringArray();
-			Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(propURI), Schema.groupNestPosition(groupNest));
+			Schema.Assignment[] assnList = schema.findAssignmentByProperty(ModelSchema.expandPrefix(propURI), groupNest);
 			if (assnList.length == 0) continue;
 			SchemaTree tree = treeCache.get(assnList[0]);
 			if (tree == null) continue;
