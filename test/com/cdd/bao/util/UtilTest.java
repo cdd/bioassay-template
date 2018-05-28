@@ -166,6 +166,8 @@ public class UtilTest
 		assertEquals("null handling", "{null}", Util.arrayStr(stringArr));
 		stringArr = new String[]{"a", "b", "c", "d"};
 		assertEquals("\"a\",\"b\",\"c\",\"d\"", Util.arrayStr(stringArr));
+		stringArr = new String[]{null, "b", null, "d"};
+		assertEquals("null,\"b\",null,\"d\"", Util.arrayStr(stringArr));
 
 		boolean[] boolArr = null;
 		assertEquals("null handling", "{null}", Util.arrayStr(boolArr));
