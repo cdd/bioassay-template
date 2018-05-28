@@ -46,6 +46,12 @@ public class Util
 	public static void writeln(String str) {System.out.println(str);}
 	
 	/**
+	 * Writes a string representation of object to the console, and adds a carriage return.
+	 * @param obj object to write
+	 */
+	public static void writeln(Object obj) {System.out.println(obj);}
+	
+	/**
 	 * Writes a carriage return to the console.
 	 */
 	public static void writeln() {System.out.println();}
@@ -283,6 +289,17 @@ public class Util
 		return str;
 	}
 	
+	/**
+	 * Converts an array to a human-readable string, for debugging purposes.
+	 */
+	public static String arrayStr(Object[] arr) 
+	{
+		if (arr == null) return "{null}";
+		String str = "";
+		for (int n = 0; n < arr.length; n++) str += arr[n] == null ? "{null}" : "{" + arr[n] + "}";
+		return str;
+	}
+
 	/**
 	 * Joins an array of strings together, in a reasonably performant way.
 	 * @param list strings to join

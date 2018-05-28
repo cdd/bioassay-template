@@ -84,6 +84,7 @@ public class ModelSchema
 	public static final String IS_EXCLUDE = "isExclude"; // indicates a value refers to something to exclude
 	public static final String IS_WHOLEBRANCH = "isWholeBranch"; // indicates a value refers to an entire branch, not just one term
 	public static final String IS_EXCLUDEBRANCH = "isExcludeBranch"; // indicates a value refers to an entire branch to exclude
+	public static final String IS_CONTAINER = "isContainer"; // indicates a value that is not explicitly selected
 	
 	public static final String SUGGESTIONS_FULL = "suggestionsFull"; // normal state: all suggestion modelling options enabled
 	public static final String SUGGESTIONS_DISABLED = "suggestionsDisabled"; // do not use for suggestion models (neither input nor output)
@@ -105,7 +106,8 @@ public class ModelSchema
 	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
 	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
-	private Property hasAnnotation, isAssignment, hasLiteral, isExclude, isWholeBranch, isExcludeBranch;
+	private Property hasAnnotation, isAssignment, hasLiteral;
+	private Property isExclude, isWholeBranch, isExcludeBranch, isContainer;
 	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
 	private Property suggestionsURL, suggestionsID, suggestionsString;
 	private Property suggestionsNumber, suggestionsInteger, suggestionsDate;
@@ -274,6 +276,7 @@ public class ModelSchema
 		isExclude = model.createProperty(PFX_BAT + IS_EXCLUDE);
 		isWholeBranch = model.createProperty(PFX_BAT + IS_WHOLEBRANCH);
 		isExcludeBranch = model.createProperty(PFX_BAT + IS_EXCLUDEBRANCH);
+		isContainer = model.createProperty(PFX_BAT + IS_CONTAINER);
 		suggestionsFull = model.createProperty(PFX_BAT + SUGGESTIONS_FULL);
 		suggestionsDisabled = model.createProperty(PFX_BAT + SUGGESTIONS_DISABLED);
 		suggestionsField = model.createProperty(PFX_BAT + SUGGESTIONS_FIELD);
@@ -382,6 +385,7 @@ public class ModelSchema
 				if (val.spec == Schema.Specify.EXCLUDE) model.add(blank, isExclude, model.createTypedLiteral(true));
 				else if (val.spec == Schema.Specify.WHOLEBRANCH) model.add(blank, isWholeBranch, model.createTypedLiteral(true));
 				else if (val.spec == Schema.Specify.EXCLUDEBRANCH) model.add(blank, isExcludeBranch, model.createTypedLiteral(true));
+				else if (val.spec == Schema.Specify.CONTAINER) model.add(blank, isContainer, model.createTypedLiteral(true));
 
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
@@ -509,7 +513,8 @@ public class ModelSchema
 			val.descr = findString(blank, hasDescription);
 			val.spec = findBoolean(blank, isExclude) ? Schema.Specify.EXCLUDE :
 					   findBoolean(blank, isWholeBranch) ? Schema.Specify.WHOLEBRANCH :
-					   findBoolean(blank, isExcludeBranch) ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
+					   findBoolean(blank, isExcludeBranch) ? Schema.Specify.EXCLUDEBRANCH :
+					   findBoolean(blank, isContainer) ? Schema.Specify.CONTAINER : Schema.Specify.ITEM;
 			assn.values.add(val);
 			order.put(val, findInteger(blank, inOrder));
 		}

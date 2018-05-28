@@ -62,6 +62,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private TextField fieldPrefix = null;
 	private CheckBox chkIsBranch = null;
 	private TextField fieldBranches = null;
+	private CheckBox chkDuplicate = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private URIRowLine fieldURI = null;
@@ -188,12 +189,16 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			sameGroup = userURI.equals(Util.safeString(group.groupURI));
 		}
 		
-		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup) return null;
+		boolean canDuplicate = chkDuplicate == null ? false : chkDuplicate.isSelected();
+		
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup &&
+			group.canDuplicate == canDuplicate) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
 		mod.groupURI = fieldURI == null ? null : ModelSchema.expandPrefix(fieldURI.getText());
+		mod.canDuplicate = canDuplicate;
 		
 		return mod;
 	}
@@ -224,8 +229,11 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
 				val.descr = vw.fieldDescr.getText();
 				int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
-				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
-						   sel == 3 ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
+				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH
+						 : sel == 2 ? Schema.Specify.EXCLUDE
+						 : sel == 3 ? Schema.Specify.EXCLUDEBRANCH
+						 : sel == 4 ? Schema.Specify.CONTAINER
+						 : Schema.Specify.ITEM;
 				mod.values.add(val);
 			}
 		}
@@ -457,6 +465,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			boolean isBranch = schema.getBranchGroups() != null;
 			chkIsBranch = new CheckBox("Branch template");
 			chkIsBranch.setSelected(isBranch);
+			
 			fieldBranches = new TextField();
 			fieldBranches.setMaxWidth(Double.MAX_VALUE);
 			if (isBranch) fieldBranches.setText(String.join(",", schema.getBranchGroups()));
@@ -494,6 +503,10 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		{
 			fieldURI = new URIRowLine(group.groupURI, "The group URI used to disambiguate this group", -1, PADDING, this);
 			line.add(fieldURI, "URI:", 1, 0);
+			
+			chkDuplicate = new CheckBox("Allow duplication");
+			chkDuplicate.setSelected(group.canDuplicate);
+			line.add(chkDuplicate, null);
 		}
 
 		vbox.getChildren().add(line);
@@ -640,8 +653,12 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			
 			vw.dropSpec = new ComboBox<>();
-			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch");
-			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1 : val.spec == Schema.Specify.EXCLUDE ? 2 : val.spec == Schema.Specify.EXCLUDEBRANCH ? 3 : 0;
+			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch", "Container");
+			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1
+					: val.spec == Schema.Specify.EXCLUDE ? 2
+					: val.spec == Schema.Specify.EXCLUDEBRANCH ? 3
+					: val.spec == Schema.Specify.CONTAINER ? 4
+					: 0; // Schema.Specify.ITEM
 			vw.dropSpec.getSelectionModel().select(sel);
 			observeFocus(vw.dropSpec, n);
 			Tooltip.install(vw.dropSpec, new Tooltip("How to interpret the selected term: include or exclude, singleton or branch."));
