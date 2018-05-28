@@ -37,7 +37,7 @@ import org.json.*;
 
 public class Schema
 {
-		// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
+	// a "group" is a collection of assignments and subgroups; a BioAssayTemplate is basically a single root group, and its descendent
 	// contents make up the definition
 	public static final class Group
 	{
