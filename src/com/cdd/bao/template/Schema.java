@@ -942,7 +942,7 @@ public class Schema
 		boolean m1 = PTN_GROUPINDEXED.matcher(uri1).matches(), m2 = PTN_GROUPINDEXED.matcher(uri2).matches();
 		if (m1 && m2) return false; // both have indices and they're different
 		if (!m1) uri1 += "@1";
-		if (!m2) uri2 += "@2";
+		if (!m2) uri2 += "@1";
 		return uri1.equals(uri2);
 	}
 }
