@@ -198,7 +198,7 @@ public class SchemaVocab
 
 			String[] groupNest = stored.assignment.groupNest();
 			data.writeInt(groupNest.length);
-			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+			for (int i = 0; i < groupNest.length; i++) data.writeUTF(groupNest[i]);
 
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
