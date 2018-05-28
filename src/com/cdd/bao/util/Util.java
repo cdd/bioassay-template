@@ -238,8 +238,8 @@ public class Util
 	public static String arrayStr(String[] arr)
 	{
 		if (arr == null) return "{null}";
-		StringJoiner sj = new StringJoiner("\",\"", "\"", "\"");
-		for (String s : arr) sj.add(s);
+		StringJoiner sj = new StringJoiner("\",\"");
+		for (String s : arr) sj.add(s == null ? null : "\"" + s + "\"");
 		return sj.toString();
 	}
 	

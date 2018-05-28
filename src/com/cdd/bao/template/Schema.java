@@ -93,7 +93,7 @@ public class Schema
 			if (parent == null) return new String[0];
 			List<String> nest = new ArrayList<>();
 			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
-			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
+			while (nest.size() > 0 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
 			return nest.toArray(new String[nest.size()]);
 		}
 		
@@ -113,6 +113,21 @@ public class Schema
 			buff.append("[" + name + "] <" + groupURI + "> (" + descr + ")\n");
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
+		}
+
+		// return a flattened list of subgroups (not including this one), arranged in tree-order
+		public Group[] flattenedGroups()
+		{
+			List<Group> list = new ArrayList<>();
+			List<Group> stack = new ArrayList<>();
+			stack.addAll(subGroups);
+			while (stack.size() > 0)
+			{
+				Group g = stack.remove(0);
+				list.add(g);
+				stack.addAll(g.subGroups);
+			}
+			return list.toArray(new Group[list.size()]);
 		}
 		
 		// makes a list of all the assignments that occur within this group and its subgroups, in order of occurrence
