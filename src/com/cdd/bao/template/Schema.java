@@ -935,7 +935,7 @@ public class Schema
 	
 	// ------------ private methods ------------	
 
-	private static final Pattern PTN_GROUPINDEXED = Pattern.compile("\\@\\d+$");
+	private static final Pattern PTN_GROUPINDEXED = Pattern.compile(".*@\\d+$");
 	private static boolean compareGroupURI(String uri1, String uri2)
 	{
 		if (uri1.equals(uri2)) return true; // quick out: avoid regex
