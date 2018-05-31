@@ -731,7 +731,25 @@ public class Schema
 	{
 		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
 	}
-		
+	
+	// comparison/manipulation of group URIs, with or without suffixes
+	private static final Pattern PTN_GROUPINDEXED = Pattern.compile("(.*)@\\d+$");
+	public static boolean compareGroupURI(String uri1, String uri2)
+	{
+		if (uri1.equals(uri2)) return true; // quick out: avoid regex
+		boolean m1 = PTN_GROUPINDEXED.matcher(uri1).matches(), m2 = PTN_GROUPINDEXED.matcher(uri2).matches();
+		if (m1 && m2) return false; // both have indices and they're different
+		if (!m1) uri1 += "@1";
+		if (!m2) uri2 += "@1";
+		return uri1.equals(uri2);
+	}
+	public static String removeSuffixGroupURI(String uri)
+	{
+		if (uri == null) return null;
+		Matcher m = PTN_GROUPINDEXED.matcher(uri);
+		return m.matches() ? m.group(1) : uri;
+	}
+	
 	// convenience methods for combining parts of assignments/annotations to make string identifiers
 	private final static String SEP = "::";
 	public static String keyPropGroup(String propURI, String[] groupNest)
@@ -934,15 +952,4 @@ public class Schema
 	}	
 	
 	// ------------ private methods ------------	
-
-	private static final Pattern PTN_GROUPINDEXED = Pattern.compile(".*@\\d+$");
-	private static boolean compareGroupURI(String uri1, String uri2)
-	{
-		if (uri1.equals(uri2)) return true; // quick out: avoid regex
-		boolean m1 = PTN_GROUPINDEXED.matcher(uri1).matches(), m2 = PTN_GROUPINDEXED.matcher(uri2).matches();
-		if (m1 && m2) return false; // both have indices and they're different
-		if (!m1) uri1 += "@1";
-		if (!m2) uri2 += "@1";
-		return uri1.equals(uri2);
-	}
 }
