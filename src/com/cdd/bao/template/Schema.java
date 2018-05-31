@@ -26,6 +26,7 @@ import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.json.*;
 
@@ -44,7 +45,6 @@ public class Schema
 		public Group parent;
 		public String name, descr = "";
 		public String groupURI = ""; // formal identity for the group
-		public int groupIndex = 0; // additional disambiguation, in case of duplicated groups
 		public boolean canDuplicate = false; // if true, permit duplication of the group when used for annotation
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
@@ -67,6 +67,8 @@ public class Schema
 		{
 			Group dup = new Group(parent, name, groupURI);
 			dup.descr = descr;
+			dup.groupURI = groupURI;
+			dup.canDuplicate = canDuplicate;
 			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
@@ -712,13 +714,13 @@ public class Schema
 	{
 		int sz1 = Util.length(groupNest1), sz2 = Util.length(groupNest2);
 		if (sz1 != sz2) return false;
-		for (int n = 0; n < sz1; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		for (int n = 0; n < sz1; n++) if (!compareGroupURI(groupNest1[n], groupNest2[n])) return false;
 		return true;
 	}
 	public static boolean compatibleGroupNest(String[] groupNest1, String[] groupNest2)
 	{
 		int sz = Math.min(Util.length(groupNest1), Util.length(groupNest2));
-		for (int n = 0; n < sz; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		for (int n = 0; n < sz; n++) if (!compareGroupURI(groupNest1[n], groupNest2[n])) return false;
 		return true;
 	}
 	public static boolean samePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
@@ -729,7 +731,25 @@ public class Schema
 	{
 		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
 	}
-		
+	
+	// comparison/manipulation of group URIs, with or without suffixes
+	private static final Pattern PTN_GROUPINDEXED = Pattern.compile("(.*)@\\d+$");
+	public static boolean compareGroupURI(String uri1, String uri2)
+	{
+		if (uri1.equals(uri2)) return true; // quick out: avoid regex
+		boolean m1 = PTN_GROUPINDEXED.matcher(uri1).matches(), m2 = PTN_GROUPINDEXED.matcher(uri2).matches();
+		if (m1 && m2) return false; // both have indices and they're different
+		if (!m1) uri1 += "@1";
+		if (!m2) uri2 += "@1";
+		return uri1.equals(uri2);
+	}
+	public static String removeSuffixGroupURI(String uri)
+	{
+		if (uri == null) return null;
+		Matcher m = PTN_GROUPINDEXED.matcher(uri);
+		return m.matches() ? m.group(1) : uri;
+	}
+	
 	// convenience methods for combining parts of assignments/annotations to make string identifiers
 	private final static String SEP = "::";
 	public static String keyPropGroup(String propURI, String[] groupNest)
@@ -932,5 +952,4 @@ public class Schema
 	}	
 	
 	// ------------ private methods ------------	
-
 }
