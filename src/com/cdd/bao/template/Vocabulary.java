@@ -517,7 +517,12 @@ public class Vocabulary
 		{
 			Statement stmt = iter.next();
 			String uri1 = remapIfAny(stmt.getSubject().getURI());
-			String uri2 = remapIfAny(stmt.getObject().asResource().getURI());
+			String uri2 = null;
+			try {uri2 = remapIfAny(stmt.getObject().asResource().getURI());}
+			catch (ResourceRequiredException ex)
+			{
+				throw new IOException("Resource missing, for: <" + uri1 + "> <" + owlEquivalence.toString() + "> {?}", ex);
+			}
 			if (uri1 == null || uri2 == null) continue;
 			addEquivalence(uri1, uri2);
 			addEquivalence(uri2, uri1);
