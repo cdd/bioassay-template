@@ -50,6 +50,7 @@ public class ScanAxioms
 	public SchemaVocab schvoc;
 
 	public static Map<String, String> uriToLabel = new HashMap<String, String>();
+	public static Map<String, String> labelToUri = new HashMap<String, String>();
 	public Map<String, List<Statement>> anonStatements = new HashMap<>();
 	//public Map<String, String> allAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> someAxiomsMap = new HashMap<String, String>();
@@ -72,7 +73,7 @@ public class ScanAxioms
 	public static ArrayList axiomsForAll = new ArrayList<AssayAxiomsAll>();
 	public static ArrayList axiomsForSome = new ArrayList<AssayAxiomsSome>();
 
-	public String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
+	public static String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
 			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
 			"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
 			"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
@@ -170,6 +171,8 @@ public class ScanAxioms
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
 				uriToLabel.put(ontClass.getURI(), label.getString());
+				labelToUri.put(label.getString(), ontClass.getURI());
+				
 			}
 		}
 
@@ -196,6 +199,7 @@ public class ScanAxioms
 				RDFNode labelNode = labels.next();
 				Literal label = labelNode.asLiteral();
 				uriToLabel.put(ontProp.getURI(), label.getString());
+				labelToUri.put(label.getString(), ontProp.getURI());
 			}
 		}
 
@@ -255,7 +259,7 @@ public class ScanAxioms
 
 						String key = nameNode(o);
 						String val = "ALL: property=[" + pname + "] value=";
-						if (sequence.length == 0) val += "{nothing}";
+						if (sequence.length == 0) val += "{nothing}";	
 						String objectURIs = null;
 						String objectLabels = null;
 						String[] uriArray = new String[sequence.length];

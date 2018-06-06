@@ -44,6 +44,7 @@ public class AxiomCollector
 	public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
 
 	public static Map<String, String> uriToLabel = ScanAxioms.uriToLabel;
+	public static Map<String, String> labelToUri = ScanAxioms.labelToUri;
 
 	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
 	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
@@ -464,7 +465,7 @@ public class AxiomCollector
 
 		public String getClassURI()
 		{
-			return classURI;
+			return labelToUri.get(classURI);
 		}
 
 		public String getClassLabel()
@@ -518,16 +519,27 @@ public class AxiomCollector
 
 		public String getObjectLabels()
 		{
-
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(objectURIs);
-			while (matcher.find())
-				this.objectLabels += uriToLabel.get(matcher.group(1)) + "\t";
-
-			objectLabels = objectLabels.replaceAll("null", "");
-			return this.objectLabels;
+			return objectURIs.split("\\]")[0].replaceAll("^\\[","");
+//			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+//			Matcher matcher = pattern.matcher(objectURIs);
+//			while (matcher.find())
+//				this.objectLabels += uriToLabel.get(matcher.group(1)) + "\t";
+//
+//			objectLabels = objectLabels.replaceAll("null", "");
+//			return this.objectLabels;
 		}
 
+		public String getSubjectLabels()
+		{
+			return classURI.split("\\]")[0].replaceAll("^\\[","");
+//			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+//			Matcher matcher = pattern.matcher(objectURIs);
+//			while (matcher.find())
+//				this.objectLabels += uriToLabel.get(matcher.group(1)) + "\t";
+//
+//			objectLabels = objectLabels.replaceAll("null", "");
+//			return this.objectLabels;
+		}
 		public String getAxiomType()
 		{
 			return this.axiomType;
@@ -671,14 +683,14 @@ public class AxiomCollector
 		{
 			mapSome.put(axiom, axiom.getClassURI());
 			mapClass2Axioms.put(axiom.generalizeSomeAxiom(axiom), axiom.getClassURI());
-			System.out.println("Class Label " + axiom.getClassLabel() + "Axiom Some String " + axiom.toString() + "Size of Map: " + mapSome.size());
+			//System.out.println("Class Label " + axiom.getClassLabel() + "Axiom Some String " + axiom.toString() + "Size of Map: " + mapSome.size());
 		}
 
 		for (AssayAxiomsAll axiom : axiomsForAll)
 		{
 			mapAll.put(axiom, axiom.getClassURI());
 			mapClass2Axioms.put(axiom.generalizeOnlyAxiom(axiom), axiom.getClassURI());
-			System.out.println("Class Label " + axiom.getClassLabel() + "Axiom All String " + axiom.toString() + "Size of Map: " + mapAll.size());
+			//System.out.println("Class Label " + axiom.getClassLabel() + "Axiom All String " + axiom.toString() + "Size of Map: " + mapAll.size());
 		}
 
 		/*ArrayList<AssayAxioms> validAxiomsInBAO = new ArrayList<AssayAxioms>();
@@ -712,6 +724,7 @@ public class AxiomCollector
 		System.out.println("Size of Merged Map " + mapClass2Axioms.size());
 
 		this.createRules(mapClass2Axioms);
+
 
 	}
 	/*public static <AssayAxioms, String> Set<AssayAxioms> getKeysByValue(Map<AssayAxioms, String> map, String value) {
@@ -831,12 +844,12 @@ public class AxiomCollector
 		for (AssayAxioms axiom : assayAxiomsMap.keySet())
 		{
 			Term subject = new Term(axiom.getClassURI(), true);
-			//System.out.println("I am here" + subject);
+			//System.out.println("I am here" + axiom.getSubjectLabels());
 
 			String[] objURIs = new String[1];
 			objURIs[0] = axiom.getObjectLabels();
 			Term[] impact = new Term[objURIs.length];
-			//System.out.println("I am here2");
+			//System.out.println("I am here2"+impact.toString());
 			//for(int i = objURIs.length-1; i>=0; i-- ){
 			//if(objURIs[i] !=null)
 			//impact[i] = A.new Term(objURIs[i]);
@@ -846,7 +859,8 @@ public class AxiomCollector
 			newRule.impact = impact;
 			newRule.type = Type.LIMIT;
 			axioms2Rules.add(newRule);
-			System.out.println(newRule.toString());
+			//System.out.println(newRule.toString());
+			System.out.println(newRule.rulesFormatString());
 
 		}
 		//System.out.println(axioms2Rules.toString());

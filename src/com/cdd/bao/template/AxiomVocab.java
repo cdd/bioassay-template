@@ -7,6 +7,7 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.axioms.AxiomCollector.*;
+import com.cdd.bao.ScanAxioms;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -21,6 +22,11 @@ import org.apache.commons.lang3.*;
 
 public class AxiomVocab
 {
+	/* LIMIT = axioms with keyword "some"; 
+	 * EXCLUDE = axioms with keyword "not";  
+	 * REQUIRED = axioms with keyword "only"
+	 * */
+	
 	public enum Type
 	{
 		LIMIT(1),
@@ -66,7 +72,7 @@ public class AxiomVocab
 		@Override
 		public String toString()
 		{
-			return "valueURI: [" + ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch + "]";
+			return ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch ;
 		}
 		
 		@Override
@@ -111,6 +117,24 @@ public class AxiomVocab
 			str.append("impacts: [");
 			for (int n = 0; n < ArrayUtils.getLength(impact); n++) str.append((n == 0 ? "" : ",") + impact[n]);
 			str.append("])");
+
+			return str.toString();
+		}
+		
+		public String rulesFormatString()
+		{
+			StringBuilder str = new StringBuilder();
+
+			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
+			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
+			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
+			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
+
+			for (int i = 0; i<ArrayUtils.getLength(impact);i++){
+				str.append("[" + ModelSchema.collapsePrefix(subject.valueURI) + "]");
+				str.append("=>["+impact[i]+"]"+"\n");
+			}
+			
 
 			return str.toString();
 		}
@@ -301,8 +325,18 @@ public class AxiomVocab
 		return axioms2Rules;
 	}*/
 	
+	public List<Rule> findRedundantRules(String[] redundantURIs){
+		
+		ArrayList<Rule> redundantRules = new ArrayList();
+		String[]redundantURIList = redundantURIs;
+		
+		
+		
+		return redundantRules;
+	}
 	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap)
 	{
+		
 		//assayAxiomsMap<axiom, axiomsClassURI>
 		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
 		ArrayList<Rule> axioms2Rules = new ArrayList<>();
@@ -311,7 +345,7 @@ public class AxiomVocab
 
 		for (AssayAxioms axiom : assayAxiomsMap.keySet())
 		{
-			Term subject = new Term(axiom.getClassURI(), true);
+			Term subject = new Term(axiom.classURI, true);
 
 			String[] objURIs = axiom.uriArray;
 			//objURIs[0] = axiom.getObjectURIs();
@@ -330,6 +364,7 @@ public class AxiomVocab
 
 		}
 		System.out.println(axioms2Rules.toString());
+		
 		return axioms2Rules;
 	}
 	
