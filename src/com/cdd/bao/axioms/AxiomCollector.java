@@ -61,335 +61,7 @@ public class AxiomCollector
 	//second you want to eliminate general axioms in the form
 	//assay has bioassay spec some bioassay spec
 
-	public static final class AssayAxiomsAll
-	{
-		public String classURI;
-		public String classLabel;
-		public String axiomType;
-		public String predicateLabel;
-		public String predicateURI;
-		public String objectLabels;
-		public String objectURIs;
-		public String[] uriArray;
-
-		public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-		{
-			this.classURI = cURI;
-			this.classLabel = cLabel;
-			this.axiomType = aType;
-			this.predicateLabel = pLabel;
-			this.predicateURI = pURI;
-			this.objectLabels = oLabels;
-			this.objectURIs = oURIs;
-		}
-
-		public String processURIArray(String[] uriArray)
-		{
-
-			String uris = "";
-			uriArray = this.uriArray;
-			for (int i = 0; i < uriArray.length; i++)
-			{
-				uris += uriArray[i] + "\t";
-
-			}
-
-			return uris;
-		}
-
-		public String labelsFromURIArray(String[] uriArray)
-		{
-
-			String uris = "";
-			String labels = "";
-			uriArray = this.uriArray;
-			for (int i = 0; i < uriArray.length; i++)
-			{
-				uris += uriArray[i] + "\t";
-				if (uriToLabel.get(uriArray[i]) != null) labels += uriToLabel.get(uriArray[i]) + "\t";
-
-			}
-
-			return labels;
-		}
-
-		public static AssayAxioms generalizeOnlyAxiom(AssayAxiomsAll onlyAxiom)
-		{
-
-			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
-			    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
-			    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
-			    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
-
-			AssayAxioms genAxiom = null;
-
-			genAxiom = new AssayAxioms(onlyAxiom.getClassLabel(), onlyAxiom.getClassLabel(), onlyAxiom.getAxiomType(), onlyAxiom.getPredicateLabel(),
-					onlyAxiom.getPredicateURI(), onlyAxiom.getObjectLabels(), onlyAxiom.getObjectURIs());
-
-			return genAxiom;
-
-		}
-
-		public AssayAxiomsAll(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
-		{
-			this.classURI = cURI;
-			this.axiomType = aType;
-			this.predicateURI = pURI;
-			this.objectURIs = oURIs;
-			this.uriArray = uriArray;
-		}
-
-		public String[] getURIArray()
-		{
-			return this.uriArray;
-		}
-
-		public String getClassURI()
-		{
-			return classURI;
-		}
-
-		public String getClassLabel()
-		{
-			return uriToLabel.get(this.classURI);
-		}
-
-		public String getPredicateURI()
-		{
-			return predicateURI;
-		}
-
-		public String getPredicateLabel()
-		{
-			return uriToLabel.get(this.predicateURI);
-		}
-
-		public String getObjectURIs()
-		{
-			objectURIs = objectURIs.replaceAll("null", "");
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(objectURIs);
-			if (matcher.find()) this.objectURIs += matcher.group(1) + "\t";
-
-			return this.objectURIs;
-		}
-
-		public String eliminateRedundantURIs()
-		{
-
-			String currentURI = this.objectURIs;
-
-			currentURI = currentURI.replaceAll("null", "");
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(currentURI);
-			while (matcher.find())
-				currentURI = matcher.group(1);
-
-			//String currentURI = this.objectURIs;
-
-			if (Arrays.asList(redundantURIs).contains(currentURI))
-			{ // System.out.println("told ya!");
-				currentURI.replaceAll(currentURI, "");
-				currentURI += "\t redundant axiom";
-			}
-			else
-				currentURI = this.objectURIs;
-
-			return currentURI;
-		}
-
-		public String getObjectLabels()
-		{
-
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(objectURIs);
-			while (matcher.find())
-				this.objectLabels += uriToLabel.get(matcher.group(1)) + "\t";
-
-			objectLabels = objectLabels.replaceAll("null", "");
-			return this.objectLabels;
-		}
-
-		public String getAxiomType()
-		{
-			return this.axiomType;
-		}
-
-		public String toString()
-		{
-			String axiomString = null;
-			axiomString = this.getClassURI() + " ; " + this.getPredicateURI() + " ; " + this.getObjectURIs() + " ; " + this.getAxiomType() + " . ";
-
-			return axiomString;
-		}
-
-	}
-
-	public static final class AssayAxiomsSome
-	{
-		public String classURI;
-		public String classLabel;
-		public String axiomType;
-		public String predicateLabel;
-		public String predicateURI;
-		public String objectLabels;
-		public String objectURIs;
-		public String[] uriArray;
-
-		public AssayAxiomsSome(String cURI, String cLabel, String pLabel, String pURI, String oLabels, String oURIs, String aType)
-		{
-			this.classURI = cURI;
-			this.classLabel = cLabel;
-			this.axiomType = aType;
-			this.predicateLabel = pLabel;
-			this.predicateURI = pURI;
-			this.objectLabels = oLabels;
-			this.objectURIs = oURIs;
-		}
-
-		public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
-		{
-			this.classURI = cURI;
-			this.axiomType = aType;
-			this.predicateURI = pURI;
-			this.objectURIs = oURIs;
-			this.uriArray = uriArray;
-		}
-
-		public String getClassURI()
-		{
-			return classURI;
-		}
-
-		public String getClassLabel()
-		{
-			return uriToLabel.get(this.classURI);
-		}
-
-		public String getPredicateURI()
-		{
-			return predicateURI;
-		}
-
-		public String getPredicateLabel()
-		{
-			return uriToLabel.get(this.predicateURI);
-		}
-
-		public String getObjectURIs()
-		{
-			objectURIs = objectURIs.replaceAll("null", "");
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(objectURIs);
-			if (matcher.find()) this.objectURIs += matcher.group(1) + "\t";
-
-			return this.objectURIs;
-		}
-
-		public String[] getURIArray()
-		{
-			return this.uriArray;
-		}
-
-		public static AssayAxioms generalizeSomeAxiom(AssayAxiomsSome someAxiom)
-		{
-
-			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
-			    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
-			    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
-			    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
-
-			AssayAxioms genAxiom = null;
-
-			genAxiom = new AssayAxioms(someAxiom.getClassLabel(), someAxiom.getClassLabel(), someAxiom.getAxiomType(), someAxiom.getPredicateLabel(),
-					someAxiom.getPredicateURI(), someAxiom.getObjectLabels(), someAxiom.getObjectURIs());
-
-			return genAxiom;
-
-		}
-
-		public String eliminateRedundantURIs()
-		{
-
-			String currentURI = this.objectURIs;
-
-			currentURI = currentURI.replaceAll("null", "");
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(currentURI);
-			while (matcher.find())
-				currentURI = matcher.group(1);
-
-			//String currentURI = this.objectURIs;
-
-			if (Arrays.asList(redundantURIs).contains(currentURI))
-			{ // System.out.println("told ya!");
-				currentURI.replaceAll(currentURI, "");
-				currentURI += "\t redundant axiom";
-			}
-			else
-				currentURI = this.objectURIs;
-
-			return currentURI;
-		}
-
-		public String processURIArray(String[] uriArray)
-		{
-
-			String uris = "";
-			uriArray = this.uriArray;
-			for (int i = 0; i < uriArray.length; i++)
-			{
-				uris += uriArray[i] + "\t";
-
-			}
-
-			return uris;
-		}
-
-		public String labelsFromURIArray(String[] uriArray)
-		{
-
-			String uris = "";
-			String labels = "";
-			uriArray = this.uriArray;
-			for (int i = 0; i < uriArray.length; i++)
-			{
-				uris += uriArray[i] + "\t";
-				if (uriToLabel.get(uriArray[i]) != null) labels += uriToLabel.get(uriArray[i]) + "\t";
-
-			}
-
-			return labels;
-		}
-
-		public String getObjectLabels()
-		{
-
-			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-			Matcher matcher = pattern.matcher(objectURIs);
-			while (matcher.find())
-				this.objectLabels += uriToLabel.get(matcher.group(1)) + "\t";
-
-			objectLabels = objectLabels.replaceAll("null", "");
-			return this.objectLabels;
-		}
-
-		public String getAxiomType()
-		{
-			return this.axiomType;
-		}
-
-		public String toString()
-		{
-			String axiomString = null;
-			axiomString = this.getClassURI() + " ; " + this.getPredicateURI() + " ; " + this.getObjectURIs() + " ; " + this.getAxiomType() + " . ";
-
-			return axiomString;
-		}
-
-	}
-
-	public static final class AssayAxioms
+	public static class AssayAxioms
 	{
 		public String classURI;
 		public String classLabel;
@@ -553,6 +225,112 @@ public class AxiomCollector
 			return axiomString;
 		}
 
+	}
+	public static final class AssayAxiomsAll extends AssayAxioms{
+		public String classURI;
+		public String classLabel;
+		public String axiomType;
+		public String predicateLabel;
+		public String predicateURI;
+		public String objectLabels;
+		public String objectURIs;
+		public String[] uriArray;
+		//(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
+	
+
+		public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
+		{
+			super(cURI, cLabel, aType, pLabel, pURI, oLabels, oURIs);
+			this.classURI = cURI;
+			this.classLabel = cLabel;
+			this.axiomType = aType;
+			this.predicateLabel = pLabel;
+			this.predicateURI = pURI;
+			this.objectLabels = oLabels;
+			this.objectURIs = oURIs;
+		}
+		public AssayAxiomsAll(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
+		{
+			super(cURI, aType, pURI, oURIs, uriArray);
+			this.classURI = cURI;
+			this.axiomType = aType;
+			this.predicateURI = pURI;
+			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
+		}
+		
+		public static AssayAxioms generalizeOnlyAxiom(AssayAxiomsAll onlyAxiom)
+		{
+
+			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
+			    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
+			    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
+			    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
+
+			AssayAxioms genAxiom = null;
+
+			genAxiom = new AssayAxioms(onlyAxiom.getClassLabel(), onlyAxiom.getClassLabel(), onlyAxiom.getAxiomType(), onlyAxiom.getPredicateLabel(),
+					onlyAxiom.getPredicateURI(), onlyAxiom.getObjectLabels(), onlyAxiom.getObjectURIs());
+
+			return genAxiom;
+
+		}
+		
+	}
+	
+	public static final class AssayAxiomsSome extends AssayAxioms{
+		
+		public String classURI;
+		public String classLabel;
+		public String axiomType;
+		public String predicateLabel;
+		public String predicateURI;
+		public String objectLabels;
+		public String objectURIs;
+		public String[] uriArray;
+		
+
+		public AssayAxiomsSome(String cURI, String cLabel, String pLabel, String pURI, String oLabels, String oURIs, String aType)
+		{
+			super(cURI, cLabel, aType, pLabel, pURI, oLabels, oURIs);
+			this.classURI = cURI;
+			this.classLabel = cLabel;
+			this.axiomType = aType;
+			this.predicateLabel = pLabel;
+			this.predicateURI = pURI;
+			this.objectLabels = oLabels;
+			this.objectURIs = oURIs;
+		}
+
+		public AssayAxiomsSome(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
+		
+		{
+			super(cURI, aType, pURI, oURIs, uriArray);
+			this.classURI = cURI;
+			this.axiomType = aType;
+			this.predicateURI = pURI;
+			this.objectURIs = oURIs;
+			this.uriArray = uriArray;
+		}
+		
+		public static AssayAxioms generalizeSomeAxiom(AssayAxiomsSome someAxiom)
+		{
+
+			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
+			    			(mapSome.get(classURI).getClassLabel()),(mapSome.get(classURI).getAxiomType()),
+			    			(mapSome.get(classURI).getPredicateLabel()), (mapSome.get(classURI).getPredicateURI()),
+			    			(mapSome.get(classURI).getObjectLabels()), (mapSome.get(classURI).getObjectURIs())), classURI);*/
+
+			AssayAxioms genAxiom = null;
+
+			genAxiom = new AssayAxioms(someAxiom.getClassLabel(), someAxiom.getClassLabel(), someAxiom.getAxiomType(), someAxiom.getPredicateLabel(),
+					someAxiom.getPredicateURI(), someAxiom.getObjectLabels(), someAxiom.getObjectURIs());
+
+			return genAxiom;
+
+		}
+
+		
 	}
 
 	public static final class PropertiesWithInverse

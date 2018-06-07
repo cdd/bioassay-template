@@ -49,19 +49,7 @@ public class AxiomVocab
 		//public String branchURI;
 		public String valueURI;
 		public boolean wholeBranch;
-		
-		/*public Term(String branchURI, String valueURI, boolean wholeBranch)
-		{
-			this.branchURI = branchURI;
-			this.valueURI = valueURI;
-			this.wholeBranch = wholeBranch;
-		}
-		public Term(String branchURI)
-		{
-			this.branchURI = branchURI;
-			this.valueURI = null;
-			this.wholeBranch = false;
-		}*/
+	
 		public Term(String valueURI, boolean wholeBranch)
 		{
 			//this.branchURI = null;
@@ -93,7 +81,13 @@ public class AxiomVocab
 
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
-
+		
+		/*Currently we don't care about the predicate, because for annotations, that's built in the template.
+		 * However, if we want to extract these axioms as a subgraph from the ontology, then we would need it.
+		 * In that case, add the following term (and add a new constructor):
+		 * public Term predicate;
+		*/
+		
 		public Rule() {}
 		public Rule(Type type, Term subject) {this(type, subject, null);}
 		public Rule(Type type, Term subject, Term[] impact)
@@ -121,6 +115,8 @@ public class AxiomVocab
 			return str.toString();
 		}
 		
+		//method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
+		//TODO: add code for printing the output content into a file with file headers Peter provided.
 		public String rulesFormatString()
 		{
 			StringBuilder str = new StringBuilder();
@@ -131,7 +127,7 @@ public class AxiomVocab
 			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
 
 			for (int i = 0; i<ArrayUtils.getLength(impact);i++){
-				str.append("[" + ModelSchema.collapsePrefix(subject.valueURI) + "]");
+				str.append("[" + subject+ "]");
 				str.append("=>["+impact[i]+"]"+"\n");
 			}
 			
@@ -152,6 +148,7 @@ public class AxiomVocab
 			return true;
 		}
 	}
+	
 	private List<Rule> rules = new ArrayList<>();
 
 	// ------------ public methods ------------
@@ -294,36 +291,8 @@ public class AxiomVocab
 		return av;
 	}
 	
-	//create rule method should read the axioms from a map or array list and 
-	// generate the rule in the format that the "addRule" method can use
-	//all the rules we have extracted fall into the LIMIT category
 	
-	/*public ArrayList<Rule> createRules(HashMap<AssayAxioms, String> axiomMap){
-		
-		//assayAxiomsMap<axiom, axiomsClassURI>
-		HashMap<AssayAxioms, String> assayAxiomsMap = axiomMap;
-		ArrayList<Rule> axioms2Rules = new ArrayList();
-		Term subject = null;
-		Term[] impact = null;
-		Rule newRule = null;
-
-		for(AssayAxioms axiom: assayAxiomsMap.keySet())
-		{
-			subject = new Term(axiom.getClassURI());
-			
-			String[] objURIs = axiom.getURIArray();
-			for(int i = objURIs.length-1; i>=0; i-- ){
-			  impact[i] = new Term(objURIs[i]);
-			}
-			
-			 newRule.subject = subject;
-			 newRule.impact = impact;
-			 newRule.type = Type.LIMIT;
-			axioms2Rules.add(newRule);
-							
-		}
-		return axioms2Rules;
-	}*/
+	
 	
 	public List<Rule> findRedundantRules(String[] redundantURIs){
 		
