@@ -335,7 +335,14 @@ public class SchemaVocab
 			curRemapTo.toURI = data.readUTF();
 			sv.remappings.put(curRemapTo.fromURI, curRemapTo);
 		}
-		
+
+		// log warnings when a StoredTree is missing an assignment (usually indicative of a mis-match between)
+		for (StoredTree stored : sv.treeList) if (stored.assignment == null)
+		{
+			Util.writeln("*** WARNING: no assignment found; schemaPrefix=" + stored.schemaPrefix
+							+ "; propURI=" + stored.propURI + "; groupNest=" + Util.arrayStr(stored.groupNest));
+		}
+
 		return sv;
 	}
 	
