@@ -1,0 +1,176 @@
+{
+    "schemaPrefix": "http://www.bioassayontology.org/bas/MeasurementDetails#",
+    "branchGroups": ["http://www.bioassayontology.org/bao#BAX_0000017"],
+    "root": 
+    {
+        "name": "measurement details",
+        "descr": "",
+        "groupURI": "http://www.bioassayontology.org/bao#BAO_0000209",
+        "assignments": [],
+        "subGroups": 
+        [
+            {
+                "name": "measurement details",
+                "descr": "",
+                "groupURI": "http://www.bioassayontology.org/bao#BAO_0000209",
+                "assignments": 
+                [
+                    {
+                        "name": "signal direction",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002857",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0000519",
+                                "name": "signal direction",
+                                "descr": "It is the trend of measured readout signal, whether it increases or decreases in perturbagen treated wells, as compared to the untreated or carrier-treated wells and the endpoint mode of action of an assay.",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "excitation wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002917",
+                        "suggestions": "number",
+                        "values": []
+                    }, 
+                    {
+                        "name": "emission wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002918",
+                        "suggestions": "number",
+                        "values": []
+                    }, 
+                    {
+                        "name": "absorbance wavelength",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002919",
+                        "suggestions": "number",
+                        "values": []
+                    }, 
+                    {
+                        "name": "detection instrument manufacturer",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0000737",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0002091",
+                                "name": "commercial company",
+                                "descr": "The name of an organization that is involved in manufacture and / or commercialization of assay kits, detection instruments, small molecule libraries, etc.",
+                                "spec": "item"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "assay readout type",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002856",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0002067",
+                                "name": "assay readout type",
+                                "descr": "A physical parameter associated with an assay measurement.",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "assay readout parameter",
+                        "descr": "Contains descriptor(s) of assay readout parameter, typically the outcome of image analysis and most often a calculated value, such as intensity, counting, etc.",
+                        "propURI": "http://www.bioassayontology.org/bao#BAX_0000052",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0002969",
+                                "name": "assay readout parameter",
+                                "descr": "assay readout parameter is the outcome of image analysis and is most often a calculated value.\nThis includes 'parameters', such as 'intensity', 'count', 'morphology', etc which are all dependent on phenotype, e.g., intensity and count (number of bright spots) are a result of the amount of gene expression, and morphology is dependent on morphological phenotype, which is detected by the expression of a marker.",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "endpoint modifier",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002858",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0002170",
+                                "name": "endpoint modifier",
+                                "descr": "",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "detected entity",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002797",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0003043",
+                                "name": "molecular entity",
+                                "descr": "",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "measurement quality",
+                        "descr": "",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002662",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://purl.obolibrary.org/obo/PATO_0000051",
+                                "name": "morphology",
+                                "descr": "A quality of a single physical entity inhering in the bearer by virtue of the bearer's size or shape or structure.",
+                                "spec": "wholebranch"
+                            }, 
+                            {
+                                "uri": "http://purl.obolibrary.org/obo/PATO_0000049",
+                                "name": "intensity",
+                                "descr": "A quality inhering in a bearer by virtue of the bearer's possessing or displaying a distinctive feature in type or degree or effect or force.",
+                                "spec": "wholebranch"
+                            }, 
+                            {
+                                "uri": "http://purl.obolibrary.org/obo/PATO_0000068",
+                                "name": "qualitative",
+                                "descr": "",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }, 
+                    {
+                        "name": "location of measurement",
+                        "descr": "BAO property 'is localized in'",
+                        "propURI": "http://www.bioassayontology.org/bao#BAO_0002861",
+                        "suggestions": "full",
+                        "values": 
+                        [
+                            {
+                                "uri": "http://purl.obolibrary.org/obo/GO_0005575",
+                                "name": "cellular component",
+                                "descr": "The part of a cell or its extracellular environment in which a gene product is located. A gene product may be located in one or more parts of a cell and its location may be as specific as a particular macromolecular complex, that is, a stable, persistent association of macromolecules that function together.",
+                                "spec": "wholebranch"
+                            }
+                        ]
+                    }
+                ],
+                "subGroups": []
+            }
+        ]
+    }
+}
