@@ -378,8 +378,7 @@ public class SchemaVocab
 		for (StoredTree stored : treeList)
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
-			if (assn == null) continue;
-			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + assn.name);
+			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + (assn == null ? "?" : assn.name));
 			int maxDepth = 0;
 			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)

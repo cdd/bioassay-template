@@ -230,7 +230,15 @@ public class Main
 		Util.writeln();
 		
 		Schema[] schemata = new Schema[inputFiles.size()];
-		for (int n = 0; n < schemata.length; n++) schemata[n] = SchemaUtil.deserialise(new File(inputFiles.get(n))).schema;
+		Set<String> allPrefixes = new HashSet<>();
+		for (int n = 0; n < schemata.length; n++) 
+		{
+			schemata[n] = SchemaUtil.deserialise(new File(inputFiles.get(n))).schema;
+			String pfx = schemata[n].getSchemaPrefix();
+			if (Util.isBlank(pfx)) throw new IOException("Schema [" + inputFiles.get(n) + "] has no URI prefix.");
+			if (allPrefixes.contains(pfx)) throw new IOException("Duplicate prefix [" + pfx + "] found in [" + inputFiles.get(n) + "].");
+			allPrefixes.add(pfx);
+		}
 		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
 
 		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
