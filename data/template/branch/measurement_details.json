@@ -25,8 +25,20 @@
                             {
                                 "uri": "http://www.bioassayontology.org/bao#BAO_0000519",
                                 "name": "signal direction",
-                                "descr": "It is the trend of measured readout signal, whether it increases or decreases in perturbagen treated wells, as compared to the untreated or carrier-treated wells and the endpoint mode of action of an assay.",
-                                "spec": "wholebranch"
+                                "descr": "The correspondence between the measured numeric value and the biological activity that is being observed.",
+                                "spec": "container"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0080025",
+                                "name": "signal decrease",
+                                "descr": "Lower measurement values correspond to increasing of biological activity.",
+                                "spec": "item"
+                            }, 
+                            {
+                                "uri": "http://www.bioassayontology.org/bao#BAO_0080026",
+                                "name": "signal increase",
+                                "descr": "Higher measurement values correspond to increasing of biological activity.",
+                                "spec": "item"
                             }
                         ]
                     }, 
