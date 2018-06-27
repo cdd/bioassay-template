@@ -636,3 +636,9 @@ bao:BAX_0000105
   rdfs:label "Strain" ;
   obo:IAO_0000115 "variants of virus, microbe, cell, tissue, whole organism, etc."
   .
+
+bao:BAX_0000106
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "publication DOI" ;
+  obo:IAO_0000115 "DOI"
+  .
