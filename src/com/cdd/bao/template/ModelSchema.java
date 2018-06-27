@@ -163,6 +163,13 @@ public class ModelSchema
 		}
 		return uri;
 	}
+	public static String[] collapsePrefixes(String[] uriList)
+	{
+		if (uriList == null) return null;
+		String[] ret = new String[uriList.length];
+		for (int n = 0; n < ret.length; n++) ret[n] = collapsePrefix(uriList[n]);
+		return ret;
+	}
 	
 	// if the given proto-URI starts with one of the common prefixes, replace it with the actual URI root stem; if none, returns same as input
 	public static String expandPrefix(String uri)
@@ -174,6 +181,13 @@ public class ModelSchema
 			if (uri.startsWith(pfx)) return stem + uri.substring(pfx.length());
 		}
 		return uri;
+	}
+	public static String[] expandPrefixes(String[] uriList)
+	{
+		if (uriList == null) return null;
+		String[] ret = new String[uriList.length];
+		for (int n = 0; n < ret.length; n++) ret[n] = expandPrefix(uriList[n]);
+		return ret;
 	}
 
 	// ------------ private data: content ------------	
