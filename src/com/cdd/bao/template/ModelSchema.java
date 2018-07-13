@@ -28,6 +28,7 @@ import com.cdd.bao.util.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang3.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
@@ -123,7 +124,7 @@ public class ModelSchema
 
 	// ------------ static methods ------------	
 	
-	private static final String[] PREFIX_MAP = new String[]
+	public static String[] prefix_map = new String[]
 	{
 		"bao:", PFX_BAO,
 		"bat:", PFX_BAT,
@@ -144,11 +145,25 @@ public class ModelSchema
 		"az:", PFX_ASTRAZENECA,
 	};
 	
+	// associate a new prefix with a URI
+	public static void addPrefix(String pfx, String uri)
+	{
+		// override any existing mapping for named prefix
+		for (int n = 0; n < prefix_map.length; n += 2) if (prefix_map[n].equals(pfx))
+		{
+			prefix_map[n + 1] = uri;
+			return;
+		}
+
+		// supplement current list of prefix mappings
+		prefix_map = ArrayUtils.addAll(prefix_map, pfx, uri);
+	}
+
 	// in case the caller needs to know what htye are
 	public static Map<String, String> getPrefixes()
 	{
 		Map<String, String> map = new LinkedHashMap<>();
-		for (int n = 0; n < PREFIX_MAP.length; n += 2) map.put(PREFIX_MAP[n], PREFIX_MAP[n + 1]);
+		for (int n = 0; n < prefix_map.length; n += 2) map.put(prefix_map[n], prefix_map[n + 1]);
 		return map;
 	}
 	
@@ -156,9 +171,9 @@ public class ModelSchema
 	public static String collapsePrefix(String uri)
 	{
 		if (uri == null) return null;
-		for (int n = 0; n < PREFIX_MAP.length; n += 2)
+		for (int n = 0; n < prefix_map.length; n += 2)
 		{
-			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
+			final String pfx = prefix_map[n], stem = prefix_map[n + 1];
 			if (uri.startsWith(stem)) return pfx + uri.substring(stem.length());
 		}
 		return uri;
@@ -175,9 +190,9 @@ public class ModelSchema
 	public static String expandPrefix(String uri)
 	{
 		if (uri == null) return null;
-		for (int n = 0; n < PREFIX_MAP.length; n += 2)
+		for (int n = 0; n < prefix_map.length; n += 2)
 		{
-			final String pfx = PREFIX_MAP[n], stem = PREFIX_MAP[n + 1];
+			final String pfx = prefix_map[n], stem = prefix_map[n + 1];
 			if (uri.startsWith(pfx)) return stem + uri.substring(pfx.length());
 		}
 		return uri;

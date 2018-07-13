@@ -956,5 +956,14 @@ public class Util
 		if (isBlank(fn) || fn.charAt(0) != '~') return fn;
 		String home = System.getProperty("user.home");
 		return home + fn.substring(1);
-	}	
+	}
+
+	// extract and return URI prefix 
+	// for URI like http://www.bioassayexpress.org/user#PROV_000123, return http://www.bioassayexpress.org/user#
+	public static String getURIPrefix(String uri)
+	{
+		int lastIdx = uri.lastIndexOf('#');
+		String pfxURI = (lastIdx < 0) ? uri : uri.substring(0, lastIdx + 1);
+		return pfxURI;
+	}
 }
