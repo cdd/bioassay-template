@@ -956,5 +956,5 @@ public class Util
 		if (isBlank(fn) || fn.charAt(0) != '~') return fn;
 		String home = System.getProperty("user.home");
 		return home + fn.substring(1);
-	}	
+	}
 }
