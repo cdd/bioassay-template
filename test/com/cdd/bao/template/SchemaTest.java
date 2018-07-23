@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2017-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -356,8 +356,22 @@ public class SchemaTest
 		Schema.Annotation annot3 = new Schema.Annotation(assn3, "literal");
 		assertEquals("name\ng3\ng2\ng1\nliteral\n", annot3.keyString());
 	}
+	
+	@Test
+	public void testGroupNestEqual()
+	{
+		String[] GROUPNEST0 = {"http://something/foo"};
+		String[] GROUPNEST1 = {"http://something/foo@1"};
+		String[] GROUPNEST2 = {"http://something/foo@2"};
+	
+		assertTrue(Schema.sameGroupNest(GROUPNEST0, GROUPNEST0));
+		assertTrue(Schema.sameGroupNest(GROUPNEST0, GROUPNEST1));
+		assertTrue(Schema.sameGroupNest(GROUPNEST1, GROUPNEST1));
+		assertFalse(Schema.sameGroupNest(GROUPNEST1, GROUPNEST2));
+		assertTrue(Schema.sameGroupNest(GROUPNEST2, GROUPNEST2));
+	}
 
-	// - private methods
+	// ------------ private methods ------------
 
 	private void expectEqual(Object obj1, Object obj2)
 	{

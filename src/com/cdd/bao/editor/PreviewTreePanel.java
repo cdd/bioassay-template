@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -53,6 +53,7 @@ public class PreviewTreePanel
 	private SchemaTree tree;
 	private Schema.Assignment assn;
 	private Vocabulary vocab = Vocabulary.globalInstance();
+	private Set<String> containerNodes = new HashSet<>();
 
 	private TreeItem<SchemaTree.Node> treeRoot = new TreeItem<>(new SchemaTree.Node());
 	private TreeView<SchemaTree.Node> treeView = new TreeView<>(treeRoot);
@@ -82,7 +83,8 @@ public class PreviewTreePanel
 			else 
 			{
 				String label = node.label;
-				String style = "-fx-font-family: arial; -fx-text-fill: black; -fx-font-weight: normal;";
+				String colour = containerNodes.contains(node.uri) ? "#808080" : "black";
+				String style = "-fx-font-family: arial; -fx-text-fill: " + colour + "; -fx-font-weight: normal;";
 
 				setText(label);
 				setStyle(style);
@@ -97,6 +99,8 @@ public class PreviewTreePanel
 	{
 		this.tree = tree;
 		this.assn = assn;
+		
+		for (Schema.Value value : assn.values) if (value.spec == Schema.Specify.CONTAINER) containerNodes.add(value.uri);
 		
 		treeView.setShowRoot(false);
 		treeView.setCellFactory(p -> new HierarchyTreeCell());

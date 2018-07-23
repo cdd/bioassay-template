@@ -1,8 +1,23 @@
 /*
-	BioAssay Express (BAE)
-
-	(c) 2016-2018 Collaborative Drug Discovery Inc.
-*/
+ * BioAssay Ontology Annotator Tools
+ * 
+ * (c) 2016-2018 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2.0
+ * as published by the Free Software Foundation:
+ * 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 package com.cdd.bao.template;
 
@@ -25,7 +40,7 @@ import java.io.*;
 public class SchemaVocab
 {
 	private static final int MAGIC_NUMBER = 0xDEADBEEF; // has to start with this number, else is not correct
-	private static final int CURRENT_VERSION = 2; // serialisation version, required to match
+	private static final int CURRENT_VERSION = 3; // serialisation version, required to match
 	
 	private String[] prefixes;
 
@@ -50,7 +65,14 @@ public class SchemaVocab
 		public SchemaTree tree;
 	}
 	private List<StoredTree> treeList = new ArrayList<>();
-		
+	
+	public final static class StoredRemapTo
+	{
+		public String fromURI; // original term
+		public String toURI; // new term
+	}
+	private Map<String, StoredRemapTo> remappings = new HashMap<>(); // uri-to-remapping
+
 	private static final String SEP = "::";
 
 	// ------------ public methods ------------
@@ -104,8 +126,16 @@ public class SchemaVocab
 
 			termLookup.put(termURI[n], n);
 		}
-		
 		derivePrefixes();
+
+		// save remappings
+		for (Map.Entry<String, String> rTo : vocab.getRemappings().entrySet())
+		{
+			StoredRemapTo curRemapTo = new StoredRemapTo();
+			curRemapTo.fromURI = rTo.getKey();
+			curRemapTo.toURI = rTo.getValue();
+			remappings.put(curRemapTo.fromURI, curRemapTo);
+		}
 
 		/*Util.writeln("** unique terms: " + allTerms.size());
 		Util.writeln("** prefixes: " + prefixes.length);
@@ -168,7 +198,7 @@ public class SchemaVocab
 
 			String[] groupNest = stored.assignment.groupNest();
 			data.writeInt(groupNest.length);
-			for (int k = 0; k < groupNest.length; ++k) data.writeUTF(groupNest[k]);
+			for (int i = 0; i < groupNest.length; i++) data.writeUTF(groupNest[i]);
 
 			SchemaTree.Node[] flat = stored.tree.getFlat();
 			data.writeInt(flat.length);
@@ -183,6 +213,14 @@ public class SchemaVocab
 				data.writeBoolean(node.isExplicit);
 			}
 		}
+
+		data.writeInt(remappings.size());
+		for (StoredRemapTo rTo : remappings.values())
+		{
+			data.writeUTF(rTo.fromURI);
+			data.writeUTF(rTo.toURI);
+		}
+
 		data.flush();
 	}
 	
@@ -244,7 +282,7 @@ public class SchemaVocab
 
 			int lenGroupNest = data.readInt();
 			stored.groupNest = new String[lenGroupNest];
-			for (int k = 0; k < stored.groupNest.length; ++k) stored.groupNest[k] = data.readUTF();
+			for (int i = 0; i < stored.groupNest.length; i++) stored.groupNest[i] = data.readUTF();
 			
 			for (Schema schema : templates) if (stored.schemaPrefix.equals(schema.getSchemaPrefix()))
 			{
@@ -287,6 +325,15 @@ public class SchemaVocab
 			stored.tree = new SchemaTree(flat, stored.assignment);
 			
 			sv.treeList.add(stored);
+		}
+
+		int nremappings = data.readInt();
+		for (int n = 0; n < nremappings; ++n)
+		{
+			StoredRemapTo curRemapTo = new StoredRemapTo();
+			curRemapTo.fromURI = data.readUTF();
+			curRemapTo.toURI = data.readUTF();
+			sv.remappings.put(curRemapTo.fromURI, curRemapTo);
 		}
 		
 		return sv;
@@ -331,7 +378,7 @@ public class SchemaVocab
 		for (StoredTree stored : treeList)
 		{
 			Schema.Assignment assn = stored.tree.getAssignment();
-			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + assn.name);
+			Util.writeln("Schema [" + stored.schemaPrefix + "], propURI: " + stored.propURI + ", name:" + (assn == null ? "?" : assn.name));
 			int maxDepth = 0;
 			int[] depths = new int[20];
 			for (SchemaTree.Node node : stored.tree.getFlat()) if (node.depth < depths.length)
@@ -344,6 +391,9 @@ public class SchemaVocab
 			Util.writeln("    # nodes: " + stored.tree.getFlat().length + ", depths:" + str);
 		}
 	}
+
+	// get remappings
+	public Map<String, StoredRemapTo> getRemappings() {return Collections.unmodifiableMap(remappings);}
 	
 	// information about content: generally just for debugging/stats purposes
 	public int numTerms() {return termList.length;}
@@ -351,6 +401,20 @@ public class SchemaVocab
 	public int numPrefixes() {return prefixes.length;}
 	public StoredTree[] getTrees() {return treeList.toArray(new StoredTree[treeList.size()]);}
 
+	// update internal data structures to reflect addition of named terms and any related remappings
+	public void addTerms(List<StoredTerm> newTerms, Map<String, StoredRemapTo> newTermRemappings)
+	{
+		StoredTerm[] newTermList = (StoredTerm[]) ArrayUtils.addAll(termList, newTerms.toArray(new StoredTerm[0]));
+		for (int k = termList.length; k < newTermList.length; k++)
+		{
+			termLookup.put(newTermList[k].uri, new Integer(k));
+			
+			StoredRemapTo srt = newTermRemappings.get(newTermList[k].uri);
+			if (srt != null) remappings.put(newTermList[k].uri, srt);
+		}
+		termList = newTermList;
+	}
+	
 	// ------------ private methods ------------
 	
 	private SchemaVocab() {}
@@ -371,6 +435,3 @@ public class SchemaVocab
 		Arrays.sort(prefixes);
 	}
 }
-
-
-

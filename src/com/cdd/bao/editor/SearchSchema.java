@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -60,7 +60,7 @@ public class SearchSchema
 			String[] altLabels = v.getAltLabels(uri);
 			if (altLabels != null)
 			{
-				for (int k = 0; k < altLabels.length; ++k)
+				for (int k = 0; k < altLabels.length; k++)
 					if (StringUtils.indexOfIgnoreCase(altLabels[k], searchText) >= 0) return true;
 			}
 		}

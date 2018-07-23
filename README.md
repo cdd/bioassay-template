@@ -23,7 +23,7 @@ The project is a continuation of the work begun in:
 "Fast and accurate semantic annotation of bioassays exploiting a hybrid of machine learning and user confirmation":
 Alex M. Clark; Barry A. Bunin; Nadia K. Litterman; Stephan C. Schürer; Ubbo Visser, _PeerJ_ 524 (2014) [link](https://peerj.com/articles/524)
 
-A second manuscript, which describes this application, has been submitted to _PeerJ_, and is currently under review.
+A second manuscript, which describes this application, has been published in _PeerJ CompSci_ [link](https://peerj.com/articles/cs-61/)
 
 Installation
 ============
@@ -34,7 +34,7 @@ included in the project.
 
 To get started quickly without compiling, download two files:
 
-  * the pre-built package: [pkg/BioAssayTemplate.jar](https://github.com/cdd/bioassay-template/blob/master/pkg/BioAssayTemplate.jar)
+  * the pre-built package: [pkg/BioAssayTemplate.jar](https://s3.us-east-2.amazonaws.com/cdd-bioassay-template/lib/BioAssayTemplate.jar)
   * the Common Assay Template: [data/template/schema.json](https://github.com/cdd/bioassay-template/blob/master/data/template/schema.json)
   
 Run the application by double clicking on the `BioAssayTemplate.jar` file within the appropriate file manager tool, or run it with the

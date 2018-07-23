@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -118,10 +118,21 @@ public class EditSchema
 
 	// ------------ public methods ------------	
 
-	public EditSchema(Stage stage)
+	public EditSchema(Stage stage, File load)
 	{
 		this.stage = stage;
-
+		
+		if (load != null)
+		{
+			try
+			{
+				SchemaUtil.SerialData serial = SchemaUtil.deserialise(load);
+				if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = load;
+				stack.setSchema(serial.schema);
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
+	
 		if (MainApplication.icon != null) stage.getIcons().add(MainApplication.icon);
 
 		menuBar = new MenuBar();
@@ -226,10 +237,24 @@ public class EditSchema
 	public void loadFile(File file, SchemaUtil.SerialData serial)
 	{
 		if (serial.format == SchemaUtil.SerialFormat.JSON) schemaFile = file; else schemaFile = null;
-		
+
 		stack.setSchema(serial.schema);
 		updateTitle();
 		rebuildTree();
+	}
+
+	// modify the group that's at the root, and also set a couple of other schema properties at the same time
+	public void updateBranchRoot(Branch branch, Schema.Group modGroup, String prefix, String[] branchGroups)
+	{
+		Schema schema = stack.getSchema();
+		if (modGroup != null) schema.setRoot(modGroup);
+		schema.setSchemaPrefix(prefix);
+		schema.setBranchGroups(branchGroups);
+		
+		if (modGroup != null) branch.group = modGroup;
+		stack.changeSchema(schema, true);
+
+		detail.setGroup(schema, branch.group, false);
 	}
 
 	// given that a part of the current/indicated branch may have been modified, updates the internal representation of the schema -
@@ -241,7 +266,6 @@ public class EditSchema
 		TreeItem<Branch> item = currentBranch();
 		if (item == null || item.getValue() == null) return;
 		updateBranchGroup(item.getValue(), modGroup);
-		
 	}
 	public void updateBranchGroup(Branch branch, Schema.Group modGroup)
 	{
@@ -417,14 +441,15 @@ public class EditSchema
 		
 		treeTemplate.setValue(new Branch(this, root, schema.locatorID(root)));
 		fillTreeGroup(schema, root, treeTemplate);
-		
+		detail.setGroup(schema, schema.getRoot(), true);
+
 		for (int n = 0; n < schema.numAssays(); n++)
 		{
 			Schema.Assay assay = schema.getAssay(n);
 			TreeItem<Branch> item = new TreeItem<>(new Branch(this, assay, schema.locatorID(assay)));
 			treeAssays.getChildren().add(item);
 		}
-		
+				
 		currentlyRebuilding = false;
 	}
 	
@@ -482,29 +507,33 @@ public class EditSchema
 		if (currentlyRebuilding || item == null) return;
 		Branch branch = item.getValue();
 
-		if (branch.group != null)
+		if (branch.group != null && branch.group.parent == null)
 		{
-			// if root, check prefix first
-			String prefix = detail.extractPrefix();
-			if (prefix != null)
+			boolean modHeader = false;
+			String prefix = stack.peekSchema().getSchemaPrefix();
+			String[] branchGroups = stack.peekSchema().getBranchGroups();
+
+			String newPrefix = detail.extractPrefix();
+			if (newPrefix != null)
 			{
-				prefix = prefix.trim();
-				if (!prefix.endsWith("#")) prefix += "#";
-				if (!stack.peekSchema().getSchemaPrefix().equals(prefix))
-				{
-					try {new URI(prefix);}
-					catch (Exception ex)
-					{
-						//informMessage("Invalid URI", "Prefix is not a valid URI: " + prefix);
-						return;
-					}
-					Schema schema = stack.getSchema();
-					schema.setSchemaPrefix(prefix);
-					stack.setSchema(schema);
-				}
+				newPrefix = newPrefix.trim();
+				if (!newPrefix.endsWith("#")) newPrefix += "#";
+				if (!newPrefix.equals(prefix)) {prefix = newPrefix; modHeader = true;}
 			}
+			String[] newGroups = detail.extractBranchGroups();
+			if (!Arrays.equals(branchGroups, newGroups)) {branchGroups = newGroups; modHeader = true;}
 			
 			// then handle the group content
+			Schema.Group modGroup = detail.extractGroup();
+			if (!modHeader && modGroup == null) return;
+
+			updateBranchRoot(branch, modGroup, prefix, branchGroups);
+
+			item.setValue(new Branch(this));
+			item.setValue(branch); // triggers redraw
+		}
+		else if (branch.group != null)
+		{
 			Schema.Group modGroup = detail.extractGroup();
 			if (modGroup == null) return;
 
@@ -587,7 +616,7 @@ public class EditSchema
 	public void actionFileNew()
 	{
 		Stage stage = new Stage();
-		EditSchema edit = new EditSchema(stage);
+		EditSchema edit = new EditSchema(stage, null);
 		stage.show();
 	}
 	public void actionFileSave(boolean promptNew, boolean exportTTL)
@@ -652,8 +681,7 @@ public class EditSchema
 		{
 			SchemaUtil.SerialData serial = SchemaUtil.deserialise(file);
 			Stage stage = new Stage();
-			EditSchema edit = new EditSchema(stage);
-			edit.loadFile(file, serial);
+			EditSchema edit = new EditSchema(stage, file);
 			stage.show();
 		}
 		catch (IOException ex)

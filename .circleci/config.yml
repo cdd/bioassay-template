@@ -7,8 +7,17 @@ jobs:
       - image: circleci/openjdk:8
     working_directory: ~/bax
     steps:
+      - run: sudo apt-get install python3-pip
+      - run: sudo pip3 install awscli
       - checkout
       - run: ls -alh
       - run: cd ~/bax; ant clean check pkgAPI
       - run: sudo apt-get install openjfx
-      - run: cd ~/bax; ant clean junit check pkg
+      - run: cd ~/bax; ant clean junit check pkg pkgAPI
+      - deploy:
+          name: Trigger bioassay-data build
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              cd ~/bax/pkg; aws s3 cp BioAssayTemplate.jar s3://cdd-bioassay-template/lib/BioAssayTemplate.jar
+              cd ~/bax/pkg; aws s3 cp BioAssayTemplateAPI.jar s3://cdd-bioassay-template/lib/BioAssayTemplateAPI.jar
+            fi

@@ -1,0 +1,30 @@
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+bat:A1
+	rdfs:label "A1" ;
+	rdf:type owl:Class
+	.
+
+bat:A2
+	rdfs:label "A2" ;
+	rdf:type owl:Class
+	.
+
+bat:A1  a bat:preferredParent .
+bat:A1  owl:equivalentClass bat:A2 .
+
+bat:B1
+	rdfs:label "B1" ;
+	rdfs:subClassOf bat:A1
+	.
+
+bat:B2
+	rdfs:label "B2" ;
+	rdfs:subClassOf bat:A2
+	.

@@ -1,0 +1,18 @@
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix bae:   <http://www.bioassayexpress.org/bae#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix efo:   <http://www.ebi.ac.uk/efo/> .
+
+bat:TestAltLabels
+	rdfs:label "Test altLabels" ;
+	rdf:type owl:Class ;
+	bae:altLabel "AltLabel #1" ;
+	obo:IAO_0000118 "AltLabel #2" ;
+	obo:IAO_0000111 "AltLabel #3" ;
+	efo:alternative_term "AltLabel #4"
+	.

@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2017-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -21,18 +21,18 @@
 
 package com.cdd.bao.template;
 
-import com.cdd.bao.template.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
 import java.io.*;
+
 import org.junit.*;
 
 /*
 	Test for (de)serialisation routines.
 */
 
-public class SerialisationTest
+public class SerialisationTest extends OntologyReader
 {
 	private Schema schemaFromJSON;
 	private Schema schemaFromTTL;
@@ -40,10 +40,11 @@ public class SerialisationTest
 	@Before
 	public void setup() throws IOException
 	{
-		this.schemaFromJSON = SchemaUtil.deserialise(new File("data/template/schema.json")).schema;
+		String[] testSchema = getPathsForTests(new String[]{"schema.json", "schema.ttl"});
+		this.schemaFromJSON = SchemaUtil.deserialise(new File(testSchema[0])).schema;
 		assumeTrue(schemaFromJSON != null);
 
-		this.schemaFromTTL = SchemaUtil.deserialise(new File("data/template/schema.ttl")).schema;
+		this.schemaFromTTL = SchemaUtil.deserialise(new File(testSchema[1])).schema;
 		assumeTrue(schemaFromTTL != null);
 	}
 
@@ -92,7 +93,7 @@ public class SerialisationTest
 		try (InputStream istr = new FileInputStream(tmpFile))
 		{
 			Schema schema3 = SchemaUtil.deserialise(istr).schema;
-			assertTrue("Schema stream does not match (destination file in JSON).", schemaFromJSON.equals(schema2));
+			assertTrue("Schema stream does not match (destination file in JSON).", schemaFromJSON.equals(schema3));
 		}
 
 		tmpFile.delete();
@@ -115,7 +116,7 @@ public class SerialisationTest
 		try (InputStream istr = new FileInputStream(tmpFile))
 		{
 			Schema schema3 = SchemaUtil.deserialise(istr).schema;
-			assertTrue("Schema stream does not match (destination file in Turtle).", schemaFromJSON.equals(schema2));
+			assertTrue("Schema stream does not match (destination file in Turtle).", schemaFromJSON.equals(schema3));
 		}
 
 		tmpFile.delete();

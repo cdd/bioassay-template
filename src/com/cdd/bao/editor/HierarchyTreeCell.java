@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2016 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -81,7 +81,6 @@ public final class HierarchyTreeCell extends TreeCell<EditSchema.Branch>
 							   branch.group != null ? branch.group.name : 
 							   branch.assignment != null ? branch.assignment.name : 
 							   branch.assay != null ? branch.assay.name : "?";
-			
 				if (label.length() == 0)
 				{
 					label = "unnamed";

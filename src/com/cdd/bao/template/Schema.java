@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -26,6 +26,7 @@ import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.json.*;
 
@@ -43,7 +44,8 @@ public class Schema
 	{
 		public Group parent;
 		public String name, descr = "";
-		public String groupURI = "";
+		public String groupURI = ""; // formal identity for the group
+		public boolean canDuplicate = false; // if true, permit duplication of the group when used for annotation
 		public List<Assignment> assignments = new ArrayList<>();
 		public List<Group> subGroups = new ArrayList<>();
 		
@@ -58,12 +60,15 @@ public class Schema
 			this.name = name == null ? "" : name;
 			this.groupURI = groupURI == null ? "" : groupURI;
 		}
+		
 		@Override
 		public Group clone() {return clone(parent);}
 		public Group clone(Group parent)
 		{
 			Group dup = new Group(parent, name, groupURI);
 			dup.descr = descr;
+			dup.groupURI = groupURI;
+			dup.canDuplicate = canDuplicate;
 			for (Assignment assn : assignments) dup.assignments.add(assn.clone(dup));
 			for (Group grp : subGroups) dup.subGroups.add(grp.clone(dup));
 			return dup;
@@ -75,7 +80,7 @@ public class Schema
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
 			return name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
-					assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
+				   canDuplicate == other.canDuplicate && assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
 		}
 		
 		@Override
@@ -90,7 +95,7 @@ public class Schema
 			if (parent == null) return new String[0];
 			List<String> nest = new ArrayList<>();
 			for (Schema.Group look = parent; look.parent != null; look = look.parent) nest.add(look.groupURI == null ? "" : look.groupURI);
-			while (nest.size() > 1 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
+			while (nest.size() > 0 && nest.get(nest.size() - 1).equals("")) nest.remove(nest.size() - 1);
 			return nest.toArray(new String[nest.size()]);
 		}
 		
@@ -111,6 +116,21 @@ public class Schema
 			for (Assignment assn : assignments) assn.outputAsString(buff, indent + 1);
 			for (Group grp : subGroups) grp.outputAsString(buff, indent + 1);
 		}
+
+		// return a flattened list of subgroups (not including this one), arranged in tree-order
+		public Group[] flattenedGroups()
+		{
+			List<Group> list = new ArrayList<>();
+			List<Group> stack = new ArrayList<>();
+			stack.addAll(subGroups);
+			while (stack.size() > 0)
+			{
+				Group g = stack.remove(0);
+				list.add(g);
+				stack.addAll(g.subGroups);
+			}
+			return list.toArray(new Group[list.size()]);
+		}
 		
 		// makes a list of all the assignments that occur within this group and its subgroups, in order of occurrence
 		public Assignment[] flattenedAssignments()
@@ -126,7 +146,7 @@ public class Schema
 			}
 			return list.toArray(new Assignment[list.size()]);
 		}
-	};
+	}
 
 	// used within assignments: used to indicate how building of models to make suggestions is handled
 	public enum Suggestions
@@ -220,6 +240,7 @@ public class Schema
 		}
 		public String keyPropGroupValue(String value)
 		{
+			value = value.replaceAll(SEP, "\\:\\:"); // this is commonly a URI, but can also be plain text in the case of labels
 			return Schema.keyPropGroupValue(propURI, groupNest(), value);
 		}
 		
@@ -242,7 +263,8 @@ public class Schema
 		ITEM, // the term specified by the URL is explicitly whitelisted
 		EXCLUDE, // explicitly blacklist the term (i.e. exclude it from a branch within which it was previously included)
 		WHOLEBRANCH, // incline the term specified and everything descended from it
-		EXCLUDEBRANCH // exclude a whole branch that had previously been included
+		EXCLUDEBRANCH, // exclude a whole branch that had previously been included
+		CONTAINER, // same as whole branch, except the term itself should not be explicitly selected
 	}
 
 	// a "value" consists of a URI (in the case of references to a known resource), and descriptive text; an assignment typically has many of these
@@ -439,6 +461,10 @@ public class Schema
 	// the URI prefix used for all non-hardwired resources: can be used to separate namespaces
 	private String schemaPrefix = ModelSchema.PFX_BAS;
 	
+	// for normal templates, branch groups is null; if defined, it refers to a list of eligible groupURI values that this template
+	// may be nested underneath; an empty array means root only; any member of the array that is null/blank also refers to the root
+	private String[] branchGroups = null;
+	
 	// ------------ public methods ------------	
 
 	public Schema()
@@ -468,6 +494,7 @@ public class Schema
 	{
 		Schema dup = new Schema();
 		dup.schemaPrefix = schemaPrefix;
+		dup.branchGroups = branchGroups == null ? null : Arrays.copyOf(branchGroups, branchGroups.length);
 		dup.root = root.clone(null);
 		for (Assay a : assays) dup.assays.add(a.clone());
 		return dup;
@@ -476,6 +503,10 @@ public class Schema
 	// access to the schema prefix, which serves as the namespace
 	public String getSchemaPrefix() {return schemaPrefix;}
 	public void setSchemaPrefix(String prefix) {schemaPrefix = prefix;}
+	
+	// access to branch groups (null = regular template, empty array = root only)
+	public String[] getBranchGroups() {return branchGroups;}
+	public void setBranchGroups(String[] groups) {branchGroups = groups;}
 	
 	// returns the top level group: all of the assignments and subgroups are considered to be
 	// connected to the primary assay description, and the root's category name is a description of this
@@ -615,6 +646,20 @@ public class Schema
 		return null;
 	}
 	
+	// returns the first group that matches the sequence of nesting URIs, or null if none
+	public Group findGroupByNest(String[] groupNest)
+	{
+		if (Util.length(groupNest) == 0) return root;
+
+		Group grp = root;
+		found: for (int n = groupNest.length - 1; n >= 0; n--)
+		{
+			for (Group look : grp.subGroups) if (groupNest[n].equals(look.groupURI)) {grp = look; continue found;}
+			return null;
+		}
+		return grp;
+	}
+	
 	// returns all of the assignments that match the given property URI, or empty list if none; if the groupNest parameter is given, it will
 	// make sure that the nested hierarchy of groupURIs match the parameter (otherwise it will be ignored)
 	public Assignment[] findAssignmentByProperty(String propURI) {return findAssignmentByProperty(propURI, null);}
@@ -669,13 +714,13 @@ public class Schema
 	{
 		int sz1 = Util.length(groupNest1), sz2 = Util.length(groupNest2);
 		if (sz1 != sz2) return false;
-		for (int n = 0; n < sz1; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		for (int n = 0; n < sz1; n++) if (!compareGroupURI(groupNest1[n], groupNest2[n])) return false;
 		return true;
 	}
 	public static boolean compatibleGroupNest(String[] groupNest1, String[] groupNest2)
 	{
 		int sz = Math.min(Util.length(groupNest1), Util.length(groupNest2));
-		for (int n = 0; n < sz; n++) if (!groupNest1[n].equals(groupNest2[n])) return false;
+		for (int n = 0; n < sz; n++) if (!compareGroupURI(groupNest1[n], groupNest2[n])) return false;
 		return true;
 	}
 	public static boolean samePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
@@ -685,6 +730,24 @@ public class Schema
 	public static boolean compatiblePropGroupNest(String propURI1, String[] groupNest1, String propURI2, String[] groupNest2)
 	{
 		return propURI1.equals(propURI2) && compatibleGroupNest(groupNest1, groupNest2);
+	}
+	
+	// comparison/manipulation of group URIs, with or without suffixes
+	private static final Pattern PTN_GROUPINDEXED = Pattern.compile("(.*)@\\d+$");
+	public static boolean compareGroupURI(String uri1, String uri2)
+	{
+		if (uri1.equals(uri2)) return true; // quick out: avoid regex
+		boolean m1 = PTN_GROUPINDEXED.matcher(uri1).matches(), m2 = PTN_GROUPINDEXED.matcher(uri2).matches();
+		if (m1 && m2) return false; // both have indices and they're different
+		if (!m1) uri1 += "@1";
+		if (!m2) uri2 += "@1";
+		return uri1.equals(uri2);
+	}
+	public static String removeSuffixGroupURI(String uri)
+	{
+		if (uri == null) return null;
+		Matcher m = PTN_GROUPINDEXED.matcher(uri);
+		return m.matches() ? m.group(1) : uri;
 	}
 	
 	// convenience methods for combining parts of assignments/annotations to make string identifiers
@@ -848,7 +911,11 @@ public class Schema
 		{
 			JSONObject json = new JSONObject(new JSONTokener(rdr));
 			Schema schema = new Schema();
+
 			schema.setSchemaPrefix(json.getString("schemaPrefix"));
+			
+			JSONArray branchGroups = json.optJSONArray("branchGroups");
+			if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
 			
 			JSONObject jsonRoot = json.getJSONObject("root");
 			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
@@ -878,11 +945,11 @@ public class Schema
 	{
 		JSONObject json = new JSONObject();
 		json.put("schemaPrefix", schemaPrefix);
+		if (branchGroups != null) json.put("branchGroups", branchGroups);
 		json.put("root", ClipboardSchema.composeGroup(root));
 		wtr.write(json.toString(4));
 		wtr.flush();
 	}	
 	
 	// ------------ private methods ------------	
-
 }

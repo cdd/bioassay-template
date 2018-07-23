@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -506,7 +506,7 @@ public class ImportControlledVocab
 		if (sz1 == 0) return sz2;
 		if (sz2 == 0) return sz1;
 
-		int cost = ch1[sz1 - 1] == ch2[sz2 - 1] ? 1 : 0;
+		int cost = ch1[sz1 - 1] == ch2[sz2 - 1] ? 0 : 1;
 		int lev1 = levenshteinDistance(ch1, sz1 - 1, ch2, sz2) + 1;
 		int lev2 = levenshteinDistance(ch1, sz1, ch2, sz2 - 1) + 1;
 		int lev3 = levenshteinDistance(ch1, sz1 - 1, ch2, sz2 - 1) + cost;

@@ -119,7 +119,7 @@ bao:BAX_0000021
 bao:BAX_0000022
   rdf:type owl:DatatypeProperty ;
   rdfs:label "has control summary" ;
-  obo:IAO_0000115 "Contains descriptors of the controls (positive, negaitve, background, etc) used in the assay."
+  obo:IAO_0000115 "Contains descriptors of the controls (positive, negative, background, etc) used in the assay."
   .
 
 bao:BAX_0000023
@@ -307,3 +307,447 @@ bao:BAX_0000053
   rdfs:label "has assay data processing method" ;
   obo:IAO_0000115 "Contains descriptor(s) of methods used to process the measurement into the result or endpoint data reported as the final outcome."
   .
+
+bao:BAX_0000054
+  rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
+  rdfs:label "has positive control" ;
+  #URI: http://dev3.ccs.miami.edu:8080/ontolobridge#ONTB_000000044
+  #CURIE: ONTB_000000044
+  #requestID:44
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000055
+  rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
+  rdfs:label "has negative control" ;
+  #URI: http://dev3.ccs.miami.edu:8080/ontolobridge#ONTB_000000045
+  #CURIE: ONTB_000000045
+  #requestID:45
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000056
+  rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
+  rdfs:label "has background control" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000057
+  rdf:type owl:DatatypeProperty ;
+  rdfs:subClassOf bao:BAO_0000740 ;
+  rdfs:label "has reference compound" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000058
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has plate control" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000059
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has screened entity details" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000060
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has delivery method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000061
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has organism details" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000062
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has anatomical entity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000063
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has anatomical entity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000064
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has bacteria/virus strain" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000065
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has primary/stem cell" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000066
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "is cell type of" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000067
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has biological sex" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000068
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has organism quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000069
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell culture method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000070
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell line inducer" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000071
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell culture serum" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000072
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has expression modulation method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000073
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has cell line modification method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000074
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses transfection agent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000075
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses DNA vector" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000076
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "uses reporter gene" ;
+  obo:IAO_0000115 ""
+  .
+
+
+bao:BAX_0000077
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has molecular quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000078
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has biochemical label" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000079
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein quality" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000080
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein modification method" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000081
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has protein purity" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000082
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has molecular entity potentiator" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000083
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "project name" ;
+  obo:IAO_0000115 "Also called 'screening campaign name'. Each screening campaign, or project, incudes a sequence of (assay) experiments performed to identify a compound (or a series of compounds) with a specific function--usually around a specific phenotypic or molecular target (e.g., pathway, cell or protein).  It includes primary (screening at single concentration), secondary, and confirmatory (dose response) screens, counterscreens, structure activity relationship (SAR) studies, lead optimization, etc."
+  .
+
+bao:BAX_0000084
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay measurement type" ;
+  obo:IAO_0000115 "Endpoint or kinetic?"
+  .
+
+bao:BAX_0000085
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay comment" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000086
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "annotated by (e-mail)" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000087
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "assay protocol version" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000088
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "source document" ;
+  obo:IAO_0000115 "Link to a document that describes the protocol with prose and diagrams."
+  .
+
+bao:BAX_0000089
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "endpoint normalization method";
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000090
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "filename" ;
+  obo:IAO_0000115 "source file for raw data"
+  .
+
+bao:BAX_0000091
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "concentration of target value" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000092
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "control format" ;
+  obo:IAO_0000115 "Specifies how controls are placed in wells: rows, columns, or specific wells."
+  .
+
+bao:BAX_0000093
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "location" ;
+  obo:IAO_0000115 "Locations on plate for control."
+  .
+
+bao:BAX_0000094
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has reductant" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000095
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "perturbagen summary" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000096
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "for natural products" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000097
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "detergent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000098
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "dilution factor" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000099
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "column time_value" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000100
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "compound incubation" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000101
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "organism, tissue or cell information" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000102
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "cell density number" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000103
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "cell fixation" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000104
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "microbe/virus-specific" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000105
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "strain" ;
+  obo:IAO_0000115 "Variants of virus, microbe, cell, tissue, whole organism, etc."
+  .
+
+bao:BAX_0000106
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "cell line information" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000107
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "rescue treatment" ;
+  obo:IAO_0000115 "Substance used to alter behavior, searching for synergistic or protective substances."
+  .
+
+bao:BAX_0000108
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "fluorescent assay parameters" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000108
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has FRET acceptor" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000109
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "background fluorophore" ;
+  obo:IAO_0000115 "Used as control."
+  .
+
+bao:BAX_0000110
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "quench" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000111
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has detergent" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000112
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has FRET donor" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000113
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has solvent parameters" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000114
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has kinetic parameters" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000115
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has software" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000116
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has equation" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000117
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has surface plasmon resonance parameters" ;
+  obo:IAO_0000115 "has Surface Plasmon Resonance parameters"
+  .
+
+bao:BAX_0000118
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "binding site count" ;
+  obo:IAO_0000115 "Binding site counts for Surface Plasmon Resonance parameters."
+  .
+
+bao:BAX_0000119
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has salt" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000120
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has buffer" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000120
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "has buffer" ;
+  obo:IAO_0000115 ""
+  .
+
+bao:BAX_0000121
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "protein highest abundance atomic mass" ;
+  obo:IAO_0000115 "Highest abundance atomic mass of uncapped protein for MassSpec tethering assay."
+  .
+
+bao:BAX_0000122
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "cap highest abundance atomic mass" ;
+  obo:IAO_0000115 "Highest abundance atomic mass of cap, Cystine or BME, for MassSpec tethering assay."
+  .
+
+bao:BAX_0000123
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "reaction time (min)" ;
+  obo:IAO_0000115 "Time (min) allowed for reaction to take place (for kinetic assays)."
+  .
+

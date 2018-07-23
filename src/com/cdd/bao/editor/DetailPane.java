@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ * (c) 2014-2018 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -25,6 +25,7 @@ import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 
 import java.util.*;
+
 import javafx.application.*;
 import javafx.geometry.*;
 import javafx.scene.*;
@@ -32,9 +33,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
+
+import org.apache.commons.lang3.*;
 
 /*
 	Detail: shows an object from the schema, and makes it editable.
@@ -57,6 +60,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private VBox vbox = new VBox(PADDING);
 	
 	private TextField fieldPrefix = null;
+	private CheckBox chkIsBranch = null;
+	private TextField fieldBranches = null;
+	private CheckBox chkDuplicate = null;
 	private TextField fieldName = null;
 	private TextArea fieldDescr = null;
 	private URIRowLine fieldURI = null;
@@ -160,18 +166,40 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		return group == null || group.parent != null ? null : fieldPrefix.getText();
 	}
 
+	// fetches the current definition of branch groups
+	public String[] extractBranchGroups()
+	{
+		if (group == null || group.parent != null || !chkIsBranch.isSelected()) return null;
+		String txt = fieldBranches.getText();
+		if (txt.length() == 0) return new String[0];
+		String[] list = txt.split(",");
+		for (int n = 0; n < list.length; n++) list[n] = ModelSchema.expandPrefix(list[n]);
+		return list;
+	}
+
 	// extracts a representation of the content from the current widgets; note that these return null if nothing has changed (or if it's not that content type)
 	public Schema.Group extractGroup()
 	{
 		if (group == null) return null;
 	
-		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && 
-			group.groupURI.equals(fieldURI == null ? "" : ModelSchema.expandPrefix(fieldURI.getText()))) return null;
+		boolean sameGroup = true;
+		if (fieldURI != null)
+		{
+			String userURI = ModelSchema.expandPrefix(fieldURI.getText());
+			sameGroup = userURI.equals(Util.safeString(group.groupURI));
+		}
+		
+		boolean canDuplicate = chkDuplicate == null ? false : chkDuplicate.isSelected();
+		
+		if (group.name.equals(fieldName.getText()) && group.descr.equals(fieldDescr.getText()) && sameGroup &&
+			group.canDuplicate == canDuplicate) return null;
 		
 		Schema.Group mod = group.clone(null); // duplicates all of the subordinate content (not currently editing this, so stays unchanged)
 		mod.name = fieldName.getText();
 		mod.descr = fieldDescr.getText();
-		mod.groupURI = ModelSchema.expandPrefix(fieldURI.getText());
+		mod.groupURI = fieldURI == null ? null : ModelSchema.expandPrefix(fieldURI.getText());
+		mod.canDuplicate = canDuplicate;
+		
 		return mod;
 	}
 	public Schema.Assignment extractAssignment()
@@ -201,8 +229,11 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				Schema.Value val = new Schema.Value(ModelSchema.expandPrefix(vw.fieldURI.getText()), vw.fieldName.getText());
 				val.descr = vw.fieldDescr.getText();
 				int sel = vw.dropSpec.getSelectionModel().getSelectedIndex();
-				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH : sel == 2 ? Schema.Specify.EXCLUDE : 
-						   sel == 3 ? Schema.Specify.EXCLUDEBRANCH : Schema.Specify.ITEM;
+				val.spec = sel == 1 ? Schema.Specify.WHOLEBRANCH
+						 : sel == 2 ? Schema.Specify.EXCLUDE
+						 : sel == 3 ? Schema.Specify.EXCLUDEBRANCH
+						 : sel == 4 ? Schema.Specify.CONTAINER
+						 : Schema.Specify.ITEM;
 				mod.values.add(val);
 			}
 		}
@@ -342,8 +373,8 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		
 		String label = vocab.getLabel(uri), descr = vocab.getDescr(uri);
 		if (label == null) {actionLookupName(); return;}
-		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(label);
-		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(descr);
+		if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(StringUtils.trim(label));
+		if (descr != null && vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(StringUtils.trim(descr));
 	}
 	public void actionLookupName(int focusIndex)
 	{
@@ -360,9 +391,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				LookupPanel.Resource[] res = result.get();
 				if (res != null && res.length > 0)
 				{
-					vw.fieldURI.setText(res[0].uri);
-					if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(res[0].label);
-					if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(res[0].descr);
+					vw.fieldURI.setText(StringUtils.trim(res[0].uri));
+					if (vw.fieldName.getText().length() == 0) vw.fieldName.setText(StringUtils.trim(res[0].label));
+					if (vw.fieldDescr.getText().length() == 0) vw.fieldDescr.setText(StringUtils.trim(res[0].descr));
 				}
 			}
 		}
@@ -377,9 +408,9 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 				LookupPanel.Resource[] res = result.get();
 				if (res != null && res.length >= 1)
 				{
-					fieldURI.setText(res[0].uri);
-					if (fieldName.getText().length() == 0) fieldName.setText(res[0].label);
-					if (fieldDescr.getText().length() == 0) fieldDescr.setText(res[0].descr);
+					fieldURI.setText(StringUtils.trim(res[0].uri));
+					if (fieldName.getText().length() == 0) fieldName.setText(StringUtils.trim(res[0].label));
+					if (fieldDescr.getText().length() == 0) fieldDescr.setText(StringUtils.trim(res[0].descr));
 				}
 			}
 		}
@@ -427,10 +458,22 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			notes.setMaxWidth(Double.MAX_VALUE);
 			line.add(notes, null, 1, 0, Lineup.NOINDENT);
 	
-			fieldPrefix = new TextField(schema.getSchemaPrefix());
+			fieldPrefix = new TextField(StringUtils.trim(schema.getSchemaPrefix()));
 			fieldPrefix.setPrefWidth(300);
 			line.add(fieldPrefix, "Prefix:", 1, 0);
-	
+			
+			boolean isBranch = schema.getBranchGroups() != null;
+			chkIsBranch = new CheckBox("Branch template");
+			chkIsBranch.setSelected(isBranch);
+			
+			fieldBranches = new TextField();
+			fieldBranches.setMaxWidth(Double.MAX_VALUE);
+			if (isBranch) fieldBranches.setText(String.join(",", schema.getBranchGroups()));
+			fieldBranches.setDisable(!isBranch);
+			line.add(RowLine.pair(PADDING, chkIsBranch, 0, fieldBranches, 1), "", 1, 0);
+			
+			chkIsBranch.setOnAction(event -> fieldBranches.setDisable(!chkIsBranch.isSelected()));		
+				
 			vbox.getChildren().add(line);
 		}
 		
@@ -441,7 +484,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(group.name);
+		fieldName = new TextField(StringUtils.trim(group.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short name for the group"));
@@ -460,6 +503,10 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		{
 			fieldURI = new URIRowLine(group.groupURI, "The group URI used to disambiguate this group", -1, PADDING, this);
 			line.add(fieldURI, "URI:", 1, 0);
+			
+			chkDuplicate = new CheckBox("Allow duplication");
+			chkDuplicate.setSelected(group.canDuplicate);
+			line.add(chkDuplicate, null);
 		}
 
 		vbox.getChildren().add(line);
@@ -492,7 +539,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(assignment.name);
+		fieldName = new TextField(StringUtils.trim(assignment.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short name for the assignment"));
@@ -600,14 +647,18 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			vw.fieldURI = new URIRowLine(val.uri, "The URI for this assignment value", n, PADDING, this);
 			vw.line.add(vw.fieldURI, "URI:", 1, 0);
 
-			vw.fieldName = new TextField(val.name);
+			vw.fieldName = new TextField(StringUtils.trim(val.name));
 			vw.fieldName.setPrefWidth(350);
 			observeFocus(vw.fieldName, n);
 			Tooltip.install(vw.fieldName, new Tooltip("Very short label for the assignment value"));
 			
 			vw.dropSpec = new ComboBox<>();
-			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch");
-			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1 : val.spec == Schema.Specify.EXCLUDE ? 2 : val.spec == Schema.Specify.EXCLUDEBRANCH ? 3 : 0;
+			vw.dropSpec.getItems().addAll("Include", "Include Branch", "Exclude", "Exclude Branch", "Container");
+			int sel = val.spec == Schema.Specify.WHOLEBRANCH ? 1
+					: val.spec == Schema.Specify.EXCLUDE ? 2
+					: val.spec == Schema.Specify.EXCLUDEBRANCH ? 3
+					: val.spec == Schema.Specify.CONTAINER ? 4
+					: 0; // Schema.Specify.ITEM
 			vw.dropSpec.getSelectionModel().select(sel);
 			observeFocus(vw.dropSpec, n);
 			Tooltip.install(vw.dropSpec, new Tooltip("How to interpret the selected term: include or exclude, singleton or branch."));
@@ -652,7 +703,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 
 		Lineup line = new Lineup(PADDING);
 		
-		fieldName = new TextField(assay.name);
+		fieldName = new TextField(StringUtils.trim(assay.name));
 		fieldName.setPrefWidth(300);
 		observeFocus(fieldName, -1);
 		Tooltip.install(fieldName, new Tooltip("Very short label for the assay being annotated"));
@@ -803,12 +854,12 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 			}
 			else if (annot.value != null)
 			{
-				btn.setText(annot.value.name);
+				btn.setText(StringUtils.trim(annot.value.name));
 				btn.setStyle("-fx-base: #000080; -fx-text-fill: white;");
 			}
 			else // annot.literal != null
 			{
-				btn.setText('"' + annot.literal + '"');
+				btn.setText('"' + StringUtils.trim(annot.literal) + '"');
 				btn.setStyle("-fx-base: #FFFFD0;");
 			}
 	
