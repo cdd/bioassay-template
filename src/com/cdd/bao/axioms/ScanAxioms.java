@@ -68,17 +68,20 @@ public class ScanAxioms
 	public int maxCardinalityCounter = 0;
 	public int minCardinalityCounter = 0;
 
-	public ArrayList rURIs = new ArrayList();
+	public List<String> rURIs = new ArrayList<>();
 
-	public static ArrayList axiomsForAll = new ArrayList<AssayAxiomsAll>();
-	public static ArrayList axiomsForSome = new ArrayList<AssayAxiomsSome>();
+	public static List<AssayAxiomsAll> axiomsForAll = new ArrayList<>();
+	public static List<AssayAxiomsSome> axiomsForSome = new ArrayList<>();
 
-	public static String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-			"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-			"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-			"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"};
+	public static String[] redundantURIs = 
+	{
+		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
+		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
+		"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
+		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
+		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
+		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
+	};
 
 	public ArrayList<String> redundantURIsList = new ArrayList<String>(Arrays.asList(redundantURIs));
 
@@ -95,7 +98,7 @@ public class ScanAxioms
 		try
 		{
 			Util.writeln("Loading common assay template...");
-			schema = ModelSchema.deserialise(new File("data/template/schema.ttl"));
+			schema = Schema.deserialise(new File("data/template/schema.json"));
 
 			Util.writeln("Loading vocabulary dump...");
 			InputStream idump = new FileInputStream("data/template/vocab.dump");

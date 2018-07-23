@@ -46,14 +46,14 @@ public class AxiomCollector
 	public static Map<String, String> uriToLabel = ScanAxioms.uriToLabel;
 	public static Map<String, String> labelToUri = ScanAxioms.labelToUri;
 
-	public static ArrayList<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
-	public static ArrayList<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
+	public static List<AssayAxiomsAll> axiomsForAll = ScanAxioms.axiomsForAll;
+	public static List<AssayAxiomsSome> axiomsForSome = ScanAxioms.axiomsForSome;
 
-	public static ArrayList<AssayAxiomsAll> nonRedundantAxiomsForAll = new ArrayList<>();
-	public static ArrayList<AssayAxiomsSome> nonRedundantAxiomsForSome = new ArrayList<>();
-	public static Map someAxiomsMap = new HashMap<String, AssayAxiomsSome>();
-	public static Map allAxiomsMap = new HashMap<String, AssayAxiomsAll>();
-	public static Map axiomMap = new HashMap<String, ArrayList<String>>();
+	public static List<AssayAxiomsAll> nonRedundantAxiomsForAll = new ArrayList<>();
+	public static List<AssayAxiomsSome> nonRedundantAxiomsForSome = new ArrayList<>();
+	public static Map<String, AssayAxiomsSome> someAxiomsMap = new HashMap<>();
+	public static Map<String, AssayAxiomsAll> allAxiomsMap = new HashMap<>();
+	public static Map<String, String[]> axiomMap = new HashMap<>();
 
 	//Alright so axiom elimination is two parts in Alex's mind:
 	// first eliminate the URIs that are already in the common assay template
@@ -259,7 +259,7 @@ public class AxiomCollector
 			this.uriArray = uriArray;
 		}
 		
-		public static AssayAxioms generalizeOnlyAxiom(AssayAxiomsAll onlyAxiom)
+		public AssayAxioms generalizeOnlyAxiom(AssayAxiomsAll onlyAxiom)
 		{
 
 			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
@@ -278,7 +278,8 @@ public class AxiomCollector
 		
 	}
 	
-	public static final class AssayAxiomsSome extends AssayAxioms{
+	public static final class AssayAxiomsSome extends AssayAxioms
+	{
 		
 		public String classURI;
 		public String classLabel;
@@ -313,7 +314,7 @@ public class AxiomCollector
 			this.uriArray = uriArray;
 		}
 		
-		public static AssayAxioms generalizeSomeAxiom(AssayAxiomsSome someAxiom)
+		public AssayAxioms generalizeSomeAxiom(AssayAxiomsSome someAxiom)
 		{
 
 			/*mapClass2Axioms.put( new AssayAxioms((mapSome.get(classURI).getClassURI()),
@@ -391,7 +392,7 @@ public class AxiomCollector
 
 		try
 		{
-			axiomJSONWriter("onlyNew.json", jsonFinal);
+			axiomJSONWriter("/tmp/onlyNew.json", jsonFinal);
 		}
 		catch (JSONException e)
 		{
@@ -440,7 +441,7 @@ public class AxiomCollector
 
 		try
 		{
-			axiomJSONWriter("someNew.json", jsonFinal);
+			axiomJSONWriter("/tmp/someNew.json", jsonFinal);
 		}
 		catch (JSONException e)
 		{
@@ -453,9 +454,9 @@ public class AxiomCollector
 
 	public void mergeAxiomMaps()
 	{
-		Map<AssayAxioms, String> mapClass2Axioms = new HashMap<AssayAxioms, String>();
-		Map<AssayAxiomsAll, String> mapAll = new HashMap<AssayAxiomsAll, String>();
-		Map<AssayAxiomsSome, String> mapSome = new HashMap<AssayAxiomsSome, String>();
+		Map<AssayAxioms, String> mapClass2Axioms = new HashMap<>();
+		Map<AssayAxiomsAll, String> mapAll = new HashMap<>();
+		Map<AssayAxiomsSome, String> mapSome = new HashMap<>();
 
 		for (AssayAxiomsSome axiom : axiomsForSome)
 		{
@@ -552,12 +553,10 @@ public class AxiomCollector
 			{
 				if ((axiom.getClassURI()).equals(axiomSome.getClassURI()))
 				{
-
 					JSONObject json = new JSONObject();
 					try
 					{
-
-						if (!(axiom.eliminateRedundantURIs().endsWith("redundant axiom")))
+						if (!axiom.eliminateRedundantURIs().endsWith("redundant axiom"))
 						{
 
 							//JSONObject obj = new JSONObject();
@@ -580,9 +579,10 @@ public class AxiomCollector
 							//if(Arrays.asList(axiomSome.getURIArray()).contains("http://www.bioassayontology.org/bao#BAO_0003028")){
 
 							String[] forSomeObjURIs = axiomSome.getURIArray();
-							ArrayList forSomeObjURIsList = new ArrayList(Arrays.asList(forSomeObjURIs));
+							List<String> forSomeObjURIsList = new ArrayList<>(Arrays.asList(forSomeObjURIs));
 							for (int i = 0; i < forSomeObjURIs.length; i++)
 							{
+								// TODO: this is broken; forSomeObjURIs is a string, nonRedundantAxiomsForSome is an object array...
 								if (nonRedundantAxiomsForSome.contains(forSomeObjURIs[i]))
 								{//this is one of the obj URIs
 									findAllAxiomsOfAssay(forSomeObjURIs[i]);
@@ -609,12 +609,12 @@ public class AxiomCollector
 
 	}
 
-	public ArrayList<Rule> createRules(Map<AssayAxioms, String> axiomMap)
+	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap)
 	{
 
 		//assayAxiomsMap<axiom, axiomsClassURI>
 		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
-		ArrayList<Rule> axioms2Rules = new ArrayList();
+		List<Rule> axioms2Rules = new ArrayList<>();
 		AxiomVocab axvocab = new AxiomVocab();
 
 		Rule newRule = new Rule();

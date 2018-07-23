@@ -306,15 +306,10 @@ public class AxiomVocab
 		return av;
 	}
 	
-	
-	
-	
-	public List<Rule> findRedundantRules(String[] redundantURIs){
-		
-		ArrayList<Rule> redundantRules = new ArrayList();
+	public List<Rule> findRedundantRules(String[] redundantURIs)
+	{
+		List<Rule> redundantRules = new ArrayList<>();
 		String[]redundantURIList = redundantURIs;
-		
-		
 		
 		return redundantRules;
 	}
