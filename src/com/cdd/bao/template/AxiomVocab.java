@@ -163,9 +163,12 @@ public class AxiomVocab
 			if (!(obj instanceof Rule)) return false;
 			Rule other = (Rule)obj;
 			if (type != other.type) return false;
-			if (subject == null) {
+			if (subject == null) 
+			{
 				if (other.subject != null) return false;
-			} else {
+			} 
+			else 
+			{
 				if (!subject.equals(other.subject)) return false;
 			}
 			int sz = ArrayUtils.getLength(impact);
