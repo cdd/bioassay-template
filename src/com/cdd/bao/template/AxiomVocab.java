@@ -22,7 +22,6 @@
 package com.cdd.bao.template;
 
 import com.cdd.bao.axioms.AxiomCollector.*;
-import com.cdd.bao.ScanAxioms;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -75,7 +74,7 @@ public class AxiomVocab
 		@Override
 		public String toString()
 		{
-			return ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch ;
+			return ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch;
 		}
 		
 		@Override
@@ -141,9 +140,10 @@ public class AxiomVocab
 			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
 			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
 
-			for (int i = 0; i<ArrayUtils.getLength(impact);i++){
-				str.append("[" + subject+ "]");
-				str.append("=>["+impact[i]+"]"+"\n");
+			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
+			{
+				str.append("[" + subject + "]");
+				str.append("=>[" + impact[i] + "]" + "\n");
 			}
 			
 

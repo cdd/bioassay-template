@@ -191,7 +191,7 @@ public class AxiomCollector
 
 		public String getObjectLabels()
 		{
-			return objectURIs.split("\\]")[0].replaceAll("^\\[","");
+			return objectURIs.split("\\]")[0].replaceAll("^\\[", "");
 //			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 //			Matcher matcher = pattern.matcher(objectURIs);
 //			while (matcher.find())
@@ -203,7 +203,7 @@ public class AxiomCollector
 
 		public String getSubjectLabels()
 		{
-			return classURI.split("\\]")[0].replaceAll("^\\[","");
+			return classURI.split("\\]")[0].replaceAll("^\\[", "");
 //			Pattern pattern = Pattern.compile("\\[(.*?)\\]");
 //			Matcher matcher = pattern.matcher(objectURIs);
 //			while (matcher.find())
@@ -226,7 +226,8 @@ public class AxiomCollector
 		}
 
 	}
-	public static final class AssayAxiomsAll extends AssayAxioms{
+	public static final class AssayAxiomsAll extends AssayAxioms
+	{
 		public String classURI;
 		public String classLabel;
 		public String axiomType;
@@ -452,7 +453,7 @@ public class AxiomCollector
 
 	}
 
-	public void mergeAxiomMaps()
+	public void mergeAxiomMaps() throws IOException
 	{
 		Map<AssayAxioms, String> mapClass2Axioms = new HashMap<>();
 		Map<AssayAxiomsAll, String> mapAll = new HashMap<>();
@@ -609,39 +610,46 @@ public class AxiomCollector
 
 	}
 
-	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap)
+	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap) throws IOException
 	{
-
-		//assayAxiomsMap<axiom, axiomsClassURI>
 		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
 		List<Rule> axioms2Rules = new ArrayList<>();
-		AxiomVocab axvocab = new AxiomVocab();
 
-		Rule newRule = new Rule();
-
-		for (AssayAxioms axiom : assayAxiomsMap.keySet())
+		
+		try (FileWriter rulesInput = new FileWriter("DTOaxioms.txt")) 
 		{
-			Term subject = new Term(axiom.getClassURI(), true);
-			//System.out.println("I am here" + axiom.getSubjectLabels());
-
-			String[] objURIs = new String[1];
-			objURIs[0] = axiom.getObjectLabels();
-			Term[] impact = new Term[objURIs.length];
-			//System.out.println("I am here2"+impact.toString());
-			//for(int i = objURIs.length-1; i>=0; i-- ){
-			//if(objURIs[i] !=null)
-			//impact[i] = A.new Term(objURIs[i]);
-			//}
-			impact[0] = new Term(objURIs[0], true);
-			newRule.subject = subject;
-			newRule.impact = impact;
-			newRule.type = Type.LIMIT;
-			axioms2Rules.add(newRule);
-			//System.out.println(newRule.toString());
-			System.out.println(newRule.rulesFormatString());
-
+			for (AssayAxioms axiom : assayAxiomsMap.keySet())
+			{
+				Term subject = new Term(axiom.getClassURI(), true);
+				//System.out.println("I am here" + axiom.getSubjectLabels());
+	
+				String[] objURIs = axiom.uriArray;
+				objURIs[1] = axiom.getObjectLabels();
+				//objURIs[2] = axiom.getObjectLabels();
+//				Term[] impact = new Term[objURIs.length];
+//				//System.out.println("I am here2"+impact.toString());
+//				//for(int i = objURIs.length-1; i>=0; i-- ){
+//				//if(objURIs[i] !=null)
+//				//impact[i] = A.new Term(objURIs[i]);
+//				//}
+//				impact[0] = new Term(objURIs[0], true);
+//				impact[1] = new Term(objURIs[1],true);
+//				impact[2] = new Term(objURIs[2],true);
+				Term[] impact  = new Term[]{
+						new Term(objURIs[0], true),
+						new Term(objURIs[1], true),
+						new Term(objURIs[2], true)
+				};
+				Rule newRule = new Rule();
+				newRule.subject = subject;
+				newRule.impact = impact;
+				newRule.type = Type.LIMIT;
+				axioms2Rules.add(newRule);
+				//System.out.println(newRule.toString());
+				System.out.println(newRule.rulesFormatString());
+				rulesInput.write(newRule.rulesFormatString() + "\n");
+			}
 		}
-		//System.out.println(axioms2Rules.toString());
 		return axioms2Rules;
 	}
 
