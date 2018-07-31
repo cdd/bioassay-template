@@ -21,7 +21,6 @@
 
 package com.cdd.bao.axioms;
 
-import com.cdd.bao.template.*;
 import com.cdd.bao.template.AxiomVocab.*;
 
 import java.io.*;
@@ -635,7 +634,7 @@ public class AxiomCollector
 //				impact[0] = new Term(objURIs[0], true);
 //				impact[1] = new Term(objURIs[1],true);
 //				impact[2] = new Term(objURIs[2],true);
-				Term[] impact  = new Term[]{
+				Term[] impact = new Term[]{
 						new Term(objURIs[0], true),
 						new Term(objURIs[1], true),
 						new Term(objURIs[2], true)

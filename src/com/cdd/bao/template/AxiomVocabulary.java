@@ -1,9 +1,26 @@
+/*
+ * BioAssay Ontology Annotator Tools
+ * 
+ * (c) 2014-2017 Collaborative Drug Discovery Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2.0
+ * as published by the Free Software Foundation:
+ * 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.cdd.bao.template;
 
-import com.cdd.bao.axioms.AxiomCollector.*;
-import com.cdd.bao.template.AxiomVocab.Rule;
-import com.cdd.bao.template.AxiomVocab.Term;
-import com.cdd.bao.ScanAxioms;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -55,7 +72,7 @@ public class AxiomVocabulary
 		@Override 
 		public boolean equals(Object obj)
 		{
-			if(obj == null || !(obj instanceof Term))  return false;
+			if (obj == null || !(obj instanceof Term)) return false;
 			Term other = (Term) obj;
 			return Util.safeString(valueURI).equals(Util.safeString(other.valueURI)) && wholeBranch == other.wholeBranch;
 		}
@@ -77,7 +94,11 @@ public class AxiomVocabulary
 		public Term[] impact;
 		
 		public Rule(){}
-		public Rule(Type type, Term subject){this(type,subject,null);}
+		public Rule(Type type, Term subject)
+		{ 
+			this(type, subject, null); 
+		}
+		
 		public Rule(Type type, Term subject, Term[] impact)
 		{
 			this.type = type;
@@ -96,14 +117,17 @@ public class AxiomVocabulary
 		public String toString()
 		{
 			StringBuilder str = new StringBuilder();
-			if(type.equals(Type.LIMIT))  str.append("LIMIT type axiom");
+			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom");
 			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom");
 			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom");
 			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom");
 			
-			str.append("subject [ "+ subject +"]");
+			str.append("subject [ " + subject + "]");
 			str.append("impacts: [");
-			for(int n =0; n<ArrayUtils.getLength(impact); n++) str.append((n == 0 ? "" : ",") + impact[n]);
+			for (int n = 0; n < ArrayUtils.getLength(impact); n++) 
+			{
+				str.append((n == 0 ? "" : ",") + impact[n]);
+			}
 			str.append("]");
 			
 			return str.toString();	
@@ -114,7 +138,7 @@ public class AxiomVocabulary
 		{
 			StringBuilder str = new StringBuilder();
 			
-			for(int i = 0; i < ArrayUtils.getLength(impact);i++)
+			for (int i = 0; i < ArrayUtils.getLength(impact); i++)
 			{
 				str.append(subject + " ");
 				//str.append(predicate+ " ");
@@ -174,22 +198,20 @@ public class AxiomVocabulary
 		ostr.close();
 	}
 	
-	public void serialise(OutputStream ostr) throws IOException
+	public void serialise(OutputStream ostr)
 	{
 		//compose a unique list of URIs, brevity purposes
 		Set<String> termSet = new HashSet<>();
-		for(Rule rule : rules) 
+		for (Rule rule : rules) 
 		{
-			if(rule.subject != null)
+			if (rule.subject != null)
 			{
-				if(rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
+				if (rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
 			}
-			if(rule.impact != null) for (Term term : rule.impact)
+			if (rule.impact != null) for (Term term : rule.impact)
 			{
-				if(term.valueURI != null) termSet.add(term.valueURI);
+				if (term.valueURI != null) termSet.add(term.valueURI);
 			}
 		}
-		
 	}
-
 }

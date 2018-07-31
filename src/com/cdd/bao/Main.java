@@ -168,9 +168,12 @@ public class Main
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
+		try 
+		{
 			ac.mergeAxiomMaps();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
