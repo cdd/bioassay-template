@@ -56,8 +56,17 @@ public class AxiomVocab
 			for (Type t : values()) if (t.raw == rawVal) return t;
 			return LIMIT;
 		}
+
+		@Override
+		public String toString()
+		{
+			if (this.equals(Type.LIMIT)) return "LIMIT";
+			else if (this.equals(Type.EXCLUDE)) return "EXCLUDE";
+			else if (this.equals(Type.REQUIRED)) return "REQUIRED";
+			else return "BLANK";
+		}
 	}
-	
+
 	public static class Term
 	{
 		//public String branchURI;
@@ -83,6 +92,12 @@ public class AxiomVocab
 			if (obj == null || !(obj instanceof Term)) return false;
 			Term other = (Term)obj;
 			return Util.safeString(valueURI).equals(Util.safeString(other.valueURI)) && wholeBranch == other.wholeBranch;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(valueURI, wholeBranch);
 		}
 	}
 	
@@ -115,16 +130,12 @@ public class AxiomVocab
 		public String toString()
 		{
 			StringBuilder str = new StringBuilder();
-
-			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
-			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
-			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
-			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
-
+			str.append(type.toString() + " type axiom; ");
 			str.append("subject: [" + subject + "]");
-			str.append("impacts: [");
-			for (int n = 0; n < ArrayUtils.getLength(impact); n++) str.append((n == 0 ? "" : ",") + impact[n]);
-			str.append("])");
+			
+			StringJoiner sj = new StringJoiner(",");
+			if (impact != null) for (Term s : impact) sj.add(s.toString());
+			str.append("impacts: [" + sj.toString() + "])");
 
 			return str.toString();
 		}
@@ -134,11 +145,7 @@ public class AxiomVocab
 		public String rulesFormatString()
 		{
 			StringBuilder str = new StringBuilder();
-
-			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
-			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
-			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
-			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
+			str.append(type.toString() + " type axiom; ");
 
 			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
 			{
@@ -153,14 +160,27 @@ public class AxiomVocab
 		@Override
 		public boolean equals(Object obj)
 		{
-			if (obj == null || !(obj instanceof Rule)) return false;
+			if (!(obj instanceof Rule)) return false;
 			Rule other = (Rule)obj;
 			if (type != other.type) return false;
-			if ((subject == null && other.subject != null) || (subject != null && !subject.equals(other.subject))) return false;
+			if (subject == null) {
+				if (other.subject != null) return false;
+			} else {
+				if (!subject.equals(other.subject)) return false;
+			}
 			int sz = ArrayUtils.getLength(impact);
 			if (sz != ArrayUtils.getLength(other.impact)) return false;
 			for (int n = 0; n < sz; n++) if (!impact[n].equals(other.impact[n])) return false;
 			return true;
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			if (impact == null)
+				return Objects.hash(type, subject);
+			else
+				return Objects.hash(type, subject, Arrays.asList(impact));
 		}
 	}
 	
