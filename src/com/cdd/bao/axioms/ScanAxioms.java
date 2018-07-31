@@ -101,9 +101,10 @@ public class ScanAxioms
 			schema = Schema.deserialise(new File("data/template/schema.json"));
 
 			Util.writeln("Loading vocabulary dump...");
-			InputStream idump = new FileInputStream("data/template/vocab.dump");
-			schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
-			idump.close();
+			try (InputStream idump = new FileInputStream("data/template/vocab.dump"))
+			{
+				schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+			}
 
 			List<File> files = new ArrayList<>();
 			for (File f : new File("data/ontology").listFiles())
@@ -117,9 +118,10 @@ public class ScanAxioms
 				//if (!f.getName().equals("bao_vocabulary_phenotype.owl")) continue; // !!			
 				Util.writeln("    reading: " + f.getCanonicalPath());
 				//org.apache.jena.riot.RDFDataMgr.read(ontology, f.getPath(), org.apache.jena.riot.Lang.RDFXML);
-				Reader rdr = new FileReader(f);
-				ontology.read(rdr, null);
-				rdr.close();
+				try (Reader rdr = new FileReader(f))
+				{
+					ontology.read(rdr, null);
+				}
 			}
 		}
 		catch (Exception e)
@@ -592,20 +594,22 @@ public class ScanAxioms
 	}
 
 	// adds a value to a list-within-map
-	private boolean putAdd(Map<String, Set<String>> map, String key, String val)
+	protected static boolean putAdd(Map<String, Set<String>> map, String key, String val)
 	{
-		Set<String> values = map.get(key);
-		if (values == null) map.put(key, values = new HashSet<>());
-		if (values.contains(val)) return false;
-		values.add(val);
-		return true;
+		return map.computeIfAbsent(key, k -> new HashSet<>()).add(val);
+//		Set<String> values = map.get(key);
+//		if (values == null) map.put(key, values = new HashSet<>());
+//		if (values.contains(val)) return false;
+//		values.add(val);
+//		return true;
 	}
 
-	private void putAdd(Map<String, List<Statement>> map, String key, Statement stmt)
+	protected static <T> void putAdd(Map<String, List<T>> map, String key, T stmt)
 	{
-		List<Statement> values = map.get(key);
-		if (values == null) map.put(key, values = new ArrayList<>());
-		values.add(stmt);
+		map.computeIfAbsent(key, k -> new ArrayList<>()).add(stmt);
+//		List<T> values = map.get(key);
+//		if (values == null) map.put(key, values = new ArrayList<>());
+//		values.add(stmt);
 	}
 
 	// turns a URI into a readable name, which includes the label if available
