@@ -49,8 +49,8 @@ public class ScanAxioms
 	public Schema schema;
 	public SchemaVocab schvoc;
 
-	public static Map<String, String> uriToLabel = new HashMap<String, String>();
-	public static Map<String, String> labelToUri = new HashMap<String, String>();
+	public static Map<String, String> uriToLabel = new HashMap<>();
+	public static Map<String, String> labelToUri = new HashMap<>();
 	public Map<String, List<Statement>> anonStatements = new HashMap<>();
 	//public Map<String, String> allAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> someAxiomsMap = new HashMap<String, String>();
@@ -83,7 +83,7 @@ public class ScanAxioms
 		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
 	};
 
-	public ArrayList<String> redundantURIsList = new ArrayList<String>(Arrays.asList(redundantURIs));
+	public ArrayList<String> redundantURIsList = new ArrayList<>(Arrays.asList(redundantURIs));
 
 	public AxiomCollector ac = new AxiomCollector();
 
@@ -248,7 +248,7 @@ public class ScanAxioms
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						OntClass v = (OntClass)av.getAllValuesFrom();
 
@@ -297,7 +297,7 @@ public class ScanAxioms
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						OntClass v = (OntClass)av.getSomeValuesFrom();
 
@@ -338,7 +338,7 @@ public class ScanAxioms
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int maximum = av.getMaxCardinality();
 
@@ -351,7 +351,7 @@ public class ScanAxioms
 					else if (r.isMinCardinalityRestriction())
 					{
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int minimum = av.getMinCardinality();
 
@@ -364,7 +364,7 @@ public class ScanAxioms
 					else if (r.isCardinalityRestriction())
 					{
 						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int cardinality = av.getCardinality();
 
@@ -396,7 +396,7 @@ public class ScanAxioms
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						OntClass v = (OntClass)av.getAllValuesFrom();
 
@@ -440,7 +440,7 @@ public class ScanAxioms
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						OntClass v = (OntClass)av.getSomeValuesFrom();
 
@@ -481,7 +481,7 @@ public class ScanAxioms
 					else if (r.isMaxCardinalityRestriction())
 					{
 						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int maximum = av.getMaxCardinality();
 
@@ -494,7 +494,7 @@ public class ScanAxioms
 					else if (r.isMinCardinalityRestriction())
 					{
 						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int minimum = av.getMinCardinality();
 
@@ -507,7 +507,7 @@ public class ScanAxioms
 					else if (r.isCardinalityRestriction())
 					{
 						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = (OntProperty)av.getOnProperty();
+						OntProperty p = av.getOnProperty();
 						String pname = nameNode(p);
 						int cardinality = av.getCardinality();
 
@@ -542,10 +542,8 @@ public class ScanAxioms
 		File f = new File("axioms.txt");
 		Util.writeln("\nWriting whole output to: " + f.getPath());
 
-		try
+		try (PrintWriter wtr = new PrintWriter(f))
 		{
-			PrintWriter wtr = new PrintWriter(f);
-
 			wtr.println("---- Property Counts ----");
 			for (String key : propTypeCount.keySet())
 				wtr.println("[" + key + "] count=" + propTypeCount.get(key));
@@ -582,8 +580,6 @@ public class ScanAxioms
 
 				stack.addAll(group.subGroups);
 			}
-
-			wtr.close();
 		}
 		catch (IOException e)
 		{
