@@ -72,6 +72,7 @@ public class ScanAxioms
 
 	public static List<AssayAxiomsAll> axiomsForAll = new ArrayList<>();
 	public static List<AssayAxiomsSome> axiomsForSome = new ArrayList<>();
+	public static List<AssayAxioms> assayAxioms = new ArrayList<>();
 
 	public static String[] redundantURIs = 
 	{
@@ -224,8 +225,8 @@ public class ScanAxioms
 
 		Util.writeln("---- Main Iteration ----");
 
-		JSONArray onlyAxiomsArray = new JSONArray();
-		JSONArray someAxiomsArray = new JSONArray();
+		
+	
 		timeThen = new Date().getTime();
 		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
@@ -266,12 +267,14 @@ public class ScanAxioms
 						String val = "ALL: property=[" + pname + "] value=";
 						if (sequence.length == 0) val += "{nothing}";	
 						String objectURIs = null;
+						StringBuilder oURIs = null;
 						String objectLabels = null;
 						String[] uriArray = new String[sequence.length];
 						for (int n = 0; n < sequence.length; n++)
 						{
 							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 							objectURIs += "[" + sequence[n] + "]";
+							oURIs.append(sequence[n] + ";");
 							objectLabels += "[" + nameNode(sequence[n]) + "]";
 							uriArray[n] = "" + sequence[n];
 
@@ -287,6 +290,9 @@ public class ScanAxioms
 
 						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
 						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
+						//public AssayAxioms(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
+						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));
+						
 
 						//o.URI --> class URI
 						//p.URI --> property URI
@@ -331,8 +337,12 @@ public class ScanAxioms
 						forSomeCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
-						if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
-							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
+						
+						//if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
+						axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
+						//public AssayAxioms(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
+						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
+						
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 					}
 					else if (r.isMaxCardinalityRestriction())
@@ -527,8 +537,7 @@ public class ScanAxioms
 				timeThen = timeNow;
 			}
 		}
-		ac.createJSON("only.json", onlyAxiomsArray);
-		//ac.createJSON("someAxioms.json",someAxiomsArray);
+
 
 		Util.writeln("\n---- Category Counts ----");
 		Util.writeln("terms with axioms: " + axioms.size());
