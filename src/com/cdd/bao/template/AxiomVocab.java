@@ -36,10 +36,12 @@ import org.apache.commons.lang3.*;
 
 public class AxiomVocab
 {
-	/* LIMIT = axioms with keyword "some"; 
-	 * EXCLUDE = axioms with keyword "not";  
-	 * REQUIRED = axioms with keyword "only"
-	 * */
+	/*
+		LIMIT = presence of a term implies the exclusive existence of other terms
+		EXCLUDE = presence of a term implies that other terms are not eligible
+		BLANK = presence of a term implies that another branch category should not be populated
+		REQUIRED = presence of a term implies that another branch category should have something (i.e. not blank)
+	*/
 	
 	public enum Type
 	{

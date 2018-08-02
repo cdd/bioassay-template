@@ -22,7 +22,6 @@
 package com.cdd.bao;
 
 import com.cdd.bao.axioms.*;
-import com.cdd.bao.axioms.ScanAxioms;
 import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
 import com.cdd.bao.template.*;
@@ -129,7 +128,27 @@ public class Main
 		}
 		else if (argv[0].equals("scanaxioms"))
 		{
-			try {new ScanAxioms().exec();}
+			String fnDump = null, fnText = null;
+			for (int n = 1; n < argv.length; n++)
+			{
+				if (argv[n].equals("--dump") && n < argv.length - 1) fnDump = argv[++n];
+				else if (argv[n].equals("--text") && n < argv.length - 1) fnText = argv[++n];
+				else
+				{
+					Util.writeln("Unexpected option: " + argv[n]);
+					return;
+				}
+			}
+			
+			try 
+			{
+				ScanAxioms scan = new ScanAxioms();
+				scan.exec();
+				if (fnDump != null) scan.exportDump(fnDump);
+				if (fnText != null) scan.exportText(fnText);
+
+				Util.writeln("Done.");
+			}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
 		else
@@ -139,15 +158,17 @@ public class Main
 		}
 		
 		
-		
+		/* TODO: put this into a separate invocation block
 		ScanAxioms s = new ScanAxioms();
 		try
 		{
 			s.exec();
 		} 
-		catch (OntologyException | JSONException | IOException e1) 
+		catch (Exception ex) 
 		{
-			e1.printStackTrace();
+			Util.writeln("Axiom scan failed:");
+			ex.printStackTrace();
+			return;
 		}
 
 		AxiomCollector ac;
@@ -177,6 +198,7 @@ public class Main
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public static void printHelp()
@@ -218,9 +240,9 @@ public class Main
 		// note: only shows trees on both sides
 		for (SchemaVocab.StoredTree tree1 : sv1.getTrees()) for (SchemaVocab.StoredTree tree2 : sv2.getTrees())
 		{
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix)
-				|| !tree1.propURI.equals(tree2.propURI)
-				|| !Arrays.equals(tree1.groupNest, tree2.groupNest)) continue;
+			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) ||
+				!tree1.propURI.equals(tree2.propURI) ||
+				!Arrays.equals(tree1.groupNest, tree2.groupNest)) continue;
 
 			String info = "propURI: " + tree1.propURI;
 			if (schema != null && tree1.schemaPrefix.equals(schema.getSchemaPrefix()))

@@ -45,30 +45,30 @@ import org.json.*;
 
 public class ScanAxioms
 {
-	public OntModel ontology;
-	public Schema schema;
-	public SchemaVocab schvoc;
+	private OntModel ontology;
+	private Schema schema;
+	private SchemaVocab schvoc;
 
 	public static Map<String, String> uriToLabel = new HashMap<>();
 	public static Map<String, String> labelToUri = new HashMap<>();
-	public Map<String, List<Statement>> anonStatements = new HashMap<>();
+	private Map<String, List<Statement>> anonStatements = new HashMap<>();
 	//public Map<String, String> allAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> someAxiomsMap = new HashMap<String, String>();
 	//public Map<String, String> inversePropertiesMap = new HashMap<String, String>();
 
 	public static Map<String, Set<String>> onlyAxioms = new TreeMap<>();
-	public Map<String, Set<String>> someAxioms = new TreeMap<>();
-	public Map<String, Set<String>> inverseProperties = new TreeMap<>();
+	private Map<String, Set<String>> someAxioms = new TreeMap<>();
+	private Map<String, Set<String>> inverseProperties = new TreeMap<>();
 
-	public int numProperties = 0;
-	public int hasInverseCounter = 0;
-	public int forAllCounter = 0;
-	public int forSomeCounter = 0;
-	public int cardinalityCounter = 0;
-	public int maxCardinalityCounter = 0;
-	public int minCardinalityCounter = 0;
+	private int numProperties = 0;
+	private int hasInverseCounter = 0;
+	private int forAllCounter = 0;
+	private int forSomeCounter = 0;
+	private int cardinalityCounter = 0;
+	private int maxCardinalityCounter = 0;
+	private int minCardinalityCounter = 0;
 
-	public List<String> rURIs = new ArrayList<>();
+	private List<String> rURIs = new ArrayList<>();
 
 	public static List<AssayAxiomsAll> axiomsForAll = new ArrayList<>();
 	public static List<AssayAxiomsSome> axiomsForSome = new ArrayList<>();
@@ -84,11 +84,13 @@ public class ScanAxioms
 		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
 	};
 
-	public ArrayList<String> redundantURIsList = new ArrayList<>(Arrays.asList(redundantURIs));
+	public List<String> redundantURIsList = new ArrayList<>(Arrays.asList(redundantURIs));
 
-	public AxiomCollector ac = new AxiomCollector();
+	private Map<String, Set<String>> axioms = new TreeMap<>();
 
-	Map<String, Integer> propTypeCount = new TreeMap<>();
+	private Map<String, Integer> propTypeCount = new TreeMap<>();
+
+	// ------------ public methods ------------
 
 	public ScanAxioms()
 	{
@@ -108,8 +110,7 @@ public class ScanAxioms
 			}
 
 			List<File> files = new ArrayList<>();
-			for (File f : new File("data/ontology").listFiles())
-				if (f.getName().endsWith(".owl")) files.add(f);
+			for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
 			//for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
 			Util.writeln("# files to read: " + files.size());
 
@@ -125,10 +126,7 @@ public class ScanAxioms
 				}
 			}
 		}
-		catch (Exception e)
-		{
-			throw new OntologyException(e.getMessage());
-		}
+		catch (Exception ex) {throw new OntologyException(ex.getMessage());}
 
 		Util.writeln("Collating values from schema...");
 		Set<String> schemaValues = new HashSet<>();
@@ -155,8 +153,6 @@ public class ScanAxioms
 		}
 		Util.writeln("    total triples inferred: " + numTriples);
 
-		Map<String, Set<String>> axioms = new TreeMap<>();
-
 		Util.writeln("Extracting class labels...");
 
 		int numClasses = 0;
@@ -178,7 +174,6 @@ public class ScanAxioms
 				Literal label = labelNode.asLiteral();
 				uriToLabel.put(ontClass.getURI(), label.getString());
 				labelToUri.put(label.getString(), ontClass.getURI());
-				
 			}
 		}
 
@@ -225,8 +220,6 @@ public class ScanAxioms
 
 		Util.writeln("---- Main Iteration ----");
 
-		
-	
 		timeThen = new Date().getTime();
 		for (Iterator<OntClass> it = ontology.listClasses(); it.hasNext();)
 		{
@@ -255,26 +248,25 @@ public class ScanAxioms
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
-						for (Resource s : sequence)
-							if (schemaValues.contains(s.getURI()))
-							{
-								anySchema = true;
-								break;
-							}
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
+						{
+							anySchema = true;
+							break;
+						}
 						if (!anySchema) continue;
 
 						String key = nameNode(o);
 						String val = "ALL: property=[" + pname + "] value=";
 						if (sequence.length == 0) val += "{nothing}";	
 						String objectURIs = null;
-						StringBuilder oURIs = null;
+						//StringBuilder oURIs = null;
 						String objectLabels = null;
 						String[] uriArray = new String[sequence.length];
 						for (int n = 0; n < sequence.length; n++)
 						{
 							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
 							objectURIs += "[" + sequence[n] + "]";
-							oURIs.append(sequence[n] + ";");
+							//oURIs.append(sequence[n] + ";");
 							objectLabels += "[" + nameNode(sequence[n]) + "]";
 							uriArray[n] = "" + sequence[n];
 
@@ -309,12 +301,11 @@ public class ScanAxioms
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
-						for (Resource s : sequence)
-							if (schemaValues.contains(s.getURI()))
-							{
-								anySchema = true;
-								break;
-							}
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
+						{
+							anySchema = true;
+							break;
+						}
 						if (!anySchema) continue;
 
 						String key = nameNode(o);
@@ -390,19 +381,13 @@ public class ScanAxioms
 			for (Iterator<OntClass> i = o.listEquivalentClasses(); i.hasNext();)
 			{
 				OntClass c = i.next();
-				/*for (Iterator<OntClass> i = o.listSuperClasses(); i.hasNext();)
-				{
-				OntClass c = i.next();
-				
-				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
-				{
-					Restriction r = c.asRestriction(); //restriction == axiom
-					if (r.isAllValuesFromRestriction()) // only axioms
-					{ */
 
 				if (c.isIntersectionClass()) //go over each axiom of a particular class and put the class and axioms to the bag
 				{
-					Restriction r = c.asRestriction(); //restriction == axiom
+					Restriction r = null; //restriction == axiom
+					try {r = c.asRestriction();}
+					catch (ConversionException ex) {continue;} // silent failure
+					
 					if (r.isAllValuesFromRestriction()) // only axioms
 					{
 						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
@@ -412,12 +397,11 @@ public class ScanAxioms
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
-						for (Resource s : sequence)
-							if (schemaValues.contains(s.getURI()))
-							{
-								anySchema = true;
-								break;
-							}
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
+						{
+							anySchema = true;
+							break;
+						}
 						if (!anySchema) continue;
 
 						String key = nameNode(o);
@@ -446,7 +430,6 @@ public class ScanAxioms
 						//val --> for(n<sequence.length) sequence[n] -->objectURI
 
 					}
-
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
@@ -456,12 +439,11 @@ public class ScanAxioms
 
 						Resource[] sequence = expandSequence(v);
 						boolean anySchema = false;
-						for (Resource s : sequence)
-							if (schemaValues.contains(s.getURI()))
-							{
-								anySchema = true;
-								break;
-							}
+						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
+						{
+							anySchema = true;
+							break;
+						}
 						if (!anySchema) continue;
 
 						String key = nameNode(o);
@@ -538,7 +520,6 @@ public class ScanAxioms
 			}
 		}
 
-
 		Util.writeln("\n---- Category Counts ----");
 		Util.writeln("terms with axioms: " + axioms.size());
 		Util.writeln("for all axioms: " + forAllCounter);
@@ -548,7 +529,18 @@ public class ScanAxioms
 		Util.writeln("for exactly axioms: " + cardinalityCounter);
 		Util.writeln("properties with inverse: " + hasInverseCounter);
 
-		File f = new File("axioms.txt");
+		Util.writeln("Scanning complete.");
+	}
+	
+	// extract as axiom rules and export using the binary format
+	public void exportDump(String fn) throws IOException
+	{
+	}
+
+	// export a human-readable text summary	
+	public void exportText(String fn) throws IOException
+	{
+		File f = new File(fn).getCanonicalFile();
 		Util.writeln("\nWriting whole output to: " + f.getPath());
 
 		try (PrintWriter wtr = new PrintWriter(f))
@@ -569,9 +561,11 @@ public class ScanAxioms
 				{
 					wtr.println("\n---- " + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + "> ----");
 					Set<String> wantURI = new HashSet<>();
-					for (SchemaVocab.StoredTree stored : schvoc.getTrees())
+					for (SchemaVocab.StoredTree stored : schvoc.getTrees()) if (stored.assignment != null && stored.tree != null)
+					{
 						if (stored.assignment.propURI.equals(assn.propURI)) for (SchemaTree.Node node : stored.tree.getFlat())
 							wantURI.add(node.uri);
+					}
 
 					for (String key : axioms.keySet())
 					{
@@ -582,39 +576,26 @@ public class ScanAxioms
 						wtr.println("[" + name + "]:");
 						List<String> values = new ArrayList<>(axioms.get(key));
 						Collections.sort(values);
-						for (String val : values)
-							wtr.println("    " + val);
+						for (String val : values) wtr.println("    " + val);
 					}
 				}
 
 				stack.addAll(group.subGroups);
 			}
-		}
-		catch (IOException e)
-		{
-			throw new OntologyException(e.getMessage());
-		}
-
-		Util.writeln("Done.");
+		}	
 	}
+	
+	// ------------ private methods ------------
 
 	// adds a value to a list-within-map
 	protected static boolean putAdd(Map<String, Set<String>> map, String key, String val)
 	{
 		return map.computeIfAbsent(key, k -> new HashSet<>()).add(val);
-//		Set<String> values = map.get(key);
-//		if (values == null) map.put(key, values = new HashSet<>());
-//		if (values.contains(val)) return false;
-//		values.add(val);
-//		return true;
 	}
 
 	protected static <T> void putAdd(Map<String, List<T>> map, String key, T stmt)
 	{
 		map.computeIfAbsent(key, k -> new ArrayList<>()).add(stmt);
-//		List<T> values = map.get(key);
-//		if (values == null) map.put(key, values = new ArrayList<>());
-//		values.add(stmt);
 	}
 
 	// turns a URI into a readable name, which includes the label if available

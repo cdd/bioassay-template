@@ -32,13 +32,16 @@ import org.json.*;
 public class AxiomCollector
 {
 
-	public static String[] redundantURIs = {"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-			"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-			"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-			"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-			"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
-			"http://www.bioassayontology.org/bao#BAO_0000019", "http://www.bioassayontology.org/bao#BAO_0000029"};
+	public static String[] redundantURIs = 
+	{
+		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
+		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
+		"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
+		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
+		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
+		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
+		"http://www.bioassayontology.org/bao#BAO_0000019", "http://www.bioassayontology.org/bao#BAO_0000029"
+	};
 
 	public static Map<String, Set<String>> onlyAxioms = ScanAxioms.onlyAxioms;
 
@@ -583,11 +586,11 @@ public class AxiomCollector
 							for (int i = 0; i < forSomeObjURIs.length; i++)
 							{
 								// TODO: this is broken; forSomeObjURIs is a string, nonRedundantAxiomsForSome is an object array...
+								/* ...
 								if (nonRedundantAxiomsForSome.contains(forSomeObjURIs[i]))
 								{//this is one of the obj URIs
 									findAllAxiomsOfAssay(forSomeObjURIs[i]);
-								}
-
+								}*/
 							}
 
 							jsonFinal.put(json);
