@@ -21,9 +21,10 @@
 
 package com.cdd.bao.axioms;
 
-import com.cdd.bao.axioms.AxiomCollector.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
+
+import static com.cdd.bao.axioms.AxiomVocab.*;
 
 import java.io.*;
 import java.util.*;
@@ -70,11 +71,9 @@ public class ScanAxioms
 
 	private List<String> rURIs = new ArrayList<>();
 
-	public static List<AssayAxiomsAll> axiomsForAll = new ArrayList<>();
-	public static List<AssayAxiomsSome> axiomsForSome = new ArrayList<>();
-	public static List<AssayAxioms> assayAxioms = new ArrayList<>();
+	private AxiomVocab axvoc = new AxiomVocab();
 
-	public static String[] redundantURIs = 
+	private static String[] redundantURIs = 
 	{
 		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
 		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
@@ -83,8 +82,7 @@ public class ScanAxioms
 		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
 		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
 	};
-
-	public List<String> redundantURIsList = new ArrayList<>(Arrays.asList(redundantURIs));
+	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
 
 	private Map<String, Set<String>> axioms = new TreeMap<>();
 
@@ -280,18 +278,15 @@ public class ScanAxioms
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
 
-						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
-						//public AssayAxioms(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
-						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));
+						/*axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
+						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));*/
 						
-
-						//o.URI --> class URI
-						//p.URI --> property URI
-						//val --> for(n<sequence.length) sequence[n] -->objectURI
-
+						
+						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
+						rule.impact = new Term[uriArray.length];
+						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
+						axvoc.addRule(rule);
 					}
-
 					else if (r.isSomeValuesFromRestriction())
 					{
 						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
@@ -330,11 +325,11 @@ public class ScanAxioms
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
 						
 						//if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
-						axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
-						//public AssayAxioms(String cURI, String pURI, String oURIs, String aType, String[] uriArray)
-						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
-						
+						//axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
+						//assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
+						
+						// TODO: is there a rule type for "Some"?
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
@@ -348,6 +343,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						maxCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+
+						// TODO: map to a rule (0 = blank?)		
 					}
 					else if (r.isMinCardinalityRestriction())
 					{
@@ -361,6 +358,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						minCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+
+						// TODO: map to a rule (>0 = required?)				
 					}
 					else if (r.isCardinalityRestriction())
 					{
@@ -374,6 +373,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						cardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+						
+						// TODO: map to a rule (blank/required?)
 					}
 				}
 			}
@@ -422,13 +423,12 @@ public class ScanAxioms
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
 
-						//public AssayAxiomsAll(String cURI, String cLabel, String aType, String pLabel, String pURI, String oLabels, String oURIs)
-						axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
+						//axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 
-						//o.URI --> class URI
-						//p.URI --> property URI
-						//val --> for(n<sequence.length) sequence[n] -->objectURI
-
+						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
+						rule.impact = new Term[uriArray.length];
+						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], false);
+						axvoc.addRule(rule);
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
@@ -466,9 +466,12 @@ public class ScanAxioms
 						forSomeCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
-						if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
+						
+						/*if (!redundantURISet.contains(o.getURI()))
 							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
-						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
+						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json*/
+						
+						// TODO: use these?
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
@@ -482,6 +485,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						maxCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+
+						// TODO: use these?
 					}
 					else if (r.isMinCardinalityRestriction())
 					{
@@ -495,6 +500,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						minCardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+
+						// TODO: use these?
 					}
 					else if (r.isCardinalityRestriction())
 					{
@@ -508,6 +515,8 @@ public class ScanAxioms
 						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
 						cardinalityCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
+
+						// TODO: use these?
 					}
 				}
 			}
@@ -528,13 +537,30 @@ public class ScanAxioms
 		Util.writeln("for min axioms: " + minCardinalityCounter);
 		Util.writeln("for exactly axioms: " + cardinalityCounter);
 		Util.writeln("properties with inverse: " + hasInverseCounter);
+		
+		Util.writeln("\nTotal Axiom Rules:");
+		int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
+		for (Rule r : axvoc.getRules())
+		{
+			if (r.type == Type.LIMIT) numLimit++;
+			else if (r.type == Type.EXCLUDE) numExclude++;
+			else if (r.type == Type.BLANK) numBlank++;
+			else if (r.type == Type.REQUIRED) numRequired++;
+		}
+		Util.writeln("    limit: " + numLimit);
+		Util.writeln("    exclude: " + numExclude);
+		Util.writeln("    blank: " + numBlank);
+		Util.writeln("    required: " + numRequired);
 
 		Util.writeln("Scanning complete.");
 	}
 	
 	// extract as axiom rules and export using the binary format
-	public void exportDump(String fn) throws IOException
+	public void exportDump(String fn) throws IOException, OntologyException
 	{
+		File f = new File(fn).getCanonicalFile();
+		Util.writeln("\nWriting rules dump to: " + f.getPath());
+		axvoc.serialise(f);
 	}
 
 	// export a human-readable text summary	

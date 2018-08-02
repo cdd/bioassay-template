@@ -27,6 +27,8 @@ import java.io.*;
 
 import org.junit.*;
 
+import com.cdd.bao.axioms.*;
+
 /*
 	Test for BAO vocabularies (imported from the template project)
 */

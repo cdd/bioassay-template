@@ -19,9 +19,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.template;
+package com.cdd.bao.axioms;
 
-import com.cdd.bao.axioms.AxiomCollector.*;
+import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
 
 import java.io.*;
@@ -59,14 +59,14 @@ public class AxiomVocab
 			return LIMIT;
 		}
 
-		@Override
+		/*@Override
 		public String toString()
 		{
 			if (this.equals(Type.LIMIT)) return "LIMIT";
 			else if (this.equals(Type.EXCLUDE)) return "EXCLUDE";
 			else if (this.equals(Type.REQUIRED)) return "REQUIRED";
 			else return "BLANK";
-		}
+		}*/
 	}
 
 	public static class Term
@@ -154,7 +154,6 @@ public class AxiomVocab
 				str.append("[" + subject + "]");
 				str.append("=>[" + impact[i] + "]" + "\n");
 			}
-			
 
 			return str.toString();
 		}
@@ -338,42 +337,6 @@ public class AxiomVocab
 		
 		return redundantRules;
 	}
-	public List<Rule> createRules(Map<AssayAxioms, String> axiomMap)
-	{
-		
-		//assayAxiomsMap<axiom, axiomsClassURI>
-		Map<AssayAxioms, String> assayAxiomsMap = axiomMap;
-		ArrayList<Rule> axioms2Rules = new ArrayList<>();
-
-		Rule newRule = new Rule();
-
-		for (AssayAxioms axiom : assayAxiomsMap.keySet())
-		{
-			Term subject = new Term(axiom.classURI, true);
-
-			String[] objURIs = axiom.uriArray;
-			//objURIs[0] = axiom.getObjectURIs();
-			Term[] impact = new Term[objURIs.length];
-
-			for (int i = objURIs.length - 1; i >= 0; i--)
-			{
-				if (objURIs[i] != null)
-					impact[i] = new Term(objURIs[i], true);
-			}
-			//impact[0] = new Term("" + objURIs[0]);
-			newRule.subject = subject;
-			newRule.impact = impact;
-			newRule.type = Type.LIMIT;
-			axioms2Rules.add(newRule);
-
-		}
-		System.out.println(axioms2Rules.toString());
-		
-		return axioms2Rules;
-	}
-	
-	//add rule method, currently all the rules we have extracted fall into the LIMIT category
-
 	
 	// ------------ private methods ------------
 	
