@@ -109,7 +109,11 @@ public class ScanAxioms
 
 			List<File> files = new ArrayList<>();
 			for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-			//for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+			if (false)
+				for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+			else
+				Util.writeln("** skipping files in [data/preprocessed]"); // (includes original DTO, which takes a long time)
+				
 			Util.writeln("# files to read: " + files.size());
 
 			ontology = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
@@ -558,15 +562,36 @@ public class ScanAxioms
 	// extract as axiom rules and export using the binary format
 	public void exportDump(String fn) throws IOException, OntologyException
 	{
-		File f = new File(fn).getCanonicalFile();
+		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("\nWriting rules dump to: " + f.getPath());
 		axvoc.serialise(f);
+	}
+	
+	// exports the axioms as a very simple text file of correlated pairs of URIs
+	public void exportPair(String fn) throws IOException
+	{
+		File f = new File(fn).getAbsoluteFile();
+		Util.writeln("\nWriting pairs to: " + f.getPath());
+		
+		try (BufferedWriter wtr = new BufferedWriter(new FileWriter(f)))
+		{
+			for (Rule r : axvoc.getRules()) if (r.type == Type.LIMIT && r.impact != null)
+			{
+				for (int n = 0; n < r.impact.length; n++)
+				{
+					wtr.write(r.subject.valueURI);
+					wtr.write(" ");
+					wtr.write(r.impact[n].valueURI);
+					wtr.write(" " + r.impact[n].wholeBranch + "\n");
+				}
+			}
+		}
 	}
 
 	// export a human-readable text summary	
 	public void exportText(String fn) throws IOException
 	{
-		File f = new File(fn).getCanonicalFile();
+		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("\nWriting whole output to: " + f.getPath());
 
 		try (PrintWriter wtr = new PrintWriter(f))
