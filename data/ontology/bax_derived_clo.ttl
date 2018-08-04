@@ -1,0 +1,94 @@
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+obo:CLO_0000176  rdfs:label  "RIKEN Cell Bank cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line cell that is in the RIKEN Cell bank" .
+
+obo:CLO_0037281  rdfs:label  "Line H1 cell" ;
+        rdfs:subClassOf  obo:CLO_0037280 .
+
+obo:CLO_0037305  rdfs:label  "mesenchymal stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037303 .
+
+obo:CLO_0037224  rdfs:label  "stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "A cell line cell that is cultured in vitro and possesses two capabilities: (1) it can self-renew, which means that it can divide indefinitely while remaining in an undifferentiated state; and (2) it is pluripotent or multipotent, which means that it can differentiate to form a specialized cell type." .
+
+obo:CLO_0000175  rdfs:label  "Coriell cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line cell that is in the Coriell cell line repositories." .
+
+obo:CLO_0037280  rdfs:label  "human embryonic stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037279 .
+
+obo:CLO_0037304  rdfs:label  "hematopoetic stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037303 .
+
+obo:CLO_0037313  rdfs:label  "H9 ES cell" ;
+        rdfs:subClassOf  obo:CLO_0037280 .
+
+obo:CLO_0037319  rdfs:label  "human embryonic stem cell line cell derived by somatic cell nuclear transfer" ;
+        rdfs:subClassOf  obo:CLO_0037280 , obo:CLO_0037318 .
+
+obo:CLO_0037251  rdfs:label  "C17.2 cell" ;
+        rdfs:subClassOf  obo:CLO_0037250 .
+
+obo:CLO_0037303  rdfs:label  "adult stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037224 .
+
+obo:CLO_0000018  rdfs:label  "mortal cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "A cell line cell that is capable of replicating a limited number of times in culture before undergoing senescence." .
+
+obo:CLO_0037318  rdfs:label  "somatic cell nuclear transfer-derived stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037224 .
+
+obo:CLO_0000027  rdfs:label  "adherent cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line that is cultured through adherence cell culturing." .
+
+obo:CLO_0037250  rdfs:label  "mouse neural progenitor cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037245 .
+
+obo:CLO_0037308  rdfs:label  "human induced pluripotent stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037307 .
+
+obo:CLO_0000011  rdfs:label  "HyperCLDB cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line cell that is in the HyperCLDB cell line repository" .
+
+obo:CLO_0037317  rdfs:label  "mouse embryonic stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037279 .
+
+obo:CLO_0000026  rdfs:label  "suspension cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line that requires suspension cell cuturing." .
+
+obo:CLO_0037320  rdfs:label  "human fibroblast-induced pluripotent stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037308 .
+
+obo:CLO_0000001  rdfs:label  "cell line ontology" .
+
+obo:CLO_0037307  rdfs:label  "induced pluripotent stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037224 .
+
+obo:CLO_0000010  rdfs:label  "ATCC cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0000001 ;
+        obo:IAO_0000115  "a cell line cell that is in the ATCC cell line repository" .
+
+obo:CLO_0037245  rdfs:label  "mouse stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037224 .
+
+obo:CLO_0037316  rdfs:label  "HUES3 ES cell" ;
+        rdfs:subClassOf  obo:CLO_0037280 .
+
+obo:CLO_0037279  rdfs:label  "embryonic stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037224 .
+
+obo:CLO_0037306  rdfs:label  "umbilical cord mesenchymal stem cell line cell" ;
+        rdfs:subClassOf  obo:CLO_0037305 .
