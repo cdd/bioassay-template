@@ -19,9 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.template;
-
-import com.cdd.bao.util.*;
+package com.cdd.bao.importer;
 
 import java.io.*;
 import java.util.*;
@@ -29,16 +27,14 @@ import java.util.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
-/*
-	Miscellaneous functionality: loads up the whole Gene Ontology OWL file (which is very large) and pulls out just the top level
-	hierarchy that is of interest to template creation. Resubclasses the root nodes so that they are attached to the BAO hierarchy.
-*/
+import com.cdd.bao.template.ModelSchema;
+import com.cdd.bao.util.*;
 
-public class ImportGeneOntology
+public abstract class OntologyImporter
 {
-	private Model inmodel, outmodel;
-	
-	private static final class Tree
+	protected Model inmodel, outmodel;
+
+	protected static final class Tree
 	{
 		Tree parent;
 		String uri;
@@ -51,12 +47,10 @@ public class ImportGeneOntology
 			this.uri = uri;
 		}
 	}
-	private Tree rootBioProc, rootCellComp, rootMolFunc;
 
-	public ImportGeneOntology() throws IOException
-	{
-	}
-	
+	// sub-classes implement this method to build custom schema tree from the input model
+	protected abstract void buildTree() throws IOException;
+
 	public void load(String fn) throws IOException
 	{
 		inmodel = ModelFactory.createDefaultModel();
@@ -68,32 +62,12 @@ public class ImportGeneOntology
 			RDFDataMgr.read(inmodel, istr, Lang.RDFXML);
 			istr.close();
 			Util.writeln("Reading complete: " + inmodel.size() + " triples.");
-			
-			Tree root = new Tree(null, ModelSchema.PFX_OBO + "BFO_0000001");
-			rootBioProc = new Tree(root, ModelSchema.PFX_OBO + "GO_0008150");
-			rootCellComp = new Tree(root, ModelSchema.PFX_OBO + "GO_0008372");
-			rootMolFunc = new Tree(root, ModelSchema.PFX_OBO + "GO_0005554");
-			
-			rootBioProc.label = "biological process";
-			rootCellComp.label = "cellular component";
-			rootMolFunc.label = "molecular function";
-			
-			buildBranch(rootBioProc);
-			buildBranch(rootCellComp);
-			buildBranch(rootMolFunc);
-			
-			//showBranch(rootBioProc, 0);
-			//showBranch(rootCellComp, 0);
-			//showBranch(rootMolFunc, 0);
-			
-			assertBranch(rootBioProc);
-			assertBranch(rootCellComp);
-			assertBranch(rootMolFunc);
+
+			this.buildTree();
 		}
 		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
-		
 	}
-	
+
 	public void save(String fn) throws IOException
 	{
 		outmodel.setNsPrefix("bao", ModelSchema.PFX_BAO);
@@ -102,7 +76,7 @@ public class ImportGeneOntology
 		outmodel.setNsPrefix("rdfs", ModelSchema.PFX_RDFS);
 		outmodel.setNsPrefix("xsd", ModelSchema.PFX_XSD);
 		outmodel.setNsPrefix("rdf", ModelSchema.PFX_RDF);
-
+		
 		Util.writeln("Writing to: " + fn);
 
 		OutputStream ostr = new FileOutputStream(fn);
@@ -111,8 +85,8 @@ public class ImportGeneOntology
 		
 		Util.writeln("Done: " + outmodel.size() + " triples");
 	}
-	
-	private void buildBranch(Tree parent)
+
+	protected void buildBranch(Tree parent)
 	{
 		Property pred = inmodel.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
 		Resource obj = inmodel.createResource(parent.uri);
@@ -133,17 +107,18 @@ public class ImportGeneOntology
 		}
 	}
 
-	private void assertBranch(Tree tree)
+	protected void assertBranch(Tree tree)
 	{
 		Resource subj = outmodel.createResource(tree.uri);
-		outmodel.add(subj, outmodel.createProperty(ModelSchema.PFX_RDFS + "subClassOf"), outmodel.createResource(tree.parent.uri));
+		if (tree.parent != null)
+			outmodel.add(subj, outmodel.createProperty(ModelSchema.PFX_RDFS + "subClassOf"), outmodel.createResource(tree.parent.uri));
 		outmodel.add(subj, outmodel.createProperty(ModelSchema.PFX_RDFS + "label"), outmodel.createLiteral(tree.label));
 		if (tree.descr != null && tree.descr.length() > 0)
 			outmodel.add(subj, outmodel.createProperty(ModelSchema.PFX_OBO + "IAO_0000115"), outmodel.createLiteral(tree.descr));
 		for (Tree child : tree.children) assertBranch(child);
 	}
 
-	private void showBranch(Tree tree, int level)
+	protected void showBranch(Tree tree, int level)
 	{
 		if (level == 0)
 		{
@@ -157,7 +132,7 @@ public class ImportGeneOntology
 		for (Tree child : tree.children) showBranch(child, level + 1);
 	}
 
-	private String findString(Resource subj, Property prop)
+	protected String findString(Resource subj, Property prop)
 	{
 		for (StmtIterator it = inmodel.listStatements(subj, prop, (RDFNode)null); it.hasNext();)
 		{
