@@ -58,26 +58,15 @@ public class AxiomVocab
 			for (Type t : values()) if (t.raw == rawVal) return t;
 			return LIMIT;
 		}
-
-		/*@Override
-		public String toString()
-		{
-			if (this.equals(Type.LIMIT)) return "LIMIT";
-			else if (this.equals(Type.EXCLUDE)) return "EXCLUDE";
-			else if (this.equals(Type.REQUIRED)) return "REQUIRED";
-			else return "BLANK";
-		}*/
 	}
 
 	public static class Term
 	{
-		//public String branchURI;
 		public String valueURI;
 		public boolean wholeBranch;
 	
 		public Term(String valueURI, boolean wholeBranch)
 		{
-			//this.branchURI = null;
 			this.valueURI = valueURI;
 			this.wholeBranch = wholeBranch;
 		}
@@ -113,12 +102,6 @@ public class AxiomVocab
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
 		
-		/*Currently we don't care about the predicate, because for annotations, that's built in the template.
-		 * However, if we want to extract these axioms as a subgraph from the ontology, then we would need it.
-		 * In that case, add the following term (and add a new constructor):
-		 * public Term predicate;
-		*/
-		
 		public Rule() {}
 		public Rule(Type type, Term subject) {this(type, subject, null);}
 		public Rule(Type type, Term subject, Term[] impact)
@@ -142,8 +125,7 @@ public class AxiomVocab
 			return str.toString();
 		}
 		
-		//method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
-		//TODO: add code for printing the output content into a file with file headers Peter provided.
+		// method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
 		public String rulesFormatString()
 		{
 			StringBuilder str = new StringBuilder();
@@ -218,12 +200,10 @@ public class AxiomVocab
 		{
 			if (rule.subject != null)
 			{
-				//if (rule.subject.branchURI != null) termSet.add(rule.subject.branchURI);
 				if (rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
 			}
 			if (rule.impact != null) for (Term term : rule.impact)
 			{
-				//if (term.branchURI != null) termSet.add(term.branchURI);
 				if (term.valueURI != null) termSet.add(term.valueURI);
 			}
 		}
@@ -273,14 +253,12 @@ public class AxiomVocab
 		{
 			data.writeInt(rule.type.raw);
 
-			//data.writeUTF(rule.subject == null ? null : rule.subject.branchURI);
 			data.writeUTF(rule.subject == null ? null : rule.subject.valueURI);
 			data.writeBoolean(rule.subject == null ? false : rule.subject.wholeBranch);
 
 			data.writeInt(rule.impact == null ? 0 : rule.impact.length);
 			if (rule.impact != null) for (Term term : rule.impact)
 			{
-				//data.writeUTF(term.branchURI);
 				data.writeUTF(term.valueURI);
 				data.writeBoolean(term.wholeBranch);
 			}
