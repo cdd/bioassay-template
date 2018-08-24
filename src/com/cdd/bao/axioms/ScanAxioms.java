@@ -555,7 +555,7 @@ public class ScanAxioms
 	public void exportDump(String fn) throws IOException, OntologyException
 	{
 		File f = new File(fn).getAbsoluteFile();
-		Util.writeln("\nWriting rules dump to: " + f.getPath());
+		Util.writeln("Writing rules dump to: " + f.getPath());
 		axvoc.serialise(f);
 	}
 	
@@ -563,7 +563,7 @@ public class ScanAxioms
 	public void exportPair(String fn) throws IOException
 	{
 		File f = new File(fn).getAbsoluteFile();
-		Util.writeln("\nWriting pairs to: " + f.getPath());
+		Util.writeln("Writing pairs to: " + f.getPath());
 		
 		try (BufferedWriter wtr = new BufferedWriter(new FileWriter(f)))
 		{
@@ -584,7 +584,7 @@ public class ScanAxioms
 	public void exportText(String fn) throws IOException
 	{
 		File f = new File(fn).getAbsoluteFile();
-		Util.writeln("\nWriting whole output to: " + f.getPath());
+		Util.writeln("Writing whole output to: " + f.getPath());
 
 		try (PrintWriter wtr = new PrintWriter(f))
 		{
