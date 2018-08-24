@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.template;
+package com.cdd.bao.importer;
 
+import com.cdd.bao.template.ModelSchema;
 import com.cdd.bao.util.*;
 
 import java.io.*;

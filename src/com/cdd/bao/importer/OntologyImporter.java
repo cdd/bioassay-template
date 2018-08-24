@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.template;
+package com.cdd.bao.importer;
 
 import java.io.*;
 import java.util.*;
@@ -27,6 +27,7 @@ import java.util.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
+import com.cdd.bao.template.ModelSchema;
 import com.cdd.bao.util.*;
 
 public abstract class OntologyImporter
