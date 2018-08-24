@@ -96,6 +96,16 @@ public class Main
 			}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("importclo")) // import cell line ontology
+		{
+			try
+			{
+				ImportCellLineOntology impclo = new ImportCellLineOntology();
+				impclo.load(argv[1]);
+				impclo.save(argv[2]);
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		else if (argv[0].equals("filter"))
 		{
 			try
@@ -209,6 +219,7 @@ public class Main
 		Util.writeln("Options:");
 		Util.writeln("    edit {files...}");
 		Util.writeln("    geneont {infile} {outfile}");
+		Util.writeln("    importclo {infile} {outfile}");
 		Util.writeln("    filter {infile.owl/ttl} {outfile.ttl}");
 		Util.writeln("    compare {old.dump} {new.dump}");
 		Util.writeln("    compile {schema*.json} {vocab.dump/json}");
