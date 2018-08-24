@@ -21,18 +21,20 @@
 
 package com.cdd.bao;
 
-import java.util.*;
-import java.io.*;
-
-import org.apache.commons.lang3.*;
-import org.json.*;
-
+import com.cdd.bao.axioms.*;
+import com.cdd.bao.editor.*;
+import com.cdd.bao.importer.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.template.Schema.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.validator.*;
-import com.cdd.bao.editor.*;
-import com.cdd.bao.importer.*;
+
+import java.io.*;
+import java.util.*;
+
+import org.apache.commons.lang3.*;
+import org.apache.jena.ontology.*;
+import org.json.*;
 
 /*
 	Entrypoint for all command line functionality: delegates to the appropriate corner.
@@ -136,7 +138,29 @@ public class Main
 		}
 		else if (argv[0].equals("scanaxioms"))
 		{
-			try {new ScanAxioms().exec();}
+			String fnDump = null, fnPair = null, fnText = null;
+			for (int n = 1; n < argv.length; n++)
+			{
+				if (argv[n].equals("--dump") && n < argv.length - 1) fnDump = argv[++n];
+				else if (argv[n].equals("--pair") && n < argv.length - 1) fnPair = argv[++n];
+				else if (argv[n].equals("--text") && n < argv.length - 1) fnText = argv[++n];
+				else
+				{
+					Util.writeln("Unexpected option: " + argv[n]);
+					return;
+				}
+			}
+			
+			try 
+			{
+				ScanAxioms scan = new ScanAxioms();
+				scan.exec();
+				if (fnDump != null) scan.exportDump(fnDump);
+				if (fnPair != null) scan.exportPair(fnPair);
+				if (fnText != null) scan.exportText(fnText);
+
+				Util.writeln("Done.");
+			}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
 		else
@@ -144,6 +168,49 @@ public class Main
 			Util.writeln("Unknown option '" + argv[0] + "'");
 			printHelp();
 		}
+		
+		
+		/* TODO: put this into a separate invocation block
+		ScanAxioms s = new ScanAxioms();
+		try
+		{
+			s.exec();
+		} 
+		catch (Exception ex) 
+		{
+			Util.writeln("Axiom scan failed:");
+			ex.printStackTrace();
+			return;
+		}
+
+		AxiomCollector ac;
+		ac = new AxiomCollector();
+		
+		try
+		{
+			AxiomCollector.serialiseAxiom();
+			AxiomCollector.serialiseAxiomSome();
+			//AxiomCollector.findAllAxiomsOfAssay();
+			//AxiomCollector.minAllAxiomsOfAssay();
+			//AxiomCollector.createAllAxiomsPerURI();
+			//AxiomCollector.createMethodAxiomsPerURI();
+			
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try 
+		{
+			ac.mergeAxiomMaps();
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 	
 	public static void printHelp()
@@ -186,9 +253,9 @@ public class Main
 		// note: only shows trees on both sides
 		for (SchemaVocab.StoredTree tree1 : sv1.getTrees()) for (SchemaVocab.StoredTree tree2 : sv2.getTrees())
 		{
-			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix)
-				|| !tree1.propURI.equals(tree2.propURI)
-				|| !Arrays.equals(tree1.groupNest, tree2.groupNest)) continue;
+			if (!tree1.schemaPrefix.equals(tree2.schemaPrefix) ||
+				!tree1.propURI.equals(tree2.propURI) ||
+				!Arrays.equals(tree1.groupNest, tree2.groupNest)) continue;
 
 			String info = "propURI: " + tree1.propURI;
 			if (schema != null && tree1.schemaPrefix.equals(schema.getSchemaPrefix()))

@@ -19,14 +19,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.cdd.bao.template;
+package com.cdd.bao.axioms;
 
+import com.cdd.bao.template.*;
 import com.cdd.bao.util.*;
-import static com.cdd.bao.template.Schema.*;
-import static com.cdd.bao.template.Vocabulary.*;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 import org.apache.commons.lang3.*;
 
@@ -37,6 +36,13 @@ import org.apache.commons.lang3.*;
 
 public class AxiomVocab
 {
+	/*
+		LIMIT = presence of a term implies the exclusive existence of other terms
+		EXCLUDE = presence of a term implies that other terms are not eligible
+		BLANK = presence of a term implies that another branch category should not be populated
+		REQUIRED = presence of a term implies that another branch category should have something (i.e. not blank)
+	*/
+	
 	public enum Type
 	{
 		LIMIT(1),
@@ -53,12 +59,12 @@ public class AxiomVocab
 			return LIMIT;
 		}
 	}
-	
+
 	public static class Term
 	{
 		public String valueURI;
 		public boolean wholeBranch;
-		
+	
 		public Term(String valueURI, boolean wholeBranch)
 		{
 			this.valueURI = valueURI;
@@ -68,7 +74,7 @@ public class AxiomVocab
 		@Override
 		public String toString()
 		{
-			return "valueURI: [" + ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch + "]";
+			return ModelSchema.collapsePrefix(valueURI) + "/" + wholeBranch;
 		}
 		
 		@Override
@@ -77,6 +83,12 @@ public class AxiomVocab
 			if (obj == null || !(obj instanceof Term)) return false;
 			Term other = (Term)obj;
 			return Util.safeString(valueURI).equals(Util.safeString(other.valueURI)) && wholeBranch == other.wholeBranch;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(valueURI, wholeBranch);
 		}
 	}
 	
@@ -89,7 +101,7 @@ public class AxiomVocab
 
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
-
+		
 		public Rule() {}
 		public Rule(Type type, Term subject) {this(type, subject, null);}
 		public Rule(Type type, Term subject, Term[] impact)
@@ -103,16 +115,27 @@ public class AxiomVocab
 		public String toString()
 		{
 			StringBuilder str = new StringBuilder();
-
-			if (type.equals(Type.LIMIT)) str.append("LIMIT type axiom; ");
-			else if (type.equals(Type.EXCLUDE)) str.append("EXCLUDE type axiom; ");
-			else if (type.equals(Type.REQUIRED)) str.append("REQUIRED type axiom; ");
-			else if (type.equals(Type.BLANK)) str.append("BLANK type axiom; ");
-
+			str.append(type.toString() + " type axiom; ");
 			str.append("subject: [" + subject + "]");
-			str.append("impacts: [");
-			for (int n = 0; n < ArrayUtils.getLength(impact); n++) str.append((n == 0 ? "" : ",") + impact[n]);
-			str.append("])");
+			
+			StringJoiner sj = new StringJoiner(",");
+			if (impact != null) for (Term s : impact) sj.add(s.toString());
+			str.append("impacts: [" + sj.toString() + "])");
+
+			return str.toString();
+		}
+		
+		// method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
+		public String rulesFormatString()
+		{
+			StringBuilder str = new StringBuilder();
+			str.append(type.toString() + " type axiom; ");
+
+			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
+			{
+				str.append("[" + subject + "]");
+				str.append("=>[" + impact[i] + "]" + "\n");
+			}
 
 			return str.toString();
 		}
@@ -120,16 +143,33 @@ public class AxiomVocab
 		@Override
 		public boolean equals(Object obj)
 		{
-			if (obj == null || !(obj instanceof Rule)) return false;
+			if (!(obj instanceof Rule)) return false;
 			Rule other = (Rule)obj;
 			if (type != other.type) return false;
-			if ((subject == null && other.subject != null) || (subject != null && !subject.equals(other.subject))) return false;
+			if (subject == null) 
+			{
+				if (other.subject != null) return false;
+			} 
+			else 
+			{
+				if (!subject.equals(other.subject)) return false;
+			}
 			int sz = ArrayUtils.getLength(impact);
 			if (sz != ArrayUtils.getLength(other.impact)) return false;
 			for (int n = 0; n < sz; n++) if (!impact[n].equals(other.impact[n])) return false;
 			return true;
 		}
+		
+		@Override
+		public int hashCode()
+		{
+			if (impact == null)
+				return Objects.hash(type, subject);
+			else
+				return Objects.hash(type, subject, Arrays.asList(impact));
+		}
 	}
+	
 	private List<Rule> rules = new ArrayList<>();
 
 	// ------------ public methods ------------
@@ -266,6 +306,14 @@ public class AxiomVocab
 		}
 
 		return av;
+	}
+	
+	public List<Rule> findRedundantRules(String[] redundantURIs)
+	{
+		List<Rule> redundantRules = new ArrayList<>();
+		String[]redundantURIList = redundantURIs;
+		
+		return redundantRules;
 	}
 	
 	// ------------ private methods ------------
