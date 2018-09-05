@@ -4,7 +4,7 @@
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
-        "groupURI": "http://www.drugtargetontology.org/dto/DTO_90100068",
+        "groupURI": "",
         "assignments": 
         [
             {
@@ -257,21 +257,6 @@
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
-                    }
-                ]
-            }, 
-            {
-                "name": "assay tissue",
-                "descr": "",
-                "propURI": "http://www.drugtargetontology.org/dto/DTO_90100068",
-                "suggestions": "full",
-                "values": 
-                [
-                    {
-                        "uri": "http://dto.org/DTO/DTO_000",
-                        "name": "BRENDA tissues and cell lines",
-                        "descr": "",
-                        "spec": "item"
                     }
                 ]
             }, 
