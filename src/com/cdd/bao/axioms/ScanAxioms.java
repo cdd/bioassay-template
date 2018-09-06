@@ -279,7 +279,7 @@ public class ScanAxioms
 						/*axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));*/
 												
-						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
+						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
 						axvoc.addRule(rule);
@@ -325,7 +325,7 @@ public class ScanAxioms
 						//axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
 						//assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
-						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
+						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
 						axvoc.addRule(rule);
@@ -426,7 +426,7 @@ public class ScanAxioms
 
 						//axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 
-						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
+						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], false);
 						axvoc.addRule(rule);
@@ -469,7 +469,7 @@ public class ScanAxioms
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
 						System.out.println("some axiom");
 						
-						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
+						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
 						axvoc.addRule(rule);
