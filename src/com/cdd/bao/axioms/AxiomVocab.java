@@ -98,6 +98,9 @@ public class AxiomVocab
 
 		// selection of the subject domain; any blank parts are considered to be wildcards
 		public Term subject;
+		
+		// selection of the predicate
+		public Term predicate;
 
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
@@ -108,6 +111,14 @@ public class AxiomVocab
 		{
 			this.type = type;
 			this.subject = subject;
+			this.impact = impact;
+		}
+		
+		public Rule(Type type, Term subject,Term predicate, Term[] impact)
+		{
+			this.type = type;
+			this.subject = subject;
+			this.predicate = predicate;
 			this.impact = impact;
 		}
 
@@ -135,6 +146,22 @@ public class AxiomVocab
 			{
 				str.append("[" + subject + "]");
 				str.append("=>[" + impact[i] + "]" + "\n");
+			}
+
+			return str.toString();
+		}
+		
+		// method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
+		public String rulesFormatFullString()
+		{
+			StringBuilder str = new StringBuilder();
+			str.append(type.toString() + " type axiom; ");
+
+			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
+			{
+				str.append("[" + subject + "]");
+				str.append("[" + predicate + "]");
+				str.append("[" + impact[i] + "]" + "\n");
 			}
 
 			return str.toString();
@@ -264,6 +291,8 @@ public class AxiomVocab
 			}
 		}
 	}
+	
+	
 	
 	// parse out the raw binary into a living object
 	public static AxiomVocab deserialise(File file) throws IOException
