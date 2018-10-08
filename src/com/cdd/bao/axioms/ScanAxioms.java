@@ -282,8 +282,10 @@ public class ScanAxioms
 												
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) {
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+						for (int n = 0; n < uriArray.length; n++) 
+						{
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
 							}
@@ -332,8 +334,10 @@ public class ScanAxioms
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) {
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+						for (int n = 0; n < uriArray.length; n++) 
+						{
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
 							}
@@ -437,8 +441,10 @@ public class ScanAxioms
 
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) {
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+						for (int n = 0; n < uriArray.length; n++) 
+						{
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
 							}
@@ -484,8 +490,10 @@ public class ScanAxioms
 						
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) {
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+						for (int n = 0; n < uriArray.length; n++) 
+						{
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
 							}
