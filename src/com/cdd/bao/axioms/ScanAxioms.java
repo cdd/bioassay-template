@@ -59,7 +59,7 @@ public class ScanAxioms
 
 	private AxiomVocab axvoc = new AxiomVocab();
 
-	/* not using this at the moment
+	
 	private static String[] redundantURIs = 
 	{
 		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
@@ -67,9 +67,10 @@ public class ScanAxioms
 		"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
 		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
 		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
+		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
+		"http://www.bioassayontology.org/bao#BAO_0000029", "http://www.bioassayontology.org/bao#BAO_0000076"
 	};
-	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));*/
+	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
 
 	private Map<String, Set<String>> axioms = new TreeMap<>();
 
@@ -281,8 +282,12 @@ public class ScanAxioms
 												
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
-						axvoc.addRule(rule);
+						for (int n = 0; n < uriArray.length; n++) {
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+									rule.impact[n] = new Term(uriArray[n], true);
+									axvoc.addRule(rule);
+							}
+						}
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
@@ -327,8 +332,12 @@ public class ScanAxioms
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
-						axvoc.addRule(rule);
+						for (int n = 0; n < uriArray.length; n++) {
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+									rule.impact[n] = new Term(uriArray[n], true);
+									axvoc.addRule(rule);
+							}
+						}
 						
 						// TODO: is there a rule type for "Some"?
 					}
@@ -428,8 +437,12 @@ public class ScanAxioms
 
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], false);
-						axvoc.addRule(rule);
+						for (int n = 0; n < uriArray.length; n++) {
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+									rule.impact[n] = new Term(uriArray[n], true);
+									axvoc.addRule(rule);
+							}
+						}
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
@@ -471,13 +484,12 @@ public class ScanAxioms
 						
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
-						axvoc.addRule(rule);
-						System.out.println("some axiom check 2");
-						/*if (!redundantURISet.contains(o.getURI()))
-							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
-						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json*/
-						// TODO: use these?
+						for (int n = 0; n < uriArray.length; n++) {
+							if(!(redundantURISet.contains(""+uriArray[n]) ) ) {
+									rule.impact[n] = new Term(uriArray[n], true);
+									axvoc.addRule(rule);
+							}
+						}
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
