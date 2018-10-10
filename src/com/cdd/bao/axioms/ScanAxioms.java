@@ -284,7 +284,7 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							if (!(redundantURISet.contains("" + uriArray[n]))) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
@@ -336,7 +336,7 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							if (!(redundantURISet.contains("" + uriArray[n]))) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
@@ -443,7 +443,7 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							if (!(redundantURISet.contains("" + uriArray[n]))) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);
@@ -492,7 +492,7 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if(!(redundantURISet.contains(""+uriArray[n]) ) ) 
+							if (!(redundantURISet.contains("" + uriArray[n]))) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc.addRule(rule);

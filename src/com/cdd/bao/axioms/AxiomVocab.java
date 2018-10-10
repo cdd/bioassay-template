@@ -114,7 +114,7 @@ public class AxiomVocab
 			this.impact = impact;
 		}
 		
-		public Rule(Type type, Term subject,Term predicate, Term[] impact)
+		public Rule(Type type, Term subject, Term predicate, Term[] impact)
 		{
 			this.type = type;
 			this.subject = subject;
