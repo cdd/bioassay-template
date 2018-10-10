@@ -284,10 +284,10 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if (!(redundantURISet.contains("" + uriArray[n]))) 
+							if (!redundantURISet.contains("" + uriArray[n]))
 							{
-									rule.impact[n] = new Term(uriArray[n], true);
-									axvoc.addRule(rule);
+								rule.impact[n] = new Term(uriArray[n], true);
+								axvoc.addRule(rule);
 							}
 						}
 					}
@@ -336,10 +336,10 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if (!(redundantURISet.contains("" + uriArray[n]))) 
+							if (!redundantURISet.contains("" + uriArray[n]))
 							{
-									rule.impact[n] = new Term(uriArray[n], true);
-									axvoc.addRule(rule);
+								rule.impact[n] = new Term(uriArray[n], true);
+								axvoc.addRule(rule);
 							}
 						}
 						
@@ -486,7 +486,7 @@ public class ScanAxioms
 						forSomeCounter++;
 						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
 						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
-						System.out.println("some axiom");
+						//System.out.println("some axiom");
 						
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
