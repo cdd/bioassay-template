@@ -29,6 +29,7 @@ import static com.cdd.bao.axioms.AxiomVocab.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
@@ -59,18 +60,40 @@ public class ScanAxioms
 
 	private AxiomVocab axvoc = new AxiomVocab();
 
-	
+	// list of URIs that are useless because of their generality
 	private static String[] redundantURIs = 
 	{
-		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-		"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
-		"http://www.bioassayontology.org/bao#BAO_0000029", "http://www.bioassayontology.org/bao#BAO_0000076"
+		"",
+		"http://purl.obolibrary.org/obo/CHEBI_35222", // inhibitor
+		"http://www.bioassayontology.org/bao#BAO_0000015", // bioassay
+		"http://www.bioassayontology.org/bao#BAO_0000019", // assay format
+		"http://www.bioassayontology.org/bao#BAO_0000026", // bioassay specification
+		"http://www.bioassayontology.org/bao#BAO_0000029", // assay screening campaign stage
+		"http://www.bioassayontology.org/bao#BAO_0000035", // physical detection method
+		"http://www.bioassayontology.org/bao#BAO_0000074", // mode of action
+		"http://www.bioassayontology.org/bao#BAO_0000076", // screened entity
+		"http://www.bioassayontology.org/bao#BAO_0000179", // endpoint
+		"http://www.bioassayontology.org/bao#BAO_0000248", // assay kit
+		"http://www.bioassayontology.org/bao#BAO_0000264", // biological process
+		"http://www.bioassayontology.org/bao#BAO_0000512", // assay footprint
+		"http://www.bioassayontology.org/bao#BAO_0002001", // measured entity
+		"http://www.bioassayontology.org/bao#BAO_0002030", // coupled substrate
+		"http://www.bioassayontology.org/bao#BAO_0002091", // commercial company
+		"http://www.bioassayontology.org/bao#BAO_0002202", // assay design method
+		"http://www.bioassayontology.org/bao#BAO_0002626", // biologics and screening manufacturer
+		"http://www.bioassayontology.org/bao#BAO_0002628", // instrumentation manufacturer
+		"http://www.bioassayontology.org/bao#BAO_0003028", // assay method
+		"http://www.bioassayontology.org/bao#BAO_0003043", // molecular entity
+		"http://www.bioassayontology.org/bao#BAO_0003060", // potentiator
+		"http://www.bioassayontology.org/bao#BAO_0003063", // substrate
+		"http://www.bioassayontology.org/bao#BAO_0003075", // molecular function
+		"http://www.bioassayontology.org/bao#BAO_0003102", // has role
+		"http://www.bioassayontology.org/bao#BAO_0003111", // nucleic acid
+		"http://www.bioassayontology.org/bao#BAO_0003112", // assay bioassay component
+		"http://www.bioassayontology.org/bao#BAO_0003115", // assay result component
 	};
 	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
+	//private static String hasRoleURI = "http://www.bioassayontology.org/bao#BAO_0003102";
 
 	private Map<String, Set<String>> axioms = new TreeMap<>();
 
@@ -227,7 +250,7 @@ public class ScanAxioms
 			//    v = value required by the axiom
 
 			OntClass o = it.next();
-			if (!schemaValues.contains(o.asResource().getURI())) continue;
+			if (!schemaValues.contains(o.getURI()) || redundantURISet.contains(o.getURI())) continue;
 
 			for (Iterator<OntClass> i = o.listSuperClasses(); i.hasNext();)
 			{
@@ -281,15 +304,10 @@ public class ScanAxioms
 						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));*/
 												
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) 
-						{
-							if (!redundantURISet.contains("" + uriArray[n]))
-							{
-								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
-							}
-						}
+						rule.impact = new Term[0];
+						for (String uri : uriArray) if (!redundantURISet.contains(uri))
+							rule.impact = ArrayUtils.add(rule.impact, new Term(uri, true));
+						if (rule.impact.length > 0) axvoc.addRule(rule);
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
@@ -332,18 +350,12 @@ public class ScanAxioms
 						//axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
 						//assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
 						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
+
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) 
-						{
-							if (!redundantURISet.contains("" + uriArray[n]))
-							{
-								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
-							}
-						}
-						
-						// TODO: is there a rule type for "Some"?
+						rule.impact = new Term[0];
+						for (String uri : uriArray) if (!redundantURISet.contains(uri))
+							rule.impact = ArrayUtils.add(rule.impact, new Term(uri, true));
+						if (rule.impact.length > 0) axvoc.addRule(rule);
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
@@ -440,15 +452,10 @@ public class ScanAxioms
 						//axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
 
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) 
-						{
-							if (!redundantURISet.contains("" + uriArray[n]))
-							{
-								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
-							}
-						}
+						rule.impact = new Term[0];
+						for (String uri : uriArray) if (!redundantURISet.contains(uri))
+							rule.impact = ArrayUtils.add(rule.impact, new Term(uri, true));
+						if (rule.impact.length > 0) axvoc.addRule(rule);
 					}
 					else if (r.isSomeValuesFromRestriction())
 					{
@@ -489,15 +496,10 @@ public class ScanAxioms
 						//System.out.println("some axiom");
 						
 						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) 
-						{
-							if (!redundantURISet.contains("" + uriArray[n]))
-							{
-								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
-							}
-						}
+						rule.impact = new Term[0];
+						for (String uri : uriArray) if (!redundantURISet.contains(uri))
+							rule.impact = ArrayUtils.add(rule.impact, new Term(uri, true));
+						if (rule.impact.length > 0) axvoc.addRule(rule);
 					}
 					else if (r.isMaxCardinalityRestriction())
 					{
