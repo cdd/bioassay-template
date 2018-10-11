@@ -82,7 +82,7 @@ public class ScanAxioms
 		
 	};
 	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
-	private static String hasRoleURI =  "http://www.bioassayontology.org/bao#BAO_0003102";
+	private static String hasRoleURI = "http://www.bioassayontology.org/bao#BAO_0003102";
 
 	private Map<String, Set<String>> axioms = new TreeMap<>();
 
@@ -301,7 +301,8 @@ public class ScanAxioms
 							{
 								rule.impact[n] = new Term(uriArray[n], true);
 								axvoc1.addRule(rule);
-							}else
+							}
+							else
 							{
 								rule.impact = null;
 								axvoc1.addRule(rule);
@@ -358,7 +359,8 @@ public class ScanAxioms
 							{
 								rule.impact[n] = new Term(uriArray[n], true);
 								axvoc1.addRule(rule);
-							}else
+							}
+							else
 							{
 								rule.impact = null;
 								axvoc1.addRule(rule);
@@ -470,7 +472,8 @@ public class ScanAxioms
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc1.addRule(rule);
-							}else
+							}
+							else
 							{
 								rule.impact = null;
 								axvoc1.addRule(rule);
@@ -524,7 +527,8 @@ public class ScanAxioms
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
 									axvoc1.addRule(rule);
-							}else
+							}
+							else
 							{
 								rule.impact = null;
 								axvoc1.addRule(rule);
@@ -599,8 +603,9 @@ public class ScanAxioms
 		
 		Util.writeln("\nTotal Axiom Rules:");
 		int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
-		for(Rule r:axvoc1.getRules()) {
-			if(!(r.impact == null)) axvoc.addRule(r);
+		for (Rule r:axvoc1.getRules()) 
+		{
+			if (!(r.impact == null)) axvoc.addRule(r);
 		}
 		for (Rule r : axvoc.getRules())
 		{
