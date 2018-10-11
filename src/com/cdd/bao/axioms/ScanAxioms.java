@@ -58,6 +58,7 @@ public class ScanAxioms
 	private Map<String, Set<String>> inverseProperties = new TreeMap<>();
 
 	private AxiomVocab axvoc = new AxiomVocab();
+	private AxiomVocab axvoc1 = new AxiomVocab();
 
 	
 	private static String[] redundantURIs = 
@@ -68,9 +69,20 @@ public class ScanAxioms
 		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
 		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
 		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075",
-		"http://www.bioassayontology.org/bao#BAO_0000029", "http://www.bioassayontology.org/bao#BAO_0000076"
+		"http://www.bioassayontology.org/bao#BAO_0000029", "http://www.bioassayontology.org/bao#BAO_0000076",		
+		"http://www.bioassayontology.org/bao#BAO_0003112", "http://www.bioassayontology.org/bao#BAO_0000026",
+		"http://www.bioassayontology.org/bao#BAO_0003028", "http://www.bioassayontology.org/bao#BAO_0003115",
+		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000512",
+		"http://www.bioassayontology.org/bao#BAO_0002091", "http://www.bioassayontology.org/bao#BAO_0003043", 
+		"http://www.bioassayontology.org/bao#BAO_0003111", "http://www.bioassayontology.org/bao#BAO_0003102",
+		"http://www.bioassayontology.org/bao#BAO_0002030", "http://www.bioassayontology.org/bao#BAO_0002001",
+		"http://www.bioassayontology.org/bao#BAO_0003060", "http://www.bioassayontology.org/bao#BAO_0002628",
+		"http://www.bioassayontology.org/bao#BAO_0002626", "http://purl.obolibrary.org/obo/CHEBI_35222",
+		"http://www.bioassayontology.org/bao#BAO_0003063", ""
+		
 	};
 	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
+	private static String hasRoleURI =  "http://www.bioassayontology.org/bao#BAO_0003102";
 
 	private Map<String, Set<String>> axioms = new TreeMap<>();
 
@@ -284,10 +296,15 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if (!redundantURISet.contains("" + uriArray[n]))
+							
+							if (!redundantURISet.contains("" + uriArray[n]) && rule.impact != null)
 							{
 								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
+								axvoc1.addRule(rule);
+							}else
+							{
+								rule.impact = null;
+								axvoc1.addRule(rule);
 							}
 						}
 					}
@@ -336,10 +353,15 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if (!redundantURISet.contains("" + uriArray[n]))
+							
+							if (!redundantURISet.contains("" + uriArray[n]) && rule.impact != null)
 							{
 								rule.impact[n] = new Term(uriArray[n], true);
-								axvoc.addRule(rule);
+								axvoc1.addRule(rule);
+							}else
+							{
+								rule.impact = null;
+								axvoc1.addRule(rule);
 							}
 						}
 						
@@ -442,12 +464,17 @@ public class ScanAxioms
 						Rule rule = new Rule(Type.REQUIRED, new Term(o.getURI(), false));
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
-						{
-							if (!(redundantURISet.contains("" + uriArray[n]))) 
+						{		
+						
+							if (!(redundantURISet.contains("" + uriArray[n])) && rule.impact != null) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
-									axvoc.addRule(rule);
-							}
+									axvoc1.addRule(rule);
+							}else
+							{
+								rule.impact = null;
+								axvoc1.addRule(rule);
+							} 
 						}
 					}
 					else if (r.isSomeValuesFromRestriction())
@@ -492,11 +519,17 @@ public class ScanAxioms
 						rule.impact = new Term[uriArray.length];
 						for (int n = 0; n < uriArray.length; n++) 
 						{
-							if (!(redundantURISet.contains("" + uriArray[n]))) 
+							
+							if (!(redundantURISet.contains("" + uriArray[n])) && rule.impact != null) 
 							{
 									rule.impact[n] = new Term(uriArray[n], true);
-									axvoc.addRule(rule);
+									axvoc1.addRule(rule);
+							}else
+							{
+								rule.impact = null;
+								axvoc1.addRule(rule);
 							}
+							
 						}
 					}
 					else if (r.isMaxCardinalityRestriction())
@@ -566,6 +599,9 @@ public class ScanAxioms
 		
 		Util.writeln("\nTotal Axiom Rules:");
 		int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
+		for(Rule r:axvoc1.getRules()) {
+			if(!(r.impact == null)) axvoc.addRule(r);
+		}
 		for (Rule r : axvoc.getRules())
 		{
 			if (r.type == Type.LIMIT) numLimit++;

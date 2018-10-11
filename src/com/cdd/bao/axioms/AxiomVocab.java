@@ -225,14 +225,17 @@ public class AxiomVocab
 		Set<String> termSet = new HashSet<>();
 		for (Rule rule : rules)
 		{
-			if (rule.subject != null)
+			if (rule.subject != null && rule.impact != null)
 			{
 				if (rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
+				for (Term term : rule.impact)
+				{
+					if (term.valueURI != null) termSet.add(term.valueURI);
+					
+				}
 			}
-			if (rule.impact != null) for (Term term : rule.impact)
-			{
-				if (term.valueURI != null) termSet.add(term.valueURI);
-			}
+			
+			
 		}
 
 		// make a list of unique prefixes
