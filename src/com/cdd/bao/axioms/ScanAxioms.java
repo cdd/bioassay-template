@@ -444,12 +444,11 @@ public class ScanAxioms
 
 		Resource[] sequence = expandSequence(v);
 		if (sequence.length == 0) return;
-for (Resource z : sequence) if (redundantURISet.contains(z.getURI())) Util.writeln("!!BARF");//fnord
 
-		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, false));
+		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, true /* whole branch? */));
 		rule.impact = new Term[sequence.length];
 		for (int n = 0; n < rule.impact.length; n++) rule.impact[n] = new Term(sequence[n].getURI(), true);
-		axvoc.addRule(rule);
+		addRule(rule);
 		
 		forAllCounter++;
 	}
@@ -464,12 +463,11 @@ for (Resource z : sequence) if (redundantURISet.contains(z.getURI())) Util.write
 
 		Resource[] sequence = expandSequence(v);
 		if (sequence.length == 0) return;
-for (Resource z : sequence) if (redundantURISet.contains(z.getURI())) Util.writeln("!!BARF");
 
-		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, false));
+		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, true /* whole branch? */));
 		rule.impact = new Term[sequence.length];
 		for (int n = 0; n < rule.impact.length; n++) rule.impact[n] = new Term(sequence[n].getURI(), true);
-		axvoc.addRule(rule);
+		addRule(rule);
 		
 		forSomeCounter++;
 	}	
@@ -571,5 +569,12 @@ for (Resource z : sequence) if (redundantURISet.contains(z.getURI())) Util.write
 			}
 		}
 		return sequence.toArray(new Resource[sequence.size()]);
+	}
+	
+	// adds a rule to the vocabulary, after checking for duplicates
+	private void addRule(Rule rule)
+	{
+		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
+		axvoc.addRule(rule);
 	}
 }
