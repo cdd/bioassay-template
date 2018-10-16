@@ -588,20 +588,13 @@ public class ScanAxioms
 		
 		for (int n = 0; n < rule.impact.length; n++) 
 		{
-			OntClass obj = outModel.createClass("" + rule.impact[n]);
+			OntClass obj = outModel.createClass(rule.impact[n].valueURI);
 			OntProperty pred = outModel.createOntProperty("" + rule.predicate);
-			if(rule.type == Type.LIMIT) 
+			if (rule.type == Type.LIMIT) 
 			{
-				SomeValuesFromRestriction someA = outModel.createSomeValuesFromRestriction("" + rule.subject, pred, obj);
-				
-			}else if(rule.type == Type.REQUIRED) {
-				AllValuesFromRestriction allA = outModel.createAllValuesFromRestriction("" + rule.subject, pred, obj);
+				AllValuesFromRestriction values = outModel.createAllValuesFromRestriction(rule.subject.valueURI, pred, obj);
 			}
-			
+			// ... other types...
 		}
-		
-		
-
-			
 	}
 }
