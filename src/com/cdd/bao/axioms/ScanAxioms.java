@@ -32,6 +32,7 @@ import java.util.*;
 import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
 import org.apache.jena.vocabulary.*;
 import org.json.*;
 
@@ -59,6 +60,8 @@ public class ScanAxioms
 	private Map<String, Set<String>> inverseProperties = new TreeMap<>();
 
 	private AxiomVocab axvoc = new AxiomVocab();
+	//private Model outModel = ModelFactory.createDefaultModel();
+	private OntModel outModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
 
 	// list of URIs that are useless because of their generality
 	private static String[] redundantURIs = 
@@ -316,11 +319,32 @@ public class ScanAxioms
 	}
 
 	// extract as axiom rules and export using the binary format
-	public void exportDump(String fn) throws IOException, OntologyException
+	public void exportDump(String fn) throws IOException
 	{
 		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("Writing rules dump to: " + f.getPath());
 		axvoc.serialise(f);
+	}
+	
+	// save the ontology representation of the scanned-out axioms
+	public void exportOntology(String fn) throws IOException
+	{
+		outModel.setNsPrefix("bao", ModelSchema.PFX_BAO);
+		outModel.setNsPrefix("bat", ModelSchema.PFX_BAT);
+		outModel.setNsPrefix("src", ModelSchema.PFX_SOURCE);
+		outModel.setNsPrefix("obo", ModelSchema.PFX_OBO);
+		outModel.setNsPrefix("rdf", ModelSchema.PFX_RDF);
+		outModel.setNsPrefix("rdfs", ModelSchema.PFX_RDFS);
+		outModel.setNsPrefix("xsd", ModelSchema.PFX_XSD);
+		outModel.setNsPrefix("dto", ModelSchema.PFX_DTO);
+		
+		File f = new File(fn).getAbsoluteFile();
+		Util.writeln("Writing ontology extract to: " + f.getPath());
+		
+		try (OutputStream ostr = new FileOutputStream(fn))
+		{
+			RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+		}
 	}
 	
 	// exports the axioms as a very simple text file of correlated pairs of URIs
@@ -406,25 +430,6 @@ public class ScanAxioms
 							wtr.write("\n");
 						}
 					}
-					
-					/*Set<String> wantURI = new HashSet<>();
-					for (SchemaVocab.StoredTree stored : schvoc.getTrees()) if (stored.assignment != null && stored.tree != null)
-					{
-						if (stored.assignment.propURI.equals(assn.propURI)) for (SchemaTree.Node node : stored.tree.getFlat())
-							wantURI.add(node.uri);
-					}
-
-					for (String key : axioms.keySet())
-					{
-						String[] bits = key.split("::");
-						String uri = bits[0], name = bits[1];
-						if (!wantURI.contains(uri)) continue;
-
-						wtr.println("[" + name + "]:");
-						List<String> values = new ArrayList<>(axioms.get(key));
-						Collections.sort(values);
-						for (String val : values) wtr.println("    " + val);
-					}*/
 				}
 
 				stack.addAll(group.subGroups);
@@ -576,5 +581,10 @@ public class ScanAxioms
 	{
 		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
 		axvoc.addRule(rule);
+		
+		Property rdfType = outModel.createProperty(ModelSchema.PFX_RDF + "type");
+		Restriction r = outModel.createRestriction(rdfType);
+
+		// !! ADD IN the rule.subject & rule.impact, then add to the output ontology		
 	}
 }

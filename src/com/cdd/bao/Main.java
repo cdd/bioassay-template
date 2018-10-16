@@ -138,10 +138,11 @@ public class Main
 		}
 		else if (argv[0].equals("scanaxioms"))
 		{
-			String fnDump = null, fnPair = null, fnText = null;
+			String fnDump = null, fnOnto = null, fnPair = null, fnText = null;
 			for (int n = 1; n < argv.length; n++)
 			{
 				if (argv[n].equals("--dump") && n < argv.length - 1) fnDump = argv[++n];
+				else if (argv[n].equals("--onto") && n < argv.length - 1) fnOnto = argv[++n];
 				else if (argv[n].equals("--pair") && n < argv.length - 1) fnPair = argv[++n];
 				else if (argv[n].equals("--text") && n < argv.length - 1) fnText = argv[++n];
 				else
@@ -156,6 +157,7 @@ public class Main
 				ScanAxioms scan = new ScanAxioms();
 				scan.exec();
 				if (fnDump != null) scan.exportDump(fnDump);
+				if (fnOnto != null) scan.exportOntology(fnOnto);
 				if (fnPair != null) scan.exportPair(fnPair);
 				if (fnText != null) scan.exportText(fnText);
 
