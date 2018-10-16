@@ -582,16 +582,19 @@ public class ScanAxioms
 		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
 		axvoc.addRule(rule);
 		
-		Property rdfType = ontology.createProperty(ModelSchema.PFX_RDF + "type");
+		Property rdfType = outModel.createProperty(ModelSchema.PFX_RDF + "type"), rdfLabel = outModel.createProperty(ModelSchema.PFX_RDFS + "label");
+		
 		for (int n = 0; n < rule.impact.length; n++) 
 		{
 			OntClass obj = outModel.createClass(rule.impact[n].valueURI);
-			//OntProperty pred = outModel.createOntProperty(rule.predicate.valueURI);
 			if (rule.type == Type.LIMIT) 
 			{
 				AllValuesFromRestriction values = outModel.createAllValuesFromRestriction(rule.subject.valueURI, rdfType, obj);
 			}
-			// ... other types...
+			String label = uriToLabel.get(rule.subject.valueURI);
+			if (label != null)
+				outModel.add(outModel.createResource(rule.subject.valueURI), rdfLabel, outModel.createLiteral(label));
 		}
+		
 	}
 }
