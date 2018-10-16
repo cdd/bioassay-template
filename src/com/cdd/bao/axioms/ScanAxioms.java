@@ -582,9 +582,26 @@ public class ScanAxioms
 		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
 		axvoc.addRule(rule);
 		
-		Property rdfType = outModel.createProperty(ModelSchema.PFX_RDF + "type");
-		Restriction r = outModel.createRestriction(rdfType);
+		// !! ADD IN the rule.subject & rule.impact, then add to the output ontology	
+		
+		//code below ideally should put the restriction under the appropriate class using the "subject" as URI
+		
+		for (int n = 0; n < rule.impact.length; n++) 
+		{
+			OntClass obj = outModel.createClass("" + rule.impact[n]);
+			OntProperty pred = outModel.createOntProperty("" + rule.predicate);
+			if(rule.type == Type.LIMIT) 
+			{
+				SomeValuesFromRestriction someA = outModel.createSomeValuesFromRestriction("" + rule.subject, pred, obj);
+				
+			}else if(rule.type == Type.REQUIRED) {
+				AllValuesFromRestriction allA = outModel.createAllValuesFromRestriction("" + rule.subject, pred, obj);
+			}
+			
+		}
+		
+		
 
-		// !! ADD IN the rule.subject & rule.impact, then add to the output ontology		
+			
 	}
 }
