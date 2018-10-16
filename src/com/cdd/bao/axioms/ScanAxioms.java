@@ -302,18 +302,18 @@ public class ScanAxioms
 		Util.writeln("properties with inverse: " + hasInverseCounter);
 		
 		Util.writeln("\nTotal Axiom Rules:");
-		int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
+		int numLimit = 0, numExclude = 0; //, numBlank = 0, numRequired = 0;
 		for (Rule r : axvoc.getRules())
 		{
 			if (r.type == Type.LIMIT) numLimit++;
 			else if (r.type == Type.EXCLUDE) numExclude++;
-			else if (r.type == Type.BLANK) numBlank++;
-			else if (r.type == Type.REQUIRED) numRequired++;
+			/*else if (r.type == Type.BLANK) numBlank++;
+			else if (r.type == Type.REQUIRED) numRequired++;*/
 		}
 		Util.writeln("    limit: " + numLimit);
 		Util.writeln("    exclude: " + numExclude);
-		Util.writeln("    blank: " + numBlank);
-		Util.writeln("    required: " + numRequired);
+		/*Util.writeln("    blank: " + numBlank);
+		Util.writeln("    required: " + numRequired);*/
 
 		Util.writeln("Scanning complete.");
 	}
@@ -377,18 +377,18 @@ public class ScanAxioms
 		try (PrintWriter wtr = new PrintWriter(f))
 		{
 			wtr.println("Total Axiom Rules:");
-			int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
+			int numLimit = 0, numExclude = 0;//, numBlank = 0, numRequired = 0;
 			for (Rule r : axvoc.getRules())
 			{
 				if (r.type == Type.LIMIT) numLimit++;
 				else if (r.type == Type.EXCLUDE) numExclude++;
-				else if (r.type == Type.BLANK) numBlank++;
-				else if (r.type == Type.REQUIRED) numRequired++;
+				/*else if (r.type == Type.BLANK) numBlank++;
+				else if (r.type == Type.REQUIRED) numRequired++;*/
 			}
 			wtr.println("    limit: " + numLimit);
 			wtr.println("    exclude: " + numExclude);
-			wtr.println("    blank: " + numBlank);
-			wtr.println("    required: " + numRequired);		
+			/*wtr.println("    blank: " + numBlank);
+			wtr.println("    required: " + numRequired);*/
 
 			wtr.println("\n==== Axioms ====");
 
@@ -582,17 +582,14 @@ public class ScanAxioms
 		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
 		axvoc.addRule(rule);
 		
-		// !! ADD IN the rule.subject & rule.impact, then add to the output ontology	
-		
-		//code below ideally should put the restriction under the appropriate class using the "subject" as URI
-		
+		Property rdfType = ontology.createProperty(ModelSchema.PFX_RDF + "type");
 		for (int n = 0; n < rule.impact.length; n++) 
 		{
 			OntClass obj = outModel.createClass(rule.impact[n].valueURI);
-			OntProperty pred = outModel.createOntProperty("" + rule.predicate);
+			//OntProperty pred = outModel.createOntProperty(rule.predicate.valueURI);
 			if (rule.type == Type.LIMIT) 
 			{
-				AllValuesFromRestriction values = outModel.createAllValuesFromRestriction(rule.subject.valueURI, pred, obj);
+				AllValuesFromRestriction values = outModel.createAllValuesFromRestriction(rule.subject.valueURI, rdfType, obj);
 			}
 			// ... other types...
 		}

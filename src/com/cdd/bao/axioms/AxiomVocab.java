@@ -46,9 +46,10 @@ public class AxiomVocab
 	public enum Type
 	{
 		LIMIT(1),
-		EXCLUDE(2),
+		EXCLUDE(2);
+		/* use case is unclear for these
 		BLANK(3),
-		REQUIRED(4);
+		REQUIRED(4);*/
 		
 		private final int raw;
 		Type(int raw) {this.raw = raw;}
@@ -99,9 +100,6 @@ public class AxiomVocab
 		// selection of the subject domain; any blank parts are considered to be wildcards
 		public Term subject;
 		
-		// selection of the predicate
-		public Term predicate;
-
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
 		
@@ -114,14 +112,6 @@ public class AxiomVocab
 			this.impact = impact;
 		}
 		
-		public Rule(Type type, Term subject, Term predicate, Term[] impact)
-		{
-			this.type = type;
-			this.subject = subject;
-			this.predicate = predicate;
-			this.impact = impact;
-		}
-
 		@Override
 		public String toString()
 		{
@@ -160,7 +150,6 @@ public class AxiomVocab
 			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
 			{
 				str.append("[" + subject + "]");
-				str.append("[" + predicate + "]");
 				str.append("[" + impact[i] + "]" + "\n");
 			}
 
