@@ -47,6 +47,7 @@ import org.json.*;
 
 public class ScanAxioms
 {
+	private File[] sources = null;
 	private OntModel ontology;
 	private Schema schema;
 	private SchemaVocab schvoc;
@@ -113,26 +114,41 @@ public class ScanAxioms
 	{
 	}
 
-	public void exec() throws OntologyException, JSONException, IOException
+	// optionally override default locations for support files
+	public void setSource(File f) {sources = new File[]{f};}
+	public void setSchema(Schema schema) {this.schema = schema;}
+	public void setVocab(SchemaVocab schvoc) {this.schvoc = schvoc;}
+
+	public void exec() throws IOException
 	{
 		try
 		{
-			Util.writeln("Loading common assay template...");
-			schema = Schema.deserialise(new File("data/template/schema.json"));
-
-			Util.writeln("Loading vocabulary dump...");
-			try (InputStream idump = new FileInputStream("data/template/vocab.dump"))
+			if (schema == null)
 			{
-				schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+				Util.writeln("Loading common assay template...");
+				schema = Schema.deserialise(new File("data/template/schema.json"));
 			}
 
-			List<File> files = new ArrayList<>();
-			// TODO: formalise which files get included; note that scanning them all can be slow
-			for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-			if (false)
-				for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-			else
-				Util.writeln("** skipping files in [data/preprocessed]"); // (includes original DTO, which takes a long time)
+			if (schvoc == null)
+			{
+				Util.writeln("Loading vocabulary dump...");
+				try (InputStream idump = new FileInputStream("data/template/vocab.dump"))
+				{
+					schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+				}
+			}
+
+			List<File> files = null;
+			if (sources == null)
+			{
+				files = new ArrayList<>();
+				for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+				if (false)
+					for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+				else
+					Util.writeln("** skipping files in [data/preprocessed]"); // (includes original DTO, which takes a long time)
+			}
+			else files = Arrays.asList(sources);
 				
 			Util.writeln("# files to read: " + files.size());
 
@@ -146,7 +162,11 @@ public class ScanAxioms
 				}
 			}
 		}
-		catch (Exception ex) {throw new OntologyException(ex.getMessage());}
+		catch (Exception ex) 
+		{
+			if (ex instanceof IOException) throw ex;			
+			throw new IOException("Loading failure", ex);
+		}
 
 		Util.writeln("Collating values from schema...");
 		for (SchemaVocab.StoredTree stored : schvoc.getTrees())
@@ -317,6 +337,12 @@ public class ScanAxioms
 
 		Util.writeln("Scanning complete.");
 	}
+	
+	// after successful scanning, fetch the outcome
+	public AxiomVocab getVocab()
+	{
+		return axvoc;
+	}
 
 	// extract as axiom rules and export using the binary format
 	public void exportDump(String fn) throws IOException
@@ -343,7 +369,9 @@ public class ScanAxioms
 		
 		try (OutputStream ostr = new FileOutputStream(fn))
 		{
-			RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+			if (fn.endsWith(".ttl")) RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+			else if (fn.endsWith(".owl")) RDFDataMgr.write(ostr, outModel, RDFFormat.RDFXML_ABBREV);
+			else throw new IOException("Invalid extension for [" + fn + "]");
 		}
 	}
 	
@@ -595,6 +623,5 @@ public class ScanAxioms
 			if (label != null)
 				outModel.add(outModel.createResource(rule.subject.valueURI), rdfLabel, outModel.createLiteral(label));
 		}
-		
 	}
 }
