@@ -142,7 +142,7 @@ public class Main
 			for (int n = 1; n < argv.length; n++)
 			{
 				if (argv[n].equals("--dump") && n < argv.length - 1) fnDump = argv[++n];
-				else if (argv[n].equals("--onto") && n < argv.length - 1) fnOnto = argv[++n];
+				else if (argv[n].equals("--odump") && n < argv.length - 1) fnOnto = argv[++n];
 				else if (argv[n].equals("--pair") && n < argv.length - 1) fnPair = argv[++n];
 				else if (argv[n].equals("--text") && n < argv.length - 1) fnText = argv[++n];
 				else
