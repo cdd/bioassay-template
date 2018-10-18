@@ -62,6 +62,7 @@ public class ScanAxioms
 
 	private AxiomVocab axvoc = new AxiomVocab();
 	//private Model outModel = ModelFactory.createDefaultModel();
+	//private OntModel outModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
 	private OntModel outModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
 
 	// list of URIs that are useless because of their generality
@@ -366,13 +367,32 @@ public class ScanAxioms
 		
 		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("Writing ontology extract to: " + f.getPath());
-		
 		try (OutputStream ostr = new FileOutputStream(fn))
 		{
+			for (Rule r : axvoc.getRules())
+			{
+				if (r.type == Type.LIMIT)
+				{
+					
+					OntClass subj = outModel.createClass(r.subject.toString());
+					OntProperty prop = outModel.createOntProperty("has predicate");
+					for (int n = 0; n < r.impact.length; n++) 
+					{
+						OntClass obj = outModel.createClass(r.impact[n].toString());					
+					}
+				}
+			}
 			if (fn.endsWith(".ttl")) RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
 			else if (fn.endsWith(".owl")) RDFDataMgr.write(ostr, outModel, RDFFormat.RDFXML_ABBREV);
 			else throw new IOException("Invalid extension for [" + fn + "]");
 		}
+		
+		/*try (OutputStream ostr = new FileOutputStream(fn))
+		{
+			if (fn.endsWith(".ttl")) RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+			else if (fn.endsWith(".owl")) RDFDataMgr.write(ostr, outModel, RDFFormat.RDFXML_ABBREV);
+			else throw new IOException("Invalid extension for [" + fn + "]");
+		}*/
 	}
 	
 	// exports the axioms as a very simple text file of correlated pairs of URIs
