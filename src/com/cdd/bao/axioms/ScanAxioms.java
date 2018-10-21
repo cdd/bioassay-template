@@ -374,11 +374,12 @@ public class ScanAxioms
 				if (r.type == Type.LIMIT)
 				{
 					
-					OntClass subj = outModel.createClass(r.subject.toString());
-					OntProperty prop = outModel.createOntProperty("has predicate");
+					OntClass subj = outModel.createClass(r.subject.valueURI);
+					OntProperty prop = outModel.createObjectProperty("http://www.bioassayontology.org/bao#BAO_0003102");
 					for (int n = 0; n < r.impact.length; n++) 
 					{
-						OntClass obj = outModel.createClass(r.impact[n].toString());					
+						OntClass obj = outModel.createClass(r.impact[n].valueURI);
+						Restriction values = outModel.createAllValuesFromRestriction(r.subject.valueURI, prop, obj);
 					}
 				}
 			}
