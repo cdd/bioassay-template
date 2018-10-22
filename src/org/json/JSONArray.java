@@ -1245,6 +1245,20 @@ public class JSONArray implements Iterable<Object>
 	}
 
 	/**
+	 * Write the contents of the JSONArray as JSON text to a writer. The
+	 * output is pretty-printed using the given indentation size.
+	 * <p>
+	 * Warning: This method assumes that the data structure is acyclical.
+	 *
+	 * @return The writer.
+	 * @throws JSONException
+	 */
+	public Writer write(Writer writer, int indentFactor) throws JSONException
+	{
+		return write(writer, 2, 0, indentFactor > 0);
+	}
+
+	/**
 	 * Write the contents of the JSONArray as JSON text to a writer. For
 	 * compactness, no whitespace is added.
 	 * <p>

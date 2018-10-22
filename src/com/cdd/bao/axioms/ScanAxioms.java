@@ -350,7 +350,7 @@ public class ScanAxioms
 	{
 		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("Writing rules dump to: " + f.getPath());
-		axvoc.serialise(f);
+		axvoc.serialise(f, schvoc);
 	}
 	
 	// save the ontology representation of the scanned-out axioms
@@ -373,7 +373,6 @@ public class ScanAxioms
 			{
 				if (r.type == Type.LIMIT)
 				{
-					
 					OntClass subj = outModel.createClass(r.subject.valueURI);
 					OntProperty prop = outModel.createObjectProperty("http://www.bioassayontology.org/bao#BAO_0003102");
 					for (int n = 0; n < r.impact.length; n++) 
@@ -628,7 +627,16 @@ public class ScanAxioms
 	// adds a rule to the vocabulary, after checking for duplicates
 	private void addRule(Rule rule)
 	{
-		for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
+		//for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
+		for (Rule look : axvoc.getRules()) if (look.type == rule.type && look.subject.equals(rule.subject))
+		{
+			if (rule.impact != null) for (Term term : rule.impact)
+			{
+				if (ArrayUtils.indexOf(look.impact, term) < 0) look.impact = ArrayUtils.add(look.impact, term);
+			}
+			return;
+		}
+		
 		axvoc.addRule(rule);
 		
 		Property rdfType = outModel.createProperty(ModelSchema.PFX_RDF + "type"), rdfLabel = outModel.createProperty(ModelSchema.PFX_RDFS + "label");

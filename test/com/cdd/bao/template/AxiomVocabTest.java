@@ -68,9 +68,10 @@ public class AxiomVocabTest
 
 		assertEquals(100, av1.numRules());
 
-		byte[] serialisation;
+		/*byte[] serialisation;
 		try (ByteArrayOutputStream ostr = new ByteArrayOutputStream())
 		{
+			
 			av1.serialise(ostr);
 			serialisation = ostr.toByteArray();
 		}
@@ -78,6 +79,17 @@ public class AxiomVocabTest
 		try (ByteArrayInputStream istr = new ByteArrayInputStream(serialisation))
 		{
 			av2 = AxiomVocab.deserialise(istr);
+		}*/
+		String serial;
+		try (StringWriter wtr = new StringWriter())
+		{
+			av1.serialise(wtr, null);
+			serial = wtr.toString();
+		}
+		AxiomVocab av2;
+		try (Reader rdr = new StringReader(serial))
+		{
+			av2 = AxiomVocab.deserialise(rdr);
 		}
 
 		// Util.writeln("# rules: input=" + av1.numRules() + ", output=" + av2.numRules());

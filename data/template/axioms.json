@@ -1,0 +1,5470 @@
+[
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "transmembrane receptor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000285",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Interleukin-3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000762",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-023",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002690",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-005",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002698",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Beta-galactosidase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000750",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "adhesion",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000237",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Interleukin-8",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000947",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Antigen KI-67",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030002",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cell cycle state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002786",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-024",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002682",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "kinase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000294",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "kinase activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0016301",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "RNA-seq gene expression profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010045",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "nucleic acid sequencing method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002447",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "RNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000270",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "phosphoprotein-specific antibody-coated bead based method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "antibody",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "kinase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000294",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "flow cytometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "HEC-1-A",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002709",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Nanostring",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010047",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "posttranslation modification assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003004",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "chloramphenicol acetyl transferase gene",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003045",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "transcription factor",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003006",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ion channel",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000280",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ATAC-seq epigenetic profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010038",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "dna-seq method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040026",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "nucleic acid sequencing method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002447",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin acessibility method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040027",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-009",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002697",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "nuclear receptor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000286",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "membrane permeability assessment",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "TO-PRO3",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003051",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-021",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002691",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-004",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002699",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "DNA-RNA interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000590",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging cell count assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010054",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell number determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000572",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna content estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000169",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "immunoassay",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000129",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Retinoblastoma-associated protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030003",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "plasmid DNA construct",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002925",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell line cell",
+        "valueURI": "http://purl.obolibrary.org/obo/CLO_0000001",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "permanent cell line",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Pancreatic trypsin inhibitor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000852",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Tubulin beta-3 chain",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030009",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "generic membrane protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000392",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Cue Signal Response assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000042",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "phosphatase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000295",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Thrombopoietin",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000771",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "U3A",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002683",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "antibody",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Microarray",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010048",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Transcription factor p65",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030010",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "phosphorylation assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003005",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein phosphorylation",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006468",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "shRNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000323",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "second messenger assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003007",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "hydrolase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000287",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "green flourescent protein gene",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003046",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "transcription factor",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-003",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002700",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "mitotic cell cycle state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002584",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "mitotic G1 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000080",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic S phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000084",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic G2 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000085",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic M phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000087",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "S phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002740",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "M phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002741",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent mitotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002040",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent interphase cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002042",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent DNA replicated cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002044",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent G2 arrested cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002081",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent mitotic arrested cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002807",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-019",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002692",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "DNA construct",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000550",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "permanent cell line",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein-DNA interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000591",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ligase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000289",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cytotoxicity assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002993",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging cell cycle state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010055",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna content estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000169",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell number determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000572",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "S phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002740",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "M phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002741",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "immunoassay",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000129",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Luciferin 4-monooxygenase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000141",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "transcriptional profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002995",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "dna-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging morphology assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010057",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cellular morphology assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040019",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Transcription factor AP-1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030004",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-026",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002684",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "monoclonal",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000503",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "lyase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000290",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "2 color apoptosis assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010002",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Caspase-3",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003049",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Hoechst 33342",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000115",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "apoptotic process",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006915",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000091",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "luciferase reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002661",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "dna-coated bead based method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cDNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000315",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "regulation of gene expression",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0010468",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "gene expression",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0010467",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mRNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000274",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "flow cytometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "WRO",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002710",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "siRNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000324",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "isomerase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000288",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein-small molecule interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000110",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "luciferase gene",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003047",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Luciferin 4-monooxygenase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000141",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "transcription factor",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP1-003",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002701",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "meiotic cell cycle state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002585",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "meiotic M phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0051327",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "meiotic G1 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0051330",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "meiotic G2 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0051331",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "meiotic S phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0051332",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-017",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002693",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "S phase assessment method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002740",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "EdU",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002742",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "S phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0051320",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence microscopy",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000450",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging cell growth inhibition assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010056",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "dna content estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000169",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent cell viability",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000202",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "viability measurement method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000127",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Mitogen-activated protein kinase 1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002789",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "kinase activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0016301",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein-nucleotide interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000394",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Bead-based immunoassay for protein state",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010050",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "flow cytometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "CyAn Flow Cytometer",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002722",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein abundance method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040014",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "antibody",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell separation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002509",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein phosphorylation",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006468",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging multiplex cytological profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010058",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cellular morphology assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040019",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "chloramphenicol acetyltransferase reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003015",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Annexin A5",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030005",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein complex",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002554",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cell viability ATP quantitation assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010001",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "ATP quantitation using luciferase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002079",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent cell viability",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000202",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "viability measurement method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000127",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "oxidoreductase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000291",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cytokine-specific antibody bead-based method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000044",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "antibody",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "flow cytometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "DNA vector",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002051",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "permanent cell line",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell line cell",
+        "valueURI": "http://purl.obolibrary.org/obo/CLO_0000001",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "N2a",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002711",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "luciferin coupled enzyme activity measurement method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002595",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Luciferin 4-monooxygenase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000141",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "beetle luciferin",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003108",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "neurite outgrowth assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002803",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "kinase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000294",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphatase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000295",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "immunocytochemistry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000416",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "neuron projection morphogenesis",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0048812",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "morphometric parameter",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002973",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "neuron projection development",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0031175",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cell viability assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003009",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "viability measurement method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000127",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent cell viability",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000202",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "SWATH-MS protein quantification assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010066",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein detection method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002013",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "permanent cell line",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "enzyme regulator",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000278",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "MEMA cell growth assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010060",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "immunofluorescent labeling",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002426",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cellular morphology assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040019",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent cell viability",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000202",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "viability measurement method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000127",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "M phase assessment method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002741",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Anti-MPM-2",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002743",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "LysoTracker Red",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000021",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "M phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000279",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence microscopy",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000450",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cell cycle assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002041",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "NOD1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000766",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP1-002",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002702",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "RBL-2H3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002694",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ELISA protein secretion profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010051",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "immunofluorescent labeling",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002426",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "antibody",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chemiluminescence",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000051",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cytokine secretion",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0050663",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging protein state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010059",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "immunofluorescent labeling",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002426",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein detection method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002013",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein phosphorylation",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006468",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "NOD2",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000767",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cDNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000315",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "C6",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002703",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "E-selectin",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030006",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-010",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002673",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "organism-based format",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000218",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Thyroid-stimulating hormone",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0001033",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Macrophage inflammatory protein 3 alpha",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000963",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "U937 (CD59+)",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000758",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "SK-BR-3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002712",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "G alpha O-Alexa Fluor 488",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000919",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "dna content estimation",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000169",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Syto 60",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000047",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "transferase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000292",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "chaperone",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000277",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cytosolic protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000365",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Caspase-3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003049",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Interferon gamma",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000271",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "enzyme",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000279",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "signal transduction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003002",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "MS protein quantification assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010061",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein detection method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002013",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "membrane protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000367",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "DNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-013",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002695",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ELISA protein state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010052",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "antibody",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000502",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chemiluminescence",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000051",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein phosphorylation",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006468",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-008",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002704",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "genomic DNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000316",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-001",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002674",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Vascular cell adhesion protein 1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030007",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cell based format",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell line cell",
+        "valueURI": "http://purl.obolibrary.org/obo/CLO_0000001",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "CD40",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000718",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "KINOMEScan assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003011",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "percent inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000201",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Kd",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000034",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein binding",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0005515",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "kinase active-site binding method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003030",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "competitive binding",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000441",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "quantitative PCR",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003031",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-014",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002676",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "receptor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000281",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "global chromatin epigenetic profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010039",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein abundance method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040014",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "KiNativ assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002908",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein binding",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0005515",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "competitive binding",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000441",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000201",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "IC50",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000190",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "H4",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002713",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Microtubule-associated protein tau",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002108",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "quantitative PCR",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003031",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "MS protein state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010062",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein detection method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002013",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "KOPN-8",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002715",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Hoechst 33342",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000115",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "recombinant expression",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000360",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "permanent cell line",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "G protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000368",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "apoptosis assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002043",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "apoptotic process",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006915",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000091",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "gene",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "transcription factor",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-011",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002696",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "plasmid DNA",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000317",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "gene",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000582",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "MSC 80",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002705",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-012",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002675",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Fluorescence imaging apoptosis assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010053",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell number determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000572",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "imaging method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000452",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna content estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000169",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "immunoassay",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000129",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "confocal microscope",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0150010",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "apoptotic process",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006915",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000091",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "platelet activation assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002763",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "fluorescent protein reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003012",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "CBF-his/runx1-biotin protein complex",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000877",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-016",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002677",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Microtubule-associated proteins 1A/1B light chain 3B",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030008",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "kinase active-site binding method",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003030",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "kinase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000294",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "quantitative PCR",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003031",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "transcription factor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "CD4-TLR4",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000719",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "CellTiter-Glo Luminescent Cell Viability Assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000682",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Luciferin 4-monooxygenase",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000141",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Adenosine triphosphate",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000776",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "polyclonal",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000507",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "structural",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000370",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "ML-2",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002714",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Mitogen-activated protein kinase 14",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002109",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "kinase activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0016301",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "P100 phosphoprotein quantification assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010063",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein detection method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002013",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mass spectrometry",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "PPC-1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002716",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "MV-4-11",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002685",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "secreted",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000369",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "generic hydrolase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000222",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-006",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002687",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "3 color apoptosis assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010003",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "Caspase-3",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003049",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "TO-PRO3",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003051",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Hoechst 33342",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000115",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "apoptotic process",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006915",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell death",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0008219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "inhibition",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000091",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protease",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000652",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "BJ",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002670",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-015",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002706",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "BSC-1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002678",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "transporter",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000283",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "beta galactosidase reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003013",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Cos-7",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000732",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Anti-MPM-2",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002743",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein subunit",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002555",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein-RNA interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000593",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "P-selectin glycoprotein ligand 1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002782",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Creatine kinase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000779",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "kinase activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0016301",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Histone H3.3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030000",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "TO-PRO3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003051",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "DNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-007",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002686",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "CSM14.1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002717",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "mitosis/apoptosis assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010004",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "mitotic G1 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000080",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic S phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000084",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic G2 phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000085",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitotic M phase",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0000087",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "apoptotic process",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0006915",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "S phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002740",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "M phase assessment method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002741",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phospholipid redistribution estimation",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000073",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "chromatin condensation visualization",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000159",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "caspase activity determination",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "membrane permeability assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000167",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mitochondrial membrane potential assessment",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent apoptotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002006",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent mitotic cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002040",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent interphase cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002042",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent DNA replicated cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002044",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent G2 arrested cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002081",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "percent mitotic arrested cells",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002807",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-020",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002680",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Ubiquitin-Rho",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0001040",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-002",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002688",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "radioligand binding assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002776",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Interleukin-6",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000204",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "OCI-Ly3",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002707",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-018",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002679",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Ubiquitin-AMC",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0001039",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "G protein coupled receptor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000284",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "beta lactamase reporter gene assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003014",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein-protein interaction assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002990",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "caspase activity determination",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000165",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "DEVD-NucView 488",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003050",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Caspase-3",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003049",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence microscopy",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000450",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Tumor necrosis factor",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000236",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "G2/mitotic-specific cyclin-B1",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0030001",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Beta-lactamase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000751",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-022",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002681",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "RPPA protein state assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010065",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "immunofluorescent labeling",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002426",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein abundance method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040014",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "immunoassay",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000129",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "LYMP2-025",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002689",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "BSR",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002718",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "single cell protein secretion microfluidic assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010005",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cytokine secretion",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0050663",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Ubiquitin vinyl sulfone",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0001041",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "generic transferase",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000293",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "catalytic activity",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "binding assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002989",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "biochemical format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000217",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "C2C12",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002708",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "L1000 mRNA profiling assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0010046",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "CyAn Flow Cytometer",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002722",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell separation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002509",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "Z-score",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000432",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "DNA or RNA abundance method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0040017",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fluorescence intensity",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "mRNA",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000274",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "nucleic acid identification and quantitation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003034",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "dna-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0002022",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Serum albumin",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0002066",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "Schneider's Drosophila Line 2",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000743",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "organism",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "protein",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "peptide",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein preparation method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "cytokine secretion assay",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003003",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "cytokine secretion",
+        "valueURI": "http://purl.obolibrary.org/obo/GO_0050663",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "fold change",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "cell based format",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "phosphoprotein-specific antibody-coated bead based method",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
+        "wholeBranch": true
+      }
+    ]
+  }, 
+  {
+    "type": "limit",
+    "subject": 
+    {
+      "label": "beta galactosidase gene",
+      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003044",
+      "wholeBranch": true
+    },
+    "impact": 
+    [
+      {
+        "label": "transcription factor",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000282",
+        "wholeBranch": true
+      }
+    ]
+  }
+]
