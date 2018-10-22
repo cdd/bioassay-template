@@ -202,6 +202,7 @@ public class AxiomVocab
 	public Rule[] getRules() {return rules.toArray(new Rule[rules.size()]);}
 	public void addRule(Rule rule) {rules.add(rule);}
 	public void setRule(int idx, Rule rule) {rules.set(idx, rule);}
+	public void deleteRule(int idx) {rules.remove(idx);}
 	
 	// write the content as JSON (somewhat human readable, with optional vocab-to-label translation)
 	public void serialise(File file) throws IOException {serialise(file, null);}
