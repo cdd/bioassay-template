@@ -402,11 +402,6 @@
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
         "wholeBranch": true
-      }, 
-      {
-        "label": "protein",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
-        "wholeBranch": true
       }
     ]
   }, 
@@ -1534,11 +1529,7 @@
     },
     "impact": 
     [
-      {
-        "label": "protein",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
-        "wholeBranch": true
-      }, 
+      
       {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
@@ -4030,28 +4021,6 @@
     "type": "limit",
     "subject": 
     {
-      "label": "CellTiter-Glo Luminescent Cell Viability Assay",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000682",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "Luciferin 4-monooxygenase",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000141",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "Adenosine triphosphate",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000776",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
       "label": "polyclonal",
       "valueURI": "http://www.bioassayontology.org/bao#BAO_0000507",
       "wholeBranch": true
@@ -4207,28 +4176,7 @@
       }
     ]
   }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
-      "label": "secreted",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000369",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
-        "wholeBranch": true
-      }
-    ]
-  }, 
+    
   {
     "type": "limit",
     "subject": 
@@ -4247,11 +4195,6 @@
       {
         "label": "catalytic activity",
         "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
         "wholeBranch": true
       }
     ]
@@ -4346,33 +4289,6 @@
       {
         "label": "mitochondrial membrane potential assessment",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000423",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
-      "label": "protease",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000652",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "catalytic activity",
-        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
         "wholeBranch": true
       }
     ]
@@ -5392,28 +5308,6 @@
       {
         "label": "organism",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
-      "label": "protein",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
         "wholeBranch": true
       }
     ]
