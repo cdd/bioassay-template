@@ -32,7 +32,7 @@ import java.util.zip.*;
 
 import org.json.*;
 import org.apache.commons.cli.*;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.*;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
@@ -68,13 +68,13 @@ public class CellLineFix
 		int score;
 	}
 
-	private static String URI_BRENDA_ROOT = "http://dto.org/DTO/DTO_000";
-	private static String URI_CLO_ROOT = "obo:CLO_0000001";
+	private final static String URI_BRENDA_ROOT = "http://dto.org/DTO/DTO_000";
+	private final static String URI_CLO_ROOT = "obo:CLO_0000001";
 	
 	// XXX contrived branches rooted at CLO and used to house BRENDA cell and tissue terms
 	// XXX note these closely resemble provisional terms in BAE
-	private static String URI_FOR_CELL_LINES = "obo:CLO_9999998";
-	private static String URI_FOR_TISSUES = "obo:CLO_9999999";
+	private final static String URI_FOR_CELL_LINES = "obo:CLO_9999998";
+	private final static String URI_FOR_TISSUES = "obo:CLO_9999999";
 
 	private List<CellPair> pairs = new ArrayList<>();
 	private Set<String> skipSet = new HashSet<>();
@@ -281,7 +281,7 @@ public class CellLineFix
 		{
 			outWriter.println("# delete redundant BRENDA term");
 		}
-		outWriter.println(uri2Pfx + " a bat:eliminated .");
+		outWriter.println(uri2Pfx + " a bat:eliminated .\n");
 	}
 
 	// reparent BRENDA term to temporary location in CLO 
@@ -333,7 +333,9 @@ public class CellLineFix
 		}
 
 		if (!StringUtils.isEmpty(brendaDesc))
-			outWriter.println("\tobo:IAO_0000115 " + brendaDesc + " .");
+			outWriter.println("\tobo:IAO_0000115 \"" + brendaDesc + "\" .");
+
+		outWriter.println(""); // trailing blank line
 	}
 
 	// uri should be fully expanded
@@ -346,6 +348,7 @@ public class CellLineFix
 			outWriter.println("# TODO CLO terms needs description");
 			outWriter.println(uriPfx + " obo:IAO_0000115 \"term description goes here\" .");
 		}
+		outWriter.println(""); // trailing blank line
 	}
 
 	// returns a measure of string similarity, used to pair controlled vocabulary names with ontology terms; 0=perfect
@@ -475,9 +478,9 @@ public class CellLineFix
 	{
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-		Option curateOpt = Option.builder().argName("curate").desc("Path to zip file containing curated assays.").hasArg().build();
-		Option scoreOpt = Option.builder().argName("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
-		Option outfileOpt = Option.builder().argName("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
+		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
+		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
+		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
 
 		Options options = new Options();
 		options.addOption(curateOpt);
@@ -512,7 +515,7 @@ public class CellLineFix
 			outfile = new File(cmdLine.getOptionValue("outfile"));
 		}
 
-		if (outfile == null || !outfile.isFile())
+		if (outfile != null && outfile.exists() && !outfile.isFile())
 		{
 			System.err.println("Please specify a valid file location for -outfile.");
 			System.exit(1);
