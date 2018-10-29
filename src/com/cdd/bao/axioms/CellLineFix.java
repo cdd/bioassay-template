@@ -85,6 +85,59 @@ public class CellLineFix
 	private String curationFN;
 	private int maxScore;
 
+	public static void main(String[] args)
+	{
+		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
+		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
+		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
+		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
+
+		Options options = new Options();
+		options.addOption(curateOpt);
+		options.addOption(scoreOpt);
+		options.addOption(outfileOpt);
+
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmdLine = null;
+		try {cmdLine = parser.parse(options, args);}
+		catch (ParseException pe)
+		{
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp(getProgramName(), options);
+			return;
+		}
+
+		int maxScore = 1;
+		if (cmdLine.hasOption("score"))
+		{
+			maxScore = Integer.parseInt(cmdLine.getOptionValue("score"));
+		}
+
+		String curationFN = null;
+		if (cmdLine.hasOption("curate"))
+		{
+			curationFN = cmdLine.getOptionValue("curate");
+		}
+
+		File outfile = null;
+		if (cmdLine.hasOption("outfile"))
+		{
+			outfile = new File(cmdLine.getOptionValue("outfile"));
+		}
+
+		if (outfile != null && outfile.exists() && !outfile.isFile())
+		{
+			System.err.println("Please specify a valid file location for -outfile.");
+			return;
+		}
+
+		Util.writeln("Cell Line Fix");
+		try {new CellLineFix(outfile, curationFN, maxScore).exec();}
+		catch (Exception ex) {ex.printStackTrace();}
+		Util.writeln("Done.");
+	}
+
 	public CellLineFix(File outfile, String curationFN, int maxScore) throws FileNotFoundException
 	{
 		this.outWriter = new PrintWriter(outfile);
@@ -98,7 +151,7 @@ public class CellLineFix
 		Util.writeln("Predefined pairs: " + pairs.size() + ", skip: " + skipSet.size());
 
 		Util.writeln("Loading vocab...");
-		vocab = new Vocabulary("./data/ontology", null);
+		vocab = new Vocabulary("data/ontology", null);
 		Util.writeln("... properties: " + vocab.numProperties() + ", values: " + vocab.numValues());		
 		
 		Vocabulary.Hierarchy hier = vocab.getValueHierarchy();
@@ -131,13 +184,13 @@ public class CellLineFix
 			List<Match> matches = matchByLabel(cloURI, cloLabel, brendaMap);
 			if (matches.size() <= 0)
 			{
-				this.handleUnmatchedCLOTerm(cloURI, cloLabel);
+				handleUnmatchedCLOTerm(cloURI, cloLabel);
 			}
 		}
 
 		for (String brendaURI : brendaMap.keySet()) if (!brendaMatched.contains(brendaURI))
 		{
-			this.handleUnmatchedBRENDATerm(cloRoot, brendaURI, brendaMap.get(brendaURI));
+			handleUnmatchedBRENDATerm(cloRoot, brendaURI, brendaMap.get(brendaURI));
 		}
 
 		if (curationFN == null)
@@ -151,7 +204,7 @@ public class CellLineFix
 
 	private void loadCellPairs() throws IOException
 	{
-		File f = new File("./data/repair/axiom_cellpairs.json");
+		File f = new File("data/repair/axiom_cellpairs.json");
 		if (!f.exists()) 
 		{
 			Util.writeln("** pair file [" + f.getAbsolutePath() + "] not found");
@@ -269,7 +322,7 @@ public class CellLineFix
 		String uri1Exp = ModelSchema.expandPrefix(uri1Pfx);
 		String uri2Exp = ModelSchema.expandPrefix(uri2Pfx);
 		String cloDesc = vocab.getDescr(uri1Exp), brendaDesc = vocab.getDescr(uri2Exp);
-		this.brendaMatched.add(uri2Exp);
+		brendaMatched.add(uri2Exp);
 
 		if (!StringUtils.isEmpty(brendaDesc) && !StringUtils.equals(cloDesc, brendaDesc))
 		{
@@ -472,60 +525,5 @@ public class CellLineFix
 		StackTraceElement main = stack[stack.length - 1];
 		String mainClass = main.getClassName();
 		return mainClass;
-	}
-
-	public static void main(String[] args)
-	{
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
-
-		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
-		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
-		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
-
-		Options options = new Options();
-		options.addOption(curateOpt);
-		options.addOption(scoreOpt);
-		options.addOption(outfileOpt);
-
-		CommandLineParser parser = new DefaultParser();
-		CommandLine cmdLine = null;
-		try {cmdLine = parser.parse(options, args);}
-		catch (ParseException pe)
-		{
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp(getProgramName(), options);
-			System.exit(1);
-		}
-
-		int maxScore = 1;
-		if (cmdLine.hasOption("score"))
-		{
-			maxScore = Integer.parseInt(cmdLine.getOptionValue("score"));
-		}
-
-		String curationFN = null;
-		if (cmdLine.hasOption("curate"))
-		{
-			curationFN = cmdLine.getOptionValue("curate");
-		}
-
-		File outfile = null;
-		if (cmdLine.hasOption("outfile"))
-		{
-			outfile = new File(cmdLine.getOptionValue("outfile"));
-		}
-
-		if (outfile != null && outfile.exists() && !outfile.isFile())
-		{
-			System.err.println("Please specify a valid file location for -outfile.");
-			System.exit(1);
-		}
-
-		Util.writeln("Cell Line Fix");
-		try {new CellLineFix(outfile, curationFN, maxScore).exec();}
-		catch (Exception ex) {ex.printStackTrace();}
-		Util.writeln("Done.");
-
-		System.exit(0);
 	}
 }
