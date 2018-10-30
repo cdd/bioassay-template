@@ -147,6 +147,8 @@ public class CellLineFix
 
 	public void exec() throws Exception
 	{
+		writeHeader();
+		
 		loadCellPairs();
 		Util.writeln("Predefined pairs: " + pairs.size() + ", skip: " + skipSet.size());
 
@@ -200,6 +202,19 @@ public class CellLineFix
 		}
 		
 		processCurated(new File(curationFN));
+	}
+
+	private void writeHeader()
+	{
+		outWriter.println("# auto-generated file of semantic directives that fold BRENDA terms into CLO ontology\n");
+		outWriter.println("@prefix bao:   <http://www.bioassayontology.org/bao#> .");
+		outWriter.println("@prefix bat:   <http://www.bioassayontology.org/bat#> .");
+		outWriter.println("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .");
+		outWriter.println("@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .");
+		outWriter.println("@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .");
+		outWriter.println("@prefix owl:   <http://www.w3.org/2002/07/owl#> .");
+		outWriter.println("@prefix obo:   <http://purl.obolibrary.org/obo/> .");
+		outWriter.println("");
 	}
 
 	private void loadCellPairs() throws IOException
@@ -375,13 +390,13 @@ public class CellLineFix
 		if (mat.matches())
 		{
 			outWriter.println("# re-parent BRENDA cell term to CLO branch");
-			outWriter.println(uriPfx + " bat:notSubClass " + URI_BRENDA_ROOT + " ;");
+			outWriter.println(uriPfx + " bat:notSubClass <" + URI_BRENDA_ROOT + "> ;");
 			outWriter.println("\trdfs:subClassOf " + URI_FOR_CELL_LINES + " " + end);
 		}
 		else
 		{
 			outWriter.println("# re-parent BRENDA tissue term to CLO branch");
-			outWriter.println(uriPfx + " bat:notSubClass " + URI_BRENDA_ROOT + " ;");
+			outWriter.println(uriPfx + " bat:notSubClass <" + URI_BRENDA_ROOT + "> ;");
 			outWriter.println("\trdfs:subClassOf " + URI_FOR_TISSUES + " " + end);
 		}
 
