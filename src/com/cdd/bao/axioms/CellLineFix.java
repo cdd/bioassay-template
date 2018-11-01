@@ -173,7 +173,10 @@ public class CellLineFix
 			cloMap.remove(cell.uri1);
 			cloMap.remove(cell.uri2);
 		}
-		
+
+		// house unmapped CLO terms here
+		NavigableMap<String, String> unmatchedCLOTerms = new TreeMap<>();
+
 		// iterate over remaining CLO pairs, look for possible BRENDA matches
 		int count = 0;
 		for (Map.Entry<String, String> entry : cloMap.entrySet())
@@ -186,7 +189,8 @@ public class CellLineFix
 			List<Match> matches = matchByLabel(cloURI, cloLabel, brendaMap);
 			if (matches.size() <= 0)
 			{
-				handleUnmatchedCLOTerm(cloURI, cloLabel);
+				// save unmatched CLO terms here and process them at the end
+				unmatchedCLOTerms.put(cloURI, cloLabel);
 			}
 		}
 
@@ -194,6 +198,10 @@ public class CellLineFix
 		{
 			handleUnmatchedBRENDATerm(cloRoot, brendaURI, brendaMap.get(brendaURI));
 		}
+
+		// process unmatched CLO terms
+		Util.writeln("unmatched CLO terms count is " + unmatchedCLOTerms.size());
+		if (unmatchedCLOTerms.size() > 0) handleUnmatchedCLOTerms(unmatchedCLOTerms);
 
 		if (curationFN == null)
 		{
@@ -288,7 +296,7 @@ public class CellLineFix
 		Matcher mat1 = pat.matcher(label);
 		String label1 = mat1.matches() ? mat1.group(1) : label;
 
-		List<Match> matches = new ArrayList<>();
+		List<Match> possibleMatches = new ArrayList<>();
 		for (Map.Entry<String, String> entry : map.entrySet())
 		{
 			Matcher mat2 = pat.matcher(entry.getValue());
@@ -299,18 +307,21 @@ public class CellLineFix
 			m.label = entry.getValue(); // save original label
 			m.score = stringSimilarity(label1, label2);
 
-			matches.add(m);
+			possibleMatches.add(m);
 		}
 
-		if (matches.size() == 0) return new ArrayList<>();
-		matches.sort((m1, m2) -> m1.score - m2.score);
+		if (possibleMatches.size() == 0) return new ArrayList<>();
+		possibleMatches.sort((m1, m2) -> m1.score - m2.score);
 
-		int bestScore = matches.get(0).score;
+		// list of actual matches logged 
+		List<Match> actualMatches = new ArrayList<>();
+
+		int bestScore = possibleMatches.get(0).score;
 		if (bestScore <= 2) // only consider matches when the best match has 2 or fewer character tweaks
 		{
 			Util.writeln();
 			int count = 0;
-			for (Match m : matches)
+			for (Match m : possibleMatches)
 			{
 				if (m.score > maxScore) break;
 
@@ -325,10 +336,12 @@ public class CellLineFix
 				Util.writeln(json.toString() + " / score=" + m.score);
 
 				handleMatchedTerms(uri1, label, uri2, m.label);
+				actualMatches.add(m);
+
 				if (++count >= 10) break;
 			}
 		}
-		return matches;
+		return actualMatches;
 	}
 
 	// uri1 and uri2 should already be collapsed
@@ -407,16 +420,31 @@ public class CellLineFix
 	}
 
 	// uri should be fully expanded
-	private void handleUnmatchedCLOTerm(String uriExp, String label)
+	private void handleUnmatchedCLOTerms(NavigableMap<String, String> unmatchedCLOTerms)
 	{
-		String cloDesc = vocab.getDescr(uriExp);
-		if (StringUtils.isEmpty(cloDesc))
+		outWriter.println("\n################################################################################");
+		outWriter.println("# following CLO terms are missing descriptions");
+		outWriter.println("# please correct and uncomment as needs be");
+		outWriter.println("################################################################################\n");
+
+		for (String uriExp : unmatchedCLOTerms.keySet())
 		{
-			String uriPfx = ModelSchema.collapsePrefix(uriExp);
-			outWriter.println("# TODO CLO terms needs description");
-			outWriter.println(uriPfx + " obo:IAO_0000115 \"term description goes here\" .");
+			String cloDesc = vocab.getDescr(uriExp);
+			if (StringUtils.isEmpty(cloDesc))
+			{
+				String uriPfx = ModelSchema.collapsePrefix(uriExp);
+				if (StringUtils.equals(uriPfx, uriExp))
+				{
+					// this obscure case happens when uri cannot be abbreviated
+					outWriter.println("# <" + uriPfx + "> obo:IAO_0000115 \"TBD: term description goes here\" .");
+				}
+				else
+				{
+					outWriter.println("# " + uriPfx + " obo:IAO_0000115 \"TBD: term description goes here\" .");
+				}
+			}
 		}
-		outWriter.println(""); // trailing blank line
+		outWriter.flush();
 	}
 
 	// returns a measure of string similarity, used to pair controlled vocabulary names with ontology terms; 0=perfect
