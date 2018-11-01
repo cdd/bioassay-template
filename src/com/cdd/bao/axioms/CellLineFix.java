@@ -81,6 +81,8 @@ public class CellLineFix
 	private Map<String, String> brendaMap = new HashMap<>(), cloMap = new HashMap<>(); // uri-to-label
 	private Set<String> brendaMatched = new HashSet<>(); // set of BRENDA terms that matched at least one CLO term
 
+	// constructor parameters parsed from command-line
+	private boolean readpairs;
 	private PrintWriter outWriter;
 	private String curationFN;
 	private int maxScore;
@@ -89,11 +91,13 @@ public class CellLineFix
 	{
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
+		Option readpairsOpt = Option.builder().longOpt("readpairs").desc("When specified, first read file with common pairs between BRENDA and CLO ontologies; by default, do not read pairs.").optionalArg(true).build();
 		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
 		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
 		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
 
 		Options options = new Options();
+		options.addOption(readpairsOpt);
 		options.addOption(curateOpt);
 		options.addOption(scoreOpt);
 		options.addOption(outfileOpt);
@@ -107,6 +111,8 @@ public class CellLineFix
 			formatter.printHelp(getProgramName(), options);
 			return;
 		}
+
+		boolean readpairs = cmdLine.hasOption("readpairs");
 
 		int maxScore = 1;
 		if (cmdLine.hasOption("score"))
@@ -133,13 +139,14 @@ public class CellLineFix
 		}
 
 		Util.writeln("Cell Line Fix");
-		try {new CellLineFix(outfile, curationFN, maxScore).exec();}
+		try {new CellLineFix(readpairs, outfile, curationFN, maxScore).exec();}
 		catch (Exception ex) {ex.printStackTrace();}
 		Util.writeln("Done.");
 	}
 
-	public CellLineFix(File outfile, String curationFN, int maxScore) throws FileNotFoundException
+	public CellLineFix(boolean readpairs, File outfile, String curationFN, int maxScore) throws FileNotFoundException
 	{
+		this.readpairs = readpairs;
 		this.outWriter = new PrintWriter(outfile);
 		this.curationFN = curationFN;
 		this.maxScore = maxScore;
@@ -148,9 +155,12 @@ public class CellLineFix
 	public void exec() throws Exception
 	{
 		writeHeader();
-		
-		loadCellPairs();
-		Util.writeln("Predefined pairs: " + pairs.size() + ", skip: " + skipSet.size());
+
+		if (readpairs)
+		{
+			loadCellPairs();
+			Util.writeln("Predefined pairs: " + pairs.size() + ", skip: " + skipSet.size());
+		}
 
 		Util.writeln("Loading vocab...");
 		vocab = new Vocabulary("data/ontology", null);
