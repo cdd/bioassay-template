@@ -230,12 +230,11 @@ public class CellLineFix
 		
 		processCurated(new File(curationFN));
 
-		outWriter.flush();
+		outWriter.close();
 	}
 
 	private void writeHeader()
 	{
-		outWriter.println("# auto-generated file of semantic directives that fold BRENDA terms into CLO ontology\n");
 		outWriter.println("@prefix bao:   <http://www.bioassayontology.org/bao#> .");
 		outWriter.println("@prefix bat:   <http://www.bioassayontology.org/bat#> .");
 		outWriter.println("@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .");
@@ -243,7 +242,8 @@ public class CellLineFix
 		outWriter.println("@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .");
 		outWriter.println("@prefix owl:   <http://www.w3.org/2002/07/owl#> .");
 		outWriter.println("@prefix obo:   <http://purl.obolibrary.org/obo/> .");
-		outWriter.println("");
+		outWriter.println();
+		outWriter.println("# auto-generated file of semantic directives that fold BRENDA terms into CLO ontology\n");
 	}
 
 	private void loadCellPairs() throws IOException
@@ -376,9 +376,9 @@ public class CellLineFix
 		if (!StringUtils.isEmpty(brendaDesc) && !StringUtils.equals(cloDesc, brendaDesc))
 		{
 			String newDesc = !StringUtils.isEmpty(cloDesc) ? (cloDesc + " " + brendaDesc) : brendaDesc;
-			String escDesc = Util.escapeStringBaseDoubleQuote(newDesc);
-			outWriter.println("# incorporate description from BRENDA term into CLO term and then delete BRENDA term");
-			outWriter.println(uri1Pfx + " obo:IAO_0000115 \"" + escDesc + "\" .");
+			//outWriter.println("# incorporate description from BRENDA term into CLO term and then delete BRENDA term");
+			outWriter.println("# CLO [" + label1 + "] paired with [" + label2 + "]");
+			outWriter.println(uri1Pfx + " obo:IAO_0000115 \"" + escapeTurtleString(newDesc) + "\" .");
 		}
 		else
 		{
@@ -403,7 +403,7 @@ public class CellLineFix
 			String branchLabel = "BRENDA cell lines";
 
 			outWriter.println("# create BRENDA cell branch and make its parent the CLO root");
-			outWriter.println(URI_FOR_CELL_LINES + " rdfs:label \"" + branchLabel + "\" ;");
+			outWriter.println(URI_FOR_CELL_LINES + " rdfs:label \"" + escapeTurtleString(branchLabel) + "\" ;");
 			outWriter.println("\trdfs:subClassOf " + URI_CLO_ROOT + " .");
 
 			cloMap.put(URI_FOR_CELL_LINES, branchLabel);
@@ -413,7 +413,7 @@ public class CellLineFix
 			String branchLabel = "BRENDA tissue lines";
 
 			outWriter.println("# create BRENDA tissue branch and make its parent the CLO root");
-			outWriter.println(URI_FOR_TISSUES + " rdfs:label \"" + branchLabel + "\" ;");
+			outWriter.println(URI_FOR_TISSUES + " rdfs:label \"" + escapeTurtleString(branchLabel) + "\" ;");
 			outWriter.println("\trdfs:subClassOf " + URI_CLO_ROOT + " .");
 
 			cloMap.put(URI_FOR_TISSUES, branchLabel);
@@ -437,7 +437,7 @@ public class CellLineFix
 		}
 
 		if (!StringUtils.isEmpty(brendaDesc))
-			outWriter.println("\tobo:IAO_0000115 \"" + brendaDesc + "\" .");
+			outWriter.println("\tobo:IAO_0000115 \"" + escapeTurtleString(brendaDesc) + "\" .");
 
 		outWriter.println(""); // trailing blank line
 		outWriter.flush();
@@ -475,7 +475,7 @@ public class CellLineFix
 	}
 
 	// returns a measure of string similarity, used to pair controlled vocabulary names with ontology terms; 0=perfect
-	public int stringSimilarity(String str1, String str2)
+	private int stringSimilarity(String str1, String str2)
 	{
 		char[] ch1 = str1.toLowerCase().toCharArray();
 		char[] ch2 = str2.toLowerCase().toCharArray();
@@ -595,5 +595,21 @@ public class CellLineFix
 		StackTraceElement main = stack[stack.length - 1];
 		String mainClass = main.getClassName();
 		return mainClass;
+	}
+	
+	// a trivial escaping transform that needs to be applied to any Turtle-formatted string
+	private String escapeTurtleString(String str)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (char ch : str.toCharArray())
+		{
+			if (ch == '"') builder.append("\\\"");
+			else if (ch == '\\') builder.append("\\\\");
+			else if (ch == '\t') builder.append("\\t");
+			else if (ch == '\r') {}
+			else if (ch == '\n') builder.append("\\n");
+			else builder.append(ch);
+		}
+		return builder.toString();
 	}
 }
