@@ -83,6 +83,7 @@ public class CellLineFix
 
 	// constructor parameters parsed from command-line
 	private boolean readpairs;
+	private boolean describe;
 	private PrintWriter outWriter;
 	private String curationFN;
 	private int maxScore;
@@ -92,12 +93,14 @@ public class CellLineFix
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
 		Option readpairsOpt = Option.builder().longOpt("readpairs").desc("When specified, first read file with common pairs between BRENDA and CLO ontologies; by default, do not read pairs.").optionalArg(true).build();
+		Option describeOpt = Option.builder().longOpt("describe").desc("When specified, output directives for CLO terms that lack descriptions; by default, do not do this.").optionalArg(true).build();
 		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
 		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
 		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
 
 		Options options = new Options();
 		options.addOption(readpairsOpt);
+		options.addOption(describeOpt);
 		options.addOption(curateOpt);
 		options.addOption(scoreOpt);
 		options.addOption(outfileOpt);
@@ -113,6 +116,7 @@ public class CellLineFix
 		}
 
 		boolean readpairs = cmdLine.hasOption("readpairs");
+		boolean describe = cmdLine.hasOption("describe");
 
 		int maxScore = 1;
 		if (cmdLine.hasOption("score"))
@@ -139,14 +143,15 @@ public class CellLineFix
 		}
 
 		Util.writeln("Cell Line Fix");
-		try {new CellLineFix(readpairs, outfile, curationFN, maxScore).exec();}
+		try {new CellLineFix(readpairs, describe, outfile, curationFN, maxScore).exec();}
 		catch (Exception ex) {ex.printStackTrace();}
 		Util.writeln("Done.");
 	}
 
-	public CellLineFix(boolean readpairs, File outfile, String curationFN, int maxScore) throws FileNotFoundException
+	public CellLineFix(boolean readpairs, boolean describe, File outfile, String curationFN, int maxScore) throws FileNotFoundException
 	{
 		this.readpairs = readpairs;
+		this.describe = describe;
 		this.outWriter = new PrintWriter(outfile);
 		this.curationFN = curationFN;
 		this.maxScore = maxScore;
@@ -211,7 +216,7 @@ public class CellLineFix
 
 		// process unmatched CLO terms
 		Util.writeln("unmatched CLO terms count is " + unmatchedCLOTerms.size());
-		if (unmatchedCLOTerms.size() > 0) handleUnmatchedCLOTerms(unmatchedCLOTerms);
+		if (unmatchedCLOTerms.size() > 0 && describe) handleUnmatchedCLOTerms(unmatchedCLOTerms);
 
 		if (curationFN == null)
 		{
@@ -220,6 +225,8 @@ public class CellLineFix
 		}
 		
 		processCurated(new File(curationFN));
+
+		outWriter.flush();
 	}
 
 	private void writeHeader()
@@ -365,14 +372,16 @@ public class CellLineFix
 		if (!StringUtils.isEmpty(brendaDesc) && !StringUtils.equals(cloDesc, brendaDesc))
 		{
 			String newDesc = !StringUtils.isEmpty(cloDesc) ? (cloDesc + " " + brendaDesc) : brendaDesc;
+			String escDesc = Util.escapeStringBaseDoubleQuote(newDesc);
 			outWriter.println("# incorporate description from BRENDA term into CLO term and then delete BRENDA term");
-			outWriter.println(uri1Pfx + " obo:IAO_0000115 \"" + newDesc + "\" .");
+			outWriter.println(uri1Pfx + " obo:IAO_0000115 \"" + escDesc + "\" .");
 		}
 		else
 		{
 			outWriter.println("# delete redundant BRENDA term");
 		}
 		outWriter.println(uri2Pfx + " a bat:eliminated .\n");
+		outWriter.flush();
 	}
 
 	// reparent BRENDA term to temporary location in CLO 
@@ -427,6 +436,7 @@ public class CellLineFix
 			outWriter.println("\tobo:IAO_0000115 \"" + brendaDesc + "\" .");
 
 		outWriter.println(""); // trailing blank line
+		outWriter.flush();
 	}
 
 	// uri should be fully expanded
@@ -442,15 +452,18 @@ public class CellLineFix
 			String cloDesc = vocab.getDescr(uriExp);
 			if (StringUtils.isEmpty(cloDesc))
 			{
+				String cloLabel = unmatchedCLOTerms.get(uriExp);
+				outWriter.println("\n# " + cloLabel); // even better if we had term hierarchy in comment
+
 				String uriPfx = ModelSchema.collapsePrefix(uriExp);
 				if (StringUtils.equals(uriPfx, uriExp))
 				{
 					// this obscure case happens when uri cannot be abbreviated
-					outWriter.println("# <" + uriPfx + "> obo:IAO_0000115 \"TBD: term description goes here\" .");
+					outWriter.println("# <" + uriPfx + "> obo:IAO_0000115 \"\" .");
 				}
 				else
 				{
-					outWriter.println("# " + uriPfx + " obo:IAO_0000115 \"TBD: term description goes here\" .");
+					outWriter.println("# " + uriPfx + " obo:IAO_0000115 \"\" .");
 				}
 			}
 		}

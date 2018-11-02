@@ -957,4 +957,41 @@ public class Util
 		String home = System.getProperty("user.home");
 		return home + fn.substring(1);
 	}
+
+	/**
+	 * Escapes basic special characters in the specified string assuming the result will be quoted with the double quotes characters (")
+	 * All characters are copied as-is, except for the following, which are escaped with a reverse solidus (\) prefix:
+	 * ", \ and special control characters \t, \r, \n, \b, \f.
+	 * 
+	 * Originally authored by Laurent Wouters under GNU Lesser General Public License v3.0+.
+	 * Search for org.xowl.infra.store.IOUtils.
+	 *
+	 * @param value The value to escape
+	 * @return The escaped value
+	 */
+	public static String escapeStringBaseDoubleQuote(String value)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i != value.length(); i++)
+		{
+			char c = value.charAt(i);
+			if (c == '"')
+				builder.append("\\\"");
+			else if (c == '\\')
+				builder.append("\\\\");
+			else if (c == '\t')
+				builder.append("\\t");
+			else if (c == '\r')
+				builder.append("\\r");
+			else if (c == '\n')
+				builder.append("\\n");
+			else if (c == '\b')
+				builder.append("\\b");
+			else if (c == '\f')
+				builder.append("\\f");
+			else
+				builder.append(c);
+		}
+		return builder.toString();
+	}
 }
