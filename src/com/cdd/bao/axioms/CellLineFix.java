@@ -187,6 +187,10 @@ public class CellLineFix
 			brendaMap.remove(cell.uri2);
 			cloMap.remove(cell.uri1);
 			cloMap.remove(cell.uri2);
+
+			String uri1 = ModelSchema.collapsePrefix(cell.uri1);
+			String uri2 = ModelSchema.collapsePrefix(cell.uri2);
+			handleMatchedTerms(uri1, cell.label1, uri2, cell.label2);
 		}
 
 		// house unmapped CLO terms here
