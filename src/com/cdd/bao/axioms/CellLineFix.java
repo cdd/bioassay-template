@@ -181,6 +181,12 @@ public class CellLineFix
 		Util.writeln("BRENDA terms: " + brendaMap.size());
 		Util.writeln("CLO terms:    " + cloMap.size());
 		
+		if (pairs.size() > 0)
+		{
+			outWriter.println("\n################################################################################");
+			outWriter.println("# start of officially sanctioned matches between BRENDA and CLO terms");
+			outWriter.println("################################################################################\n");
+		}
 		for (CellPair cell : pairs)
 		{
 			brendaMap.remove(cell.uri1);
@@ -191,6 +197,12 @@ public class CellLineFix
 			String uri1 = ModelSchema.collapsePrefix(cell.uri1);
 			String uri2 = ModelSchema.collapsePrefix(cell.uri2);
 			handleMatchedTerms(uri1, cell.label1, uri2, cell.label2);
+		}
+		if (pairs.size() > 0)
+		{
+			outWriter.println("\n################################################################################");
+			outWriter.println("# end of officially sanctioned matches between BRENDA and CLO terms");
+			outWriter.println("################################################################################\n");
 		}
 
 		// house unmapped CLO terms here
