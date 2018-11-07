@@ -380,10 +380,11 @@ public class CellLineFix
 	// uri1 and uri2 should already be collapsed
 	private void handleMatchedTerms(String uri1Pfx, String label1, String uri2Pfx, String label2)
 	{
-		String uri1Exp = ModelSchema.expandPrefix(uri1Pfx);
 		String uri2Exp = ModelSchema.expandPrefix(uri2Pfx);
+		if (!brendaMatched.add(uri2Exp)) return; // greedily select 1st matching CLO term
+
+		String uri1Exp = ModelSchema.expandPrefix(uri1Pfx);
 		String cloDesc = vocab.getDescr(uri1Exp), brendaDesc = vocab.getDescr(uri2Exp);
-		brendaMatched.add(uri2Exp);
 
 		if (!StringUtils.isEmpty(brendaDesc) && !StringUtils.equals(cloDesc, brendaDesc))
 		{
