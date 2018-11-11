@@ -86,7 +86,6 @@ public class CellLineFix
 	private boolean describe;
 	private PrintWriter outWriter;
 	private String curationFN;
-	private int maxScore;
 
 	public static void main(String[] args)
 	{
@@ -95,14 +94,12 @@ public class CellLineFix
 		Option readpairsOpt = Option.builder().longOpt("readpairs").desc("When specified, first read file with common pairs between BRENDA and CLO ontologies; by default, do not read pairs.").optionalArg(true).build();
 		Option describeOpt = Option.builder().longOpt("describe").desc("When specified, output directives for CLO terms that lack descriptions; by default, do not do this.").optionalArg(true).build();
 		Option curateOpt = Option.builder().longOpt("curate").desc("Path to zip file containing curated assays.").hasArg().build();
-		Option scoreOpt = Option.builder().longOpt("score").desc("Scoring sensitivity. Roughly, ignore matches with Levenshtein distances in excess of this score.").hasArg().build();
 		Option outfileOpt = Option.builder().longOpt("outfile").desc("Save semantic directives that make cell line corrections to the named file.").hasArg().required().build();
 
 		Options options = new Options();
 		options.addOption(readpairsOpt);
 		options.addOption(describeOpt);
 		options.addOption(curateOpt);
-		options.addOption(scoreOpt);
 		options.addOption(outfileOpt);
 
 		CommandLineParser parser = new DefaultParser();
@@ -117,12 +114,6 @@ public class CellLineFix
 
 		boolean readpairs = cmdLine.hasOption("readpairs");
 		boolean describe = cmdLine.hasOption("describe");
-
-		int maxScore = 1;
-		if (cmdLine.hasOption("score"))
-		{
-			maxScore = Integer.parseInt(cmdLine.getOptionValue("score"));
-		}
 
 		String curationFN = null;
 		if (cmdLine.hasOption("curate"))
@@ -143,18 +134,17 @@ public class CellLineFix
 		}
 
 		Util.writeln("Cell Line Fix");
-		try {new CellLineFix(readpairs, describe, outfile, curationFN, maxScore).exec();}
+		try {new CellLineFix(readpairs, describe, outfile, curationFN).exec();}
 		catch (Exception ex) {ex.printStackTrace();}
 		Util.writeln("Done.");
 	}
 
-	public CellLineFix(boolean readpairs, boolean describe, File outfile, String curationFN, int maxScore) throws FileNotFoundException
+	public CellLineFix(boolean readpairs, boolean describe, File outfile, String curationFN) throws FileNotFoundException
 	{
 		this.readpairs = readpairs;
 		this.describe = describe;
 		this.outWriter = new PrintWriter(outfile);
 		this.curationFN = curationFN;
-		this.maxScore = maxScore;
 	}
 
 	public void exec() throws Exception
@@ -200,7 +190,7 @@ public class CellLineFix
 		}
 		if (pairs.size() > 0)
 		{
-			outWriter.println("\n################################################################################");
+			outWriter.println("################################################################################");
 			outWriter.println("# end of officially sanctioned matches between BRENDA and CLO terms");
 			outWriter.println("################################################################################\n");
 		}
@@ -210,20 +200,29 @@ public class CellLineFix
 
 		// iterate over remaining CLO pairs, look for possible BRENDA matches
 		int count = 0;
-		for (Map.Entry<String, String> entry : cloMap.entrySet())
+
+		Iterator<Map.Entry<String, String>> cloIter = cloMap.entrySet().iterator();
+		while (cloIter.hasNext())
 		{
+			Map.Entry<String, String> entry = cloIter.next();
+
 			String cloURI = entry.getKey(), cloLabel = entry.getValue();
 			if (skipSet.contains(cloURI)) continue;
+
 			if (++count > 64) {Util.writeln(""); count = 0;}
 			Util.write(".");
 			
-			List<Match> matches = matchByLabel(cloURI, cloLabel, brendaMap);
-			if (matches.size() <= 0)
+			if (brendaMap.size() == 0) break; // abort loop when no more BRENDA terms to match
+			
+			Match bestMatch = matchByLabel(cloURI, cloLabel, brendaMap);
+			if (bestMatch == null)
 			{
 				// save unmatched CLO terms here and process them at the end
 				unmatchedCLOTerms.put(cloURI, cloLabel);
 			}
+			else cloIter.remove();
 		}
+		if (cloMap.size() > 0) unmatchedCLOTerms.putAll(cloMap);
 
 		for (String brendaURI : brendaMap.keySet()) if (!brendaMatched.contains(brendaURI))
 		{
@@ -323,7 +322,9 @@ public class CellLineFix
 		for (Vocabulary.Branch child : branch.children) flattenBranch(map, child, reqBrenda);
 	}
 
-	private List<Match> matchByLabel(String uri, String label, Map<String, String> map)
+	// return best match if one exists or null otherwise
+	// if a best match is found, then remove it from BRENDA map
+	private Match matchByLabel(String uri, String label, Map<String, String> map)
 	{
 		Pattern pat = Pattern.compile("(.+)\\s+cell(\\s+line)?\\s*$");
 		Matcher mat1 = pat.matcher(label);
@@ -343,38 +344,25 @@ public class CellLineFix
 			possibleMatches.add(m);
 		}
 
-		if (possibleMatches.size() == 0) return new ArrayList<>();
+		if (possibleMatches.size() == 0) return null;
 		possibleMatches.sort((m1, m2) -> m1.score - m2.score);
 
+		Match bestMatch = possibleMatches.get(0);
+		String uri1 = ModelSchema.collapsePrefix(uri);
+		String uri2 = ModelSchema.collapsePrefix(bestMatch.uri);
+		map.remove(bestMatch.uri);
+
 		// list of actual matches logged 
-		List<Match> actualMatches = new ArrayList<>();
+		JSONObject json = new JSONObject();
+		json.put("uri1", uri1);
+		json.put("label1", label);
+		json.put("uri2", uri2);
+		json.put("label2", bestMatch.label);
+		Util.writeln(json.toString() + " / score=" + bestMatch.score);
 
-		int bestScore = possibleMatches.get(0).score;
-		if (bestScore <= 2) // only consider matches when the best match has 2 or fewer character tweaks
-		{
-			Util.writeln();
-			int count = 0;
-			for (Match m : possibleMatches)
-			{
-				if (m.score > maxScore) break;
+		handleMatchedTerms(uri1, label, uri2, bestMatch.label);
 
-				String uri1 = ModelSchema.collapsePrefix(uri);
-				String uri2 = ModelSchema.collapsePrefix(m.uri);
-
-				JSONObject json = new JSONObject();
-				json.put("uri1", uri1);
-				json.put("label1", label);
-				json.put("uri2", uri2);
-				json.put("label2", m.label);
-				Util.writeln(json.toString() + " / score=" + m.score);
-
-				handleMatchedTerms(uri1, label, uri2, m.label);
-				actualMatches.add(m);
-
-				if (++count >= 10) break;
-			}
-		}
-		return actualMatches;
+		return bestMatch;
 	}
 
 	// uri1 and uri2 should already be collapsed
