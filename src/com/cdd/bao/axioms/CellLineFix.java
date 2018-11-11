@@ -129,7 +129,7 @@ public class CellLineFix
 
 		if (outfile != null && outfile.exists() && !outfile.isFile())
 		{
-			System.err.println("Please specify a valid file location for -outfile.");
+			System.err.println("Please specify a valid file location for --outfile.");
 			return;
 		}
 
