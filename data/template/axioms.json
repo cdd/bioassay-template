@@ -304,6 +304,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/DTO00000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "flow cytometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
         "wholeBranch": true
@@ -398,6 +407,21 @@
     },
     "impact": 
     [
+      {
+        "label": "protein",
+        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { 
+        "label": "protein",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
@@ -738,11 +762,7 @@
     },
     "impact": 
     [
-      {
-        "label": "phosphoprotein-specific antibody-coated bead based method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003025",
-        "wholeBranch": true
-      }, 
+      
       {
         "label": "fold change",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000193",
@@ -957,33 +977,6 @@
     "type": "limit",
     "subject": 
     {
-      "label": "hydrolase",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000287",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "catalytic activity",
-        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
       "label": "green flourescent protein gene",
       "valueURI": "http://www.bioassayontology.org/bao#BAO_0003046",
       "wholeBranch": true
@@ -1137,23 +1130,6 @@
     "type": "limit",
     "subject": 
     {
-      "label": "DNA construct",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000550",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "permanent cell line",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
       "label": "protein-DNA interaction assay",
       "valueURI": "http://www.bioassayontology.org/bao#BAO_0000591",
       "wholeBranch": true
@@ -1276,6 +1252,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
@@ -1929,6 +1914,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "flow cytometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
         "wholeBranch": true
@@ -1992,11 +1986,20 @@
     },
     "impact": 
     [
-      {
+{
         "label": "protein",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
@@ -2127,6 +2130,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "flow cytometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000005",
@@ -2305,47 +2317,17 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "mass spectrometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
-      "label": "permanent cell line",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0003048",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "organism",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000551",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
-      "label": "enzyme regulator",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000278",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
         "wholeBranch": true
       }
     ]
@@ -2427,6 +2409,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "fluorescence microscopy",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000450",
@@ -2533,6 +2524,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "fluorescence intensity",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
         "wholeBranch": true
@@ -2594,6 +2594,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "fluorescence intensity",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
@@ -3055,6 +3064,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "mass spectrometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
         "wholeBranch": true
@@ -3137,6 +3155,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "fluorescence intensity",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
@@ -3256,7 +3283,18 @@
         "label": "cell line cell",
         "valueURI": "http://purl.obolibrary.org/obo/CLO_0000001",
         "wholeBranch": true
+      },
+      {
+        "label": "cell line cell",
+        "valueURI": "http://dto.org/DTO/DTO_000",
+        "wholeBranch": true
+      },
+      {
+        "label": "cell line cell",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00000018",
+        "wholeBranch": true
       }
+      
     ]
   }, 
   {
@@ -3528,6 +3566,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "mass spectrometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
         "wholeBranch": true
@@ -3581,6 +3628,15 @@
       {
         "label": "protein",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
+        "wholeBranch": true
+      }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       }, 
       {
@@ -3884,6 +3940,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
         "wholeBranch": true
@@ -4136,6 +4201,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "mass spectrometry",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000055",
         "wholeBranch": true
@@ -4381,6 +4455,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
@@ -4872,6 +4955,15 @@
         "wholeBranch": true
       }, 
       {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
+      {
         "label": "cell based format",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000219",
         "wholeBranch": true
@@ -5045,6 +5137,15 @@
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000175",
         "wholeBranch": true
       }, 
+      {
+        "label": "protein",
+        "valueURI": "http://purl.obolibrary.org/obo/PR_000000001",
+        "wholeBranch": true
+      },  
+      { "label": "protein",
+        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "wholeBranch": true
+      },
       {
         "label": "fluorescence intensity",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
