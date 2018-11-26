@@ -309,7 +309,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -1258,7 +1258,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -1919,7 +1919,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -1997,7 +1997,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2136,7 +2136,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2322,7 +2322,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2415,7 +2415,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2529,7 +2529,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2600,7 +2600,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -2858,16 +2858,6 @@
     "impact": 
     [
       {
-        "label": "Syto 60",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000047",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "DNA",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000269",
-        "wholeBranch": true
-      }, 
-      {
         "label": "fluorescence intensity",
         "valueURI": "http://www.bioassayontology.org/bao#BAO_0000363",
         "wholeBranch": true
@@ -2998,33 +2988,6 @@
     "type": "limit",
     "subject": 
     {
-      "label": "enzyme",
-      "valueURI": "http://www.bioassayontology.org/bao#BAO_0000279",
-      "wholeBranch": true
-    },
-    "impact": 
-    [
-      {
-        "label": "catalytic activity",
-        "valueURI": "http://purl.obolibrary.org/obo/GO_0003824",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "protein preparation method",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000356",
-        "wholeBranch": true
-      }, 
-      {
-        "label": "peptide",
-        "valueURI": "http://www.bioassayontology.org/bao#BAO_0000325",
-        "wholeBranch": true
-      }
-    ]
-  }, 
-  {
-    "type": "limit",
-    "subject": 
-    {
       "label": "signal transduction assay",
       "valueURI": "http://www.bioassayontology.org/bao#BAO_0003002",
       "wholeBranch": true
@@ -3069,7 +3032,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -3161,7 +3124,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -3571,7 +3534,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -3636,7 +3599,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       }, 
       {
@@ -3945,7 +3908,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -4206,7 +4169,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -4461,7 +4424,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -4960,7 +4923,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
@@ -5143,7 +5106,7 @@
         "wholeBranch": true
       },  
       { "label": "protein",
-        "valueURI": "hhttp://www.drugtargetontology.org/dto/DTO_00100000",
+        "valueURI": "http://www.drugtargetontology.org/dto/DTO_00100000",
         "wholeBranch": true
       },
       {
