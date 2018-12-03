@@ -1,0 +1,235 @@
+@prefix bao:   <http://www.bioassayontology.org/bao#> .
+@prefix bat:   <http://www.bioassayontology.org/bat#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+
+# Cell Line Ontology / BRENDA merging:
+#	the CLO is the preferred nomenclature system for cell lines, but we also use the BRENDA ontology; the
+#   two are partially overlapping; CLO has the benefit of a hierarchy, whereas BRENDA is flat; CLO mostly
+#   lacks descriptions, whereas BRENDA provides them...
+#   ... hence we need properties of both; this file contains a manual/automated selection of patches to
+#   make this happen
+
+# CLO [Cos-7] paired with BRENDA [COS-7 cell]
+bao:BAO_0000732 obo:IAO_0000115 "African green monkey kidney derived from CV-1, a simian cell line (cercopithecus aethiops), by transformation with an origin-defective mutant of SV-40; cells were described to support the growth of SV-40 viruses." .
+obo:BTO_0000298 a bat:eliminated .
+bao:BAO_0000732 bat:pairedWith obo:BTO_0000298 .
+
+# CLO [COS-7 cell] paired with BRENDA [COS-7 cell]
+obo:CLO_0002597 obo:IAO_0000115 "African green monkey kidney derived from CV-1, a simian cell line (cercopithecus aethiops), by transformation with an origin-defective mutant of SV-40; cells were described to support the growth of SV-40 viruses." .
+obo:BTO_0000298 a bat:eliminated .
+obo:CLO_0002597 bat:pairedWith obo:BTO_0000298 .
+
+# CLO [HT-1080 cell] paired with BRENDA [HT-1080 cell]
+obo:CLO_0004276 obo:IAO_0000115 "Human fibrosarcoma cell line; established from the biopsy from a fibrosarcoma of a 35-year-old Caucasian man in 1972; patient did not receive any chemo- or radiotherapy." .
+obo:BTO_0001282 a bat:eliminated .
+obo:CLO_0004276 bat:pairedWith obo:BTO_0001282 .
+
+# CLO [A549 cell] paired with BRENDA [A-549 cell]
+obo:CLO_0001601 obo:IAO_0000115 "Human lung carcinoma established from an explanted lung tumor which was removed from a 58-year-old Caucasian man in 1972; cells were described to induce tumors in athymic mice and to synthesize lecithin." .
+obo:BTO_0000018 a bat:eliminated .
+obo:CLO_0001601 bat:pairedWith obo:BTO_0000018 .
+
+obo:BTO_0000944 a bat:eliminated .
+obo:CLO_0008172 bat:pairedWith obo:BTO_0000944 .
+
+# CLO [CHO-K1 cell] paired with BRENDA [CHO-K1 cell]
+obo:CLO_0002462 obo:IAO_0000115 "Chinese hamster ovary cells, subclone from parental CHO cell line that was initiated from an ovary biopsy of an adult Chinese hamster in 1957." .
+obo:BTO_0000457 a bat:eliminated .
+obo:CLO_0002462 bat:pairedWith obo:BTO_0000457 .
+
+# CLO [SH-SY5Y cell] paired with BRENDA [SH-SY5Y cell]
+obo:CLO_0009015 obo:IAO_0000115 "Human neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma." .
+obo:BTO_0000793 a bat:eliminated .
+obo:CLO_0009015 bat:pairedWith obo:BTO_0000793 .
+
+# CLO [ACHN cell] paired with BRENDA [ACHN cell]
+obo:CLO_0001654 obo:IAO_0000115 "Human renal cell carcinoma cell line." .
+obo:BTO_0003846 a bat:eliminated .
+obo:CLO_0001654 bat:pairedWith obo:BTO_0003846 .
+
+# CLO [HEL cell] paired with BRENDA [HEL cell]
+obo:CLO_0003679 obo:IAO_0000115 "Human erythroleukemia, established from the peripheral blood of a 30-year-old man with erythroleukemia (AML M6) in relapse (after treatment for Hodgkin's disease) in 1980; cells were described to be capable of spontaneous and induced globin synthesis." .
+obo:BTO_0000565 a bat:eliminated .
+obo:CLO_0003679 bat:pairedWith obo:BTO_0000565 .
+
+# CLO [Hs 578T cell] paired with BRENDA [Hs-578T cell]
+obo:CLO_0004009 obo:IAO_0000115 "Human breast cancer cell line; established from a 74-years-old caucasian female with infiltrating ductal carcinoma." .
+obo:BTO_0003885 a bat:eliminated .
+obo:CLO_0004009 bat:pairedWith obo:BTO_0003885 .
+
+# CLO [HeLa cell] paired with BRENDA [HeLa cell]
+obo:CLO_0003684 obo:IAO_0000115 "Human cervix carcinoma established from the epitheloid cervix carcinoma of a 31-year-old black woman in 1951; later diagnosis changed to adenocarcinoma; first aneuploid, continuously cultured human cell line." .
+obo:BTO_0000567 a bat:eliminated .
+obo:CLO_0003684 bat:pairedWith obo:BTO_0000567 .
+
+# CLO [C-33 A cell] paired with BRENDA [C-33A cell]
+obo:CLO_0002115 obo:IAO_0000115 "Cervical cancer cell line." .
+obo:BTO_0001968 a bat:eliminated .
+obo:CLO_0002115 bat:pairedWith obo:BTO_0001968 .
+
+# CLO [MDCK cell] paired with BRENDA [MDCK cell]
+obo:CLO_0007646 obo:IAO_0000115 "The MDCK cell line was derived from a kidney of an apparently normal adult female cocker spaniel, September, 1958, by S.H. Madin and N.B. Darby. The cells are positive for keratin by immunoperoxidase staining. MDCK cells have been used to study processing of beta amyloid precursor protein and sorting of its proteolytic products." .
+obo:BTO_0000837 a bat:eliminated .
+obo:CLO_0007646 bat:pairedWith obo:BTO_0000837 .
+
+# CLO [CSM14.1] paired with BRENDA [CSM14.1 cell]
+bao:BAO_0002717 obo:IAO_0000115 "Immortalized rat neuronal cell line." .
+obo:BTO_0004073 a bat:eliminated .
+bao:BAO_0002717 bat:pairedWith obo:BTO_0004073 .
+
+# CLO [WRO] paired with BRENDA [WRO cell]
+bao:BAO_0002710 obo:IAO_0000115 "Follicular thyroid tumor cell line." .
+obo:BTO_0004772 a bat:eliminated .
+bao:BAO_0002710 bat:pairedWith obo:BTO_0004772 .
+
+# CLO [SK-BR-3] paired with BRENDA [SK-BR-3 cell]
+bao:BAO_0002712 obo:IAO_0000115 "Human breast adenocarcinoma cell line; established from a caucasian female 43 years old. Morphology: epithelial-like." .
+obo:BTO_0002419 a bat:eliminated .
+bao:BAO_0002712 bat:pairedWith obo:BTO_0002419 .
+
+# CLO [ML-2] paired with BRENDA [ML-2 cell]
+bao:BAO_0002714 obo:IAO_0000115 "Human acute myelomonocytic leukemia cell line; established from the peripheral blood of a 26-year-old man with acute myeloid leukemia (AML M4) at diagnosis of AML (following T-non-Hodgkin lymphoma and T-ALL) in 1978; sister cell lines are ML-1 and ML-3." .
+obo:BTO_0001885 a bat:eliminated .
+bao:BAO_0002714 bat:pairedWith obo:BTO_0001885 .
+
+# CLO [BT-549 cell] paired with BRENDA [BT-549 cell]
+obo:CLO_0002044 obo:IAO_0000115 "Human breast ductal carcinoma cell line. The BT-549 line was isolated in 1978 by W.G. Coutinho and E.Y. Lasfargues. Source tissue consisted of a papillary, invasive ductal tumor which had metastasized to 3 of 7 regional lymph nodes." .
+obo:BTO_0002548 a bat:eliminated .
+obo:CLO_0002044 bat:pairedWith obo:BTO_0002548 .
+
+# CLO [HEK293] paired with BRENDA [HEK-293 cell]
+obo:CLO_0001230 obo:IAO_0000115 "Established from a human primary embryonal kidney transformed by adenovirus type 5." .
+obo:BTO_0000007 a bat:eliminated .
+obo:CLO_0001230 bat:pairedWith obo:BTO_0000007 .
+
+# CLO [IEC-6 cell] paired with BRENDA [IEC-6 cell]
+obo:CLO_0004342 obo:IAO_0000115 "Rat normal small intestine cell line. Normal rat epithelial cells from the small intestine; cells were described to synthesize fibronectin and collagen." .
+obo:BTO_0001497 a bat:eliminated .
+obo:CLO_0004342 bat:pairedWith obo:BTO_0001497 .
+
+# CLO [MV-4-11] paired with BRENDA [MV4-11 cell]
+bao:BAO_0002685 obo:IAO_0000115 "Human acute myelocytic leukemia cell line." .
+obo:BTO_0004479 a bat:eliminated .
+bao:BAO_0002685 bat:pairedWith obo:BTO_0004479 .
+
+# CLO [HL-60 cell] paired with BRENDA [HL-60 cell]
+obo:CLO_0003775 obo:IAO_0000115 "Human acute myeloid leukemia established from the peripheral blood of a 35-year-old woman with acute myeloid leukemia (AML FAB M2) in 1976." .
+obo:BTO_0000738 a bat:eliminated .
+obo:CLO_0003775 bat:pairedWith obo:BTO_0000738 .
+
+# CLO [Vero cell] paired with BRENDA [Vero cell]
+obo:CLO_0009524 obo:IAO_0000115 "The Vero cell line was initiated from the kidney of a normal adult African green monkey on March 27, 1962, by Y. Yasumura and Y. Kawakita at the Chiba University in Chiba, Japan." .
+obo:BTO_0001444 a bat:eliminated .
+obo:CLO_0009524 bat:pairedWith obo:BTO_0001444 .
+
+# CLO [MRC-5 cell] paired with BRENDA [MRC-5 cell]
+obo:CLO_0007865 obo:IAO_0000115 "Homo sapiens (human) lung; fibroblast; normal cell line. The MRC-5 cell line was derived from normal lung tissue of a 14-week-old male fetus by J.P. Jacobs in September of 1966." .
+obo:BTO_0001590 a bat:eliminated .
+obo:CLO_0007865 bat:pairedWith obo:BTO_0001590 .
+
+# CLO [VERO 76 cell] paired with BRENDA [VERO-76 cell]
+obo:CLO_0009526 obo:IAO_0000115 "Monkey (Cercopithecus aethiops) kidney endothelial cell line. It is a derivative of the original VERO." .
+obo:BTO_0004754 a bat:eliminated .
+obo:CLO_0009526 bat:pairedWith obo:BTO_0004754 .
+
+# CLO [RBL-2H3] paired with BRENDA [RBL-2H3 cell]
+bao:BAO_0002694 obo:IAO_0000115 "Rat basophilic leukemia (RBL) cell line; obtained by Eccleston et al. and was maintained by serial passage in neonatal Wistar rats; four cell lines (named RBL I-IV) were started from this tumor between 1973 and 1975; the subline RBL-IV HR+ was derived from RBL-IV; further subcloning established the cell line RBL-2H3; cells are described to release histamine as an IgE-mediated reaction." .
+obo:BTO_0000833 a bat:eliminated .
+bao:BAO_0002694 bat:pairedWith obo:BTO_0000833 .
+
+# CLO [CAKI-1 cell] paired with BRENDA [Caki-1 cell]
+obo:CLO_0002175 obo:IAO_0000115 "Human renal cancer cell line, established from a 49-years-old male." .
+obo:BTO_0003204 a bat:eliminated .
+obo:CLO_0002175 bat:pairedWith obo:BTO_0003204 .
+
+# CLO [Caki-1 cell] paired with BRENDA [Caki-1 cell]
+obo:CLO_0002176 obo:IAO_0000115 "Human renal cancer cell line, established from a 49-years-old male." .
+obo:BTO_0003204 a bat:eliminated .
+obo:CLO_0002176 bat:pairedWith obo:BTO_0003204 .
+
+obo:BTO_0001109 a bat:eliminated .
+obo:CLO_0003665 bat:pairedWith obo:BTO_0001109 .
+
+# CLO [CCRF-CEM cell] paired with BRENDA [CCRF-CEM cell]
+obo:CLO_0002334 obo:IAO_0000115 "Peripheral blood, T lymphoblast, acute lymphoblastic leukemia cell line. CCRF-CEM is a T lymphoblastoid cell line derived by G.E. Foley, et al. Cells were obtained in November, 1964 from peripheral blood buffy coat of a 4-year-old Caucasian female with acute lymphoblastic leukemia." .
+obo:BTO_0000736 a bat:eliminated .
+obo:CLO_0002334 bat:pairedWith obo:BTO_0000736 .
+
+# CLO [Hep G2 cell] paired with BRENDA [Hep-G2 cell]
+obo:CLO_0003704 obo:IAO_0000115 "Human hepatocellular carcinoma, established from the tumor tissue of a 15-year-old Argentine boy with hepatocellular carcinoma in 1975." .
+obo:BTO_0000599 a bat:eliminated .
+obo:CLO_0003704 bat:pairedWith obo:BTO_0000599 .
+
+# CLO [VERO C1008 cell] paired with BRENDA [VERO C1008 cell]
+obo:CLO_0009527 obo:IAO_0000115 "This line is a clone of VERO 76." .
+obo:BTO_0004755 a bat:eliminated .
+obo:CLO_0009527 bat:pairedWith obo:BTO_0004755 .
+
+# CLO [primary cell] paired with BRENDA [primary cell]
+bao:BAO_0000239 obo:IAO_0000115 "Cells that are cultured from a subject (tissue or tumor) and which are not immortalized. They can undergo only a limited number of cell divisions prior to reaching senescence. A cell taken directly from a living organism, which is not immortalized." .
+obo:BTO_0001413 a bat:eliminated .
+bao:BAO_0000239 bat:pairedWith obo:BTO_0001413 .
+
+# CLO [JURKAT cell] paired with BRENDA [JURKAT cell]
+obo:CLO_0007043 obo:IAO_0000115 "Human T cell leukemia, established from the peripheral blood of a 14-year-old boy with acute lymphoblastic leukemia (ALL) at first relapse in 1976; often this cell line is called JM (JURKAT and JM are derived from the same patient and are sister clones), occasionally JM may be a subclone with somewhat divergent features." .
+obo:BTO_0000661 a bat:eliminated .
+obo:CLO_0007043 bat:pairedWith obo:BTO_0000661 .
+
+# CLO [HT-29 cell] paired with BRENDA [HT-29 cell]
+obo:CLO_0004283 obo:IAO_0000115 "Human colon adenocarcinoma, established from the primary tumor of a 44-year-old Caucasian woman with colon adenocarcinoma in 1964; described to be heterotransplantable forming well-differentiated grade I tumors." .
+obo:BTO_0000182 a bat:eliminated .
+obo:CLO_0004283 bat:pairedWith obo:BTO_0000182 .
+
+# CLO [U-2 OS cell] paired with BRENDA [U2-OS cell]
+obo:CLO_0009454 obo:IAO_0000115 "Human osteosarcoma cell line." .
+obo:BTO_0001938 a bat:eliminated .
+obo:CLO_0009454 bat:pairedWith obo:BTO_0001938 .
+
+# CLO [SK-N-SH cell] paired with BRENDA [SK-N-SH cell]
+obo:CLO_0009059 obo:IAO_0000115 "Human, Caucasian, bone marrow, neuroblastoma cell line. Species: human, Caucasian female 4 years old; Tissue: bone marrow; Tumor: neuroblastoma." .
+obo:BTO_0001620 a bat:eliminated .
+obo:CLO_0009059 bat:pairedWith obo:BTO_0001620 .
+
+# CLO [COLO 205 cell] paired with BRENDA [Colo-205 cell]
+obo:CLO_0002544 obo:IAO_0000115 "Human Caucasian colon adenocarcinoma cell line. Isolated from ascitic fluid of a 70-year-old Caucasian male with carcinoma of the colon." .
+obo:BTO_0000179 a bat:eliminated .
+obo:CLO_0002544 bat:pairedWith obo:BTO_0000179 .
+
+# CLO [CHO cell] paired with BRENDA [CHO cell]
+obo:CLO_0002421 obo:IAO_0000115 "Chinese hamster ovary cell line, that was initiated from an ovary biopsy of an adult Chinese hamster in 1957." .
+obo:BTO_0000246 a bat:eliminated .
+obo:CLO_0002421 bat:pairedWith obo:BTO_0000246 .
+
+# CLO [DLD-1 cell] paired with BRENDA [DLD-1 cell]
+obo:CLO_0002785 obo:IAO_0000115 "Human colon adenocarcinoma established from a colorectal adenocarcinoma." .
+obo:BTO_0000391 a bat:eliminated .
+obo:CLO_0002785 bat:pairedWith obo:BTO_0000391 .
+
+# CLO [C2C12] paired with BRENDA [C2C12 cell]
+bao:BAO_0002708 obo:IAO_0000115 "This is a subclone of the mouse myoblast cell line. The C2C12 cell line differentiates rapidly, forming contractile myotubes and producing characteristic muscle proteins. Treatment with bone morphogenic protein 2 (BMP-2) cause a shift in the differentiation pathway from myoblastic to osteoblastic." .
+obo:BTO_0000165 a bat:eliminated .
+bao:BAO_0002708 bat:pairedWith obo:BTO_0000165 .
+
+# CLO [HEC-1-A] paired with BRENDA [HEC-1-A cell]
+bao:BAO_0002709 obo:IAO_0000115 "This line was isolated in 1968 and associates from a patient with stage IA endometrial cancer." .
+obo:BTO_0002960 a bat:eliminated .
+bao:BAO_0002709 bat:pairedWith obo:BTO_0002960 .
+
+# CLO [THP-1 cell] paired with BRENDA [THP-1 cell]
+obo:CLO_0009348 obo:IAO_0000115 "Human acute monocytic leukemia established from the peripheral blood of a 1-year-old boy with acute monocytic leukemia (AML) at relapse in 1978; the cells can be used for induction of differentiation studies; the cells were described to produce lysozyme and to be phagocytic." .
+obo:BTO_0001370 a bat:eliminated .
+obo:CLO_0009348 bat:pairedWith obo:BTO_0001370 .
+
+# CLO [BJ] paired with BRENDA [BJ cell]
+bao:BAO_0002670 obo:IAO_0000115 "Human normal foreskin fibroblast cell line." .
+obo:BTO_0003807 a bat:eliminated .
+bao:BAO_0002670 bat:pairedWith obo:BTO_0003807 .
+
+# CLO [MCF7 cell] paired with BRENDA [MCF-7 cell]
+obo:CLO_0007606 obo:IAO_0000115 "Human breast adenocarcinoma, established from the pleural effusion of a 69-year-old caucasian woman with metastatic mammary carcinoma (after radio- and hormone therapy) in 1970; cells were described of being positive for cytoplasmic estrogen receptors and having the capability to form domes." .
+obo:BTO_0000093 a bat:eliminated .
+obo:CLO_0007606 bat:pairedWith obo:BTO_0000093 .
