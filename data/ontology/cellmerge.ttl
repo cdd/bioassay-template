@@ -2209,7 +2209,6 @@ obo:CLO_0003730 bat:notPairedWith obo:BTO_0002582 .
 obo:CLO_0003733 bat:notPairedWith obo:BTO_0004117 .
 
 # CLO [HFL1 cell] paired with BRENDA [HFL-1 cell]
-# **** BRENDA value pair count: 3
 obo:CLO_0003734 obo:IAO_0000115 "Human lung fibroblast cell line; established from a caucasian fetus." .
 obo:CLO_0003734 bat:pairedWith obo:BTO_0002582 .
 obo:BTO_0002582 a bat:eliminated .
@@ -2398,7 +2397,6 @@ obo:CLO_0007449 bat:notPairedWith obo:BTO_0005490 .
 obo:CLO_0007449 bat:notPairedWith obo:BTO_0004160 .
 
 # CLO [M-7 cell] paired with BRENDA [M-07 cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0007485 obo:IAO_0000115 "Human megakaryoblastic leukemia cell line." .
 obo:CLO_0007485 bat:pairedWith obo:BTO_0005249 .
 obo:BTO_0005249 a bat:eliminated .
@@ -2434,7 +2432,6 @@ obo:CLO_0007599 bat:pairedWith obo:BTO_0001939 .
 obo:BTO_0001939 a bat:eliminated .
 
 # CLO [MCF 10F cell] paired with BRENDA [MCF-10F cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0007600 obo:IAO_0000115 "Normal breast epithelial cell line." .
 obo:CLO_0007600 bat:pairedWith obo:BTO_0003900 .
 obo:BTO_0003900 a bat:eliminated .
@@ -2443,7 +2440,6 @@ obo:CLO_0007604 bat:notPairedWith obo:BTO_0003900 .
 obo:CLO_0007604 bat:notPairedWith obo:BTO_0002544 .
 
 # CLO [MCF12A cell] paired with BRENDA [MCF-12A cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0037180 obo:IAO_0000115 "Human mammary epithelial cell line." .
 obo:CLO_0037180 bat:pairedWith obo:BTO_0002544 .
 obo:BTO_0002544 a bat:eliminated .
@@ -2506,8 +2502,6 @@ obo:CLO_0007889 bat:notPairedWith obo:BTO_0004325 .
 obo:CLO_0007891 bat:notPairedWith obo:BTO_0002805 .
 
 # CLO [MT4 cell] paired with BRENDA [MT-4 cell]
-# **** CLO value pair count: 2
-# **** BRENDA value pair count: 3
 obo:CLO_0007891 obo:IAO_0000115 "Human T cell Lymphotropic Virus-I (HTLV-I) carrying human T cell line." .
 obo:CLO_0007891 bat:pairedWith obo:BTO_0003030 .
 obo:BTO_0003030 a bat:eliminated .
@@ -2586,7 +2580,6 @@ obo:CLO_0008307 bat:notPairedWith obo:BTO_0003771 .
 obo:CLO_0008311 bat:notPairedWith obo:BTO_0004035 .
 
 # CLO [P388 cell] paired with BRENDA [P-388 cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0008321 obo:IAO_0000115 "An experimental lymphocytic leukemia originally induced in DBA/2 mice by painting with methylcholanthrene." .
 obo:CLO_0008321 bat:pairedWith obo:BTO_0000748 .
 obo:BTO_0000748 a bat:eliminated .
@@ -2739,7 +2732,6 @@ obo:CLO_0009046 bat:notPairedWith obo:BTO_0002967 .
 obo:CLO_0009052 bat:notPairedWith obo:BTO_0004782 .
 
 # CLO [SK-N-BE(2)-C cell] paired with BRENDA [SK-N-BE(2)C cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0009053 obo:IAO_0000115 "Human neuroblastoma cell line." .
 obo:CLO_0009053 bat:pairedWith obo:BTO_0004782 .
 obo:BTO_0004782 a bat:eliminated .
@@ -2756,25 +2748,21 @@ obo:CLO_0009141 bat:notPairedWith obo:BTO_0000492 .
 obo:CLO_0009142 bat:notPairedWith obo:BTO_0004010 .
 
 # CLO [STC 1 cell] paired with BRENDA [STC-1 cell]
-# **** BRENDA value pair count: 7
 obo:CLO_0037044 obo:IAO_0000115 "Murine neuroendocrine tumor cell line." .
 obo:CLO_0037044 bat:pairedWith obo:BTO_0003584 .
 obo:BTO_0003584 a bat:eliminated .
 
 # CLO [SW 1116 cell] paired with BRENDA [SW-1116 cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0009183 obo:IAO_0000115 "Homo sapiens (human) colon; colorectal adenocarcinoma cell line; established from a 73 year old caucasian male organism." .
 obo:CLO_0009183 bat:pairedWith obo:BTO_0001599 .
 obo:BTO_0001599 a bat:eliminated .
 
 # CLO [SW 1353 cell] paired with BRENDA [SW-1353 cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0009186 obo:IAO_0000115 "Human bone chondrosarcoma cell line. The SW 1353 cell line was initiated by A. Leibovitz at the Scott and White Clinic, Temple, Texas in 1977 from a primary grade II chondrosarcoma of the right humerus obtained from a 72 year old female Caucasian." .
 obo:CLO_0009186 bat:pairedWith obo:BTO_0002003 .
 obo:BTO_0002003 a bat:eliminated .
 
 # CLO [SW 48 cell] paired with BRENDA [SW-48 cell]
-# **** BRENDA value pair count: 5
 obo:CLO_0009194 obo:IAO_0000115 "Human colon; colorectal adenocarcinoma cell line. Morphology: epithelial." .
 obo:CLO_0009194 bat:pairedWith obo:BTO_0001535 .
 obo:BTO_0001535 a bat:eliminated .
@@ -2867,7 +2855,6 @@ obo:CLO_0009356 bat:notPairedWith obo:BTO_0003707 .
 obo:CLO_0009356 bat:notPairedWith obo:BTO_0003219 .
 
 # CLO [TK6 cell] paired with BRENDA [TK-6 cell]
-# **** BRENDA value pair count: 2
 obo:CLO_0009357 obo:IAO_0000115 "Human lymphoblastoid cell line." .
 obo:CLO_0009357 bat:pairedWith obo:BTO_0003707 .
 obo:BTO_0003707 a bat:eliminated .
@@ -2878,7 +2865,6 @@ obo:CLO_0009369 bat:notPairedWith obo:BTO_0004523 .
 obo:CLO_0009369 bat:notPairedWith obo:BTO_0004230 .
 
 # CLO [TM3 cell] paired with BRENDA [TM-3 cell]
-# **** BRENDA value pair count: 3
 obo:CLO_0009366 obo:IAO_0000115 "Mouse Leydig cell line." .
 obo:CLO_0009366 bat:pairedWith obo:BTO_0004523 .
 obo:BTO_0004523 a bat:eliminated .
