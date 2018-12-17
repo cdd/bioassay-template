@@ -1,0 +1,1786 @@
+Friend erythroleukemia cell line
+A7r5 cell
+NA cell
+testicular cancer cell
+Colo-201 cell
+SiHa cell
+Lewis lung carcinoma cell line
+WEHI-7.2 cell
+SCC-4 cell
+Chloride intracellular channel protein 6
+TAMH cell
+cutaneous T cell lymphoma
+HL-60 cell
+41-M cell
+esophageal cell line
+HUT-78 cell
+B95-8 cell
+B-lymphoblastoid cell line
+sickle cell
+foreign-body giant cell
+chondrosarcoma cell line
+urinary bladder cells
+CCF-STTG1 cell
+granulosa cell line
+dermal microvascular endothelial cell
+HEK-293-TrkB cell
+diffuse large B-cell lymphoma cell
+MST cell
+BT-325 cell
+small intestine cell line
+PLC-PRF-5 cell
+promyelocytic leukemia cell
+cortical collecting duct cell
+M-07E cell
+CAPAN-1 cell
+NRK cell
+myofibroblast cell line
+bronchial smooth muscle cell
+glioblastoma multiforme cell
+SK-MEL-37 cell
+natural killer cell
+HEL-92.1.7 cell
+laryngeal cancer cell
+interstitial cell of Cajal
+angiomyolipoma cell line
+ML-2 cell
+plasmacytoid dendritic cell
+neurilemoma cell
+L-02 cell
+cervical keratinizing squamous cell carcinoma
+cancer stem cell
+HCT-15 cell
+brain endothelial cell
+SAF-1 cell
+giant cell tumor cell line
+SK-N-DZ cell
+mesothelioma cell line
+alveolar cell
+carcinoid cell
+Hodgkin lymphoma cell line
+Y-79 cell
+NTERA-2 cell
+A3 cell
+renal cell carcinoma
+McA-RH7777 cell
+tissues, cell types and enzyme sources
+EB-1 cell
+HT-29-MTX cell
+biliary tract cells
+BL-41 cell
+C81-61 cell
+immobilized cell
+germ cell and embryonal cancer
+teratocarcinoma cell
+sebaceous gland cell line
+B-cell lymphoma cell
+companion cell
+ovarian small cell carcinoma
+CCL-39 cell
+NG-108-15 cell
+BE(2)-M17 cell
+embryonic cell line
+astrocyte cell line
+D-54MG cell
+HT-1080 cell
+colorectal cancer cell line
+HL-60/MX-2 cell
+thyroid cell line
+SW-480 cell
+COS-7 cell
+TSA cell
+NCI-H295 cell
+HEC-1-B cell
+pancreatic cancer cell line
+mesenchymal stem cell
+bronchoalveolar stem cell
+THP-1 cell
+aorta smooth muscle cell line
+islet cell tumor
+diffuse large B-cell lymphoma
+mucosal mast cell
+epididymal clear cell
+other immortalized cell line
+Do11.10 cell
+cellular neurofibroma
+J558L cell
+microglial cell line
+meiotic cell
+B cell deficiency
+A2780/CP70 cell
+rhabdomyosarcoma cell line
+cell culture
+psammomatous meningioma cell
+RINm5F cell
+endothelial cell line
+WM-239 cell
+osteosarcoma cell
+FHC cell
+myometrial cell
+soft tissue sarcoma cell
+SGC-7901 cell
+N18TG2 cell
+endometrial stromal cell
+BEL-7402 cell
+small cell carcinoma
+MB-49 cell
+Colon-26 cell
+MDCK-2 cell
+medullary carcinoma cell
+SKLU-1 cell
+NAMALWA cell
+lymphoma cell
+PC-3M cell
+SNU-387 cell
+BSC cell
+chronic NK-cell lymphocytosis
+Y1-BS1 cell
+BRL-3A cell
+P-388 cell
+REF-52 cell
+eosinophilic leukemia cell line
+adult stem cell
+breast squamous cell carcinoma
+MOLT-4 cell
+lung squamous cell carcinoma cell
+G-361 cell
+LIM1863 cell
+U-251 MG cell
+osteoblast cell line
+Sertoli-Leydig cell tumor
+T-lymphoblastoid cell line
+alveolar macrophage cell line
+Fanconi anemia disease specific cell type
+MDBK cell
+mesenchymal cell neoplasm
+oropharyngeal cancer cell
+salivary gland cell line
+lung squamous cell carcinoma
+endothelial cell
+U-937 cell
+ascites tumor cell
+clear cell acanthoma
+beta-TC6 cell
+Tay-Sachs disease specific cell type
+LAD-2 cell
+gastrointestinal endocrine cell
+NB2-Sp cell
+3-LL cell
+myoepithelial cell
+ACT-1 cell
+oral squamous cell carcinoma cell line
+HT-29 cell
+R1 cell
+M14 cell
+TF-1 cell
+NHEK cell
+LX-2 cell
+OV-MZ-6 cell
+adipose-derived stem cell
+leiomyoma cell
+MA-104 cell
+CL-1 prostate cancer cell
+adenocarcinoma cell
+Me665/2 cell
+choriocarcinoma cell line
+N1E-115 cell
+urinary tract cells
+CMT-93 cell
+HSC-4 cell
+nephroblastoma cell
+Clara cell
+FaDu cell
+COS-1 cell
+plasmacytoma cell line
+M-07 cell
+CAPAN-2 cell
+spindle cell carcinoma
+mesenchymal stromal cell
+GT1-7 cell
+uterine anchor cell
+MOPC-315 cell
+RT-4 cell
+HCE cell
+renal glomerular cell line
+guard cell
+KU-7 cell
+Ewing's family tumor cell
+glycogen-rich clear cell breast carcinoma
+zygotene cell
+epithelial cell line
+SK-N-FI cell
+duodenal adenocarcinoma cell
+horizontal cell
+MSTO-211H cell
+EAhy 926 cell
+EOMA cell
+Hodgkin lymphoma cell
+endometrial squamous cell carcinoma
+Hodgkin's lymphoma, mixed cellularity
+ZR-75-1 cell
+insulinoma cell
+LS174T-HM7 cell
+Dunn cell
+ROS-17/2.8 cell
+macrophage foam cell
+HCN-1A cell
+HT-29 G cell
+BL-70 cell
+NCM-460 cell
+rhabdomyosarcoma cell
+scrotum squamous cell carcinoma
+Rb-1 cell
+liver cell line
+Ewing's sarcoma cell
+salivary gland cancer cell
+histiocytic and dendritic cell cancer
+Intracellular chloride channel (icc) family
+bladder transitional cell carcinoma
+stomach cells
+TP17 cell
+RAMOS cell
+mixed cell type cancer
+myeloid cell line
+ECC-1 cell
+esophageal squamous cell carcinoma cell
+ovary cancer cell
+KM-12C cell
+mitral cell
+DHL-9 cell
+HL60/ADR cell
+Leydig cell tumor
+NCI-H295R cell
+distal tip cell
+hypodermal seam cell
+germ cell
+L-5178-Y cell
+MM-1 cell
+Burkitt lymphoma cell
+sarcoma cell line
+culture condition:CD4+ cell
+adult T-cell leukemia
+STAV-AB cell
+LM3 cell
+gastrointestinal stromal tumor cell
+NCI-H929 cell
+TTA-1 cell
+adenoid squamous cell carcinoma
+human bone marrow endothelial cell line
+neuroepithelioma cell line
+mantle cell lymphoma
+papilloma cell
+U-266 cell
+renal clear cell
+AR4-2J cell
+stem cell
+NS20Y cell
+CWR-22 cell
+K-1034 RPE cell
+epidermal cell line
+erythroleukemia cell line
+SF-767 cell
+ACHN cell
+culture condition:antigen-presenting cell
+LOX cell
+VCaP cell
+glioma cell line
+WM-35 cell
+SAOS-2 cell
+adenoid basal cell carcinoma
+SK-MEL-30 cell
+N-27 cell
+BCBL-1 cell
+WM-9 cell
+IMR-32 cell
+kidney cell line
+bipolar cell
+lung cells
+Mo-T cell
+anaplastic large cell lymphoma cell line
+HLE-B3 cell
+nasopharyngeal carcinoma cell
+glioma cell
+embryonic germ cell
+transitional cell carcinoma cell
+TAD-2 cell
+renal cancer cell line
+IEC-6 cell
+myometrial cell line
+large cell medulloblastoma
+spindle cell
+clear cell meningioma
+cord blood stem cell
+nasal cavity squamous cell carcinoma
+MPC-11 cell
+sessile cell
+oral squamous cell carcinoma cell
+JAR cell
+Intracellular chloride channel (clic) family
+U-87MG cell
+2T3 cell
+acute promyelocytic leukemia cell
+ZR-75 cell
+Fanconi anemia lymphoid cell line
+MDCK cell
+oropharyngeal carcinoma cell line
+acute T cell leukemia
+non-small cell lung carcinoma
+A-253 cell
+L-1210 cell
+KAT-18 cell
+Langerhans cell sarcoma
+primary cell
+F-9 cell
+L-929 cell
+pulmonary large cell neuroendocrine carcinoma
+N1-S1 cell
+BIC-1 cell
+mucous cell
+NB2a/d1 cell
+amnion epithelial cell
+EJ cell
+Nthy-ori 3-1 cell
+A-375 cell
+cervical intraepithelial neoplasia cell
+melanocyte cell line
+SCaBER cell
+prostate gland cancer cell
+Colo-206F cell
+NSC-34 cell
+uterine leiomyoma cell
+liver epithelial cell line
+Hca-F cell
+HRT-18 cell
+stromal cell
+collecting duct cell line
+3T3-L1 cell
+CaSki cell
+muscle stem cell
+1321-N1 cell
+choriocarcinoma cell
+enteroendocrine cell
+oral cancer cell line
+NBT-II cell
+smooth muscle cell
+dermal dendritic cell
+FTO-2B cell
+peripheral blood cell
+pancreatic alpha cell
+marrow cell
+AILNCaP cell
+CHO-K1 cell
+endometrioma cell
+nurse cell
+MHCC-97 cell
+hepatoblastoma cell line
+BL-3 cell
+pleura cells
+head and neck squamous cell carcinoma cell line
+NC37 cell
+oral cell line
+prostate cancer cell line
+SUP-T1 cell
+KU-1 cell
+Langerhans-cell histiocytosis
+SK-MES-1 cell
+lung small cell carcinoma
+adipose-derived stromal cell
+dendritic cell thymoma
+KG-1 cell
+RPMI-7951 cell
+A-673 cell
+MV4-11 cell
+placental cell line
+HPAC cell
+CHOP cell
+embryogenic cell line
+5637 cell
+intestine-407 cell
+chondrogenic cell
+bronchial epithelial cell
+adult T-cell lymphoma cell
+U2-OS cell
+B35 cell
+HCN-2 cell
+MDA-MB-435 cell
+BON-1 cell
+macrophage cell line
+sessile serrated adenoma cell
+CEM cell
+184B5 cell
+neurilemoma cell line
+SF-21 cell
+RPAEC cell
+SAS cell
+CEM-VCR R cell
+LAPC4 cell
+NIH-3T3 cell
+PC-3 cell
+BV-2 cell
+Mel-Ab cell
+esophagus cells
+uroepithelial cell line
+oxyntic cell
+soft tissue sarcoma cell line
+periglomerular cell
+C2C12 cell
+Extracellular tyrosine-protein kinase PKDCC
+cervical adenocarcinoma cell
+JURKAT cell
+cervical cell line
+GBC-SD cell
+Rat-1/BB16 cell
+anal squamous cell carcinoma
+plant mucous cell
+MT-4 cell
+PanIN cell
+ATDC-5 cell
+embrionic stem cell
+HMT-3522 cell
+D-407 cell
+BEN cell
+JB6 cell
+ELT-3 cell
+JEG-3 cell
+RCSN-3 cell
+anaplastic large cell lymphoma cell
+natural killer cell leukemia
+melan-a cell
+SK-MEL-2 cell
+HEP-3B cell
+adenohypophysis tumor cell
+prostate gland stromal cell
+DC-3F cell
+BCP-1 cell
+LAN-5 cell
+CA-77 cell
+bone marrow stem cell
+breast cells
+Mast/stem cell growth factor receptor kit
+PANC-1 cell
+PNT-1A cell
+cell type cancer
+LS-180 cell
+extragonadal germ cell cancer
+PCCL-3 cell
+AN3CA cell
+TALH cell
+rectal cancer cell
+glioblastoma cell
+gonadotrophic cell
+gastric cancer cell line
+NPA cell
+Sertoli cell
+interstitial cell
+THCE cell
+HBL-100 cell
+synovial cell
+MC3T3-E1 cell
+NRK-52E cell
+bone marrow stromal stem cell
+gastric squamous cell carcinoma
+non-Hodgkin lymphoma cell line
+N20.1 cell
+cholangiocarcinoma cell
+planktonic cell
+lymphoid cell line
+FTC-236 cell
+ADF cell
+granulosa cell tumor
+\novarian germ cell monodermal and highly specialized teratoma\n
+megakaryocytic cell line
+TALL-104 cell
+retinoblastoma cell
+oligodendroglioma cell
+Morris hepatoma cell
+leukemic stem cell
+Mel Im cell
+NCI-H441 cell
+miscellaneous cells
+GLC-4 cell
+primary effusion lymphoma cell line
+adrenal gland cancer cell
+retinal pigment epithelial cell
+neural stem cell
+hemocyte cell line
+CHO-LY-B cell
+oviduct epithelial cell line
+breast invasive ductal carcinoma cell
+H-10 cell
+medullary thyroid carcinoma cell
+IMR-90 cell
+kidney cancer cell
+BHK cell
+trophoblast cell line
+testicular cell line
+Mo-B cell
+OE-21 cell
+SK-N-BE(2) cell
+cholangiocarcinoma cell line
+HD-11 cell
+JURKAT E-6.1 cell
+B cell linker protein deficiency
+clear cell ependymoma
+Lymphokine-activated killer t-cell-originated protein kinase
+Swiss-3T3 cell
+bone marrow cell
+NPrEC cell
+esophageal cancer cell
+aortic smooth muscle cell
+HEK-293A cell
+CL-48 cell
+acute lymphoblastic leukemia cell
+WI-38 cell
+PC-1 cell
+mixed germ cell cancer
+astrocytoma cell
+3T3-F442A cell
+bronchial cancer cell
+MHCC97-H cell
+3D5 cell
+muscle cells
+bone marrow cancer cell
+non-neuronal cell
+gastric small cell carcinoma
+sporulating cell
+neuroendocrine tumor cell line
+KB-V1 cell
+follicular thyroid cancer cell
+glioblastoma cell line
+F5 meningioma cell
+NCI-H358 cell
+extraosseus Ewing's sarcoma cell
+Ca9-22 cell
+HEC-1-A cell
+A-498 cell
+Neuro-2a cell
+bone marrow stromal cell
+endometrial clear cell adenocarcinoma
+ganglioneuroma cell
+Leydig cell tumor cell
+tongue cancer cell
+gallbladder squamous cell carcinoma
+intercalated cell
+BEAS-2B cell
+ganglion cell layer
+T-24 cell
+MCF-10A cell
+skin carcinoma cell line
+intestinal cell line
+NCI-H1299 cell
+HEK-AD293 cell
+Merkel cell carcinoma
+MDA-MB-436 cell
+bone marrow-derived dendritic cell
+SGS cell
+epidermal cell
+CGR-8 cell
+J-774 cell
+seminoma cell
+HEK-293T cell
+brain cortex cell line
+LM6 cell
+buccal epithelial cell
+ANA-1 cell
+Intracellular chloride channel (clic) family
+S-180 cell
+retinal stem cell
+HET-1A cell
+CHO-EM9 cell
+MN-9D cell
+RPMI-7932 cell
+prostate cells
+follicular lymphoma cell
+hematopoietic cell
+myrosin cell
+peripheral blood mononuclear cell
+skin fibroblast cell line
+H9c2 cell
+pancreatic adenocarcinoma cell line
+interdigitating dendritic cell sarcoma
+parathyroid gland cancer cell
+OCI-AML2 cell
+colonic cancer cell line
+T-47D cell
+Xenopus A6 cell
+hair cell
+cervical clear cell adenocarcinoma
+10T1/2 cell
+624 cell
+cervical cancer cell line
+human brain microvascular endothelial cell
+SK-N-MC cell
+tongue cell line
+HCA-7 cell
+marginal zone B-cell lymphoma
+P493-6 cell
+MG-63 cell
+malignant ovarian germ cell neoplasm
+Hs-578T cell
+Colo-320 cell
+melanoma cell
+adenoid cystic carcinoma cell
+Ewing's sarcoma cell line
+KYSE-30 cell
+SK-HEP-1 cell
+WM-793 cell
+INS-1 cell
+ES-2 cell
+DC-3F/ADX cell
+ovarian serous carcinoma cell
+WSS-1 cell
+neural stem cell line
+laryngeal squamous cell carcinoma cell
+WISH cell
+cervix cells
+HS-68 cell
+OK cell
+HEL cell
+endometrioid carcinoma cell
+kidney clear cell sarcoma
+esophageal cancer cell line
+WRO cell
+testicular granulosa cell tumor
+GRX cell
+mucous acinar cell
+prostate gland intraepithelial neoplasia cell line
+NRK-49F cell
+yolk sac cancer cell
+peripheral blood stem cell
+F9-12 cell
+mammary myoepithelial cell
+cellulitis
+TE-8 cell
+I-cell
+GaMG cell
+NCI-H69 cell
+granule cell layer
+MEL-HO cell
+CESS cell
+AT6.1 cell
+HBL-3 cell
+aortic endothelial cell
+lymphocytic leukemia cell line
+T-47 cell
+superficial basal cell carcinoma
+amniotic cell line
+anaplastic thyroid cancer cell
+CALO cell
+bladder transitional cell papilloma
+MOLT-3 cell
+H4 neuroglioma cell
+OECM-1 cell
+U-373MG cell
+lung adenocarcinoma cell line
+GLC-4/ADR cell
+erythroid progenitor cell
+32D cell
+mbn-2 cell
+chief cell adenoma
+amacrine cell
+goblet cell
+squamous cell neoplasm
+AGS cell
+mast cell neoplasm
+BmN cell
+SN-56 cell
+porcine aortic endothelial cell
+follicular dendritic cell
+A-1235 cell
+B16-BL6 cell
+NHDF cell
+KM-3 cell
+RN-46A cell
+hairy cell leukemia cell line
+skeletal muscle cell
+MA-10 cell
+HUVEC cell
+HTC cell
+mammary ductal carcinoma cell
+Schwann cell
+myoma cell
+vascular smooth muscle cell
+HEK-293FT cell
+DT-40 cell
+gall bladder cancer cell line
+tenosynovial giant cell tumor
+KU-812 cell
+Patu-8988 cell
+fibrosarcoma cell
+BL-2 cell
+astrocytoma cell line
+laryngeal cell line
+endometrial small cell carcinoma
+HT-144 cell
+hepatoblastoma cell
+N-11 cell
+liver cells
+cellular schwannoma
+retinal ganglion cell line
+pancreatic cancer cell
+RD cell
+hematopoietic cell line
+cardiomyocyte cell line
+C127I cell
+STC-1 cell
+KB-3-1 cell
+FTC-133 cell
+glial cell line
+222 cell
+oral epithelial cell
+NCI-H460M cell
+primitive neuroectodermal tumor cell
+subependymal giant cell astrocytoma
+large cell lung cancer cell line
+carcinoma cell
+Ma-1 cell
+VERO-76 cell
+Chloride intracellular channel protein 1
+interdigitating reticulum cell
+Oc cell
+esophageal squamous cell carcinoma cell line
+vascular cell
+HEY cell
+NHBE cell
+Ishikawa cell
+childhood kidney cell carcinoma
+lung adenocarcinoma cell
+bone marrow cell line
+nonpapillary renal cell carcinoma
+HL-1 cell
+LLC-PK1 cell
+MDA-MB-361 cell
+chondrocyte cell line
+breast epithelial cell
+95D cell
+Mahlavu cell
+SMMC-7721 cell
+TOV-112D cell
+vegetative cell
+midgut cell line
+transformed cell line
+22Rv1 cell
+orbital cellulitis
+CHO-AA8 cell
+RMG-I cell
+NT2/D1 cell
+brain capillary endothelial cell line
+MMDD1 cell
+uterus cells
+T3M4 cell
+ovary cancer cell line
+skin cancer cell
+HK-2 cell
+bile duct cell line
+B-lymphocyte cell line
+dendritic cell sarcoma
+basophilic leukemia cell
+Leydig cell line
+alveolar cell type II
+SK-N-AS cell
+SK-N-BE(2)C cell
+BeWo cell
+COLO-357 cell
+cell type benign neoplasm
+adenocarcinoma cell line
+ovarian clear cell adenocarcinoma
+mastocytoma cell line
+143B cell
+C-33A cell
+adrenocortical carcinoma cell line
+thyroid cancer cell line
+SK-BR-3 cell
+OVCA-5 cell
+colonic adenocarcinoma cell
+NS-0 cell
+MEG-01 cell
+HEK-293F cell
+peripheral T-cell lymphoma
+RAW-264.7 cell
+Germ cell nuclear factor receptors
+ovarian germ cell cancer
+Hs-578Bst cell
+MCF-12A cell
+large cell neuroendocrine carcinoma cell
+melanoma cell line
+adenosquamous carcinoma cell
+BALB/3T3 cell
+RD-ES cell
+K-562R cell
+GH4-C1 cell
+BHK-21 cell
+U-343 MG-A cell
+FAZA cell
+SNU-638 cell
+V-79 cell
+VMRC-RCW cell
+NB-4 cell
+embryonic neural stem cell
+stem cell isolated from model organisms or humans
+ES-E14 cell
+swine testicular cell line
+GEO cell
+pheochromocytoma cell
+testicular Leydig cell tumor
+umbilical cord blood cell
+Dami cell
+pancreas cells
+teratocarcinoma cell line
+retinal microvascular endothelial cell
+Mat-Ly-Lu cell
+B-lymphoblast cell line
+alphaT3-1 cell
+CACO-2 cell
+brucellosis
+C6 glioma cell
+Sertoli cell line
+columnar cell
+CA-46 cell
+trophoblast stem cell line
+hFOB 1.19 cell
+pancreatic alpha cell line
+PR-Mel cell
+dermatofibroma cell
+vascular cancer cell
+cellular congenital mesoblastic nephroma
+myelinating Schwann cell
+spindle cell hemangioma
+PEER cell
+sarcomatoid renal cell carcinoma
+FPMI-CF-203 cell
+gastroesophageal cancer cell
+BxPC-3 cell
+C4-2B cell
+penis squamous cell carcinoma
+mature cell
+TE-1 cell
+KG-1A cell
+MEF cell
+SC-M1 cell
+MEL-JUSO cell
+G-292 cell
+DAOY cell
+synovial sarcoma cell
+perivascular epithelioid cell tumor
+CHO cell
+TM-4 cell
+HN-30 cell
+RFL-6 cell
+NCI-H1975 cell
+vulva basal cell carcinoma
+Sertoli cell tumor
+Langerhans cell
+MM46 cell
+BPH cell
+esophageal basaloid squamous cell carcinoma
+PC-12D cell
+U-138MG cell
+Daltons lymphoma cell
+breast adenocarcinoma cell line
+liver cancer cell
+32D clone3 cell
+Sertoli cell-only syndrome
+T-lymphocyte cell line
+mast cell
+Mono-Mac-1 cell
+squamous cell papilloma
+connecting tubule cell
+non-Hodgkin lymphoma cell
+somatic cell
+resting cell
+LN-319 cell
+lobular carcinoma cell
+MHCC97-L cell
+lung giant cell carcinoma
+KB-C2 cell
+KJ29 cell
+AF5 cell
+hairy cell leukemia cell
+SNU-16 cell
+tall cell variant papillary carcinoma
+MBA-15 cell
+salivary gland tumor cell line
+granular cell tumor
+transitional cell carcinoma
+hepatoma cell
+PAM212 cell
+OV-90 cell
+lung oat cell carcinoma
+A-427 cell
+SN-12C cell
+neural crest-derived stem cell
+ER-1 cell
+cystadenoma cell
+gall bladder cancer cell
+paneth cell
+anal canal squamous cell carcinoma
+Vero cell
+large cell carcinoma
+urinary bladder cancer cell
+CEM-VBL100 cell
+infundibulocystic basal cell carcinoma
+neuroendocrine tumor cell
+CSM14.1 cell
+adrenal gland cells
+lignifying cell
+RGC-5 cell
+intraocular melanoma cell
+Rat-2 cell
+SR cell
+rectal cancer cell line
+umbilical vein endothelial cell
+ovarian primitive germ cell tumor
+SMS-KCN cell
+primitive neuroectodermal tumor cell line
+small cell lung cancer cell line
+BG-1 cell
+acinar cell carcinoma
+VERO C1008 cell
+encysting cell
+HT-1197 cell
+SK-N-SH cell
+HA22T/VGH cell
+osteoclast stem cell
+PLHC-1 cell
+OCI-AML3 cell
+cervical squamous cell carcinoma
+hereditary renal cell carcinoma
+non-small cell lung cancer cell
+SNB-19 cell
+C-1300 cell
+95C cell
+follicular lymphoma cell line
+mantle cell lymphoma cell
+TOV-21G cell
+P-388D1 cell
+FL cell
+RT-112 cell
+A-375P cell
+BJAB cell
+induced pluripotent stem cell
+lung cell line
+neuronal cell line
+blood cells
+mammary epithelial cell
+clear cell adenofibroma
+TE-671 cell
+B-16 cell
+GER cell
+1205-Lu cell
+OVCAR-3 cell
+WIL-2 cell
+TM-3 cell
+HMEC-1 cell
+SeAx cell
+lymphosarcoma cell
+PNT2-C2 cell
+ovary transitional cell carcinoma
+K-562 cell
+S2 cell
+Trimeric intracellular cation channel type a
+HAC cell
+MCF-10F cell
+HIT-T15 cell
+HFL-1 cell
+striated muscle cell
+follicular dendritic cell sarcoma
+HEK-293H cell
+chronic myelogenous leukemia progenitor cell
+Rat-1 cell
+SF-9 cell
+Chang cell
+myoblast cell line
+prostate adenocarcinoma cell line
+MCF-12F cell
+sickle cell anemia
+RIE-1 cell
+parenchymal cell
+laryngeal squamous cell carcinoma
+mammary epithelial cell line
+TMK-1 cell
+KATO-III cell
+MiaPaCa-2 cell
+differentiated cell
+SH-EP cell
+ovarian epithelial cell
+CL1-4 cell
+COS cell
+kidney cells
+HeLa cell
+plasma cell neoplasm
+basophilic leukemia cell line
+pancreatic delta cell
+NEF cell
+biliary epithelial cell
+cerebellar granule cell
+oral cancer cell
+thyroid cancer cell
+NCCIT cell
+trophoblast stem cell
+Extracellular calcium-sensing receptor
+EL-4 cell
+hemangioendothelioma cell
+prostatic intraepithelial neoplasia cell
+non-myelinating Schwann cell
+testicular malignant germ cell cancer
+T-cell acute lymphoblastic leukemia cell
+retinal cell line
+immature cell
+human aortic endothelial cell
+TERA-2 cell
+mononuclear cell
+HEI-OC1 cell
+gastrinoma cell
+alveolar cell type I
+KLN205 cell
+BGC-823 cell
+HSC-T6 cell
+T-cell lymphoma cell
+HN cell
+TCMK-1 cell
+RL95-2 cell
+BAEC cell
+pre-B-lymphocyte cell line
+thymoma cell
+HuH-7 cell
+BV173 cell
+SCHNEIDER-2 cell
+TX3868 cell
+colonic adenocarcinoma cell line
+natural killer cell line
+primary cell line
+M12 prostate cancer cell
+FDCP-1 cell
+SUM-149 cell
+HeLa-229 cell
+MM1-R cell
+vulva squamous cell carcinoma
+GOTO cell
+principal cell
+PC-12 cell
+fibrosarcoma cell line
+REC-1 cell
+liver cancer stem cell
+anterior horn cell disease
+lacrimal gland acinar cell
+RKO cell
+pleomorphic adenoma cell
+papillary renal cell carcinoma
+SK-CO15 cell
+OVCA-429 cell
+cervix small cell carcinoma
+CTLL-2 cell
+T2 cell
+non-langerhans-cell histiocytosis
+Chloride intracellular channel protein 2
+cellular leiomyoma
+SCC-13 cell
+gastric cancer cell
+ovarian surface epithelial cell line
+ERpP cell
+thyroid hurthle cell adenoma
+clear cell adenocarcinoma cell
+Germ cell nuclear factor receptors
+OVISE cell
+RBL-1 cell
+IB3-1 cell
+cellular ependymoma
+pro-B-lymphocyte cell line
+mast cell line
+N-9 cell
+MDA-MB-468 cell
+gall bladder cells
+prostate adenocarcinoma cell
+spindle cell synovial sarcoma
+colonic cancer cell
+sensory cell
+FLK cell
+Hep-G2/C3A cell
+colonic epithelial cell
+respiratory epithelium cell
+HT-29/219 cell
+meningioma cell
+NCI-H460 cell
+adenoma cell
+MALME-3M cell
+epithelial cell
+clear cell sarcoma
+SW-626 cell
+monocytic leukemia cell line
+OCI-AML5 cell
+epithelial stem cell
+skin squamous cell carcinoma
+tracheobronchial epithelial cell line
+\neosinophilic variant of chromophobe renal cell carcinoma\n
+DG-75 cell
+T-cell leukemia
+large cell carcinoma cell
+osteoblastoma cell
+HOSE cell
+TZM-bl cell
+HPAF-2 cell
+lung cancer cell line
+large cell acanthoma
+intestinal cancer cell
+monocytic leukemia cell
+DLD-1 cell
+hematopoietic stem cell
+P-815 cell
+CaR-1 cell
+SK-UT-1B cell
+null-cell leukemia
+BT-474 cell
+DON cell
+SKOV-3 cell
+Tsu-Pr1 cell
+B-cell chronic lymphocytic leukemia cell
+amelanotic melanoma cell
+CHO-MG cell
+DAUDI cell
+intestine cells
+neuroepithelial cell
+glial cell
+Morris hepatoma 3924A cell
+thymic stromal cell
+46BR.1G1 cell
+INS-1E cell
+Pt-K1 cell
+WIL2-NS cell
+Calu-6 cell
+pacemaker cell
+KARPAS-299 cell
+erythroid cell
+NCI-H716 cell
+KB cell
+Trimeric intracellular cation channel type B
+HEP-3B2 cell
+WM-793B cell
+HELF cell
+mature B-cell neoplasm
+SW-1116 cell
+ScGT1 cell
+MR-Mel cell
+TE-13 cell
+uterine cancer cell
+KBM-5 cell
+malignant Leydig cell tumor
+cancellous bone
+LLC-RK1 cell
+corticotropic cell
+HME cell
+Kc cell
+pancreatic beta cell line
+HEp-2 cell
+giant cell tumor
+infiltrative basal cell carcinoma
+WEHI-231 cell
+ScN2a cell
+MiaPaCa cell
+endothelial progenitor cell
+cancer cell line
+prostate epithelium cell line
+basal cell
+Hepa-1c1c7 cell
+myeloid leukemia cell
+HN-12 cell
+pancreatic acinar cell adenocarcinoma
+CL1 lung adenocarcinoma cell
+lymphatic system cells
+SW-1353 cell
+malignant giant cell tumor
+cytotoxic T-lymphocyte cell line
+HeLa-S3 cell
+spindle cell Liposarcoma
+J-774A.1 cell
+mammary gland cell line
+papillary thyroid cancer cell line
+ovarian serous adenocarcinoma cell line
+carcinosarcoma cell
+NCI/ADR-RES cell
+exocrine acinar cell
+histiocytic lymphoma cell
+retinal cell cancer
+CFPAC-1 cell
+testicular germ cell cancer
+FD-2 cell
+satellite cell
+HBE cell
+PLB-985 cell
+pure red-cell aplasia
+mast-cell leukemia
+RCC 786-O cell
+tsA-201 cell
+BNL CL.2 cell
+gastric epithelial cell
+breast cancer cell
+invasive bladder transitional cell carcinoma
+lymphocytic leukemia cell
+thymic carcinoma cell
+liposarcoma cell line
+Ehrlich ascites carcinoma cell
+skeletal muscle cell line
+TK-6 cell
+Th1-cell
+OSRGA cell
+colorectal adenocarcinoma cell line
+U-1285 cell
+RNK-16 cell
+SP2/0-AG14 cell
+A2780/S cell
+mesenchymal cell
+P-19 cell
+squamous cell carcinoma
+pulmonary artery smooth muscle cell
+mastocytoma cell
+uterine sarcoma cell
+inner medullary collecting duct cell
+pheochromocytoma cell line
+HSDM1C1 cell
+Calu-3 cell
+HT-1376 cell
+prostate small cell carcinoma
+nodular basal cell carcinoma
+colonic cell line
+SNU-449 cell
+disease of cellular proliferation
+leiomyosarcoma cell
+vaginal cell line
+NCI-N87 cell
+vascular endothelial cell
+A-172 cell
+Askin's tumor cell
+OVCA-432 cell
+PK-1 cell
+EHEB cell
+alveolar epithelial cell line
+WiDr cell
+SF-268 cell
+Chloride intracellular channel protein 3
+cervical squamous cell carcinoma cell
+NHK cell
+malignant granular cell myoblastoma
+mucinous adenocarcinoma cell
+NCI-H838 cell
+OVTOKO cell
+S9 cell
+lymphoma cell line
+CHRB-30 cell
+HMC-1 cell
+M cell
+skin cells
+T/C-28a2 cell
+bronchial epithelial cell line
+     rdfs:label  "BRENDA tissues and cell lines" .
+4T1 cell
+Pt-K2 cell
+CL1-5 cell
+basal cell carcinoma cell
+SW-948 cell
+corneal epithelial cell
+foreskin fibroblast cell line
+hepatic stellate cell
+combined T cell and B cell immunodeficiency
+REH cell
+adipocyte cell line
+medulloblastoma cell
+K6H6/B5 cell
+Colo-205 cell
+SW-620 cell
+ameloblastoma cell
+CCRF-HSB-2 cell
+Huh-7.5 cell
+fibroblastoma cell
+frontal sinus squamous cell carcinoma
+Mono-Mac-6 cell
+OCI-M1 cell
+interrenal cell
+skin stem cell
+tracheobronchial epithelial cell
+myeloma cell
+pollen mother cell
+GT1 cell
+liver sinusoidal endothelial cell
+P4E6 cell
+HEK-293 cell
+NHOst cell
+NCI-H322 cell
+HS-766T cell
+Yoshida sarcoma cell
+yolk sac erythroid cell
+NCI-H660 cell
+eosinophilic leukemia cell
+plasma cell
+RPMI-8226 cell
+pachytene cell
+embryonic carcinoma cell line
+T-cell large granular lymphocyte leukemia
+BRL cell
+osteogenic cell
+CCD-13Lu cell
+adrenal cortex cell line
+nervous system cells
+CV-1 cell
+thymic cortical epithelial cell
+hepatoma cell line
+MH1C1 cell
+INS-1 823/13 cell
+squamous cell carcinoma cell
+gingival cell line
+ovarian cumulus cell
+PC-J cell
+Ewing's sarcoma family tumor cell line
+hairy cell leukemia
+ARH-77 cell
+RAJI cell
+multiple myeloma cell
+urethra clear cell adenocarcinoma
+L-428 cell
+ovarian germ cell teratoma
+osteochondroma cell
+LoVo cell
+coronary artery smooth muscle cell
+human lens epithelial cell line
+outer hair cell
+HFK cell
+ependymoma cell
+WEHI-3 cell
+WRL-68 cell
+HMV-II cell
+Burkitt lymphoma cell line
+bladder papillary transitional cell neoplasm
+cellular myxoid liposarcoma
+oligodendroglioma cell line
+BW-5147 cell
+B-cell lymphoma
+fetal cell line
+KE-37 cell
+PrEC cell
+RPMI-2650 cell
+Pro-5 cell
+PG cell
+renal cell carcinoma cell line
+acute megakaryoblastic leukemia cell line
+ovary cell line
+microvascular endothelial cell
+pre-B acute lymphoblastic leukemia cell
+hepatoma ascites cell
+HS-683 cell
+epithelial ovarian cancer cell
+MRC-5 cell
+H4-II-E-C3 cell
+cell line
+PNT-2 cell
+POS cell
+HEPA 1-6 cell
+hepatocellular carcinoma
+LS-174T cell
+thyroid cells
+LN-229 cell
+bundle sheath cell
+dried cell
+UROtsa cell
+mucoepidermoid carcinoma cell
+C57MG cell
+XC cell
+CNS cell line
+juvenile type testicular granulosa cell tumor
+tracheal cell line
+MNT-1 cell
+mitral cell layer
+1-LN cell
+G cell
+AsPC-1 cell
+HT-2 cell
+supporting cell
+adult liver stem cell
+IEC-18 cell
+KLE cell
+IGROV-1 cell
+RK-13 cell
+HMC cell
+rectal adenocarcinoma cell
+gastric epithelium cell line
+hFOB cell
+CX-1 cell
+brain endothelium cell line
+Lewis lung carcinoma cell
+HPAEC cell
+liposarcoma cell
+HPB-ALL cell
+hepatocellular fibrolamellar carcinoma
+OS-RC-2 cell
+HSC-1 cell
+hybridoma cell
+glycogen cell
+Th2-cell
+LNCaP cell
+embryonic stem cell line
+M5076 cell
+T-84 cell
+germ cell cancer
+ZR-75-30 cell
+renal epithelium cell line
+RBL-2H3 cell
+chronic myeloid leukemia cell
+HCT-8 cell
+giant cell glioblastoma
+neurosecretory cell
+chalazal cell
+small cell lung cancer cell
+cervical epithelial cell
+gastric adenocarcinoma cell line
+MC57 cell
+UM-SCC-22A cell
+Kupffer cell
+HEK-293-EBNA cell
+Kasumi-1 cell
+KHOS cell
+malignant spindle cell melanoma
+OVCA-8 cell
+medulloblastoma cell line
+renal clear cell carcinoma
+A-431 cell
+ARO cell
+peripheral primitive neuroectodermal tumor cell
+COLO-699 cell
+H2.35 cell
+lymphoblastoid cell line
+mast-cell sarcoma
+hepatic stellate cell line
+oropharyngeal squamous cell carcinoma cell
+Chloride intracellular channel protein 4
+vascular smooth muscle cell line
+ovarian surface epithelial cell
+CCRF-CEM cell
+mural cell
+K-562/R7 cell
+neuroendocrine cell
+uveal melanoma cell
+thyroid epithelial cell
+bronchioalveolar carcinoma cell
+juxtaglomerular cell
+UACC-903 cell
+pituitary gland tumor cell
+testes cells
+inflammatory cell
+HBE-1 cell
+NCI-H157 cell
+LL/2 (LLC1) cell
+PC-14 cell
+peritubular cell
+cEND cell
+TS-20 cell
+HeLa-MAGI cell
+RL cell
+SW-48 cell
+lung epithelial cell
+medullary collecting duct cell
+fibroblast cell line
+giant cell reparative granuloma
+gallbladder small cell carcinoma
+ocellus
+arterial endothelial cell
+BPAEC cell
+human amniotic epithelial cell
+M10 cell
+T cell deficiency
+spindle cell sarcoma
+adenosquamous cell lung carcinoma
+fibroma cell
+IMCD cell
+acute myeloid leukemia cell line
+retinal pigment epithelium cell line
+OCI-M2 cell
+epidermal stem cell
+DDT1-MF-2 cell
+adult stem cell line
+myeloma cell line
+OE-33 cell
+testicular pure germ cell tumor
+NCI cell
+MEL cell
+plant cell line
+multiple myeloma cell line
+granule cell
+HSCC cell
+breast cancer cell line
+bone cells
+B16-F10 cell
+eye cancer cell
+thymic medullary epithelial cell
+cell suspension culture
+B-cell leukemia cell
+myelomonocytic leukemia cell
+Hepa-1 cell
+decidual cell
+HGF cell
+testicular non-seminomatous germ cell cancer
+beta-TC3 cell
+ray cell
+spindle cell thymoma
+osteosarcoma cell line
+P3X63Ag8 cell
+medullary thyroid carcinoma cell line
+trophoblast giant cell
+inner hair cell
+colorectal cell line
+lens epithelial cell line
+gastric adenocarcinoma cell
+retinoblastoma cell line
+\nurinary tract papillary transitional cell benign neoplasm\n
+hippocampal cell line
+HOG cell
+bone marrow stromal cell line
+urinary bladder cancer cell line
+A7 cell
+OV-2008 cell
+trypanosomoid cell line
+chromaffin cell
+BT-549 cell
+MRC5-SV cell
+lung fibroblast cell line
+Leydig cell
+BT-20 cell
+RPMI-8866 cell
+PR cell
+T/G HA-VSMC cell
+BCWM.1 cell
+CMK cell
+keratinizing squamous cell carcinoma
+microvascular endothelial cell line
+mature T-cell and NK-cell lymphoma
+spindle cell lipoma
+BMMC cell
+EONT cell
+PA-1 cell
+head and neck cells
+dendritic cell
+HRA cell
+C4-2 cell
+C3H10T1/2 cell
+ovary cells
+LN-18 cell
+FM3A cell
+IC-21 cell
+T-lymphoma cell line
+NMuMg cell
+neuroblastoma cell
+CAD cell
+uterine adenocarcinoma cell
+HCT-116 cell
+cerebellar Purkinje cell
+leukemia cell
+CCE cell
+PK-15 cell
+stellate cell
+U-118MG cell
+UMR-106 cell
+malignant peripheral nerve sheath cancer cell
+NK-92 cell
+pancreatic beta cell
+rectal adenocarcinoma cell line
+RGM-1 cell
+HGC-27 cell
+infected cell
+myeloid progenitor cell
+preadipocyte cell line
+spindle cell rhabdomyosarcoma
+papillary thyroid cancer cell
+bone giant cell tumor
+nevoid basal cell carcinoma syndrome
+BC3H1 cell
+keratinocyte cell line
+HTAU cell
+osteoclastoma cell
+MGC-803 cell
+embryonic stem cell
+monocyte-derived dendritic cell
+RAG cell
+RWPE-1 cell
+LIM1215 cell
+uterine endometrial cancer cell
+T-lymphoblastoma cell
+A-9 cell
+adult T-cell lymphoma cell line
+acute myeloid leukemia cell
+PC-6 cell
+GH3 cell
+adrenocortical carcinoma cell
+endothelioma cell
+erythroleukemia cell
+culture condition:CD8+ cell
+MKN-28 cell
+Kurloff cell
+B-103 cell
+lung cancer cell
+clear cell adenocarcinoma
+A-549 cell
+HEMn cell
+cerebral giant cell
+cervical carcinoma cell
+BLM cell
+lymphoblastoma cell
+MKN-45 cell
+SCC-25 cell
+Chloride intracellular channel protein 5
+leukemia cell line
+myeloid dendritic cell
+KBv200 cell
+enterochromaffin-like cell
+KARPAS-422 cell
+lung large cell carcinoma
+H9 cell
+extraglomerular mesangial cell
+AtT-20 cell
+brain cancer cell
+NS-1 cell
+ureter cells
+squamous cell carcinoma cell line
+MIN-6 cell
+B-lymphoblastoid cell
+EMT-6 cell
+SHG-44 cell
+253J cell
+Novikoff hepatoma cell
+venous endothelial cell
+neuroepithelioma cell
+TRAMP-C1 cell
+SK-N-MC-IXC cell
+ML-1 cell
+Y-1 cell
+ARPE-19 cell
+YN-1 cell
+follicular stem cell
+leiomyosarcoma cell line
+clear cell hidradenoma
+neurofibroma cell
+granulosa cell
+esophagus squamous cell carcinoma
+LAN-1 cell
+small cell osteogenic sarcoma
+L-cell
+Schwann cell line
+T-cell chronic lymphocytic leukemia cell
+dermatofibroma cell line
+MES-23.5 cell
+TBY-2 cell
+mesothelioma cell
+KM-H2 cell
+S-49 cell
+CT-26 cell
+BW-5147.3 cell
+osteogenic cell line
+ARPE cell
+mesangial cell
+brain cells
+B16-F1 cell
+cell lysate
+retinal ganglion cell
+astroglial cell
+thymic dendritic cell
+transitional cell carcinoma cell line
+olfactory ensheathing cell
+C-127 cell
+SK-N-LO cell
+T-REx 293 cell
+MDA-MB-435S cell
+pancreatic ductal carcinoma cell
+NB-1 cell
+TT cell
+KMCH cell
+colorectal cancer cell
+HOS cell
+FRTL-5 cell
+renal cell carcinoma cell
+G-401 cell
+HT-22 cell
+NCTC-2544 cell
+SH-SY5Y cell
+A-2780 cell
+sarcoma cell
+PrSC cell
+HMEpC cell
+LbetaT2 cell
+blast cell
+PG-CL3 cell
+acute megakaryoblastic leukemia cell
+basaloid squamous cell carcinoma
+signet ring cell adenocarcinoma
+human bladder microvascular endothelial cell
+lymphoid cell
+LLC-WRC 256 cell
+V-79-4 cell
+anaplastic large cell lymphoma
+serosal mast cell
+coronary artery endothelial cell
+hybridoma cell line
+primary cell
+HSC-2 cell
+ECV-304 cell
+respiratory epithelium cell line
+IM-9 cell
+chondrosarcoma cell
+M1 melanoma cell
+colonic epithelium cell line
+CCD-18Co cell
+endometrial cancer cell line
+vulva cells
+lung epithelium cell line
+B-lymphoma cell line
+BJ cell
+promyelocytic leukemia cell line
+SK-MEL-28 cell
+digestive cell
+U-1285dox cell
+synovial cell line
+neuroblastoma cell line
+ATRkd cell
+KMS-11 cell
+theca cell
+secretory cell
+MEWO cell
+ROS cell
+pancreatic acinar cell
+hyalocyte cell line
+MDCK-1 cell
+NCI-N417 cell
+NALM-6 cell
+glucagonoma cell
+SIRC cell
+lymphoid progenitor cell
+B-cell acute lymphoblastic leukemia cell
+basal cell carcinoma
+angiomyolipoma cell
+B-50 cell
+PC3-MM2 cell
+plasmacytoma cell
+neural crest cell line
+oligodendrocytic cell line
+BPH-1 cell
+Intracellular chloride channel (icc) family
+mammary gland tumor cell
+T-98G cell
+foam cell
+B-lymphoblastoma cell
+Hep-G2 cell
+Th-1 cell line
+DT-40 3KO cell
+HCMEC/D3 cell
+phloem parenchyma cell
+human lung microvascular endothelial cell
+chronic lymphocytic leukemia cell
+Caki-1 cell
+CA-HPV-10 cell
+UT-7 cell
+laryngeal small cell carcinoma
+MOLM-13 cell
+endothelioma cell line
+nasopharyngeal carcinoma cell line
+MCF-7 cell
+pituitary gland cell line
+MKN-7 cell
+meningioma cell line
+serous adenocarcinoma cell
+NB-2 cell
+HaCaT cell
+parotid acinar cell
