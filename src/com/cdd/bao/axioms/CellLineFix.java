@@ -295,7 +295,6 @@ public class CellLineFix
 			{
 				int cmp = p1.label1.toLowerCase().compareTo(p2.label1.toLowerCase());
 				if (cmp != 0) return cmp;
-				cmp = p1.label1.compareTo(p2.label1);
 				return p1.label2.compareTo(p2.label2);
 			});
 			
