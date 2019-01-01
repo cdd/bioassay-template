@@ -13,6 +13,13 @@
 	<description>Collaborative Drug Discovery</description>
 
 	<property name="pkg" location="pkg" />
+	<property file="${basedir}/build.properties" />
+	<condition property="requires-jdk1.8">
+		<equals arg1="${jdk.version}" arg2="jdk1.8"/>
+	</condition>
+	<condition property="requires-jdk11">
+		<equals arg1="${jdk.version}" arg2="jdk11"/>
+	</condition>
 
 	<path id="project.class.path">
 		<fileset dir="lib">
@@ -27,10 +34,30 @@
 	</target>
 
 	<target name="build" depends="init" description="build the source">
-		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="1.8" target="1.8">
-			<classpath refid="project.class.path" />
-		</javac>
+		<antcall target="build-jdk11"/>
+		<antcall target="build-jdk1.8"/>
 		<copy file="cfg/log4j.properties" todir="bin" />
+	</target>
+	
+	<target name="build-jdk11" if="requires-jdk11">
+		<antcall target="build-javac">
+			<param name="java.version" value="11"/>
+			<param name="compilerarg" value="--module-path ${jfx.module.home} --add-modules=javafx.controls"/>
+		</antcall>
+	</target>
+
+	<target name="build-jdk1.8" if="requires-jdk1.8">
+		<antcall target="build-javac">
+			<param name="java.version" value="1.8"/>
+			<param name="compilerarg" value=""/> <!-- intentionally empty -->
+		</antcall>
+	</target>
+
+	<target name="build-javac">
+		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="${java.version}" target="${java.version}">
+			<compilerarg line="${compilerarg}"/>
+			<classpath refid="project.class.path"/>
+		</javac>
 	</target>
 
 	<target name="pkg" depends="build" description="generate the packages">
@@ -45,7 +72,28 @@
 	</target>
 
 	<target name="buildAPI" depends="init" description="build the source (API only)">
-		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="1.8" target="1.8">
+		<antcall target="buildAPI-jdk11"/>
+		<antcall target="buildAPI-jdk1.8"/>
+		<copy file="cfg/log4j.properties" todir="bin" />
+	</target>
+
+	<target name="buildAPI-jdk11" if="requires-jdk11">
+		<antcall target="build-javac">
+			<param name="java.version" value="11"/>
+			<param name="compilerarg" value="--module-path ${jfx.module.home} --add-modules=javafx.controls"/>
+		</antcall>
+	</target>
+
+	<target name="buildAPI-jdk1.8" if="requires-jdk1.8">
+		<antcall target="build-javac">
+			<param name="java.version" value="1.8"/>
+			<param name="compilerarg" value=""/> <!-- intentionally empty -->
+		</antcall>
+	</target>
+
+	<target name="buildAPI-javac">
+		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="${java.version}" target="${java.version}">
+			<compilerarg line="${compilerarg}"/>
 			<exclude name="com/cdd/bao/editor/**" />
 			<exclude name="com/cdd/bao/importer/**" />
 			<exclude name="com/cdd/bao/*.java" />
@@ -55,7 +103,6 @@
 			<exclude name="com/cdd/bao/util/UtilGUI.java" />
 			<classpath refid="project.class.path" />
 		</javac>
-		<copy file="cfg/log4j.properties" todir="bin" />
 	</target>
 
 	<target name="pkgAPI" depends="buildAPI" description="generate the package without the GUI">
@@ -120,18 +167,38 @@
 
 	<target name="test-compile" depends="build">
 		<mkdir dir="${test.build.dir}" />
-		<javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false" debug="on">
-			<classpath>
-				<path refid="classpath.main" />
-				<path refid="classpath.test" />
-			</classpath>
-		</javac>
+		<antcall target="test-compile-jdk11"/>
+		<antcall target="test-compile-jdk1.8"/>
 		<copy todir="${test.build.dir}">
 			<fileset dir="test">
 				<include name="testData/**" />
 				<include name="mockito-extensions/**" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="test-compile-jdk11" if="requires-jdk11">
+		<antcall target="test-compile-javac">
+			<param name="java.version" value="11"/>
+			<param name="compilerarg" value="--module-path ${jfx.module.home} --add-modules=javafx.controls"/>
+		</antcall>
+	</target>
+
+	<target name="test-compile-jdk1.8" if="requires-jdk1.8">
+		<antcall target="test-compile-javac">
+			<param name="java.version" value="1.8"/>
+			<param name="compilerarg" value=""/> <!-- intentionally empty -->
+		</antcall>
+	</target>
+
+	<target name="test-compile-javac">
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false" debug="on" source="${java.version}" target="${java.version}">
+			<compilerarg line="${compilerarg}"/>
+			<classpath>
+				<path refid="classpath.main" />
+				<path refid="classpath.test" />
+			</classpath>
+		</javac>
 	</target>
 
 	<target name="junit" depends="test-compile" description="run junit">
