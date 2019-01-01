@@ -1,3 +1,6 @@
+# Ignore environment-specific build properties.
+build.properties
+
 *.class
 .DS_Store
 
