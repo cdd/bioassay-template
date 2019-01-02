@@ -84,7 +84,8 @@ public class Main
 		else if (argv[0].equals("edit")) 
 		{			
 			String[] subset = Arrays.copyOfRange(argv, 1, argv.length);
-			new MainApplication().exec(subset);
+			try {new MainApplication().exec(subset);}
+			catch (RuntimeException ex) {ex.printStackTrace();}
 		}
 		else if (argv[0].equals("geneont"))
 		{

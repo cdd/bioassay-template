@@ -1285,7 +1285,7 @@ public class JSONObject
 	 */
 	public JSONObject put(String key, double value) throws JSONException
 	{
-		put(key, new Double(value));
+		put(key, Double.valueOf(value));
 		return this;
 	}
 
@@ -1302,7 +1302,7 @@ public class JSONObject
 	 */
 	public JSONObject put(String key, int value) throws JSONException
 	{
-		put(key, new Integer(value));
+		put(key, Integer.valueOf(value));
 		return this;
 	}
 
@@ -1319,7 +1319,7 @@ public class JSONObject
 	 */
 	public JSONObject put(String key, long value) throws JSONException
 	{
-		put(key, new Long(value));
+		put(key, Long.valueOf(value));
 		return this;
 	}
 
@@ -1602,7 +1602,7 @@ public class JSONObject
 				}
 				else
 				{
-					Long myLong = new Long(string);
+					Long myLong = Long.valueOf(string);
 					if (string.equals(myLong.toString()))
 					{
 						if (myLong == myLong.intValue())

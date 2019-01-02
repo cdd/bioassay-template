@@ -407,7 +407,7 @@ public class SchemaVocab
 		StoredTerm[] newTermList = (StoredTerm[]) ArrayUtils.addAll(termList, newTerms.toArray(new StoredTerm[0]));
 		for (int k = termList.length; k < newTermList.length; k++)
 		{
-			termLookup.put(newTermList[k].uri, new Integer(k));
+			termLookup.put(newTermList[k].uri, Integer.valueOf(k));
 			
 			StoredRemapTo srt = newTermRemappings.get(newTermList[k].uri);
 			if (srt != null) remappings.put(newTermList[k].uri, srt);
