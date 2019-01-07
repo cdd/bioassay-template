@@ -736,6 +736,7 @@ public class JSONArray implements Iterable<Object>
 			if (clazz.isAssignableFrom(val.getClass()))
 			{
 				// we just checked it!
+				@SuppressWarnings("unchecked")
 				E myE = (E)val;
 				return myE;
 			}
