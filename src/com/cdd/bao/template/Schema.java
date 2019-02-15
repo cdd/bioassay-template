@@ -293,7 +293,7 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Value other = (Value)o;
-			return Util.equals(uri, other.uri) &&  Util.equals(name, other.name) &&  Util.equals(descr, other.descr) && spec == other.spec;
+			return Util.equals(uri, other.uri) && Util.equals(name, other.name) && Util.equals(descr, other.descr) && spec == other.spec;
 		}
 
 		@Override
