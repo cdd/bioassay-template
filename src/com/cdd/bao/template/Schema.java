@@ -79,7 +79,7 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Group other = (Group)o;
-			return name.equals(other.name) && descr.equals(other.descr) && groupURI.equals(other.groupURI) &&
+			return Util.equals(name, other.name) && Util.equals(descr, other.descr) && Util.equals(groupURI, other.groupURI) &&
 				   canDuplicate == other.canDuplicate && assignments.equals(other.assignments) && subGroups.equals(other.subGroups);
 		}
 		
@@ -194,8 +194,8 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Assignment other = (Assignment)o;
-			return name.equals(other.name) && descr.equals(other.descr) && propURI.equals(other.propURI) &&
-					suggestions == other.suggestions && values.equals(other.values);
+			return Util.equals(name, other.name) && Util.equals(descr, other.descr) && Util.equals(propURI, other.propURI) &&
+				   suggestions == other.suggestions && values.equals(other.values);
 		}
 
 		@Override
@@ -293,7 +293,7 @@ public class Schema
 		{
 			if (o == null || getClass() != o.getClass()) return false;
 			Value other = (Value)o;
-			return uri.equals(other.uri) && name.equals(other.name) && descr.equals(other.descr) && spec == other.spec;
+			return Util.equals(uri, other.uri) && Util.equals(name, other.name) && Util.equals(descr, other.descr) && spec == other.spec;
 		}
 
 		@Override
