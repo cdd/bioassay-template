@@ -43,3 +43,19 @@ schema window as the default. Use File|Open to locate and load the `schema.json`
 
 When executing a build version with raw Java `.class` files, it is useful to add the command line parameter 
 `-Dlog4j.configuration=file:cfg/log4j.properties` in order to prevent the logging mechanism from complaining needlessly.
+
+Java Version
+============
+
+The transition to Java 11 has been problematic: the JavaFX dependency has been separated into an independent project, and Oracle has deprecated Java 8, making it difficult to download. As a transitional measure, the source code target is Java 8, but it can be compiled and run with either JDK 8 or JDK 11. There are two main options:
+
+* use Eclipse with JDK 8 as the global default, and everything works as per usual
+* use Eclipse with JDK 11 as the global default, which is coerced into using Java 8 compatibility
+
+When using JDK 11, even in backward compatibility mode, it is not possible to *run* the template editor in graphical mode, because the JavaFX libraries are not part of the JRE anymore. For that reason, the `libjfx` library has been included in this project, which consists of just the platform independent language bindings, and **not** the actual compiled binaries, which are necessary for runtime use. The compiler is told to link against the JAR files, which resolves the compile-time issues. Running the classes or JAR file with Java 11 will fail unless additional parameters are added.
+
+Assuming that JavaFX is installed in `/opt/javafx-sdk-11.0.1/lib` and defined by `$JFX`, the following syntax should be used:
+
+`java --module-path $JFX --add-modules=javafx.controls -jar pkg/BioAssayTemplate.jar`
+
+In the near future, the language syntax target will be updated to JDK 11.

@@ -295,7 +295,7 @@ public class JSONWriter
 	 */
 	public JSONWriter value(double d) throws JSONException
 	{
-		return value(new Double(d));
+		return value(Double.valueOf(d));
 	}
 
 	/**
