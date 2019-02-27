@@ -174,8 +174,8 @@ public class AxiomVocabTest
 		/*assertEquals(AxiomVocab.Type.BLANK, AxiomVocab.Type.valueOf(3));
 		assertEquals(AxiomVocab.Type.REQUIRED, AxiomVocab.Type.valueOf(4));*/
 
-		assertEquals(AxiomVocab.Type.LIMIT, AxiomVocab.Type.valueOf(0));
-		assertEquals(AxiomVocab.Type.LIMIT, AxiomVocab.Type.valueOf(5));
+		assertNull( AxiomVocab.Type.valueOf(0));
+		assertNull(AxiomVocab.Type.valueOf(5));
 	}
 
 	@Test
