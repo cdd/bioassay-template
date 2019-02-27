@@ -58,7 +58,7 @@ public class AxiomVocab
 		public static Type valueOf(int rawVal)
 		{
 			for (Type t : values()) if (t.raw == rawVal) return t;
-			return LIMIT;
+			return null;
 		}
 	}
 
@@ -328,8 +328,8 @@ public class AxiomVocab
 	private static Term parseJSONTerm(JSONObject json) throws IOException
 	{
 		Term term = new Term();
-		term.valueURI = json.getString("valueURI");
-		term.wholeBranch = json.getBoolean("wholeBranch");
+		term.valueURI = ModelSchema.expandPrefix(json.getString("valueURI"));
+		term.wholeBranch = json.optBoolean("wholeBranch", false);
 		return term;
 	}
 }

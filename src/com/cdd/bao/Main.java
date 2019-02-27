@@ -166,7 +166,7 @@ public class Main
 			}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
-		else if (argv[0].equals("showaxioms"))
+		/*else if (argv[0].equals("showaxioms"))
 		{
 			String fnAxioms = argv.length >= 2 ? argv[1] : "data/template/axioms.dump";
 			String fnTemplate = argv.length >= 3 ? argv[2] : "data/template/schema.json";
@@ -177,7 +177,7 @@ public class Main
 				show.exec();
 			}
 			catch (Exception ex) {ex.printStackTrace();}
-		}
+		}*/
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
