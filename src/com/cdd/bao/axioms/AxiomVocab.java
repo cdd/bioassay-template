@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.commons.lang3.*;
+import org.json.*;
 
 /*
 	AxiomVocab: serialisable collection of "axioms", which are distilled out from various sources to provide useful guidelines
@@ -46,9 +47,10 @@ public class AxiomVocab
 	public enum Type
 	{
 		LIMIT(1),
-		EXCLUDE(2),
+		EXCLUDE(2);
+		/* use case is unclear for these
 		BLANK(3),
-		REQUIRED(4);
+		REQUIRED(4);*/
 		
 		private final int raw;
 		Type(int raw) {this.raw = raw;}
@@ -56,7 +58,7 @@ public class AxiomVocab
 		public static Type valueOf(int rawVal)
 		{
 			for (Type t : values()) if (t.raw == rawVal) return t;
-			return LIMIT;
+			return null;
 		}
 	}
 
@@ -65,6 +67,7 @@ public class AxiomVocab
 		public String valueURI;
 		public boolean wholeBranch;
 	
+		public Term() {}
 		public Term(String valueURI, boolean wholeBranch)
 		{
 			this.valueURI = valueURI;
@@ -98,7 +101,7 @@ public class AxiomVocab
 
 		// selection of the subject domain; any blank parts are considered to be wildcards
 		public Term subject;
-
+		
 		// the object domain of the rule: the meaning varies depending on type
 		public Term[] impact;
 		
@@ -110,7 +113,7 @@ public class AxiomVocab
 			this.subject = subject;
 			this.impact = impact;
 		}
-
+		
 		@Override
 		public String toString()
 		{
@@ -135,6 +138,21 @@ public class AxiomVocab
 			{
 				str.append("[" + subject + "]");
 				str.append("=>[" + impact[i] + "]" + "\n");
+			}
+
+			return str.toString();
+		}
+		
+		// method for generating output for rules analysis code, currently all the rules we have extracted fall into the LIMIT category
+		public String rulesFormatFullString()
+		{
+			StringBuilder str = new StringBuilder();
+			str.append(type.toString() + " type axiom; ");
+
+			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
+			{
+				str.append("[" + subject + "]");
+				str.append("[" + impact[i] + "]" + "\n");
 			}
 
 			return str.toString();
@@ -184,99 +202,44 @@ public class AxiomVocab
 	public Rule[] getRules() {return rules.toArray(new Rule[rules.size()]);}
 	public void addRule(Rule rule) {rules.add(rule);}
 	public void setRule(int idx, Rule rule) {rules.set(idx, rule);}
+	public void deleteRule(int idx) {rules.remove(idx);}
 	
-	// write the content as raw binary
-	public void serialise(File file) throws IOException
+	// write the content as JSON (somewhat human readable, with optional vocab-to-label translation)
+	public void serialise(File file) throws IOException {serialise(file, null);}
+	public void serialise(File file, SchemaVocab schvoc) throws IOException
 	{
-		OutputStream ostr = new FileOutputStream(file);
-		serialise(ostr);
-		ostr.close();
+		try (Writer wtr = new FileWriter(file)) {serialise(wtr, schvoc);}
 	}
-	public void serialise(OutputStream ostr) throws IOException
-	{		
-		// compose a unique list of URIs, for brevity purposes
-		Set<String> termSet = new HashSet<>();
-		for (Rule rule : rules)
-		{
-			if (rule.subject != null)
-			{
-				if (rule.subject.valueURI != null) termSet.add(rule.subject.valueURI);
-			}
-			if (rule.impact != null) for (Term term : rule.impact)
-			{
-				if (term.valueURI != null) termSet.add(term.valueURI);
-			}
-		}
-
-		// make a list of unique prefixes
-		List<String> pfxList = new ArrayList<>();
-		Map<String, Integer> pfxMap = new LinkedHashMap<>();
-		for (String uri : termSet)
-		{
-			int i = Math.max(uri.lastIndexOf('/'), uri.lastIndexOf('#'));
-			if (i < 0) continue;
-			String pfx = uri.substring(0, i);
-			if (pfxMap.containsKey(pfx)) continue;
-			pfxMap.put(pfx, pfxList.size());
-			pfxList.add(pfx);
-		}
-
-		String[] termList = termSet.toArray(new String[termSet.size()]);
-		Map<String, Integer> termMap = new HashMap<>();
-		for (int n = 0; n < termList.length; n++) termMap.put(termList[n], n);
-
-		// start the writing: header summaries first
-		DataOutputStream data = new DataOutputStream(ostr);
-
-		data.writeInt(pfxList.size());
-		for (String pfx : pfxList) data.writeUTF(pfx);
-		
-		data.writeInt(termList.length);
-		for (String uri : termList)
-		{
-			int i = Math.max(uri.lastIndexOf('/'), uri.lastIndexOf('#'));
-			if (i < 0)
-			{
-				data.writeInt(-1);
-				data.writeUTF(uri);
-			}
-			else
-			{
-				data.writeInt(pfxMap.get(uri.substring(0, i)));
-				data.writeUTF(uri.substring(i));
-			}
-		}
-		
-		// write out each rule
-		data.writeInt(rules.size());
-		for (Rule rule : rules)
-		{
-			data.writeInt(rule.type.raw);
-
-			data.writeUTF(rule.subject == null ? null : rule.subject.valueURI);
-			data.writeBoolean(rule.subject == null ? false : rule.subject.wholeBranch);
-
-			data.writeInt(rule.impact == null ? 0 : rule.impact.length);
-			if (rule.impact != null) for (Term term : rule.impact)
-			{
-				data.writeUTF(term.valueURI);
-				data.writeBoolean(term.wholeBranch);
-			}
-		}
+	public void serialise(Writer wtr, SchemaVocab schvoc) throws IOException
+	{
+		JSONArray jsonRules = new JSONArray();
+		for (Rule rule : rules) jsonRules.put(formatJSONObject(rule, schvoc));
+		jsonRules.write(wtr, 2);
 	}
 	
 	// parse out the raw binary into a living object
 	public static AxiomVocab deserialise(File file) throws IOException
 	{
-		InputStream istr = new FileInputStream(file);
-		try {return deserialise(istr);}
-		finally {istr.close();}
+		try (Reader rdr = new FileReader(file)) {return deserialise(rdr);}
 	}
-	public static AxiomVocab deserialise(InputStream istr) throws IOException
+	public static AxiomVocab deserialise(Reader rdr) throws IOException
 	{
+		JSONArray json = new JSONArray(new JSONTokener(rdr));
+	
 		AxiomVocab av = new AxiomVocab();
+		for (int n = 0; n < json.length(); n++)
+		{
+			JSONObject jsonRule = json.optJSONObject(n);
+			if (jsonRule == null) continue; // is OK to skip
+			try
+			{
+				Rule rule = parseJSONRule(jsonRule);
+				av.addRule(rule);
+			}
+			catch (IOException ex) {throw new IOException("Parsing error: " + ex.getMessage() + " for rule: " + jsonRule.toString(), ex);}
+		}
 
-		DataInputStream data = new DataInputStream(istr);
+		/*DataInputStream data = new DataInputStream(istr);
 	
 		int nprefix = data.readInt();
 		String[] pfxList = new String[nprefix];
@@ -303,7 +266,7 @@ public class AxiomVocab
 			for (int i = 0; i < nimpact; i++) r.impact[i] = new Term(data.readUTF(), data.readBoolean());
 			
 			av.addRule(r);
-		}
+		}*/
 
 		return av;
 	}
@@ -318,6 +281,57 @@ public class AxiomVocab
 	
 	// ------------ private methods ------------
 	
+	// turning rule objects into JSON
+	private JSONObject formatJSONObject(Rule rule, SchemaVocab schvoc)
+	{
+		JSONObject json = new JSONObject();
+		json.put("type", rule.type.toString().toLowerCase());
+		json.put("subject", formatJSONObject(rule.subject, schvoc));
+		
+		JSONArray jsonImpact = new JSONArray();
+		if (rule.impact != null) for (Term term : rule.impact) jsonImpact.put(formatJSONObject(term, schvoc));
+		json.put("impact", jsonImpact);
+		
+		return json;
+	}
+	private JSONObject formatJSONObject(Term term, SchemaVocab schvoc)
+	{
+		JSONObject json = new JSONObject();
+		if (schvoc != null) json.put("label", schvoc.getLabel(term.valueURI));
+		json.put("valueURI", term.valueURI);
+		json.put("wholeBranch", term.wholeBranch);
+		return json;
+	}
+
+	// unpacking JSON-formatted objects into rules (or hard fail)
+	private static Rule parseJSONRule(JSONObject json) throws IOException
+	{
+		Rule rule = new Rule();
+
+		String strType = json.getString("type");
+		try {rule.type = Type.valueOf(strType.toUpperCase());}
+		catch (Exception ex) {throw new IOException("Invalid rule type: " + strType);}
+		
+		rule.subject = parseJSONTerm(json.getJSONObject("subject"));
+		
+		JSONArray jsonImpact = json.optJSONArray("impact");
+		List<Term> impact = new ArrayList<>();
+		for (int n = 0; n < jsonImpact.length(); n++)
+		{
+			JSONObject jsonRule = jsonImpact.optJSONObject(n);
+			if (jsonRule != null) impact.add(parseJSONTerm(jsonRule));
+		}
+		rule.impact = impact.toArray(new Term[impact.size()]);
+		
+		return rule;
+	}
+	private static Term parseJSONTerm(JSONObject json) throws IOException
+	{
+		Term term = new Term();
+		term.valueURI = ModelSchema.expandPrefix(json.getString("valueURI"));
+		term.wholeBranch = json.optBoolean("wholeBranch", false);
+		return term;
+	}
 }
 
 

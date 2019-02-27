@@ -68,9 +68,10 @@ public class AxiomVocabTest
 
 		assertEquals(100, av1.numRules());
 
-		byte[] serialisation;
+		/*byte[] serialisation;
 		try (ByteArrayOutputStream ostr = new ByteArrayOutputStream())
 		{
+			
 			av1.serialise(ostr);
 			serialisation = ostr.toByteArray();
 		}
@@ -78,6 +79,17 @@ public class AxiomVocabTest
 		try (ByteArrayInputStream istr = new ByteArrayInputStream(serialisation))
 		{
 			av2 = AxiomVocab.deserialise(istr);
+		}*/
+		String serial;
+		try (StringWriter wtr = new StringWriter())
+		{
+			av1.serialise(wtr, null);
+			serial = wtr.toString();
+		}
+		AxiomVocab av2;
+		try (Reader rdr = new StringReader(serial))
+		{
+			av2 = AxiomVocab.deserialise(rdr);
 		}
 
 		// Util.writeln("# rules: input=" + av1.numRules() + ", output=" + av2.numRules());
@@ -95,28 +107,28 @@ public class AxiomVocabTest
 	{
 		AxiomVocab.Rule rule1 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, term1);
 		AxiomVocab.Rule rule2 = new AxiomVocab.Rule(AxiomVocab.Type.EXCLUDE, term1);
-		AxiomVocab.Rule rule3 = new AxiomVocab.Rule(AxiomVocab.Type.REQUIRED, new AxiomVocab.Term(uri1, false),
+		/*AxiomVocab.Rule rule3 = new AxiomVocab.Rule(AxiomVocab.Type.REQUIRED, new AxiomVocab.Term(uri1, false),
 				new AxiomVocab.Term[]{new AxiomVocab.Term(uri2, true), new AxiomVocab.Term(uri3, true)});
-		AxiomVocab.Rule rule4 = new AxiomVocab.Rule(AxiomVocab.Type.BLANK, new AxiomVocab.Term(uri5, true));
+		AxiomVocab.Rule rule4 = new AxiomVocab.Rule(AxiomVocab.Type.BLANK, new AxiomVocab.Term(uri5, true));*/
 
 		assertEquals("LIMIT type axiom; subject: [bao:FNORD0000001/true]impacts: [])", rule1.toString());
 		assertEquals("EXCLUDE type axiom; subject: [bao:FNORD0000001/true]impacts: [])", rule2.toString());
-		assertEquals("REQUIRED type axiom; subject: [bao:FNORD0000001/false]impacts: [bao:FNORD0000002/true,bao:FNORD0000003/true])", rule3.toString());
-		assertEquals("BLANK type axiom; subject: [rdf:FNORD0000005/true]impacts: [])", rule4.toString());
+		/*assertEquals("REQUIRED type axiom; subject: [bao:FNORD0000001/false]impacts: [bao:FNORD0000002/true,bao:FNORD0000003/true])", rule3.toString());
+		assertEquals("BLANK type axiom; subject: [rdf:FNORD0000005/true]impacts: [])", rule4.toString());*/
 
 		assertEquals("LIMIT type axiom; ", rule1.rulesFormatString());
-		assertEquals("REQUIRED type axiom; " +
+		/*assertEquals("REQUIRED type axiom; " +
 				"[bao:FNORD0000001/false]=>[bao:FNORD0000002/true]\n" +
-				"[bao:FNORD0000001/false]=>[bao:FNORD0000003/true]\n", rule3.rulesFormatString());
+				"[bao:FNORD0000001/false]=>[bao:FNORD0000003/true]\n", rule3.rulesFormatString());*/
 		
 		// test equality
 		rule1 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, term1);
 		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, term1);
 		assertTrue(rule1.equals(rule2));
 		assertEquals(rule1.hashCode(), rule2.hashCode());
-		rule2.type = AxiomVocab.Type.BLANK;
+		/*rule2.type = AxiomVocab.Type.BLANK;
 		assertFalse(rule1.equals(rule2));
-		assertNotEquals(rule1.hashCode(), rule2.hashCode());
+		assertNotEquals(rule1.hashCode(), rule2.hashCode());*/
 		
 		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, null);
 		assertFalse(rule1.equals(rule2));
@@ -133,10 +145,10 @@ public class AxiomVocabTest
 		assertTrue(rule1.equals(rule2));
 		assertEquals(rule1.hashCode(), rule2.hashCode());
 		
-		rule1.impact = rule3.impact;
+		/*rule1.impact = rule3.impact;
 		assertFalse(rule1.equals(rule2));
 		assertFalse(rule2.equals(rule1));
-		assertNotEquals(rule1.hashCode(), rule2.hashCode());
+		assertNotEquals(rule1.hashCode(), rule2.hashCode());*/
 		
 		rule2.impact = new AxiomVocab.Term[]{new AxiomVocab.Term(uri1, true), new AxiomVocab.Term(uri3, true)};
 		assertFalse(rule1.equals(rule2));
@@ -154,16 +166,16 @@ public class AxiomVocabTest
 	{
 		assertEquals(1, AxiomVocab.Type.LIMIT.raw());
 		assertEquals(2, AxiomVocab.Type.EXCLUDE.raw());
-		assertEquals(3, AxiomVocab.Type.BLANK.raw());
-		assertEquals(4, AxiomVocab.Type.REQUIRED.raw());
+		/*assertEquals(3, AxiomVocab.Type.BLANK.raw());
+		assertEquals(4, AxiomVocab.Type.REQUIRED.raw());*/
 
 		assertEquals(AxiomVocab.Type.LIMIT, AxiomVocab.Type.valueOf(1));
 		assertEquals(AxiomVocab.Type.EXCLUDE, AxiomVocab.Type.valueOf(2));
-		assertEquals(AxiomVocab.Type.BLANK, AxiomVocab.Type.valueOf(3));
-		assertEquals(AxiomVocab.Type.REQUIRED, AxiomVocab.Type.valueOf(4));
+		/*assertEquals(AxiomVocab.Type.BLANK, AxiomVocab.Type.valueOf(3));
+		assertEquals(AxiomVocab.Type.REQUIRED, AxiomVocab.Type.valueOf(4));*/
 
-		assertEquals(AxiomVocab.Type.LIMIT, AxiomVocab.Type.valueOf(0));
-		assertEquals(AxiomVocab.Type.LIMIT, AxiomVocab.Type.valueOf(5));
+		assertNull( AxiomVocab.Type.valueOf(0));
+		assertNull(AxiomVocab.Type.valueOf(5));
 	}
 
 	@Test

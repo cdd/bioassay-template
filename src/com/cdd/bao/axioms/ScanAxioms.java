@@ -29,8 +29,10 @@ import static com.cdd.bao.axioms.AxiomVocab.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
 import org.apache.jena.vocabulary.*;
 import org.json.*;
 
@@ -45,6 +47,7 @@ import org.json.*;
 
 public class ScanAxioms
 {
+	private File[] sources = null;
 	private OntModel ontology;
 	private Schema schema;
 	private SchemaVocab schvoc;
@@ -58,49 +61,95 @@ public class ScanAxioms
 	private Map<String, Set<String>> inverseProperties = new TreeMap<>();
 
 	private AxiomVocab axvoc = new AxiomVocab();
+	//private Model outModel = ModelFactory.createDefaultModel();
+	//private OntModel outModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
+	private OntModel outModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_RDFS_INF);
 
-	/* not using this at the moment
+	// list of URIs that are useless because of their generality
 	private static String[] redundantURIs = 
 	{
-		"http://www.bioassayontology.org/bao#BAO_0000035", "http://www.bioassayontology.org/bao#BAO_0000179",
-		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0000015",
-		"http://www.bioassayontology.org/bao#BAO_0000026", "http://www.bioassayontology.org/bao#BAO_0000019",
-		"http://www.bioassayontology.org/bao#BAO_0000248", "http://www.bioassayontology.org/bao#BAO_0000015",
-		"http://www.bioassayontology.org/bao#BAO_0000264", "http://www.bioassayontology.org/bao#BAO_0000074",
-		"http://www.bioassayontology.org/bao#BAO_0002202", "http://www.bioassayontology.org/bao#BAO_0003075"
+		"",
+		"http://purl.obolibrary.org/obo/CHEBI_35222", // inhibitor
+		"http://www.bioassayontology.org/bao#BAO_0000015", // bioassay
+		"http://www.bioassayontology.org/bao#BAO_0000019", // assay format
+		"http://www.bioassayontology.org/bao#BAO_0000026", // bioassay specification
+		"http://www.bioassayontology.org/bao#BAO_0000029", // assay screening campaign stage
+		"http://www.bioassayontology.org/bao#BAO_0000035", // physical detection method
+		"http://www.bioassayontology.org/bao#BAO_0000074", // mode of action
+		"http://www.bioassayontology.org/bao#BAO_0000076", // screened entity
+		"http://www.bioassayontology.org/bao#BAO_0000179", // endpoint
+		"http://www.bioassayontology.org/bao#BAO_0000248", // assay kit
+		"http://www.bioassayontology.org/bao#BAO_0000264", // biological process
+		"http://www.bioassayontology.org/bao#BAO_0000512", // assay footprint
+		"http://www.bioassayontology.org/bao#BAO_0002001", // measured entity
+		"http://www.bioassayontology.org/bao#BAO_0002030", // coupled substrate
+		"http://www.bioassayontology.org/bao#BAO_0002091", // commercial company
+		"http://www.bioassayontology.org/bao#BAO_0002202", // assay design method
+		"http://www.bioassayontology.org/bao#BAO_0002626", // biologics and screening manufacturer
+		"http://www.bioassayontology.org/bao#BAO_0002628", // instrumentation manufacturer
+		"http://www.bioassayontology.org/bao#BAO_0003028", // assay method
+		"http://www.bioassayontology.org/bao#BAO_0003043", // molecular entity
+		"http://www.bioassayontology.org/bao#BAO_0003060", // potentiator
+		"http://www.bioassayontology.org/bao#BAO_0003063", // substrate
+		"http://www.bioassayontology.org/bao#BAO_0003075", // molecular function
+		"http://www.bioassayontology.org/bao#BAO_0003102", // has role
+		"http://www.bioassayontology.org/bao#BAO_0003111", // nucleic acid
+		"http://www.bioassayontology.org/bao#BAO_0003112", // assay bioassay component
+		"http://www.bioassayontology.org/bao#BAO_0003115", // assay result component
 	};
-	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));*/
+	public Set<String> redundantURISet = new HashSet<>(Arrays.asList(redundantURIs));
+	//private static String hasRoleURI = "http://www.bioassayontology.org/bao#BAO_0003102";
 
-	private Map<String, Set<String>> axioms = new TreeMap<>();
-
-	private Map<String, Integer> propTypeCount = new TreeMap<>();
-
+	private Set<String> schemaValues = new HashSet<>();
+	private int numProperties = 0;
+	private int hasInverseCounter = 0;
+	private int forAllCounter = 0;
+	private int forSomeCounter = 0;
+	private int cardinalityCounter = 0;
+	private int maxCardinalityCounter = 0;
+	private int minCardinalityCounter = 0;
+	
 	// ------------ public methods ------------
 
 	public ScanAxioms()
 	{
 	}
 
-	public void exec() throws OntologyException, JSONException, IOException
+	// optionally override default locations for support files
+	public void setSource(File f) {sources = new File[]{f};}
+	public void setSchema(Schema schema) {this.schema = schema;}
+	public void setVocab(SchemaVocab schvoc) {this.schvoc = schvoc;}
+
+	public void exec() throws IOException
 	{
 		try
 		{
-			Util.writeln("Loading common assay template...");
-			schema = Schema.deserialise(new File("data/template/schema.json"));
-
-			Util.writeln("Loading vocabulary dump...");
-			try (InputStream idump = new FileInputStream("data/template/vocab.dump"))
+			if (schema == null)
 			{
-				schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+				Util.writeln("Loading common assay template...");
+				schema = Schema.deserialise(new File("data/template/schema.json"));
 			}
 
-			List<File> files = new ArrayList<>();
-			// TODO: formalise which files get included; note that scanning them all can be slow
-			for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-			if (false)
-				for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
-			else
-				Util.writeln("** skipping files in [data/preprocessed]"); // (includes original DTO, which takes a long time)
+			if (schvoc == null)
+			{
+				Util.writeln("Loading vocabulary dump...");
+				try (InputStream idump = new FileInputStream("data/template/vocab.dump"))
+				{
+					schvoc = SchemaVocab.deserialise(idump, new Schema[]{schema});
+				}
+			}
+
+			List<File> files = null;
+			if (sources == null)
+			{
+				files = new ArrayList<>();
+				for (File f : new File("data/ontology").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+				if (false)
+					for (File f : new File("data/preprocessed").listFiles()) if (f.getName().endsWith(".owl")) files.add(f);
+				else
+					Util.writeln("** skipping files in [data/preprocessed]"); // (includes original DTO, which takes a long time)
+			}
+			else files = Arrays.asList(sources);
 				
 			Util.writeln("# files to read: " + files.size());
 
@@ -114,10 +163,13 @@ public class ScanAxioms
 				}
 			}
 		}
-		catch (Exception ex) {throw new OntologyException(ex.getMessage());}
+		catch (Exception ex) 
+		{
+			if (ex instanceof IOException) throw ex;			
+			throw new IOException("Loading failure", ex);
+		}
 
 		Util.writeln("Collating values from schema...");
-		Set<String> schemaValues = new HashSet<>();
 		for (SchemaVocab.StoredTree stored : schvoc.getTrees())
 			for (SchemaTree.Node node : stored.tree.getFlat())
 				schemaValues.add(node.uri);
@@ -166,14 +218,6 @@ public class ScanAxioms
 		}
 
 		Util.writeln("    number of classes: " + numClasses);
-
-		int numProperties = 0;
-		int hasInverseCounter = 0;
-		int forAllCounter = 0;
-		int forSomeCounter = 0;
-		int cardinalityCounter = 0;
-		int maxCardinalityCounter = 0;
-		int minCardinalityCounter = 0;
 
 		Util.writeln("Extracting property labels...");
 
@@ -226,153 +270,21 @@ public class ScanAxioms
 			//    v = value required by the axiom
 
 			OntClass o = it.next();
-			if (!schemaValues.contains(o.asResource().getURI())) continue;
+			String subjectURI = o.getURI(), subjectName = nameNode(o);
+			if (!schemaValues.contains(subjectURI) || redundantURISet.contains(subjectURI)) continue;
 
 			for (Iterator<OntClass> i = o.listSuperClasses(); i.hasNext();)
 			{
 				OntClass c = i.next();
 
-				if (c.isRestriction()) //go over each axiom of a particular class and put the class and axioms to the bag
+				if (c.isRestriction()) // go over each axiom of a particular class and put the class and axioms to the bag
 				{
-					Restriction r = c.asRestriction(); //restriction == axiom
-					if (r.isAllValuesFromRestriction()) // only axioms
-					{
-						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						OntClass v = (OntClass)av.getAllValuesFrom();
-
-						Resource[] sequence = expandSequence(v);
-						boolean anySchema = false;
-						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
-						{
-							anySchema = true;
-							break;
-						}
-						if (!anySchema) continue;
-
-						String key = nameNode(o);
-						String val = "ALL: property=[" + pname + "] value=";
-						if (sequence.length == 0) val += "{nothing}";	
-						String objectURIs = null;
-						//StringBuilder oURIs = null;
-						String objectLabels = null;
-						String[] uriArray = new String[sequence.length];
-						for (int n = 0; n < sequence.length; n++)
-						{
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-							objectURIs += "[" + sequence[n] + "]";
-							//oURIs.append(sequence[n] + ";");
-							objectLabels += "[" + nameNode(sequence[n]) + "]";
-							uriArray[n] = "" + sequence[n];
-
-							//here I want to add all the subclasses for 
-							//OntClass v as well in order to do better suggestions for the
-							//axiom backed up suggestions for [property, value (and its subclasses)]
-
-						}
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						forAllCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue; //this is added for JSON
-
-						/*axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
-						assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "only", uriArray));*/
-												
-						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], true);
-						axvoc.addRule(rule);
-					}
-					else if (r.isSomeValuesFromRestriction())
-					{
-						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						OntClass v = (OntClass)av.getSomeValuesFrom();
-
-						Resource[] sequence = expandSequence(v);
-						boolean anySchema = false;
-						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
-						{
-							anySchema = true;
-							break;
-						}
-						if (!anySchema) continue;
-
-						String key = nameNode(o);
-						String val = "SOME: property=[" + pname + "] value=";
-						if (sequence.length == 0) val += "{nothing}";
-						String objectURIs = null;
-						String objectLabels = null;
-						String[] uriArray = new String[sequence.length];
-						for (int n = 0; n < sequence.length; n++)
-						{
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-							objectURIs += "[" + sequence[n] + "]";
-							objectLabels += "[" + nameNode(sequence[n]) + "]";
-							uriArray[n] = "" + sequence[n];
-						}
-						for (int n = 0; n < sequence.length; n++)
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						forSomeCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
-						
-						//if (!(Arrays.asList(redundantURIs).contains(o.getURI())))
-						//axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
-						//assayAxioms.add(new AssayAxioms(o.getURI(), p.getURI(), "some", uriArray));
-						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json
-						
-						// TODO: is there a rule type for "Some"?
-					}
-					else if (r.isMaxCardinalityRestriction())
-					{
-						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int maximum = av.getMaxCardinality();
-
-						String key = nameNode(o);
-						String val = "MAX: property=[" + pname + "] maximum=" + maximum;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						maxCardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-
-						// TODO: map to a rule (0 = blank?)		
-					}
-					else if (r.isMinCardinalityRestriction())
-					{
-						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int minimum = av.getMinCardinality();
-
-						String key = nameNode(o);
-						String val = "MIN: property=[" + pname + "] minimum=" + minimum;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						minCardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-
-						// TODO: map to a rule (>0 = required?)				
-					}
-					else if (r.isCardinalityRestriction())
-					{
-						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int cardinality = av.getCardinality();
-
-						String key = nameNode(o);
-						String val = "EQ: property=[" + pname + "] cardinality=" + cardinality;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						cardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-						
-						// TODO: map to a rule (blank/required?)
-					}
+					Restriction r = c.asRestriction(); // restriction == axiom
+					if (r.isAllValuesFromRestriction()) processAxiomAll(subjectURI, subjectName, r);
+					else if (r.isSomeValuesFromRestriction()) processAxiomSome(subjectURI, subjectName, r);
+					else if (r.isMinCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
+					else if (r.isMaxCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
+					else if (r.isCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
 				}
 			}
 
@@ -386,147 +298,23 @@ public class ScanAxioms
 					try {r = c.asRestriction();}
 					catch (ConversionException ex) {continue;} // silent failure
 					
-					if (r.isAllValuesFromRestriction()) // only axioms
-					{
-						AllValuesFromRestriction av = r.asAllValuesFromRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						OntClass v = (OntClass)av.getAllValuesFrom();
-
-						Resource[] sequence = expandSequence(v);
-						boolean anySchema = false;
-						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
-						{
-							anySchema = true;
-							break;
-						}
-						if (!anySchema) continue;
-
-						String key = nameNode(o);
-						String val = "ALL: property=[" + pname + "] value=";
-						if (sequence.length == 0) val += "{nothing}";
-						String objectURIs = null;
-						String objectLabels = null;
-						String[] uriArray = new String[sequence.length];
-						for (int n = 0; n < sequence.length; n++)
-						{
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-							objectURIs += "[" + sequence[n] + "]";
-							objectLabels += "[" + nameNode(sequence[n]) + "]";
-							uriArray[n] = "" + sequence[n];
-						}
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						forAllCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-						if (!putAdd(onlyAxioms, o.getURI() + "::" + key, val)) continue;//this is added for JSON
-
-						//axiomsForAll.add(new AssayAxiomsAll(o.getURI(), p.getURI(), objectURIs, "only", uriArray));
-
-						Rule rule = new Rule(Type.LIMIT, new Term(o.getURI(), false));
-						rule.impact = new Term[uriArray.length];
-						for (int n = 0; n < uriArray.length; n++) rule.impact[n] = new Term(uriArray[n], false);
-						axvoc.addRule(rule);
-					}
-					else if (r.isSomeValuesFromRestriction())
-					{
-						SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						OntClass v = (OntClass)av.getSomeValuesFrom();
-
-						Resource[] sequence = expandSequence(v);
-						boolean anySchema = false;
-						for (Resource s : sequence) if (schemaValues.contains(s.getURI()))
-						{
-							anySchema = true;
-							break;
-						}
-						if (!anySchema) continue;
-
-						String key = nameNode(o);
-						String val = "SOME: property=[" + pname + "] value=";
-						if (sequence.length == 0) val += "{nothing}";
-						String objectURIs = null;
-						String objectLabels = null;
-						String[] uriArray = new String[sequence.length];
-						for (int n = 0; n < sequence.length; n++)
-						{
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-							objectURIs += "[" + sequence[n] + "]";
-							objectLabels += "[" + nameNode(sequence[n]) + "]";
-							uriArray[n] = "" + sequence[n];
-						}
-						for (int n = 0; n < sequence.length; n++)
-							val += (n > 0 ? "," : "") + "[" + nameNode(sequence[n]) + "]";
-
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						forSomeCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-						if (!putAdd(someAxioms, o.getURI() + "::" + key, val)) continue;
-						
-						/*if (!redundantURISet.contains(o.getURI()))
-							axiomsForSome.add(new AssayAxiomsSome(o.getURI(), p.getURI(), objectURIs, "some", uriArray));
-						//someAxiomsArray.put(ac.createJSONObject(o.getURI(), p.getURI(), objectURIs,"some"));//this is for the axiom json*/
-						// TODO: use these?
-					}
-					else if (r.isMaxCardinalityRestriction())
-					{
-						MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int maximum = av.getMaxCardinality();
-
-						String key = nameNode(o);
-						String val = "MAX: property=[" + pname + "] maximum=" + maximum;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						maxCardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-
-						// TODO: use these?
-					}
-					else if (r.isMinCardinalityRestriction())
-					{
-						MinCardinalityRestriction av = r.asMinCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int minimum = av.getMinCardinality();
-
-						String key = nameNode(o);
-						String val = "MIN: property=[" + pname + "] minimum=" + minimum;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						minCardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-
-						// TODO: use these?
-					}
-					else if (r.isCardinalityRestriction())
-					{
-						CardinalityRestriction av = r.asCardinalityRestriction();
-						OntProperty p = av.getOnProperty();
-						String pname = nameNode(p);
-						int cardinality = av.getCardinality();
-
-						String key = nameNode(o);
-						String val = "EQ: property=[" + pname + "] cardinality=" + cardinality;
-						if (!putAdd(axioms, o.getURI() + "::" + key, val)) continue;
-						cardinalityCounter++;
-						propTypeCount.put(pname, propTypeCount.getOrDefault(pname, 0) + 1);
-
-						// TODO: use these?
-					}
+					if (r.isAllValuesFromRestriction()) processAxiomAll(subjectURI, subjectName, r);
+					else if (r.isSomeValuesFromRestriction()) processAxiomSome(subjectURI, subjectName, r);
+					else if (r.isMinCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
+					else if (r.isMaxCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
+					else if (r.isCardinalityRestriction()) processCardinality(subjectURI, subjectName, r);
 				}
 			}
 
 			long timeNow = new Date().getTime();
 			if (timeNow > timeThen + 2000)
 			{
-				Util.writeln("    so far: " + axioms.size());
+				Util.writeln("    so far: " + axvoc.numRules());
 				timeThen = timeNow;
 			}
 		}
 
 		Util.writeln("\n---- Category Counts ----");
-		Util.writeln("terms with axioms: " + axioms.size());
 		Util.writeln("for all axioms: " + forAllCounter);
 		Util.writeln("for some axioms: " + forSomeCounter);
 		Util.writeln("for max axioms: " + maxCardinalityCounter);
@@ -535,28 +323,76 @@ public class ScanAxioms
 		Util.writeln("properties with inverse: " + hasInverseCounter);
 		
 		Util.writeln("\nTotal Axiom Rules:");
-		int numLimit = 0, numExclude = 0, numBlank = 0, numRequired = 0;
+		int numLimit = 0, numExclude = 0; //, numBlank = 0, numRequired = 0;
 		for (Rule r : axvoc.getRules())
 		{
 			if (r.type == Type.LIMIT) numLimit++;
 			else if (r.type == Type.EXCLUDE) numExclude++;
-			else if (r.type == Type.BLANK) numBlank++;
-			else if (r.type == Type.REQUIRED) numRequired++;
+			/*else if (r.type == Type.BLANK) numBlank++;
+			else if (r.type == Type.REQUIRED) numRequired++;*/
 		}
 		Util.writeln("    limit: " + numLimit);
 		Util.writeln("    exclude: " + numExclude);
-		Util.writeln("    blank: " + numBlank);
-		Util.writeln("    required: " + numRequired);
+		/*Util.writeln("    blank: " + numBlank);
+		Util.writeln("    required: " + numRequired);*/
 
 		Util.writeln("Scanning complete.");
 	}
 	
+	// after successful scanning, fetch the outcome
+	public AxiomVocab getVocab()
+	{
+		return axvoc;
+	}
+
 	// extract as axiom rules and export using the binary format
-	public void exportDump(String fn) throws IOException, OntologyException
+	public void exportDump(String fn) throws IOException
 	{
 		File f = new File(fn).getAbsoluteFile();
 		Util.writeln("Writing rules dump to: " + f.getPath());
-		axvoc.serialise(f);
+		axvoc.serialise(f, schvoc);
+	}
+	
+	// save the ontology representation of the scanned-out axioms
+	public void exportOntology(String fn) throws IOException
+	{
+		outModel.setNsPrefix("bao", ModelSchema.PFX_BAO);
+		outModel.setNsPrefix("bat", ModelSchema.PFX_BAT);
+		outModel.setNsPrefix("src", ModelSchema.PFX_SOURCE);
+		outModel.setNsPrefix("obo", ModelSchema.PFX_OBO);
+		outModel.setNsPrefix("rdf", ModelSchema.PFX_RDF);
+		outModel.setNsPrefix("rdfs", ModelSchema.PFX_RDFS);
+		outModel.setNsPrefix("xsd", ModelSchema.PFX_XSD);
+		outModel.setNsPrefix("dto", ModelSchema.PFX_DTO);
+		
+		File f = new File(fn).getAbsoluteFile();
+		Util.writeln("Writing ontology extract to: " + f.getPath());
+		try (OutputStream ostr = new FileOutputStream(fn))
+		{
+			for (Rule r : axvoc.getRules())
+			{
+				if (r.type == Type.LIMIT)
+				{
+					OntClass subj = outModel.createClass(r.subject.valueURI);
+					OntProperty prop = outModel.createObjectProperty("http://www.bioassayontology.org/bao#BAO_0003102");
+					for (int n = 0; n < r.impact.length; n++) 
+					{
+						OntClass obj = outModel.createClass(r.impact[n].valueURI);
+						Restriction values = outModel.createAllValuesFromRestriction(r.subject.valueURI, prop, obj);
+					}
+				}
+			}
+			if (fn.endsWith(".ttl")) RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+			else if (fn.endsWith(".owl")) RDFDataMgr.write(ostr, outModel, RDFFormat.RDFXML_ABBREV);
+			else throw new IOException("Invalid extension for [" + fn + "]");
+		}
+		
+		/*try (OutputStream ostr = new FileOutputStream(fn))
+		{
+			if (fn.endsWith(".ttl")) RDFDataMgr.write(ostr, outModel, RDFFormat.TURTLE);
+			else if (fn.endsWith(".owl")) RDFDataMgr.write(ostr, outModel, RDFFormat.RDFXML_ABBREV);
+			else throw new IOException("Invalid extension for [" + fn + "]");
+		}*/
 	}
 	
 	// exports the axioms as a very simple text file of correlated pairs of URIs
@@ -588,11 +424,24 @@ public class ScanAxioms
 
 		try (PrintWriter wtr = new PrintWriter(f))
 		{
-			wtr.println("---- Property Counts ----");
-			for (String key : propTypeCount.keySet())
-				wtr.println("[" + key + "] count=" + propTypeCount.get(key));
+			wtr.println("Total Axiom Rules:");
+			int numLimit = 0, numExclude = 0;//, numBlank = 0, numRequired = 0;
+			for (Rule r : axvoc.getRules())
+			{
+				if (r.type == Type.LIMIT) numLimit++;
+				else if (r.type == Type.EXCLUDE) numExclude++;
+				/*else if (r.type == Type.BLANK) numBlank++;
+				else if (r.type == Type.REQUIRED) numRequired++;*/
+			}
+			wtr.println("    limit: " + numLimit);
+			wtr.println("    exclude: " + numExclude);
+			/*wtr.println("    blank: " + numBlank);
+			wtr.println("    required: " + numRequired);*/
 
 			wtr.println("\n==== Axioms ====");
+
+			Map<String, List<AxiomVocab.Rule>> ruleSubject = new HashMap<>();
+			for (AxiomVocab.Rule rule : axvoc.getRules()) putAdd(ruleSubject, rule.subject.valueURI, rule);
 
 			List<Schema.Group> stack = new ArrayList<>();
 			stack.add(schema.getRoot());
@@ -602,24 +451,32 @@ public class ScanAxioms
 
 				for (Schema.Assignment assn : group.assignments)
 				{
-					wtr.println("\n---- " + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + "> ----");
-					Set<String> wantURI = new HashSet<>();
+					SchemaTree tree = null;
 					for (SchemaVocab.StoredTree stored : schvoc.getTrees()) if (stored.assignment != null && stored.tree != null)
-					{
-						if (stored.assignment.propURI.equals(assn.propURI)) for (SchemaTree.Node node : stored.tree.getFlat())
-							wantURI.add(node.uri);
-					}
+						if (stored.assignment.propURI.equals(assn.propURI)) {tree = stored.tree; break;}
+					if (tree == null) continue;
+					
+					wtr.println("\n---- " + assn.name + " <" + ModelSchema.collapsePrefix(assn.propURI) + "> ----");
 
-					for (String key : axioms.keySet())
+					for (SchemaTree.Node node : tree.getFlat())
 					{
-						String[] bits = key.split("::");
-						String uri = bits[0], name = bits[1];
-						if (!wantURI.contains(uri)) continue;
-
-						wtr.println("[" + name + "]:");
-						List<String> values = new ArrayList<>(axioms.get(key));
-						Collections.sort(values);
-						for (String val : values) wtr.println("    " + val);
+						List<AxiomVocab.Rule> rules = ruleSubject.get(node.uri);
+						if (rules == null) continue;
+						for (AxiomVocab.Rule rule : rules)
+						{
+							wtr.write("  ");
+							wtr.write(rule.type.toString() + ": ");
+							wtr.write("[" + ModelSchema.collapsePrefix(rule.subject.valueURI) + (rule.subject.wholeBranch ? "*" : "") + 
+									  "/" + uriToLabel.get(rule.subject.valueURI) + "]");
+									  
+							wtr.write(" ==> ");
+							
+							StringJoiner sj = new StringJoiner(",");
+							if (rule.impact != null) for (Term s : rule.impact) 
+								sj.add(ModelSchema.collapsePrefix(s.valueURI) + (s.wholeBranch ? "*" : "") + "/" + uriToLabel.get(s.valueURI));
+							wtr.write(" [" + sj.toString() + "])");
+							wtr.write("\n");
+						}
 					}
 				}
 
@@ -629,6 +486,76 @@ public class ScanAxioms
 	}
 	
 	// ------------ private methods ------------
+
+	// process an "ALL" axiom, which is converted to a limitation rule
+	private void processAxiomAll(String subjectURI, String subjectName, Restriction r)
+	{
+		AllValuesFromRestriction av = r.asAllValuesFromRestriction();
+		OntProperty p = av.getOnProperty();
+		String pname = nameNode(p);
+		OntClass v = (OntClass)av.getAllValuesFrom();
+
+		Resource[] sequence = expandSequence(v);
+		if (sequence.length == 0) return;
+
+		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, true /* whole branch? */));
+		rule.impact = new Term[sequence.length];
+		for (int n = 0; n < rule.impact.length; n++) rule.impact[n] = new Term(sequence[n].getURI(), true);
+		addRule(rule);
+		
+		forAllCounter++;
+	}
+	
+	// process a "SOME" axiom, which is converted to a limitation rule
+	private void processAxiomSome(String subjectURI, String subjectName, Restriction r)
+	{
+		SomeValuesFromRestriction av = r.asSomeValuesFromRestriction();
+		OntProperty p = av.getOnProperty();
+		String pname = nameNode(p);
+		OntClass v = (OntClass)av.getSomeValuesFrom();
+
+		Resource[] sequence = expandSequence(v);
+		if (sequence.length == 0) return;
+
+		Rule rule = new Rule(Type.LIMIT, new Term(subjectURI, true /* whole branch? */));
+		rule.impact = new Term[sequence.length];
+		for (int n = 0; n < rule.impact.length; n++) rule.impact[n] = new Term(sequence[n].getURI(), true);
+		addRule(rule);
+		
+		forSomeCounter++;
+	}	
+
+	// cardinality restriction: not currently used, but they could be
+	private void processCardinality(String subjectURI, String subjectName, Restriction r)
+	{
+		if (r.isMaxCardinalityRestriction())
+		{
+			MaxCardinalityRestriction av = r.asMaxCardinalityRestriction();
+			OntProperty p = av.getOnProperty();
+			String pname = nameNode(p);
+			int maximum = av.getMaxCardinality();
+			// ...
+			maxCardinalityCounter++;
+		}
+		else if (r.isMinCardinalityRestriction())
+		{
+			MinCardinalityRestriction av = r.asMinCardinalityRestriction();
+			OntProperty p = av.getOnProperty();
+			String pname = nameNode(p);
+			int minimum = av.getMinCardinality();
+			// ...
+			minCardinalityCounter++;
+		}
+		else if (r.isCardinalityRestriction())
+		{
+			CardinalityRestriction av = r.asCardinalityRestriction();
+			OntProperty p = av.getOnProperty();
+			String pname = nameNode(p);
+			int cardinality = av.getCardinality();
+			// ...
+			cardinalityCounter++;
+		}
+	}
 
 	// adds a value to a list-within-map
 	protected static boolean putAdd(Map<String, Set<String>> map, String key, String val)
@@ -659,10 +586,17 @@ public class ScanAxioms
 		return "{???}";
 	}
 
-	// takes a resource that may well be an anonymous value: which means go through and expand it out into a chain of resources
+	// takes a resource that may well be an anonymous value: which means go through and expand it out into a chain of resources;
+	// excludes anything in the redundant list/not in the schema items list
 	private Resource[] expandSequence(Resource v)
 	{
-		if (!v.isAnon()) return new Resource[]{v};
+		if (!v.isAnon()) 
+		{
+			if (!v.isResource()) return new Resource[0];
+			String uri = v.asResource().getURI();
+			if (redundantURISet.contains(uri) || !schemaValues.contains(uri)) return new Resource[0];
+			return new Resource[]{v};
+		}
 
 		Property rdfType = ontology.createProperty(ModelSchema.PFX_RDF + "type");
 		List<Resource> sequence = new ArrayList<>(), anonymous = new ArrayList<>();
@@ -674,14 +608,49 @@ public class ScanAxioms
 			{
 				Property prop = stmt.getPredicate();
 				if (prop.equals(rdfType)) continue;
+				
 				RDFNode object = stmt.getObject();
 				if (!object.isResource()) continue;
+				
 				if (!object.isAnon())
-					sequence.add(object.asResource());
-				else
-					anonymous.add(object.asResource());
+				{
+					Resource r = object.asResource();
+					String uri = r.getURI();
+					if (!redundantURISet.contains(uri) && schemaValues.contains(uri)) sequence.add(r);
+				}
+				else anonymous.add(object.asResource());
 			}
 		}
 		return sequence.toArray(new Resource[sequence.size()]);
+	}
+	
+	// adds a rule to the vocabulary, after checking for duplicates
+	private void addRule(Rule rule)
+	{
+		//for (Rule look : axvoc.getRules()) if (look.equals(rule)) return;
+		for (Rule look : axvoc.getRules()) if (look.type == rule.type && look.subject.equals(rule.subject))
+		{
+			if (rule.impact != null) for (Term term : rule.impact)
+			{
+				if (ArrayUtils.indexOf(look.impact, term) < 0) look.impact = ArrayUtils.add(look.impact, term);
+			}
+			return;
+		}
+		
+		axvoc.addRule(rule);
+		
+		Property rdfType = outModel.createProperty(ModelSchema.PFX_RDF + "type"), rdfLabel = outModel.createProperty(ModelSchema.PFX_RDFS + "label");
+		
+		for (int n = 0; n < rule.impact.length; n++) 
+		{
+			OntClass obj = outModel.createClass(rule.impact[n].valueURI);
+			if (rule.type == Type.LIMIT) 
+			{
+				AllValuesFromRestriction values = outModel.createAllValuesFromRestriction(rule.subject.valueURI, rdfType, obj);
+			}
+			String label = uriToLabel.get(rule.subject.valueURI);
+			if (label != null)
+				outModel.add(outModel.createResource(rule.subject.valueURI), rdfLabel, outModel.createLiteral(label));
+		}
 	}
 }

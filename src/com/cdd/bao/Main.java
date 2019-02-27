@@ -139,10 +139,11 @@ public class Main
 		}
 		else if (argv[0].equals("scanaxioms"))
 		{
-			String fnDump = null, fnPair = null, fnText = null;
+			String fnDump = null, fnOnto = null, fnPair = null, fnText = null;
 			for (int n = 1; n < argv.length; n++)
 			{
 				if (argv[n].equals("--dump") && n < argv.length - 1) fnDump = argv[++n];
+				else if (argv[n].equals("--odump") && n < argv.length - 1) fnOnto = argv[++n];
 				else if (argv[n].equals("--pair") && n < argv.length - 1) fnPair = argv[++n];
 				else if (argv[n].equals("--text") && n < argv.length - 1) fnText = argv[++n];
 				else
@@ -157,6 +158,7 @@ public class Main
 				ScanAxioms scan = new ScanAxioms();
 				scan.exec();
 				if (fnDump != null) scan.exportDump(fnDump);
+				if (fnOnto != null) scan.exportOntology(fnOnto);
 				if (fnPair != null) scan.exportPair(fnPair);
 				if (fnText != null) scan.exportText(fnText);
 
@@ -164,6 +166,18 @@ public class Main
 			}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		/*else if (argv[0].equals("showaxioms"))
+		{
+			String fnAxioms = argv.length >= 2 ? argv[1] : "data/template/axioms.dump";
+			String fnTemplate = argv.length >= 3 ? argv[2] : "data/template/schema.json";
+			String fnVocab = argv.length >= 4 ? argv[3] : "data/template/vocab.dump";
+			try
+			{
+				ShowAxioms show = new ShowAxioms(fnAxioms, fnTemplate, fnVocab);
+				show.exec();
+			}
+			catch (Exception ex) {ex.printStackTrace();}
+		}*/
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
