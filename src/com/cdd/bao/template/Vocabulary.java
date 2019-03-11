@@ -390,22 +390,6 @@ public class Vocabulary
 			synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingProgress(this, progress);}
 		}
 
-		// find remappings, as distinguished from reparenting via preferredParent
-		Property batRemapTo = model.createProperty(ModelSchema.PFX_BAT + "remapTo");
-		for (StmtIterator iter = model.listStatements(null, batRemapTo, (RDFNode)null); iter.hasNext();)
-		{
-			Statement stmt = iter.next();
-			Resource subject = stmt.getSubject();
-			RDFNode object = stmt.getObject();
-
-			if (!object.isResource()) throw new IOException(ModelSchema.PFX_BAT + "remapTo directive requires a resource as the object.");
-
-			String srcURI = subject.getURI();
-			String dstURI = object.asResource().getURI();
-			remappings.put(srcURI, dstURI);
-		}
-		RemappingChecker.validateRemappings(remappings); // throws exception if cycle detected in remappings
-
 		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
 		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
 		Property subPropOf = model.createProperty(ModelSchema.PFX_RDFS + "subPropertyOf");
@@ -422,6 +406,40 @@ public class Vocabulary
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
 		Property notSubClass = model.createProperty(ModelSchema.PFX_BAT + "notSubClass");
 		Resource resEliminated = model.createResource(ModelSchema.PFX_BAT + "eliminated");
+
+		// find remappings, as distinguished from reparenting via preferredParent
+		Property batRemapTo = model.createProperty(ModelSchema.PFX_BAT + "remapTo");
+		for (StmtIterator iter = model.listStatements(null, batRemapTo, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			Resource subject = stmt.getSubject();
+			RDFNode object = stmt.getObject();
+
+			if (!object.isResource()) throw new IOException(ModelSchema.PFX_BAT + "remapTo directive requires a resource as the object.");
+
+			String srcURI = subject.getURI();
+			String dstURI = object.asResource().getURI();
+			remappings.put(srcURI, dstURI);
+		}
+		
+		// same deal with bat:pairedWith, if one of the is eliminated
+		Property batPairedWith = model.createProperty(ModelSchema.PFX_BAT + "pairedWith");
+		for (StmtIterator iter = model.listStatements(null, batPairedWith, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			Resource subject = stmt.getSubject();
+			RDFNode object = stmt.getObject();
+
+			if (!object.isResource()) throw new IOException(ModelSchema.PFX_BAT + "pairedWith directive requires a resource as the object.");
+
+			String uri1 = subject.getURI(), uri2 = object.asResource().getURI();
+			boolean elim1 = model.contains(model.createResource(uri1), rdfType, resEliminated);
+			boolean elim2 = model.contains(model.createResource(uri2), rdfType, resEliminated);
+			if (elim1 && !elim2) remappings.put(uri1, uri2);
+			else if (elim2 && !elim1) remappings.put(uri2, uri1);
+		}
+		
+		RemappingChecker.validateRemappings(remappings); // throws exception if cycle detected in remappings
 		
 		Set<String> anyProp = new HashSet<>(), anyValue = new HashSet<>();
 
