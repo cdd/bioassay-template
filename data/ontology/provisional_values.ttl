@@ -338,4 +338,23 @@ bae:BAE_0000063
   obo:IAO_0000115 "" ;
   .
 
+# rearrangements to the "organism" hierarchy, to insert prokaryotes as a branch
+
+bae:BAE_0000064
+  rdfs:label "prokaryote" ;
+  rdfs:subClassOf bao:BAO_0000658 ;
+  obo:IAO_0000115 "Prokaryotes are single-celled organisms that lack nuclei." ;
+  .
+
+bao:BAO_0000364  
+  bat:notSubClass bao:BAO_0000658 ;
+  rdfs:subClassOf bae:BAE_0000064 ;
+  .
+
+bae:BAE_0000065
+  rdfs:label "archaea" ;
+  rdfs:subClassOf bae:BAE_0000064 ;
+  obo:IAO_0000115 "Archaea are an ancient branch of prokaryotes, exemplified by deep ocean extremophiles." ;
+  .
+
 

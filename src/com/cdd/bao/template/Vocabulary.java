@@ -453,7 +453,7 @@ public class Vocabulary
 
 			String subjURI = remapIfAny(subject.getURI());
 			String objURI = remapIfAny(object.getURI());
-			classBreakers.add(subjURI + "::" + objURI);
+			classBreakers.add(subjURI + SEP + objURI);
 		}
 		for (StmtIterator iter = model.listStatements(null, rdfType, resEliminated); iter.hasNext();)
 		{
@@ -638,8 +638,6 @@ public class Vocabulary
 
 				String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
 				if (labelChild == null || labelParent == null) continue;
-				
-				//Util.writeln("{"+uriParent+":"+getLabel(uriParent)+"} -> {"+uriChild+":"+getLabel(uriChild)+"}");
 				
 				Branch child = hier.uriToBranch.get(uriChild), parent = hier.uriToBranch.get(uriParent);
 				
