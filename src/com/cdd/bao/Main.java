@@ -26,6 +26,7 @@ import com.cdd.bao.editor.*;
 import com.cdd.bao.importer.*;
 import com.cdd.bao.template.*;
 import com.cdd.bao.template.Schema.*;
+import com.cdd.bao.template.SchemaVocab.*;
 import com.cdd.bao.util.*;
 import com.cdd.bao.validator.*;
 
@@ -335,6 +336,13 @@ public class Main
 		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
 
 		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
+		
+		for (Schema schema : schemata) 
+		{
+			Util.writeln("Schema [" + schema.getRoot().name + "] <" + schema.getSchemaPrefix() + ">");
+			summariseSchemaGroup(schema.getRoot(), 4, schvoc);
+		}
+		
 		try (OutputStream ostr = new FileOutputStream(outputFile))
 		{
 			if (outputFile.endsWith(".json"))
@@ -356,6 +364,26 @@ public class Main
 			else schvoc.serialise(ostr);
 		}
 		Util.writeln("Done.");
+	}
+
+	// display overview of schema contents
+	private static void summariseSchemaGroup(Group group, int indent, SchemaVocab schvoc)
+	{
+		for (Assignment assn : group.assignments)
+		{
+			Util.write(Util.rep(' ', indent) + "[" + assn.name + "] <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
+			for (StoredTree stored : schvoc.getTrees()) if (stored.assignment == assn) 
+			{
+				Util.write(" terms=" + stored.tree.getTree().size());
+				break;
+			}
+			Util.writeln();
+		}
+		for (Group subgrp : group.subGroups)
+		{
+			Util.writeln(Util.rep(' ', indent) + "{" + subgrp.name + "} <" + ModelSchema.collapsePrefix(subgrp.groupURI) + ">");
+			summariseSchemaGroup(subgrp, indent + 4, schvoc);
+		}
 	}
 
 	// evaluates a schema template, looking for obvious shortcomings
