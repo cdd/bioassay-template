@@ -157,7 +157,6 @@ public class SchemaTree
 		while (!candidates.isEmpty())
 		{
 			boolean modified = false;
-			int prevSize = candidates.size();
 			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
 			{
 				Pair<String, Node> pair = it.next();
