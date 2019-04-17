@@ -58,11 +58,14 @@ public class SchemaTree
 		public Node(Branch source, String descr)
 		{
 			this.source = source;
-			uri = source.uri;
-			label = source.label;
+			if (source != null)
+			{
+				uri = source.uri;
+				label = source.label;
+			}
 			this.descr = descr;
 		}
-
+		
 		public String toString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -148,42 +151,50 @@ public class SchemaTree
 	// label, description, and uri fields return true if SchemaTree was changed, false otherwise
 	public List<Node> addNodes(List<Pair<String, Node>> nodes)
 	{
-		List<Node> wasAdded = new ArrayList<>();
-		
+		List<Node> wereAdded = new ArrayList<>();
 		List<Pair<String, Node>> candidates = new ArrayList<>(nodes); 
+
 		while (!candidates.isEmpty())
 		{
-			int prevSize = candidates.size();
+			boolean modified = false;
 			for (Iterator<Pair<String, Node>> it = candidates.iterator(); it.hasNext();)
 			{
 				Pair<String, Node> pair = it.next();
 				Node parent = tree.get(pair.getLeft());
-				if (parent != null)
-				{
-					Node node = pair.getRight();
-					node.parent = parent;
-					node.depth = parent.depth + 1;
-					parent.children.add(node);
-					parent.childCount++;
-					node.inSchema = false;
-					node.isExplicit = false;
-					wasAdded.add(node);
+				if (parent == null) continue;
+				
+				Node srcNode = pair.getRight();
+				Node node = new Node(srcNode.source, srcNode.descr);
+				node.uri = srcNode.uri;
+				node.label = srcNode.label;
+				node.altLabels = srcNode.altLabels;
+				node.externalURLs = srcNode.externalURLs;
+				node.pubchemSource = srcNode.pubchemSource;
+				node.pubchemImport = srcNode.pubchemImport;
+				node.parent = parent;
+				node.depth = parent.depth + 1;
+				parent.children.add(node);
+				parent.childCount++;
+				node.inSchema = false;
+				node.isExplicit = false;
+				wereAdded.add(node);
 
-					tree.put(node.uri, node);
-					list.add(node);
-					
-					it.remove();
-				}
+				tree.put(node.uri, node);
+				list.add(node);
+				
+				it.remove();
+				modified = true;
 			}
-			if (prevSize == candidates.size()) break; // exit outer loop if no change
+			if (!modified) break;
 		}
-		if (wasAdded.size() > 0)
+		
+		if (wereAdded.size() > 0)
 		{
 			// both flat & list need to be updated
 			flattenTree();
 			list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
 		}
-		return wasAdded;
+		return wereAdded;
 	}
 
 	// tack on value node to this schema tree, leaving the underlying assignment untouched
