@@ -597,7 +597,7 @@ public class CellLineFix
 			d[i][j] = Math.min(Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1), d[i - 1][j - 1] + cost);
 		}
 		return d[sz1][sz2];
-	}	
+	}
 	
 	private void processCurated(File f) throws IOException
 	{

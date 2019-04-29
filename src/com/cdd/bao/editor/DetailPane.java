@@ -70,6 +70,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 	private RadioButton suggestionsFull = null, suggestionsDisabled = null, suggestionsField = null;
 	private RadioButton suggestionsURL = null, suggestionsID = null, suggestionsString = null;
 	private RadioButton suggestionsNumber = null, suggestionsInteger = null, suggestionsDate = null; 
+	private CheckBox chkMandatory = null;
 	
 	private final class ValueWidgets
 	{
@@ -217,6 +218,8 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		else if (suggestionsNumber.isSelected()) mod.suggestions = Schema.Suggestions.NUMBER;
 		else if (suggestionsInteger.isSelected()) mod.suggestions = Schema.Suggestions.INTEGER;
 		else if (suggestionsDate.isSelected()) mod.suggestions = Schema.Suggestions.DATE;
+		
+		mod.mandatory = chkMandatory.isSelected();
 		
 		if (isSummaryView)
 		{
@@ -598,8 +601,14 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 		suggestionsNumber.setSelected(assignment.suggestions == Schema.Suggestions.NUMBER);
 		suggestionsInteger.setSelected(assignment.suggestions == Schema.Suggestions.INTEGER);
 		suggestionsDate.setSelected(assignment.suggestions == Schema.Suggestions.DATE);
+
+		chkMandatory = new CheckBox("Mandatory");
+		chkMandatory.setSelected(assignment.mandatory);
+		Tooltip.install(chkMandatory, new Tooltip("If checked, the assignment should not be left blank."));
+
 		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsURL, suggestionsID, 
-											 suggestionsString, suggestionsNumber, suggestionsInteger, suggestionsDate);
+											 suggestionsString, suggestionsNumber, suggestionsInteger, suggestionsDate, chkMandatory);
+
 		line.add(suggestionsLine, "Suggestions:", 1, 0);
 
 		vbox.getChildren().add(line);

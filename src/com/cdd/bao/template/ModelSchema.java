@@ -86,6 +86,7 @@ public class ModelSchema
 	public static final String IS_WHOLEBRANCH = "isWholeBranch"; // indicates a value refers to an entire branch, not just one term
 	public static final String IS_EXCLUDEBRANCH = "isExcludeBranch"; // indicates a value refers to an entire branch to exclude
 	public static final String IS_CONTAINER = "isContainer"; // indicates a value that is not explicitly selected
+	public static final String IS_MANDATORY = "isMandatory"; // indicates that the assignment should not be blank
 	
 	public static final String SUGGESTIONS_FULL = "suggestionsFull"; // normal state: all suggestion modelling options enabled
 	public static final String SUGGESTIONS_DISABLED = "suggestionsDisabled"; // do not use for suggestion models (neither input nor output)
@@ -108,7 +109,7 @@ public class ModelSchema
 	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral;
-	private Property isExclude, isWholeBranch, isExcludeBranch, isContainer;
+	private Property isExclude, isWholeBranch, isExcludeBranch, isContainer, isMandatory;
 	private Property suggestionsFull, suggestionsDisabled, suggestionsField;
 	private Property suggestionsURL, suggestionsID, suggestionsString;
 	private Property suggestionsNumber, suggestionsInteger, suggestionsDate;
@@ -306,6 +307,7 @@ public class ModelSchema
 		isWholeBranch = model.createProperty(PFX_BAT + IS_WHOLEBRANCH);
 		isExcludeBranch = model.createProperty(PFX_BAT + IS_EXCLUDEBRANCH);
 		isContainer = model.createProperty(PFX_BAT + IS_CONTAINER);
+		isMandatory = model.createProperty(PFX_BAT + IS_MANDATORY);
 		suggestionsFull = model.createProperty(PFX_BAT + SUGGESTIONS_FULL);
 		suggestionsDisabled = model.createProperty(PFX_BAT + SUGGESTIONS_DISABLED);
 		suggestionsField = model.createProperty(PFX_BAT + SUGGESTIONS_FIELD);
@@ -400,6 +402,8 @@ public class ModelSchema
 			else if (assn.suggestions == Schema.Suggestions.INTEGER) model.add(objAssn, suggestionsInteger, model.createTypedLiteral(true));
 			else if (assn.suggestions == Schema.Suggestions.DATE) model.add(objAssn, suggestionsDate, model.createTypedLiteral(true));
 			
+			model.add(objAssn, isMandatory, model.createTypedLiteral(assn.mandatory));
+			
 			int vorder = 0;
 			for (Value val : assn.values)
 			{
@@ -415,7 +419,7 @@ public class ModelSchema
 				else if (val.spec == Schema.Specify.WHOLEBRANCH) model.add(blank, isWholeBranch, model.createTypedLiteral(true));
 				else if (val.spec == Schema.Specify.EXCLUDEBRANCH) model.add(blank, isExcludeBranch, model.createTypedLiteral(true));
 				else if (val.spec == Schema.Specify.CONTAINER) model.add(blank, isContainer, model.createTypedLiteral(true));
-
+				
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
 			
@@ -530,6 +534,8 @@ public class ModelSchema
 						   findBoolean(objAssn, suggestionsNumber) ? Schema.Suggestions.NUMBER : 
 						   findBoolean(objAssn, suggestionsInteger) ? Schema.Suggestions.INTEGER : 
 						   findBoolean(objAssn, suggestionsDate) ? Schema.Suggestions.DATE : Schema.Suggestions.FULL;
+
+		assn.mandatory = findBoolean(objAssn, isContainer);
 		
 		Map<Object, Integer> order = new HashMap<>();
 
