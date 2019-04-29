@@ -604,6 +604,7 @@ public class DetailPane extends ScrollPane implements URIRowLine.Delegate
 
 		chkMandatory = new CheckBox("Mandatory");
 		chkMandatory.setSelected(assignment.mandatory);
+		Tooltip.install(chkMandatory, new Tooltip("If checked, the assignment should not be left blank."));
 
 		suggestionsLine.getChildren().addAll(suggestionsFull, suggestionsDisabled, suggestionsField, suggestionsURL, suggestionsID, 
 											 suggestionsString, suggestionsNumber, suggestionsInteger, suggestionsDate, chkMandatory);
