@@ -172,6 +172,7 @@ public class ClipboardSchema
 		json.put("descr", assn.descr);
 		json.put("propURI", assn.propURI);
 		json.put("suggestions", assn.suggestions.toString().toLowerCase());
+		json.put("mandatory", assn.mandatory);
 
 		JSONArray jvalues = new JSONArray();
 		for (Schema.Value val : assn.values)
@@ -284,6 +285,8 @@ public class ClipboardSchema
 			try {assn.suggestions = Schema.Suggestions.valueOf(suggestValue.toUpperCase());}
 			catch (IllegalArgumentException ex) {} // silent fail: leave it as default (see class definition)
 		}
+		
+		assn.mandatory = json.optBoolean("mandatory", false);
 		
 		JSONArray jvalues = json.getJSONArray("values");
 		for (int n = 0; n < jvalues.length(); n++)

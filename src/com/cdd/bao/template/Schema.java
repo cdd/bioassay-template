@@ -171,6 +171,7 @@ public class Schema
 		public String propURI;
 		public List<Value> values = new ArrayList<>();
 		public Suggestions suggestions = Suggestions.FULL;
+		public boolean mandatory = false;
 		
 		public Assignment(Group parent, String name, String propURI) 
 		{
@@ -185,6 +186,7 @@ public class Schema
 			dup.descr = descr;
 			for (Value val : values) dup.values.add(val.clone());
 			dup.suggestions = suggestions;
+			dup.mandatory = mandatory;
 			return dup;
 		}
 		
@@ -195,13 +197,13 @@ public class Schema
 			if (o == null || getClass() != o.getClass()) return false;
 			Assignment other = (Assignment)o;
 			return Util.equals(name, other.name) && Util.equals(descr, other.descr) && Util.equals(propURI, other.propURI) &&
-				   suggestions == other.suggestions && values.equals(other.values);
+				   suggestions == other.suggestions && mandatory == other.mandatory && values.equals(other.values);
 		}
 
 		@Override
 		public int hashCode()
 		{
-			return Objects.hash(name, descr, propURI, suggestions, values);
+			return Objects.hash(name, descr, propURI, suggestions, mandatory, values);
 		}
 		
 		// returns true if the other assignment has the same branch sequence, i.e. the name is the same, and likewise for the trail of parent groups
