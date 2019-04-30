@@ -122,14 +122,16 @@ public class BRENDAFix
 		for (String uri : cells)
 		{
 			String abbrev = ModelSchema.collapsePrefix(uri), label = vocab.getLabel(uri);
-			out.println(abbrev + " rdfs:subClassOf " + URI_BRENDA_CELLLINES + " . # " + label);
+			out.println(abbrev + " rdfs:subClassOf " + URI_BRENDA_CELLLINES + " ;");
+			out.println("  bat:notSubClass <" + URI_BRENDA_ROOT + "> . # " + label);
 		}
 		
 		out.println("\n# reparenting tissues\n");
 		for (String uri : tissues)
 		{
 			String abbrev = ModelSchema.collapsePrefix(uri), label = vocab.getLabel(uri);
-			out.println(abbrev + " rdfs:subClassOf " + URI_BRENDA_TISSUES + " . # " + label);
+			out.println(abbrev + " rdfs:subClassOf " + URI_BRENDA_TISSUES + " ;");
+			out.println("  bat:notSubClass <" + URI_BRENDA_ROOT + "> . # " + label);
 		}
 
 		out.close();
