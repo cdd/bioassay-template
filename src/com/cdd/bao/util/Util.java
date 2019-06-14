@@ -110,7 +110,7 @@ public class Util
 	{
 		byte[] arr = new byte[coll.size()]; 
 		int n = 0;
-		for (byte v : coll) arr[n++] = v;
+		for (Number v : coll) arr[n++] = v.byteValue();
 		return arr;
 	}
 
@@ -121,7 +121,7 @@ public class Util
 	{
 		int[] arr = new int[coll.size()];
 		int n = 0;
-		for (int v : coll) arr[n++] = v;
+		for (Number v : coll) arr[n++] = v.intValue();
 		return arr;
 	}
 
@@ -132,7 +132,7 @@ public class Util
 	{
 		long[] arr = new long[coll.size()];
 		int n = 0;
-		for (long v : coll) arr[n++] = v;
+		for (Number v : coll) arr[n++] = v.longValue();
 		return arr;
 	}
 
@@ -143,7 +143,7 @@ public class Util
 	{
 		float[] arr = new float[coll.size()];
 		int n = 0;
-		for (float v : coll) arr[n++] = v;
+		for (Number v : coll) arr[n++] = v.floatValue();
 		return arr;
 	}
 
@@ -154,7 +154,7 @@ public class Util
 	{
 		double[] arr = new double[coll.size()];
 		int n = 0;
-		for (double v : coll) arr[n++] = v;
+		for (Number v : coll) arr[n++] = v.doubleValue();
 		return arr;
 	}
 

@@ -463,6 +463,8 @@ public class Vocabulary
 		eliminatedTerms.addAll(remappings.keySet()); // all remapped terms are eliminated by implication
 
 		// iterate over the list looking for label definitions
+		String stumpURI = ModelSchema.PFX_BAT + "stump"; // way to guarantee a childless class is in the list
+
 		for (StmtIterator iter = model.listStatements(); iter.hasNext();)
 		{
 			Statement stmt = iter.next();
@@ -482,13 +484,13 @@ public class Vocabulary
 			// separately collect everything that's part of the class/property hierarchy
 			if (predicate.equals(subPropOf) && object.isURIResource())
 			{
-				anyProp.add(objURI);
 				anyProp.add(subjURI);
+				anyProp.add(objURI);
 			}
 			else if (predicate.equals(subClassOf) && object.isURIResource())
 			{
-				anyValue.add(objURI);
 				anyValue.add(subjURI);
+				if (!objURI.equals(stumpURI)) anyValue.add(objURI);
 			}
 			else if (predicate.equals(rdfType) && (object.equals(owlDataType) || object.equals(owlObjProp)))
 			{
@@ -625,6 +627,8 @@ public class Vocabulary
 	{
 		Hierarchy hier = new Hierarchy();
 		
+		String stumpURI = ModelSchema.PFX_BAT + "stump";
+
 		// build the tree
 		for (int pass = 0; pass < 2; pass++) // want to do BAO first
 		{
@@ -633,10 +637,19 @@ public class Vocabulary
 				Statement st = it.next();
 				String uriChild = remapIfAny(st.getSubject().toString());
 				String uriParent = remapIfAny(st.getObject().toString());
-				
+
 				if (uriChild.equals(uriParent)) continue; // yes this really does happen (ontology bug)
 
 				String labelChild = uriToLabel.get(uriChild), labelParent = uriToLabel.get(uriParent);
+				
+				// special deal: when parent is "stump", create an empty branch, and do nothing else
+				if (uriParent.equals(stumpURI))
+				{
+					Branch branch = new Branch(uriChild, labelChild);
+					hier.uriToBranch.put(uriChild, branch);
+					continue;
+				}
+				
 				if (labelChild == null || labelParent == null) continue;
 				
 				Branch child = hier.uriToBranch.get(uriChild), parent = hier.uriToBranch.get(uriParent);
