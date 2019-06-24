@@ -175,8 +175,8 @@ public class SchemaTree
 				node.depth = parent.depth + 1;
 				parent.children.add(node);
 				parent.childCount++;
-				node.inSchema = false;
-				node.isExplicit = false;
+				node.inSchema = srcNode.inSchema;
+				node.isExplicit = srcNode.inSchema;
 				wereAdded.add(node);
 
 				tree.put(node.uri, node);
