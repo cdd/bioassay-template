@@ -120,6 +120,7 @@ public class Vocabulary
 	{
 		public void vocabLoadingProgress(Vocabulary vocab, float progress);		
 		public void vocabLoadingException(Exception ex);
+		default public void vocabLoadingFile(String path) {}
 	}
 	private Set<Listener> listeners = new HashSet<>();
 
@@ -303,7 +304,7 @@ public class Vocabulary
 	// ------------ private methods ------------
 
 	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException
-	{
+	{	
 		Model model = ModelFactory.createDefaultModel();
 
 		// preliminary analysis: done now in order to estimate the total size of the files needing to be loaded
@@ -358,6 +359,7 @@ public class Vocabulary
 				{
 					progressSize += ze.getSize();
 					InputStream res = getClass().getResourceAsStream("/" + path);
+					synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingFile(path);}
 					try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
 					catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
 					res.close();
@@ -377,6 +379,7 @@ public class Vocabulary
 		{
 			try 
 			{
+				synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingFile(f.getPath());}
 				URL fileURL = new File(f.getPath()).toURI().toURL(); // changing file to a URL for passing into Jena's RDF reader			
 				RDFDataMgr.read(model, fileURL.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
 			}

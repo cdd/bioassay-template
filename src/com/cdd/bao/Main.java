@@ -317,11 +317,11 @@ public class Main
 		Util.writeFlush("Loading ontologies ");
 		vocab.addListener(new Vocabulary.Listener()
 		{
-			public void vocabLoadingProgress(Vocabulary vocab, float progress) {Util.writeFlush(".");}
+			public void vocabLoadingProgress(Vocabulary vocab, float progress) {}
 			public void vocabLoadingException(Exception ex) {ex.printStackTrace();}
+			public void vocabLoadingFile(String path) {Util.writeln(" [" + path + "]");}
 		});
 		vocab.load(null, null);
-		Util.writeln();
 		
 		Schema[] schemata = new Schema[inputFiles.size()];
 		Set<String> allPrefixes = new HashSet<>();
