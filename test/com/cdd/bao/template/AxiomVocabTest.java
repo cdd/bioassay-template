@@ -130,7 +130,7 @@ public class AxiomVocabTest
 		assertFalse(rule1.equals(rule2));
 		assertNotEquals(rule1.hashCode(), rule2.hashCode());*/
 		
-		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, null);
+		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT);
 		assertFalse(rule1.equals(rule2));
 		assertFalse(rule2.equals(rule1));
 		assertNotEquals(rule1.hashCode(), rule2.hashCode());
@@ -140,8 +140,8 @@ public class AxiomVocabTest
 		assertFalse(rule2.equals(rule1));
 		assertNotEquals(rule1.hashCode(), rule2.hashCode());
 
-		rule1 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, null);
-		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT, null);
+		rule1 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT);
+		rule2 = new AxiomVocab.Rule(AxiomVocab.Type.LIMIT);
 		assertTrue(rule1.equals(rule2));
 		assertEquals(rule1.hashCode(), rule2.hashCode());
 		

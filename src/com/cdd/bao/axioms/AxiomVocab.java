@@ -64,8 +64,8 @@ public class AxiomVocab
 
 	public static class Term
 	{
-		public String valueURI;
-		public boolean wholeBranch;
+		public String valueURI = null;
+		public boolean wholeBranch = false;
 	
 		public Term() {}
 		public Term(String valueURI, boolean wholeBranch)
@@ -95,22 +95,67 @@ public class AxiomVocab
 		}
 	}
 	
+	public static class Keyword
+	{
+		public String text = null; // short string that must be present, and separated by a boundary
+		public String propURI = null; // identifies eligible literal-type assignments; null = look in main text
+		
+		public Keyword() {}
+		public Keyword(String text, String propURI)
+		{
+			this.text = text;
+			this.propURI = propURI;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return ModelSchema.collapsePrefix(text) + "/" + propURI;
+		}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj == null || !(obj instanceof Keyword)) return false;
+			Keyword other = (Keyword)obj;
+			return Util.safeString(text).equals(Util.safeString(other.text)) && propURI == other.propURI;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(text, propURI);
+		}		
+	}
+	
 	public static class Rule
 	{
-		public Type type;
+		public Type type = null;
 
-		// selection of the subject domain; any blank parts are considered to be wildcards
-		public Term subject;
+		// selection of the subject domain; either subject or keyword must be filled out
+		public Term subject = null;
+		public Keyword keyword = null; 
 		
 		// the object domain of the rule: the meaning varies depending on type
-		public Term[] impact;
+		public Term[] impact = null;
 		
 		public Rule() {}
+		public Rule(Type type)
+		{
+			this.type = type;
+		}
 		public Rule(Type type, Term subject) {this(type, subject, null);}
 		public Rule(Type type, Term subject, Term[] impact)
 		{
 			this.type = type;
 			this.subject = subject;
+			this.impact = impact;
+		}
+		public Rule(Type type, Keyword keyword) {this(type, keyword, null);}
+		public Rule(Type type, Keyword keyword, Term[] impact)
+		{
+			this.type = type;
+			this.keyword = keyword;
 			this.impact = impact;
 		}
 		
@@ -213,7 +258,7 @@ public class AxiomVocab
 	public void serialise(Writer wtr, SchemaVocab schvoc) throws IOException
 	{
 		JSONArray jsonRules = new JSONArray();
-		for (Rule rule : rules) jsonRules.put(formatJSONObject(rule, schvoc));
+		for (Rule rule : rules) jsonRules.put(formatJSONRule(rule, schvoc));
 		jsonRules.write(wtr, 2);
 	}
 	
@@ -282,24 +327,36 @@ public class AxiomVocab
 	// ------------ private methods ------------
 	
 	// turning rule objects into JSON
-	private JSONObject formatJSONObject(Rule rule, SchemaVocab schvoc)
+	private JSONObject formatJSONRule(Rule rule, SchemaVocab schvoc)
 	{
 		JSONObject json = new JSONObject();
 		json.put("type", rule.type.toString().toLowerCase());
-		json.put("subject", formatJSONObject(rule.subject, schvoc));
+		if (rule.subject != null) json.put("subject", formatJSONTerm(rule.subject, schvoc));
+		if (rule.keyword != null) json.put("keyword", formatJSONKeyword(rule.keyword, schvoc));
 		
 		JSONArray jsonImpact = new JSONArray();
-		if (rule.impact != null) for (Term term : rule.impact) jsonImpact.put(formatJSONObject(term, schvoc));
+		if (rule.impact != null) for (Term term : rule.impact) jsonImpact.put(formatJSONTerm(term, schvoc));
 		json.put("impact", jsonImpact);
 		
 		return json;
 	}
-	private JSONObject formatJSONObject(Term term, SchemaVocab schvoc)
+	private JSONObject formatJSONTerm(Term term, SchemaVocab schvoc)
 	{
 		JSONObject json = new JSONObject();
 		if (schvoc != null) json.put("label", schvoc.getLabel(term.valueURI));
 		json.put("valueURI", term.valueURI);
 		json.put("wholeBranch", term.wholeBranch);
+		return json;
+	}
+	private JSONObject formatJSONKeyword(Keyword keyword, SchemaVocab schvoc)
+	{
+		JSONObject json = new JSONObject();
+		json.put("text", keyword.text);
+		if (keyword.propURI != null)
+		{
+			json.put("propURI", keyword.propURI);
+			if (schvoc != null) json.put("propLabel", schvoc.getLabel(keyword.propURI));
+		}
 		return json;
 	}
 
@@ -312,7 +369,10 @@ public class AxiomVocab
 		try {rule.type = Type.valueOf(strType.toUpperCase());}
 		catch (Exception ex) {throw new IOException("Invalid rule type: " + strType);}
 		
-		rule.subject = parseJSONTerm(json.getJSONObject("subject"));
+		JSONObject jsonSubject = json.optJSONObject("subject"), jsonKeyword = json.optJSONObject("keyword");
+		if (jsonSubject != null) rule.subject = parseJSONTerm(jsonSubject);
+		else if (jsonKeyword != null) rule.keyword = parseJSONKeyword(jsonKeyword);
+		else throw new IOException("Rule must provide subject or keyword.");
 		
 		JSONArray jsonImpact = json.optJSONArray("impact");
 		List<Term> impact = new ArrayList<>();
@@ -331,6 +391,13 @@ public class AxiomVocab
 		term.valueURI = ModelSchema.expandPrefix(json.getString("valueURI"));
 		term.wholeBranch = json.optBoolean("wholeBranch", false);
 		return term;
+	}
+	private static Keyword parseJSONKeyword(JSONObject json) throws IOException
+	{
+		Keyword keyword = new Keyword();
+		keyword.text = json.getString("text");
+		if (json.has("propURI")) keyword.propURI = ModelSchema.expandPrefix(json.getString("propURI"));
+		return keyword;
 	}
 }
 
