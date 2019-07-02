@@ -164,7 +164,8 @@ public class AxiomVocab
 		{
 			StringBuilder str = new StringBuilder();
 			str.append(type.toString() + " type axiom; ");
-			str.append("subject: [" + subject + "]");
+			if (subject != null) str.append("subject: [" + subject + "]");
+			if (keyword != null) str.append("keyword: [" + keyword + "]");
 			
 			StringJoiner sj = new StringJoiner(",");
 			if (impact != null) for (Term s : impact) sj.add(s.toString());
@@ -181,7 +182,8 @@ public class AxiomVocab
 
 			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
 			{
-				str.append("[" + subject + "]");
+				if (subject != null) str.append("[" + subject + "]");
+				if (keyword != null) str.append("[" + keyword + "]");
 				str.append("=>[" + impact[i] + "]" + "\n");
 			}
 
@@ -196,7 +198,8 @@ public class AxiomVocab
 
 			for (int i = 0; i < ArrayUtils.getLength(impact);i++)
 			{
-				str.append("[" + subject + "]");
+				if (subject != null) str.append("[" + subject + "]");
+				if (keyword != null) str.append("[" + keyword + "]");
 				str.append("[" + impact[i] + "]" + "\n");
 			}
 
@@ -216,6 +219,14 @@ public class AxiomVocab
 			else 
 			{
 				if (!subject.equals(other.subject)) return false;
+			}
+			if (keyword == null)
+			{
+				if (other.keyword != null) return false;
+			}
+			else
+			{
+				if (!keyword.equals(other.keyword)) return false;
 			}
 			int sz = ArrayUtils.getLength(impact);
 			if (sz != ArrayUtils.getLength(other.impact)) return false;
