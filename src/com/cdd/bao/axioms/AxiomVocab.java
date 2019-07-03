@@ -238,9 +238,9 @@ public class AxiomVocab
 		public int hashCode()
 		{
 			if (impact == null)
-				return Objects.hash(type, subject);
+				return Objects.hash(type, subject, keyword);
 			else
-				return Objects.hash(type, subject, Arrays.asList(impact));
+				return Objects.hash(type, subject, keyword, Arrays.asList(impact));
 		}
 	}
 	
