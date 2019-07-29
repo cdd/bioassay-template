@@ -116,7 +116,7 @@ public class ModelSchema
 
 	// data used only during serialisation
 	private Map<String, Integer> nameCounts; // ensures no name clashes
-	private Map<Assignment, Resource> assignmentToResource; // stashes the model resource per assignment
+	private Map<Integer, Resource> assignmentToResource; // assignment (using identity hash code) to resource (in model)
 	private Map<Resource, Assignment> resourceToAssignment; // or vice versa for loading
 
 	private Schema schema;
@@ -208,7 +208,7 @@ public class ModelSchema
 
 	// ------------ private data: content ------------	
 
-	private ModelSchema(Schema schema, Model model)
+	public ModelSchema(Schema schema, Model model)
 	{
 		this.schema = schema;
 		this.model = model;
@@ -218,6 +218,16 @@ public class ModelSchema
 	
 	// access to the content
 	public Schema getSchema() {return schema;}
+	
+	// get the URI that describes the first node in the schema
+	public String getRootURI() {return rootURI;}
+	
+	// returns the transient URI that was created for the given hash code during the model serialisation process
+	public String getURIForAssignment(Assignment assn) 
+	{
+		Resource res = assignmentToResource.get(System.identityHashCode(assn));
+		return res == null ? null : res.getURI();
+	}
 	
 	// load in previously saved file
 	public static Schema deserialise(File file) throws IOException
@@ -267,6 +277,60 @@ public class ModelSchema
 		catch (Exception ex) {throw new IOException(ex);}
 		return thing.rootURI;
 	}
+	
+	// perform the serialisation-to-model operation
+	public void exportToModel()
+	{
+		Group root = schema.getRoot();
+		String pfx = schema.getSchemaPrefix();
+	
+		rootURI = pfx + turnLabelIntoName(root.name);
+		Resource objRoot = model.createResource(rootURI);
+		model.add(objRoot, rdfType, batRoot);
+		model.add(objRoot, rdfType, batGroup);
+		model.add(objRoot, rdfLabel, root.name);
+		if (root.descr.length() > 0) model.add(objRoot, hasDescription, root.descr);
+		
+		formulateGroup(objRoot, root);
+
+		for (int n = 0; n < schema.numAssays(); n++)
+		{
+			Assay assay = schema.getAssay(n);
+			Resource objAssay = model.createResource(pfx + turnLabelIntoName(assay.name));
+			model.add(objAssay, rdfType, batAssay);
+			model.add(objAssay, rdfLabel, assay.name);
+			model.add(objAssay, usesTemplate, objRoot);
+			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
+			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
+			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI.trim());
+			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
+			
+			for (int i = 0; i < assay.annotations.size(); i++)
+			{
+				Annotation annot = assay.annotations.get(i);
+			
+				Resource blank = model.createResource();
+				model.add(objAssay, hasAnnotation, blank);
+
+				// looks up the assignment in the overall hierarchy, to obtain the recently-created URI
+				Assignment assn = schema.findAssignment(annot);
+				if (assn != null) model.add(blank, isAssignment, assignmentToResource.get(System.identityHashCode(assn)));
+
+				// emits either value or literal, with any accompanying decoration
+				if (annot.value != null)
+				{
+					model.add(blank, hasProperty, model.createResource(annot.assn.propURI)); // note: using propURI stored in its own linear branch
+					model.add(blank, hasValue, model.createResource(annot.value.uri));
+					if (annot.value.name.length() > 0) model.add(blank, rdfLabel, model.createLiteral(annot.value.name));
+					if (annot.value.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(annot.value.descr));
+				}
+				else
+				{
+					model.add(blank, hasLiteral, model.createLiteral(annot.literal));
+				}
+			}
+		}
+	}	
 	
 	// ------------ private methods ------------	
 
@@ -322,59 +386,6 @@ public class ModelSchema
 		assignmentToResource = new HashMap<>();
 	}
 
-	private void exportToModel()
-	{
-		Group root = schema.getRoot();
-		String pfx = schema.getSchemaPrefix();
-	
-		rootURI = pfx + turnLabelIntoName(root.name);
-		Resource objRoot = model.createResource(rootURI);
-		model.add(objRoot, rdfType, batRoot);
-		model.add(objRoot, rdfType, batGroup);
-		model.add(objRoot, rdfLabel, root.name);
-		if (root.descr.length() > 0) model.add(objRoot, hasDescription, root.descr);
-		
-		formulateGroup(objRoot, root);
-
-		for (int n = 0; n < schema.numAssays(); n++)
-		{
-			Assay assay = schema.getAssay(n);
-			Resource objAssay = model.createResource(pfx + turnLabelIntoName(assay.name));
-			model.add(objAssay, rdfType, batAssay);
-			model.add(objAssay, rdfLabel, assay.name);
-			model.add(objAssay, usesTemplate, objRoot);
-			if (assay.descr.length() > 0) model.add(objAssay, hasDescription, assay.descr);
-			if (assay.para.length() > 0) model.add(objAssay, hasParagraph, assay.para);
-			if (assay.originURI.length() > 0) model.add(objAssay, hasOrigin, assay.originURI.trim());
-			model.add(objAssay, inOrder, model.createTypedLiteral(n + 1));
-			
-			for (int i = 0; i < assay.annotations.size(); i++)
-			{
-				Annotation annot = assay.annotations.get(i);
-			
-				Resource blank = model.createResource();
-				model.add(objAssay, hasAnnotation, blank);
-
-				// looks up the assignment in the overall hierarchy, to obtain the recently-created URI
-				Assignment assn = schema.findAssignment(annot);
-				if (assn != null) model.add(blank, isAssignment, assignmentToResource.get(assn));
-
-				// emits either value or literal, with any accompanying decoration
-				if (annot.value != null)
-				{
-					model.add(blank, hasProperty, model.createResource(annot.assn.propURI)); // note: using propURI stored in its own linear branch
-					model.add(blank, hasValue, model.createResource(annot.value.uri));
-					if (annot.value.name.length() > 0) model.add(blank, rdfLabel, model.createLiteral(annot.value.name));
-					if (annot.value.descr.length() > 0) model.add(blank, hasDescription, model.createLiteral(annot.value.descr));
-				}
-				else
-				{
-					model.add(blank, hasLiteral, model.createLiteral(annot.literal));
-				}
-			}
-		}
-	}
-
 	private void formulateGroup(Resource objParent, Group group)
 	{
 		int order = 0;
@@ -423,7 +434,7 @@ public class ModelSchema
 				model.add(blank, inOrder, model.createTypedLiteral(++vorder));
 			}
 			
-			assignmentToResource.put(assn, objAssn); // for subsequent retrieval
+			assignmentToResource.put(System.identityHashCode(assn), objAssn); // for subsequent retrieval
 		}
 		
 		// recursively emit any subgroups
