@@ -343,12 +343,19 @@ public class Main
 		for (Assignment assn : group.assignments)
 		{
 			Util.write(Util.rep(' ', indent) + "[" + assn.name + "] <" + ModelSchema.collapsePrefix(assn.propURI) + ">");
+			int nterms = 0;
 			for (StoredTree stored : schvoc.getTrees()) if (stored.assignment == assn) 
 			{
-				Util.write(" terms=" + stored.tree.getTree().size());
+				nterms = stored.tree.getTree().size();
+				Util.write(" terms=" + nterms);
 				break;
 			}
 			Util.writeln();
+			
+			if (nterms == 0 && (assn.suggestions == Suggestions.FULL || assn.suggestions == Suggestions.DISABLED))
+			{
+				Util.writeln(Util.rep(' ', indent) + " **** no terms available to select");
+			}
 		}
 		for (Group subgrp : group.subGroups)
 		{
