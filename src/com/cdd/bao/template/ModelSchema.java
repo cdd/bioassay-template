@@ -57,6 +57,8 @@ public class ModelSchema
 	public static final String PFX_PROTEIN = "http://www.bioassayontology.org/protein#";
 	public static final String PFX_PROV = "http://www.w3.org/ns/prov#";
 	public static final String PFX_ASTRAZENECA = "http://rdf.astrazeneca.com/bae#";
+	public static final String PFX_OBOINOWL = "http://www.geneontology.org/formats/oboInOwl#";
+	
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -66,6 +68,7 @@ public class ModelSchema
 	public static final String HAS_GROUP = "hasGroup";
 	public static final String BAT_ASSIGNMENT = "Assignment";
 	public static final String HAS_ASSIGNMENT = "hasAssignment";
+	public static final String HAS_EXACT_SYNONYM = "hasExactSynonym"; // PRO Annotation property for UniProt Names of Proteins
 
 	public static final String HAS_DESCRIPTION = "hasDescription"; // longwinded version of rdf:label
 	public static final String IN_ORDER = "inOrder"; // each group/assignment can have one of these
@@ -105,7 +108,7 @@ public class ModelSchema
 	private Resource batRoot, batAssay;
 	private Resource batGroup, batAssignment;
 	private Property hasGroup, hasAssignment;
-	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate;
+	private Property hasDescription, inOrder, hasParagraph, hasOrigin, usesTemplate, hasExactSynonym;
 	private Property hasGroupURI, hasProperty, hasValue;
 	private Property mapsTo;
 	private Property hasAnnotation, isAssignment, hasLiteral;
@@ -144,6 +147,7 @@ public class ModelSchema
 		"protein:", PFX_PROTEIN,
 		"prov:", PFX_PROV,
 		"az:", PFX_ASTRAZENECA,
+		"oboInOwl", PFX_OBOINOWL
 	};
 	
 	// associate a new prefix with a URI
@@ -362,6 +366,7 @@ public class ModelSchema
 		hasValue = model.createProperty(PFX_BAT + HAS_VALUE);
 		mapsTo = model.createProperty(PFX_BAT + MAPS_TO);
 		hasParagraph = model.createProperty(PFX_BAT + HAS_PARAGRAPH);
+		hasExactSynonym = model.createProperty(PFX_OBOINOWL + HAS_EXACT_SYNONYM);
 		hasOrigin = model.createProperty(PFX_BAT + HAS_ORIGIN);
 		usesTemplate = model.createProperty(PFX_BAT + USES_TEMPLATE);
 		hasAnnotation = model.createProperty(PFX_BAT + HAS_ANNOTATION);
@@ -381,6 +386,7 @@ public class ModelSchema
 		suggestionsNumber = model.createProperty(PFX_BAT + SUGGESTIONS_NUMBER);
 		suggestionsInteger = model.createProperty(PFX_BAT + SUGGESTIONS_INTEGER);
 		suggestionsDate = model.createProperty(PFX_BAT + SUGGESTIONS_DATE);
+		
 
 		nameCounts = new HashMap<>();
 		assignmentToResource = new HashMap<>();

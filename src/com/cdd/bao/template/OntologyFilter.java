@@ -57,6 +57,7 @@ public class OntologyFilter
 			Property propClass = inmodel.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
 			Property propLabel = inmodel.createProperty(ModelSchema.PFX_RDFS + "label");
 			Property propDescr = inmodel.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
+			Property propSynonym = inmodel.createProperty(ModelSchema.PFX_OBOINOWL + "hasExactSynonym");
 
 			for (StmtIterator it = inmodel.listStatements(null, null, (RDFNode)null); it.hasNext();)
 			{

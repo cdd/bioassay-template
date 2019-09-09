@@ -404,6 +404,8 @@ public class Vocabulary
 		Property altLabel2 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000118");
 		Property altLabel3 = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000111");
 		Property altLabel4 = model.createProperty("http://www.ebi.ac.uk/efo/alternative_term");
+		Property proSynonym = model.createProperty(ModelSchema.PFX_OBOINOWL + "hasExactSynonym");
+		
 		Property rdfType = model.createProperty(ModelSchema.PFX_RDF + "type");
 		Resource owlDataType = model.createResource(ModelSchema.PFX_OWL + "DatatypeProperty");
 		Resource owlObjProp = model.createResource(ModelSchema.PFX_OWL + "ObjectProperty");
