@@ -112,13 +112,11 @@
 
 	<!-- These are the jar files required to run the tests -->
 	<path id="classpath.main">
-		<pathelement location="lib/commons-lang3-3.3.2.jar" />
-		<pathelement location="lib/jena-core-3.0.0.jar" />
+		<pathelement location="lib/commons-lang3-3.9.jar" />
 	</path>
 
 	<path id="classpath.test">
 		<pathelement location="lib/junit-4.12.jar" />
-		<pathelement location="lib/hamcrest-core-1.3.jar" />
 		<pathelement location="${main.build.dir}" />
 	</path>
 
@@ -142,6 +140,7 @@
 		<junit printsummary="on" showoutput="yes" haltonfailure="yes" fork="false" forkmode="once" reloading="false" maxmemory="1024m">
 			<classpath>
 				<path refid="project.class.path" />
+				<path refid="classpath.main" />
 				<path refid="classpath.test" />
 				<pathelement location="${test.build.dir}" />
 			</classpath>
