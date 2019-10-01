@@ -83,8 +83,8 @@
 	<!-- checkstyle configuration -->
 	<property name="check.config" location="check/bax_checks.xml" />
 	<path id="path.check">
-		<pathelement location="check/checkstyle-patch.jar" />
-		<pathelement location="check/checkstyle-8.4-all.jar" />
+		<pathelement location="check/checkstyle-8.25-patch.jar" />
+		<pathelement location="check/checkstyle-8.25-all.jar" />
 	</path>
 
 	<path id="project.sourcepath">
