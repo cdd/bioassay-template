@@ -124,7 +124,7 @@ public class SchemaTree
 		if (node == null) return;
 		
 		if (node.parent != null) 
-			node.parent.children.removeIf((child) -> child.uri.equals(uri));
+			node.parent.children.removeIf(child -> child.uri.equals(uri));
 			
 		tree.remove(uri);
 		
