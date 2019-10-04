@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2016-2018 Collaborative Drug Discovery Inc.
+ * (c) 2016-2019 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -408,7 +408,14 @@ public class SchemaVocab
 	
 	// information about content: generally just for debugging/stats purposes
 	public int numTerms() {return termList.length;}
+	public StoredTerm getTerm(int idx) {return termList[idx];}
 	public StoredTerm[] getTerms() {return termList;}
+	public void removeTerm(int idx) 
+	{
+		termList = ArrayUtils.remove(termList, idx);
+		termLookup.clear();
+		for (int n = 0; n < termList.length; n++) termLookup.put(termList[n].uri, n);
+	}
 	public int numPrefixes() {return prefixes.length;}
 	public StoredTree[] getTrees() {return treeList.toArray(new StoredTree[treeList.size()]);}
 
