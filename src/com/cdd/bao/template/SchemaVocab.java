@@ -392,8 +392,19 @@ public class SchemaVocab
 		}
 	}
 
-	// get remappings
+	// access to remappings
 	public Map<String, StoredRemapTo> getRemappings() {return Collections.unmodifiableMap(remappings);}
+	public void defineRemapping(String fromURI, String toURI)
+	{
+		if (toURI != null) 
+		{
+			StoredRemapTo remap = new StoredRemapTo();
+			remap.fromURI = fromURI;
+			remap.toURI = toURI;
+			remappings.put(fromURI, remap);
+		}
+		else remappings.remove(fromURI); 
+	}
 	
 	// information about content: generally just for debugging/stats purposes
 	public int numTerms() {return termList.length;}
