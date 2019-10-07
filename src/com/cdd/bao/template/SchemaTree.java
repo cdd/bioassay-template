@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2016-2018 Collaborative Drug Discovery Inc.
+ * (c) 2016-2019 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -116,6 +116,23 @@ public class SchemaTree
 	
 	// the list version of the tree, containing only items for which inSchema=true: and, sorted alphabetically, rather than in hierarchy order
 	public Node[] getList() {return list.toArray(new Node[list.size()]);}
+	
+	// if the indicated URI is in the tree, deletes that whole branch, and re-derives the flattened forms
+	public void removeNode(String uri)
+	{
+		Node node = tree.get(uri);
+		if (node == null) return;
+		
+		if (node.parent != null) 
+			node.parent.children.removeIf(child -> child.uri.equals(uri));
+			
+		tree.remove(uri);
+		
+		flattenTree();
+		list.clear();
+		list.addAll(flat);
+		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+	}
 	
 	// returns a text representation of the tree (for debugging purposes)
 	public String toString()
