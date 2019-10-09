@@ -272,7 +272,7 @@ public class CellLineFix
 				{
 					if (ArrayUtils.indexOf(doNotMatch.get(cloURI), brendaURI) >= 0) continue;
 					String brendaLabel = vocab.getLabel(brendaURI);
-					if (stringSimilarity(cloLabel, brendaLabel) > th) continue;
+					if (Util.stringSimilarity(cloLabel, brendaLabel) > th) continue;
 					
 					Util.writeln("    [" + cloLabel + "] / [" + brendaLabel + "]");
 					
@@ -561,43 +561,6 @@ public class CellLineFix
 		}
 		out.flush();
 	}*/
-
-	// returns a measure of string similarity, used to pair controlled vocabulary names with ontology terms; 0=perfect
-	private int stringSimilarity(String str1, String str2)
-	{
-		//if (str1.endsWith(" cell")) str1 = str1.substring(0, str1.length() - 5);
-		//if (str2.endsWith(" cell")) str2 = str2.substring(0, str2.length() - 5);
-	
-		char[] ch1 = str1.toLowerCase().toCharArray();
-		char[] ch2 = str2.toLowerCase().toCharArray();
-		int sz1 = ch1.length, sz2 = ch2.length;
-		if (sz1 == 0) return sz2;
-		if (sz2 == 0) return sz1;
-
-		int cost = ch1[sz1 - 1] == ch2[sz2 - 1] ? 0 : 1;
-		int lev1 = levenshteinDistance(ch1, sz1 - 1, ch2, sz2) + 1;
-		int lev2 = levenshteinDistance(ch1, sz1, ch2, sz2 - 1) + 1;
-		int lev3 = levenshteinDistance(ch1, sz1 - 1, ch2, sz2 - 1) + cost;
-		
-		return Math.min(Math.min(lev1, lev2), lev3);
-	}
-	private int levenshteinDistance(char[] ch1, int sz1, char[] ch2, int sz2)
-	{
-		int[][] d = new int[sz1 + 1][];
-		for (int i = 0; i <= sz1; i++)
-		{
-			d[i] = new int[sz2 + 1];
-			d[i][0] = i;
-		}
-		for (int j = 1; j <= sz2; j++) d[0][j] = j;
-
-		for (int j = 1; j <= sz2; j++) for (int i = 1; i <= sz1; i++)
-		{
-			int cost = ch1[i - 1] == ch2[j - 1] ? 0 : 1;
-			d[i][j] = Math.min(Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1), d[i - 1][j - 1] + cost);
-		}
-		return d[sz1][sz2];
-	}
 	
 	private void processCurated(File f) throws IOException
 	{

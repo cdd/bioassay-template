@@ -4,23 +4,23 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="lib/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/apache-log4j-extras-1.2.17.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx-swt.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.base.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.controls.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.fxml.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.graphics.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.media.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.swing.jar"/>
-	<classpathentry kind="lib" path="libjfx/javafx.web.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/apache-log4j-extras-1.2.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx-swt.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.base.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.controls.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.fxml.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.graphics.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.media.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.swing.jar"/>
+	<classpathentry exported="true" kind="lib" path="libjfx/javafx.web.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-cli-1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-csv-1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-lang3-3.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/fontbox-2.0.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/pdfbox-2.0.17.jar"/>
-	<classpathentry kind="lib" path="lib/hamcrest-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hamcrest-2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.5.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpclient-cache-4.5.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.4.12.jar"/>
@@ -28,18 +28,18 @@
 	<classpathentry exported="true" kind="lib" path="lib/jackson-core-2.9.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jackson-databind-2.9.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jcl-over-slf4j-1.7.28.jar"/>
-	<classpathentry kind="lib" path="lib/jena-arq-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jena-base-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jena-core-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jena-iri-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jena-shaded-guava-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jena-tdb-3.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/jsonld-java-0.12.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-arq-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-base-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-core-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-iri-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-shaded-guava-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-tdb-3.12.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsonld-java-0.12.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/libthrift-0.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.28.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.7.28.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.28.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.7.28.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl-2.12.0.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-compress-1.19.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.5">
@@ -49,6 +49,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
