@@ -522,4 +522,33 @@ public class UtilTest
 		Util.swap(list, 0, 1);
 		assertEquals(Arrays.asList(2, 1, 3), list);
 	}
+	
+	@Test
+	public void testStringSim()
+	{
+		Object[][] testCases = new Object[][]
+		{
+			{"same", "same", 0, 0},
+			{"a", "b", 1, 5},
+			{"uh", "huh", 1, 3},
+			{"rat", "cat", 1, 3},
+			{"flip", "flop", 1, 2},
+			{"fnord", "dronf", 4, 4},
+			{"Ni!", "Ekke ekke ekke ekke ptang zoo boing!", 33, 33},
+		};
+		for (Object[] test : testCases)
+		{
+			String str1 = (String)test[0], str2 = (String)test[1];
+			Integer sim = (Integer)test[2], cal = (Integer)test[3];
+			String msg = "strings: [" + str1 + "], [" + str2 + "]";
+			assertEquals("raw similarity; " + msg, sim, Integer.valueOf(Util.stringSimilarity(str1, str2)));
+			assertEquals("raw similarity; " + msg, sim, Integer.valueOf(Util.stringSimilarity(str2, str1)));
+			assertEquals("calibrated similarity; " + msg, cal, Integer.valueOf(Util.calibratedSimilarity(str1, str2)));
+			assertEquals("calibrated similarity; " + msg, cal, Integer.valueOf(Util.calibratedSimilarity(str2, str1)));
+			assertEquals(0, Util.stringSimilarity(str1, str1));
+			assertEquals(0, Util.stringSimilarity(str2, str2));
+			assertEquals(0, Util.calibratedSimilarity(str1, str1));
+			assertEquals(0, Util.calibratedSimilarity(str2, str2));
+		}
+	}
 }
