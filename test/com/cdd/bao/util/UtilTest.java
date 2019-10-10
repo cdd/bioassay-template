@@ -542,8 +542,13 @@ public class UtilTest
 			Integer sim = (Integer)test[2], cal = (Integer)test[3];
 			String msg = "strings: [" + str1 + "], [" + str2 + "]";
 			assertEquals("raw similarity; " + msg, sim, Integer.valueOf(Util.stringSimilarity(str1, str2)));
+			assertEquals("raw similarity; " + msg, sim, Integer.valueOf(Util.stringSimilarity(str2, str1)));
 			assertEquals("calibrated similarity; " + msg, cal, Integer.valueOf(Util.calibratedSimilarity(str1, str2)));
-			// !!
+			assertEquals("calibrated similarity; " + msg, cal, Integer.valueOf(Util.calibratedSimilarity(str2, str1)));
+			assertEquals(0, Util.stringSimilarity(str1, str1));
+			assertEquals(0, Util.stringSimilarity(str2, str2));
+			assertEquals(0, Util.calibratedSimilarity(str1, str1));
+			assertEquals(0, Util.calibratedSimilarity(str2, str2));
 		}
 	}
 }
