@@ -59,9 +59,3 @@ bat:NeedsChecking
   rdfs:subClassOf bat:Absence ;
   obo:IAO_0000115 "These terms need to be checked by an expert."
   .
-
-bat:SeeGeneID
-  rdfs:label "see Gene ID" ;
-  rdfs:subClassOf bat:Absence ;
-  obo:IAO_0000115 "The target is present in the Gene ID section, but needs to be mapped to a formal ontology."
-  .

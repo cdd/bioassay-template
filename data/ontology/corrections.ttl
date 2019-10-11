@@ -31,6 +31,10 @@ obo:DOID_4 a bat:preferredParent .
 obo:CLO_0000001 a bat:preferredParent .
 obo:CLO_0000001 owl:equivalentClass bao:BAO_0002931 .
 
+# fluorescence intensity stays in physical detection branch
+bao:BAO_0000363 bat:notSubClass bao:BAO_0000583 . 
+bao:BAO_0000363 rdfs:subClassOf bao:BAO_0000046 . 
+
 # use the original UO units
 bao:BAO_0000077 a bat:eliminated .
 obo:UO_0000000 a bat:preferredParent .

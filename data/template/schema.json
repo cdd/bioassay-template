@@ -4,7 +4,7 @@
     {
         "name": "common assay template",
         "descr": "The Common Assay Template is designed to capture most of the high value data from in vitro assays, particularly those used for high throughput screening.",
-        "groupURI": "",
+        "groupURI": "http://www.bioassayontology.org/bao#BAO_0002854",
         "assignments": 
         [
             {
@@ -14,40 +14,6 @@
                 "suggestions": "string",
                 "mandatory": false,
                 "values": []
-            }, 
-            {
-                "name": "bioassay type",
-                "descr": "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc.",
-                "propURI": "http://www.bioassayontology.org/bao#BAO_0002854",
-                "suggestions": "full",
-                "mandatory": true,
-                "values": 
-                [
-                    {
-                        "uri": "http://www.bioassayontology.org/bao#BAO_0000008",
-                        "name": "bioassay type",
-                        "descr": "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
-                    }
-                ]
             }, 
             {
                 "name": "bioassay",
@@ -134,12 +100,6 @@
                         "spec": "exclude"
                     }, 
                     {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000019",
                         "name": "assay format",
                         "descr": "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism.",
@@ -171,12 +131,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -218,12 +172,6 @@
                         "name": "not determined",
                         "descr": "The measurement was not made.",
                         "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -258,12 +206,6 @@
                         "name": "not determined",
                         "descr": "The measurement was not made.",
                         "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -285,12 +227,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -331,12 +267,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -384,6 +314,12 @@
                         "name": "not determined",
                         "descr": "The measurement was not made.",
                         "spec": "exclude"
+                    }, 
+                    {
+                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
+                        "name": "see Gene ID",
+                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
+                        "spec": "item"
                     }
                 ]
             }, 
@@ -418,12 +354,6 @@
                         "name": "not determined",
                         "descr": "The measurement was not made.",
                         "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -445,12 +375,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -482,12 +406,6 @@
                         "spec": "exclude"
                     }, 
                     {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000179",
                         "name": "endpoint",
                         "descr": "The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a \"closed\" model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay.",
@@ -513,12 +431,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -550,12 +462,6 @@
                         "spec": "exclude"
                     }, 
                     {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000512",
                         "name": "assay footprint",
                         "descr": "This describes the physical format such as plate density in which an assay is performed, which is generally a microplate format, but can also be an array format.",
@@ -581,12 +487,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -622,12 +522,6 @@
                         "name": "physical detection method",
                         "descr": "The physical method (technology) used to measure / readout the effect caused by a perturbagen in the assay environment.",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -649,12 +543,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
@@ -695,12 +583,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }
                 ]
@@ -773,12 +655,6 @@
                         "uri": "http://www.bioassayontology.org/bat#NotDetermined",
                         "name": "not determined",
                         "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "exclude"
                     }, 
                     {
