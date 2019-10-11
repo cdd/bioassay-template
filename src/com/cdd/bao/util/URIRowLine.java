@@ -21,10 +21,6 @@
 
 package com.cdd.bao.util;
 
-import org.apache.commons.lang3.*;
-
-import com.cdd.bao.template.*;
-
 import javafx.scene.*;
 import javafx.scene.control.*;
 
