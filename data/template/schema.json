@@ -320,6 +320,12 @@
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
                         "spec": "item"
+                    }, 
+                    {
+                        "uri": "http://www.bioassayontology.org/bat#SeeAlso",
+                        "name": "see also",
+                        "descr": "Concepts that are defined elsewhere.",
+                        "spec": "wholebranch"
                     }
                 ]
             }, 
