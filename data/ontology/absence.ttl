@@ -60,8 +60,15 @@ bat:NeedsChecking
   obo:IAO_0000115 "These terms need to be checked by an expert."
   .
 
+# alternate branch for see-also
+
+bat:SeeAlso
+  rdfs:label "see also" ;
+  obo:IAO_0000115 "Concepts that are defined elsewhere."
+  .
+
 bat:SeeGeneID
   rdfs:label "see Gene ID" ;
-  rdfs:subClassOf bat:Absence ;
+  rdfs:subClassOf bat:SeeAlso ;
   obo:IAO_0000115 "The target is present in the Gene ID section, but needs to be mapped to a formal ontology."
   .
