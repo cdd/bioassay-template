@@ -107,12 +107,12 @@ public class Util
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
 
 	/**
-	 * Remove elements from array based on a filter function (similar to the collection method)
+	 * Remove elements from array based on a filter function (similar to the collection method removeIf)
 	 * @param arr array to filer
 	 * @param filter function that returns true if element should be removed
 	 * @return modified array
 	 */
-	public static <T> T[] arrayRemoveIf(T[] arr, Predicate<T> filter)
+	public static <T> T[] removeIf(T[] arr, Predicate<T> filter)
 	{
 		for (int n = arr.length - 1; n >= 0; n--) 
 			if (filter.test(arr[n])) arr = ArrayUtils.remove(arr, n);

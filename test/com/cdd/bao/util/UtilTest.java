@@ -45,8 +45,8 @@ public class UtilTest
 	public void testArrayRemoveIf()
 	{
 		Integer[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
-		assertArrayEquals(new Integer[]{1, 3, 5, 7}, Util.arrayRemoveIf(arr, (n) -> n % 2 == 0));
-		assertArrayEquals(new Integer[]{1, 2, 3, 4}, Util.arrayRemoveIf(arr, (n) -> n > 4));
+		assertArrayEquals(new Integer[]{1, 3, 5, 7}, Util.removeIf(arr, (n) -> n % 2 == 0));
+		assertArrayEquals(new Integer[]{1, 2, 3, 4}, Util.removeIf(arr, (n) -> n > 4));
 	}
 
 	@Test
