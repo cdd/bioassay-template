@@ -40,6 +40,14 @@ public class UtilTest
 		assertEquals("handling of null", 0, Util.length(new int[0]));
 		assertEquals("handling of null", 3, Util.length(new int[]{1, 2, 3}));
 	}
+	
+	@Test
+	public void testArrayRemoveIf()
+	{
+		Integer[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
+		assertArrayEquals(new Integer[]{1, 3, 5, 7}, Util.removeIf(arr, (n) -> n % 2 == 0));
+		assertArrayEquals(new Integer[]{1, 2, 3, 4}, Util.removeIf(arr, (n) -> n > 4));
+	}
 
 	@Test
 	public void testPrimByte()
@@ -276,6 +284,36 @@ public class UtilTest
 
 		assertFalse(Util.equals("abc", "def"));
 		assertTrue(Util.equals("abc", "abc"));
+	}
+	
+	@Test
+	public void testSafeEquals()
+	{
+		final class Test
+		{
+			int value;
+			Test(int value) { this.value = value; }
+
+			@Override
+			public boolean equals(Object o)
+			{
+				if (o == null || getClass() != o.getClass()) return false;
+				Test other = (Test)o;
+				return this.value == other.value;
+			}
+		}
+		
+		Test t1 = new Test(1);
+		Test t1a = new Test(1);
+		Test t2 = new Test(2);
+		assertTrue(Util.equals(t1, t1));
+		assertTrue(Util.equals(t1, t1a));
+		assertFalse(Util.equals(t1, t2));
+		assertTrue(Util.equals((Test)null, (Test)null));
+		assertFalse(Util.equals(t1, (Test)null));
+		assertFalse(Util.equals((Test)null, t1));
+		assertFalse(Util.equals(t1, (String)null));
+		assertFalse(Util.equals(t1, "abc"));
 	}
 
 	@Test

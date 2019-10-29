@@ -23,9 +23,12 @@ package com.cdd.bao.util;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.*;
 import java.text.*;
 import java.util.*;
-import java.net.*;
+import java.util.function.*;
+
+import org.apache.commons.lang3.*;
 
 /*
  * Static utilities to make life a little bit easier.
@@ -102,7 +105,20 @@ public class Util
 	 * Length of array, protected against nulls.
 	 */
 	public static int length(Object arr) {return arr == null ? 0 : Array.getLength(arr);}
-	
+
+	/**
+	 * Remove elements from array based on a filter function (similar to the collection method removeIf)
+	 * @param arr array to filer
+	 * @param filter function that returns true if element should be removed
+	 * @return modified array
+	 */
+	public static <T> T[] removeIf(T[] arr, Predicate<T> filter)
+	{
+		for (int n = arr.length - 1; n >= 0; n--) 
+			if (filter.test(arr[n])) arr = ArrayUtils.remove(arr, n);
+		return arr;
+	}
+
 	/**
 	 * Converts a collection of Byte objects directly to a primitive array.
 	 */
@@ -443,6 +459,15 @@ public class Util
 	 * Returns true if the two strings are equal, whereby null strings and blank strings are considered the same.
 	 */
 	public static boolean equals(String s1, String s2) {return safeString(s1).equals(safeString(s2));}
+	
+	/**
+	 * Returns true if the two objects are equal taking care of null values
+	 */
+	public static <T> boolean equals(T o1, T o2) 
+	{
+		if (o1 == null) return o2 == null ? true : false;
+		return o1.equals(o2);
+	}
 	
 	/**
 	 * Renders the given double floating point value into a string, in a way that is similar to the C function
