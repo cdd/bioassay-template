@@ -160,6 +160,16 @@ public class ModelSchema
 		prefixMap = ArrayUtils.addAll(prefixMap, pfx, uri);
 	}
 
+	// remove prefix
+	public static void removePrefix(String pfx)
+	{
+		for (int n = 0; n < prefixMap.length; n += 2) if (prefixMap[n].equals(pfx))
+		{
+			prefixMap = ArrayUtils.removeAll(prefixMap, n, n + 1);
+			break;
+		}
+	}
+
 	// in case the caller needs to know what htye are
 	public static Map<String, String> getPrefixes()
 	{
