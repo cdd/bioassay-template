@@ -28,24 +28,6 @@
                         "name": "bioassay type",
                         "descr": "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, etc.",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -62,24 +44,6 @@
                         "name": "bioassay",
                         "descr": "A set of instructions, methodology, operations, required reagents, instruments to carrie out experiments for the purpose of testing the effect of a perturbing agent in a biological model system, measuring one or multiple effect(s) of the agent facilitated by an assay design method translate the perturbation into a detectable signal to arrive at one or multiple endpoint(s) that quantify or qualify the extent of the perturbation.  Bioassay is described by multiple bioassay components: assay format, biology (biological participants in various role and processes), design method, physical detection method / technology, screened entity, and endpoint. Bioassay includes one or multiple measure groups to describe panel, profiling, multiparametric (or multiplexed) assays (assays that measure more than one effect of the perturbagen on the system that is screened).",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                        "name": "see Gene ID",
-                        "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000248",
@@ -122,18 +86,6 @@
                 "values": 
                 [
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000019",
                         "name": "assay format",
                         "descr": "Assay format is a conceptualization of assays based on the biological and / or chemical features of the experimental system. For example assay formats include biochemical assays - referring to assays with purified protein, cell-based - referring to assays in whole cells, or organism-based - referring to assays performed in an organism.",
@@ -154,18 +106,6 @@
                         "name": "assay design method",
                         "descr": "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest.",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0002429",
@@ -194,18 +134,6 @@
                         "name": "assay design method",
                         "descr": "The assay design method describes how a biological or physical process screened / investigated in the model system is translated into a detectable signal. This relates to the technology / technologies used to make the assay system work, i.e. enable that the screened process can be detected.  It typically involves some manipulation of the (biological) model system to detect the process of interest.",
                         "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -228,18 +156,6 @@
                         "name": "cell line cell",
                         "descr": "",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -251,18 +167,6 @@
                 "mandatory": false,
                 "values": 
                 [
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000551",
                         "name": "organism",
@@ -280,12 +184,6 @@
                 "values": 
                 [
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
                         "uri": "http://purl.obolibrary.org/obo/GO_0008150",
                         "name": "biological process",
                         "descr": "Any process specifically pertinent to the functioning of integrated living units: cells, tissues, organs, and organisms. A process is a collection of molecular events with a defined beginning and end (from GO).",
@@ -296,12 +194,6 @@
                         "name": "molecular function",
                         "descr": "Elemental activities, such as catalysis or binding, describing the actions of a gene product at the molecular level. A given gene product may exhibit one or more molecular functions.",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0003117",
@@ -338,18 +230,6 @@
                         "spec": "container"
                     }, 
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
                         "name": "see Gene ID",
                         "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
@@ -382,18 +262,6 @@
                         "name": "assay biology component",
                         "descr": "",
                         "spec": "exclude"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -405,18 +273,6 @@
                 "mandatory": false,
                 "values": 
                 [
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000074",
                         "name": "mode of action",
@@ -434,18 +290,6 @@
                 "values": 
                 [
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000179",
                         "name": "endpoint",
                         "descr": "The endpoint is a quantitive or qualitative interpretable standardized representation of a perturbation (a change from a defined reference state of a \"closed\" model system) that is measured by the bioassay.  An endpoint consists of a series of data points, one for each perturbing agent (screened entity) tested the assay.",
@@ -461,18 +305,6 @@
                 "mandatory": false,
                 "values": 
                 [
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000029",
                         "name": "assay screening campaign stage",
@@ -490,18 +322,6 @@
                 "values": 
                 [
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000512",
                         "name": "assay footprint",
                         "descr": "This describes the physical format such as plate density in which an assay is performed, which is generally a microplate format, but can also be an array format.",
@@ -517,18 +337,6 @@
                 "mandatory": false,
                 "values": 
                 [
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000248",
                         "name": "assay kit",
@@ -546,18 +354,6 @@
                 "values": 
                 [
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000035",
                         "name": "physical detection method",
                         "descr": "The physical method (technology) used to measure / readout the effect caused by a perturbagen in the assay environment.",
@@ -573,18 +369,6 @@
                 "mandatory": false,
                 "values": 
                 [
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
                     {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0000697",
                         "name": "detection instrument",
@@ -612,18 +396,6 @@
                         "name": "screened entity",
                         "descr": "",
                         "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
                     }
                 ]
             }, 
@@ -686,18 +458,6 @@
                         "spec": "container"
                     }, 
                     {
-                        "uri": "http://www.bioassayontology.org/bat#Absence",
-                        "name": "absence",
-                        "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                        "spec": "container"
-                    }, 
-                    {
-                        "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                        "name": "not determined",
-                        "descr": "The measurement was not made.",
-                        "spec": "exclude"
-                    }, 
-                    {
                         "uri": "http://www.bioassayontology.org/bao#BAO_0003117",
                         "name": "function",
                         "descr": "",
@@ -755,24 +515,6 @@
                         "mandatory": false,
                         "values": 
                         [
-                            {
-                                "uri": "http://www.bioassayontology.org/bat#Absence",
-                                "name": "absence",
-                                "descr": "A group of annotations that explain why an annotation is missing, when it should not be.",
-                                "spec": "container"
-                            }, 
-                            {
-                                "uri": "http://www.bioassayontology.org/bat#NotDetermined",
-                                "name": "not determined",
-                                "descr": "The measurement was not made.",
-                                "spec": "exclude"
-                            }, 
-                            {
-                                "uri": "http://www.bioassayontology.org/bat#SeeGeneID",
-                                "name": "see Gene ID",
-                                "descr": "The target is present in the Gene ID section, but needs to be mapped to a formal ontology.",
-                                "spec": "exclude"
-                            }, 
                             {
                                 "uri": "http://purl.obolibrary.org/obo/UO_0000000",
                                 "name": "unit of measurement",
