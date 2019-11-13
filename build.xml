@@ -63,7 +63,11 @@
 
 	<target name="pkgAPI" depends="buildAPI" description="generate the package without the GUI">
 		<jar jarfile="pkg/BioAssayTemplateAPI.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.cdd.bao.Main" />
+			</manifest>
 			<fileset dir="bin">
+				<include name="com/cdd/bao/Main.class" />
 				<include name="com/cdd/bao/axioms/**" />
 				<include name="com/cdd/bao/template/**" />
 				<include name="com/cdd/bao/util/Util.class" />
