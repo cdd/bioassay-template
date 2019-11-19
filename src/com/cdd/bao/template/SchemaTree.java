@@ -78,8 +78,6 @@ public class SchemaTree
 	private List<Node> flat = new ArrayList<>(); // ordered by tree structure, i.e. root at the beginning, depth & parentIndex are meaningful
 	private List<Node> list = new ArrayList<>(); // just nodes in the schema, sorted alphabetically (i.e. no tree structure)
 
-	private static final String SEP = "::";
-
 	// ------------ public methods ------------
 
 	// direct constructor: when instantiating outside of the common cache framework
@@ -123,10 +121,22 @@ public class SchemaTree
 		Node node = tree.get(uri);
 		if (node == null) return;
 		
+		// get count of node and its children
+		Set<String> branchURIs = getNodeURIsInBranch(node);
+		
 		if (node.parent != null) 
 			node.parent.children.removeIf(child -> child.uri.equals(uri));
-			
-		tree.remove(uri);
+		
+		// adjust childCount in parent nodes
+		Node p = node.parent;
+		while (p != null)
+		{
+			p.childCount -= branchURIs.size();
+			p = p.parent;
+		}
+
+		// and remove branch information from tree
+		for (String u : branchURIs) tree.remove(u);
 		
 		flattenTree();
 		list.clear();
@@ -191,7 +201,13 @@ public class SchemaTree
 				node.parent = parent;
 				node.depth = parent.depth + 1;
 				parent.children.add(node);
-				parent.childCount++;
+				// increase child count of all parents
+				Node p = parent;
+				while (p != null)
+				{
+					p.childCount++;
+					p = p.parent;
+				}
 				node.inSchema = srcNode.inSchema;
 				node.isExplicit = srcNode.inSchema;
 				wereAdded.add(node);
@@ -205,7 +221,7 @@ public class SchemaTree
 			if (!modified) break;
 		}
 		
-		if (wereAdded.size() > 0)
+		if (!wereAdded.isEmpty())
 		{
 			// both flat & list need to be updated
 			flattenTree();
@@ -228,7 +244,7 @@ public class SchemaTree
 		candidates.add(pair);
 
 		List<Node> added = addNodes(candidates);
-		return added.size() > 0 ? node : null;
+		return added.isEmpty() ? null : node;
 	}
 
 	// ------------ private methods ------------
@@ -411,7 +427,7 @@ public class SchemaTree
 	{
 		List<Branch> stack = new ArrayList<>();
 		stack.add(branch);
-		while (stack.size() > 0)
+		while (!stack.isEmpty())
 		{
 			Branch br = stack.remove(0);
 			if (exclude != null && exclude.contains(br.uri)) continue;
@@ -441,5 +457,20 @@ public class SchemaTree
 			flat.add(node);
 			flattenBranch(node.children, depth + 1, flat.size() - 1);
 		}
+	}
+	
+	// return the URI of nodes in branch starting at parent (incl. parent)
+	protected static Set<String> getNodeURIsInBranch(Node node)
+	{
+		Set<String> result = new HashSet<>();
+		List<Node> stack = new ArrayList<>();
+		stack.add(node);
+		while (!stack.isEmpty())
+		{
+			Node n = stack.remove(0);
+			result.add(n.uri);
+			stack.addAll(n.children);
+		}
+		return result;
 	}
 }

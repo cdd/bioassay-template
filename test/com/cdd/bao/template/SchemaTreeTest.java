@@ -21,8 +21,9 @@
 
 package com.cdd.bao.template;
 
+import com.cdd.bao.template.Schema.*;
+
 import static org.junit.Assert.*;
-import static org.junit.Assume.*;
 
 import java.io.*;
 import java.util.*;
@@ -31,11 +32,6 @@ import java.util.stream.*;
 import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.tuple.*;
 import org.junit.*;
-
-import com.cdd.bao.template.*;
-import com.cdd.bao.template.Schema.*;
-import com.cdd.bao.template.Vocabulary.*;
-import com.cdd.bao.util.*;
 
 public class SchemaTreeTest extends OntologyReader
 {
@@ -68,30 +64,29 @@ public class SchemaTreeTest extends OntologyReader
 	}
 	
 	@Test
-	public void testAddNode() throws IOException
+	public void testAddNode()
 	{
 		Schema.Group group = schema.getRoot();
 		Assignment assn = group.assignments.get(1); // bioassay type
 
 		SchemaTree schemaTree = new SchemaTree(assn, vocab);
-		int flatLength = schemaTree.getFlat().length;
-		int listLength = schemaTree.getList().length;
+		int treeSize = schemaTree.getTree().size();
+		verifyTreeStructure(schemaTree, treeSize);
 
 		// verify new node creation for provisional term
 		SchemaTree.Node newNode = schemaTree.addNode(provTerm.parentURI, provTerm.label, provTerm.descr, provTerm.uri);
 		assertTrue(newNode != null);
 
+		verifyTreeStructure(schemaTree, treeSize + 1);
+
 		// verify tree
-		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
-		SchemaTree.Node provNode = tree.get(provTerm.uri);
+		SchemaTree.Node provNode = schemaTree.getTree().get(provTerm.uri);
 		verifyNode(provNode, provTerm);
 
 		// verify node in flat array
-		assertTrue((flatLength + 1) == schemaTree.getFlat().length);
 		verifyNodeInCollection(provTerm, schemaTree.getFlat());
 
 		// verify node in list array
-		assertTrue((listLength + 1) == schemaTree.getList().length);
 		verifyNodeInCollection(provTerm, schemaTree.getList());
 	}
 
@@ -103,11 +98,16 @@ public class SchemaTreeTest extends OntologyReader
 
 		// send spurious parentURI to addNode
 		SchemaTree schemaTree = new SchemaTree(assn, vocab);
+		int treeSize = schemaTree.getTree().size();
+		verifyTreeStructure(schemaTree, treeSize);
+
 		schemaTree.addNode("http://non.existent.com/uri", provTerm.label, provTerm.descr, provTerm.uri);
 		
-		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
-		SchemaTree.Node provNode = tree.get(provTerm.uri);
+		SchemaTree.Node provNode = schemaTree.getTree().get(provTerm.uri);
 		assertTrue(provNode == null);
+		
+		// tree is unchanged
+		verifyTreeStructure(schemaTree, treeSize);
 	}
 	
 	@Test
@@ -116,6 +116,8 @@ public class SchemaTreeTest extends OntologyReader
 		Schema.Group group = schema.getRoot();
 		Assignment assn = group.assignments.get(1); // bioassay type
 		SchemaTree schemaTree = new SchemaTree(assn, vocab);
+		int treeSize = schemaTree.getTree().size();
+		verifyTreeStructure(schemaTree, treeSize);
 
 		// list of provisional terms will contain a cycle
 		ProvTerm provTerm2 = new ProvTerm();
@@ -128,7 +130,6 @@ public class SchemaTreeTest extends OntologyReader
 		provTerm.parentURI = "http://www.bioassayontology.org/bat#provisional_test2";
 
 		List<Pair<String, SchemaTree.Node>> candidates = new ArrayList<>();
-		List<SchemaTree.Node> nodes = new ArrayList<>();
 		for (ProvTerm pt : new ProvTerm[]{provTerm, provTerm2})
 		{
 			SchemaTree.Node stNode = new SchemaTree.Node();
@@ -139,9 +140,76 @@ public class SchemaTreeTest extends OntologyReader
 		}
 		
 		List<SchemaTree.Node> added = schemaTree.addNodes(candidates);
-		assertTrue(added.size() <= 0);
+		assertTrue(added.isEmpty());
+
+		// tree is unchanged
+		verifyTreeStructure(schemaTree, treeSize);
 	}
 	
+	@Test
+	public void testChildCount()
+	{
+		// get tree for bioassay type
+		Assignment assn = schema.getRoot().assignments.get(1);
+		SchemaTree schemaTree = new SchemaTree(assn, vocab);
+		int treeSize = schemaTree.getTree().size();
+		verifyTreeStructure(schemaTree, treeSize);
+		
+		// get a parent node
+		SchemaTree.Node parent = schemaTree.getNode(provTerm.parentURI);
+		long parentChildCount = parent.childCount;
+
+		// add branch with a few nodes 
+		SchemaTree.Node node1 = schemaTree.addNode(parent.uri, "label1", "descr1", "uri1");
+		verifyTreeStructure(schemaTree, treeSize + 1);
+		assertEquals(parentChildCount + 1, schemaTree.getNode(parent.uri).childCount);
+		assertEquals(0, node1.childCount);
+
+		schemaTree.addNode(node1.uri, "label11", "descr11", "uri11");
+		schemaTree.addNode(node1.uri, "label12", "descr12", "uri12");
+		schemaTree.addNode("uri11", "label112", "descr112", "uri111");
+		verifyTreeStructure(schemaTree, treeSize + 4);
+		assertEquals(parentChildCount + 4, schemaTree.getNode(parent.uri).childCount);
+		assertEquals(3, schemaTree.getNode("uri1").childCount);
+		assertEquals(1, schemaTree.getNode("uri11").childCount);
+		assertEquals(0, schemaTree.getNode("uri111").childCount);
+		assertEquals(0, schemaTree.getNode("uri12").childCount);
+		
+		// remove one of the new terminal nodes
+		schemaTree.removeNode("uri12");
+		verifyTreeStructure(schemaTree, treeSize + 3);
+		assertEquals(parentChildCount + 3, schemaTree.getNode(parent.uri).childCount);
+		assertEquals(2, schemaTree.getNode("uri1").childCount);
+		assertEquals(1, schemaTree.getNode("uri11").childCount);
+		assertEquals(0, schemaTree.getNode("uri111").childCount);
+		
+		// remove branch at once
+		schemaTree.removeNode("uri1");
+		verifyTreeStructure(schemaTree, treeSize);
+		assertEquals(parentChildCount, schemaTree.getNode(parent.uri).childCount);
+	}
+	
+	//--- private methods -------------------
+	
+	private static void verifyTreeStructure(SchemaTree tree, int expectedSize)
+	{
+		assertEquals(expectedSize, tree.getTree().size());
+		assertEquals(expectedSize, tree.getFlat().length);
+		assertEquals(expectedSize, tree.getList().length);
+
+		// assert that the child count is correct
+		for (SchemaTree.Node node : tree.getFlat())
+			assertEquals(countNodes(node) - 1, node.childCount);
+	}
+	
+	// return the number of nodes in branch starting at parent (incl. parent)
+	private static int countNodes(SchemaTree.Node parent)
+	{
+		int count = 1;
+		for (SchemaTree.Node child : parent.children) count += countNodes(child);
+		return count;
+	}
+
 	private void verifyNode(SchemaTree.Node provNode, ProvTerm provTerm)
 	{
 		assertTrue(provNode != null);
