@@ -134,8 +134,8 @@ public class SchemaTree
 			p.childCount -= branchURIs.size();
 			p = p.parent;
 		}
-		
 
+		// and remove branch information from tree
 		for (String u : branchURIs) tree.remove(u);
 		
 		flattenTree();

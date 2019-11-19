@@ -82,8 +82,7 @@ public class SchemaTreeTest extends OntologyReader
 		verifyTreeStructure(schemaTree, treeSize + 1);
 
 		// verify tree
-		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
-		SchemaTree.Node provNode = tree.get(provTerm.uri);
+		SchemaTree.Node provNode = schemaTree.getTree().get(provTerm.uri);
 		verifyNode(provNode, provTerm);
 
 		// verify node in flat array
@@ -106,8 +105,7 @@ public class SchemaTreeTest extends OntologyReader
 
 		schemaTree.addNode("http://non.existent.com/uri", provTerm.label, provTerm.descr, provTerm.uri);
 		
-		Map<String, SchemaTree.Node> tree = schemaTree.getTree();
-		SchemaTree.Node provNode = tree.get(provTerm.uri);
+		SchemaTree.Node provNode = schemaTree.getTree().get(provTerm.uri);
 		assertTrue(provNode == null);
 		
 		// tree is unchanged
