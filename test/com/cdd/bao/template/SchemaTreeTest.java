@@ -23,8 +23,6 @@ package com.cdd.bao.template;
 
 import com.cdd.bao.template.Schema.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -195,13 +193,13 @@ public class SchemaTreeTest extends OntologyReader
 	
 	private static void verifyTreeStructure(SchemaTree tree, int expectedSize)
 	{
-		assertThat(tree.getTree().size(), is(expectedSize));
-		assertThat(tree.getFlat().length, is(expectedSize));
-		assertThat(tree.getList().length, is(expectedSize));
+		assertEquals(expectedSize, tree.getTree().size());
+		assertEquals(expectedSize, tree.getFlat().length);
+		assertEquals(expectedSize, tree.getList().length);
 
 		// assert that the child count is correct
 		for (SchemaTree.Node node : tree.getFlat())
-			assertThat(node.childCount, is(countNodes(node) - 1));
+			assertEquals(countNodes(node) - 1, node.childCount);
 	}
 	
 	// return the number of nodes in branch starting at parent (incl. parent)
