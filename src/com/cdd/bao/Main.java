@@ -32,6 +32,7 @@ import com.cdd.bao.validator.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
@@ -314,8 +315,10 @@ public class Main
 			summariseSchemaGroup(schema.getRoot(), 4, schvoc);
 		}
 		
-		try (OutputStream ostr = new FileOutputStream(outputFile))
+		try (OutputStream outstr = new FileOutputStream(outputFile))
 		{
+			boolean isGzip = outputFile.endsWith(".gz");
+			OutputStream ostr = isGzip ? new GZIPOutputStream(outstr) : outstr;
 			if (outputFile.endsWith(".json"))
 			{
 				JSONArray templates = new JSONArray();
