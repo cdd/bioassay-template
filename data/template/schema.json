@@ -384,6 +384,12 @@
                         "name": "not determined",
                         "descr": "The measurement was not made.",
                         "spec": "exclude"
+                    }, 
+                    {
+                        "uri": "http://purl.obolibrary.org/obo/PR_000000001",
+                        "name": "protein",
+                        "descr": "An amino acid chain that is produced de novo by ribosome-mediated translation of a genetically-encoded mRNA.",
+                        "spec": "item"
                     }
                 ]
             }, 
