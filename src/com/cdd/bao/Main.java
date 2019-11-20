@@ -216,6 +216,7 @@ public class Main
 		Util.writeln("    scanaxioms");
 		Util.writeln("    --onto {files...}");
 		Util.writeln("    --excl {files...}");
+		Util.writeln("User e.g. vocab.dump.gz to compress file");
 	}
 
 	private static void diffVocab(String[] options) throws Exception
@@ -225,12 +226,9 @@ public class Main
 		Util.writeln("    OLD:" + fn1);
 		Util.writeln("    NEW:" + fn2);
 
-		InputStream istr = new FileInputStream(fn1);
-		SchemaVocab sv1 = SchemaVocab.deserialise(istr, new Schema[0]); // note: giving no schemata works for this purpose
-		istr.close();
-		istr = new FileInputStream(fn2);
-		SchemaVocab sv2 = SchemaVocab.deserialise(istr, new Schema[0]); // note: giving no schemata works for this purpose
-		istr.close();
+		// note: giving no schemata works for this purpose
+		SchemaVocab sv1 = loadVocabDump(fn1, new Schema[0]);
+		SchemaVocab sv2 = loadVocabDump(fn2, new Schema[0]);
 		
 		Schema schema = null;
 		if (fn3 != null) schema = SchemaUtil.deserialise(new File(fn3)).schema;
@@ -422,4 +420,15 @@ public class Main
 		ImportControlledVocab imp = new ImportControlledVocab(options[0], options[1], options[2], options[3], options[4], hintsFN);
 		imp.exec();
 	}
+	
+	private static SchemaVocab loadVocabDump(String filename, Schema[] templates) throws IOException
+	{
+		try (InputStream istr = new FileInputStream(filename))
+		{
+			boolean isGzip = filename.endsWith(".gz");
+			InputStream inp = isGzip ? new GZIPInputStream(istr) : istr;
+			return SchemaVocab.deserialise(inp, templates);
+		}
+	}
+
 }
