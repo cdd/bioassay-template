@@ -334,6 +334,7 @@ public class Main
 				wtr.flush();
 			}
 			else schvoc.serialise(ostr);
+			ostr.close();
 		}
 		Util.writeln("Done.");
 	}
