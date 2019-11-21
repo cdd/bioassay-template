@@ -303,6 +303,11 @@ public class Vocabulary
 	
 	// ------------ private methods ------------
 
+	private boolean eligibleSuffix(String fn)
+	{
+		return fn.endsWith(".owl") || fn.endsWith(".ttl") || fn.endsWith(".owl.gz") || fn.endsWith(".ttl.gz");
+	}
+
 	private void loadLabels(File baseDir, File[] extra, Set<String> exclude) throws IOException
 	{	
 		Model model = ModelFactory.createDefaultModel();
@@ -316,13 +321,13 @@ public class Vocabulary
 			for (File f : list)
 			{
 				String fn = f.getCanonicalPath();
-				if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
+				if (eligibleSuffix(fn)) allFiles.add(fn);
 			}
 		}
 		for (File f : extra)
 		{
 			String fn = f.getCanonicalPath();
-			if (fn.endsWith(".owl") || fn.endsWith(".ttl")) allFiles.add(fn);
+			if (eligibleSuffix(fn)) allFiles.add(fn);
 		}		
 		List<File> files = new ArrayList<>();
 		long progressSize = 0, totalSize = 0;
@@ -345,7 +350,7 @@ public class Vocabulary
 			while ((ze = zip.getNextEntry()) != null) 
 			{
 				String path = ze.getName();
-				if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl"))) totalSize += ze.getSize();
+				if (path.startsWith("data/ontology/") && eligibleSuffix(path)) totalSize += ze.getSize();
 			}
 
 			// second pass: read it in
@@ -355,12 +360,16 @@ public class Vocabulary
 			while ((ze = zip.getNextEntry()) != null) 
 			{
 				String path = ze.getName();
-				if (path.startsWith("data/ontology/") && (path.endsWith(".owl") || path.endsWith(".ttl")) && !exclude.contains(new File(path).getName()))
+				if (path.startsWith("data/ontology/") && eligibleSuffix(path) && !exclude.contains(new File(path).getName()))
 				{
 					progressSize += ze.getSize();
 					InputStream res = getClass().getResourceAsStream("/" + path);
 					synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingFile(path);}
-					try {RDFDataMgr.read(model, res, path.endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);}
+					try 
+					{
+						InputStream istr = path.endsWith(".gz") ? new GZIPInputStream(res) : res;
+						RDFDataMgr.read(model, istr, path.indexOf(".ttl") >= 0 ? Lang.TURTLE : Lang.RDFXML);
+					}
 					catch (Exception ex) {throw new IOException("Failed to load from JAR file: " + path);}
 					res.close();
 			
@@ -380,8 +389,14 @@ public class Vocabulary
 			try 
 			{
 				synchronized (listeners) {for (Listener l : listeners) l.vocabLoadingFile(f.getPath());}
-				URL fileURL = new File(f.getPath()).toURI().toURL(); // changing file to a URL for passing into Jena's RDF reader			
-				RDFDataMgr.read(model, fileURL.getPath(), f.getName().endsWith(".ttl") ? Lang.TURTLE : Lang.RDFXML);
+				URL fileURL = new File(f.getPath()).toURI().toURL(); // changing file to a URL for passing into Jena's RDF reader
+				
+				String path = fileURL.getPath();
+				try (InputStream fstr = new FileInputStream(path))
+				{
+					InputStream istr = path.endsWith(".gz") ? new GZIPInputStream(fstr) : fstr;
+					RDFDataMgr.read(model, istr, path.indexOf(".ttl") >= 0 ? Lang.TURTLE : Lang.RDFXML);
+				}
 			}
 			catch (Exception ex) 
 			{
