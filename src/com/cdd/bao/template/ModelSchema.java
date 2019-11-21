@@ -57,6 +57,7 @@ public class ModelSchema
 	public static final String PFX_PROTEIN = "http://www.bioassayontology.org/protein#";
 	public static final String PFX_PROV = "http://www.w3.org/ns/prov#";
 	public static final String PFX_ASTRAZENECA = "http://rdf.astrazeneca.com/bae#";
+	public static final String PFX_OBOINOWL = "http://www.geneontology.org/formats/oboInOwl#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -144,6 +145,7 @@ public class ModelSchema
 		"protein:", PFX_PROTEIN,
 		"prov:", PFX_PROV,
 		"az:", PFX_ASTRAZENECA,
+		"oboInOwl:", PFX_OBOINOWL,
 	};
 	
 	// associate a new prefix with a URI
