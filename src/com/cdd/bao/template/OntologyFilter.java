@@ -25,6 +25,7 @@ import com.cdd.bao.util.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
@@ -50,22 +51,32 @@ public class OntologyFilter
 		{
 			Util.writeln("Reading input model...");
 			InputStream istr = new FileInputStream(fn);
-			RDFDataMgr.read(inmodel, istr, Lang.RDFXML);
+			if (fn.endsWith(".gz")) istr = new GZIPInputStream(istr);
+			RDFDataMgr.read(inmodel, istr, fn.indexOf(".ttl") >= 0 ? Lang.TURTLE : Lang.RDFXML);
 			istr.close();
 			Util.writeln("Reading complete: " + inmodel.size() + " triples.");
 			
+			// these are the allowed outputs
 			Property propClass = inmodel.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
 			Property propLabel = inmodel.createProperty(ModelSchema.PFX_RDFS + "label");
 			Property propDescr = inmodel.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
+			Property propAltLabel = inmodel.createProperty(ModelSchema.PFX_BAE + "altLabel");
 
+			// these are inputs that get remapped
+			Property propSynonym1 = inmodel.createProperty(ModelSchema.PFX_OBOINOWL + "hasExactSynonym");
+			
 			for (StmtIterator it = inmodel.listStatements(null, null, (RDFNode)null); it.hasNext();)
 			{
 				Statement st = it.next();
+				Resource subj = st.getSubject();
 				Property pred = st.getPredicate();
-				//if (pred != propClass && pred != propLabel && pred != propDescr) continue;
-				if (!pred.equals(propClass) && !pred.equals(propLabel) && !pred.equals(propDescr)) continue;
+				RDFNode obj = st.getObject();
+
+				if (pred.equals(propSynonym1)) pred = propAltLabel;
+				else if (!pred.equals(propClass) && !pred.equals(propLabel) && 
+					     !pred.equals(propDescr) && !pred.equals(propAltLabel)) continue; // don't want it
 				
-				outmodel.add(st);
+				outmodel.add(subj, pred, obj);
 			}
 		}
 		catch (Exception ex) {throw new IOException("Failed to parse schema", ex);}
@@ -73,21 +84,17 @@ public class OntologyFilter
 	
 	public void save(String fn) throws IOException
 	{
-		/*outmodel.setNsPrefix("bao", ModelSchema.PFX_BAO);
-		outmodel.setNsPrefix("bat", ModelSchema.PFX_BAT);
-		outmodel.setNsPrefix("obo", ModelSchema.PFX_OBO);
-		outmodel.setNsPrefix("rdfs", ModelSchema.PFX_RDFS);
-		outmodel.setNsPrefix("xsd", ModelSchema.PFX_XSD);
-		outmodel.setNsPrefix("rdf", ModelSchema.PFX_RDF);*/
-		
 		Map<String, String> prefixes = ModelSchema.getPrefixes();
 		for (String pfx : prefixes.keySet()) outmodel.setNsPrefix(pfx.substring(0, pfx.length() - 1), prefixes.get(pfx));
 
 		Util.writeln("Writing to: " + fn);
 
-		OutputStream ostr = new FileOutputStream(fn);
-		RDFDataMgr.write(ostr, outmodel, RDFFormat.TURTLE);
-		ostr.close();
+		try (OutputStream fstr = new FileOutputStream(fn))
+		{
+			OutputStream ostr = fn.endsWith(".gz") ? new GZIPOutputStream(fstr) : fstr;
+			RDFDataMgr.write(ostr, outmodel, RDFFormat.TURTLE);
+			ostr.close();
+		}
 		
 		Util.writeln("Done: " + outmodel.size() + " triples");
 	}
