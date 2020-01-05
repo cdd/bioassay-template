@@ -415,7 +415,7 @@
                 [
                     {
                         "uri": "http://www.bioassayontology.org/taxon#Root",
-                        "name": "Faux ProteinID",
+                        "name": "NCBI ProteinID",
                         "descr": "Temporary ontology terms for NCBI Protein GI",
                         "spec": "container"
                     }
@@ -431,7 +431,7 @@
                 [
                     {
                         "uri": "http://www.bioassayontology.org/geneid#Root",
-                        "name": "Faux GeneID",
+                        "name": "NCBI GeneID",
                         "descr": "Temporary ontology terms for NCBI Gene ID",
                         "spec": "container"
                     }
