@@ -139,6 +139,11 @@ public class Main
 			try {importKeywords(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
+		else if (argv[0].equals("valuetree"))
+		{
+			try {compileValueTree(ArrayUtils.remove(argv, 0));}
+			catch (Exception ex) {ex.printStackTrace();}
+		}
 		/*else if (argv[0].equals("showaxioms"))
 		{
 			String fnAxioms = argv.length >= 2 ? argv[1] : "data/template/axioms.dump";
@@ -214,6 +219,7 @@ public class Main
 		Util.writeln("    check {schema.json}");
 		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
+		Util.writeln("    valuetree {schema*.json} {outfile.txt}");
 		Util.writeln("    --onto {files...}");
 		Util.writeln("    --excl {files...}");
 		Util.writeln("User e.g. vocab.dump.gz to compress file");
@@ -336,6 +342,49 @@ public class Main
 			else schvoc.serialise(ostr);
 			ostr.close();
 		}
+		
+		Util.writeln("Done.");
+	}
+
+	// assembles all the schema content, and then emits each unique {valueURI,propURI,groupNest...} to a text file	
+	private static void compileValueTree(String[] options) throws Exception
+	{
+		List<String> inputFiles = new ArrayList<>();
+		for (int n = 0; n < options.length - 1; n++) inputFiles.add(Util.expandFileHome(options[n]));
+		String outputFile = Util.expandFileHome(options[options.length - 1]);
+		Util.writeln("Compiling schema files:");
+		for (int n = 0; n < inputFiles.size(); n++) Util.writeln("    " + inputFiles.get(n));
+		Util.writeln("Output to:");
+		Util.writeln("    " + outputFile);
+		
+		Vocabulary vocab = new Vocabulary();
+		Util.writeFlush("Loading ontologies ");
+		vocab.load(null, null);
+		
+		Schema[] schemata = new Schema[inputFiles.size()];
+		for (int n = 0; n < schemata.length; n++) schemata[n] = SchemaUtil.deserialise(new File(inputFiles.get(n))).schema;
+		SchemaVocab schvoc = new SchemaVocab(vocab, schemata);
+		Util.writeln("Loaded: " + schvoc.numTerms() + " terms.");
+		
+		Set<String> valueLines = new TreeSet<>();
+		for (SchemaVocab.StoredTree stored : schvoc.getTrees())
+		{
+			Schema.Assignment assn = stored.tree.getAssignment();
+			for (SchemaTree.Node node : stored.tree.getFlat())
+			{
+				String line = node.uri + "\t" + assn.propURI;
+				for (String gn : assn.groupNest()) line += "\t" + gn;
+				valueLines.add(line);
+			}
+		}
+		
+		Util.writeln("Unique value/prop/group entries: " + valueLines.size());
+		
+		try (Writer wtr = new BufferedWriter(new FileWriter(outputFile)))
+		{
+			for (String line : valueLines) wtr.write(line + "\n");
+		}
+		
 		Util.writeln("Done.");
 	}
 
