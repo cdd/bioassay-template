@@ -348,13 +348,13 @@ public class EditSchema
 	
 		addMenu(menuFile, "_New", new KeyCharacterCombination("N", cmd)).setOnAction(event -> actionFileNew());
 		addMenu(menuFile, "_Open", new KeyCharacterCombination("O", cmd)).setOnAction(event -> actionFileOpen(false));
-		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false, false));
-		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true, false));
+		addMenu(menuFile, "_Save", new KeyCharacterCombination("S", cmd)).setOnAction(event -> actionFileSave(false, SchemaUtil.SerialFormat.JSON));
+		addMenu(menuFile, "Save _As", new KeyCharacterCombination("S", cmd, shift)).setOnAction(event -> actionFileSave(true, SchemaUtil.SerialFormat.JSON));
 		addMenu(menuFile, "_Export Dump", new KeyCharacterCombination("E", cmd)).setOnAction(event -> actionFileExportDump());
 		addMenu(menuFile, "_Merge", null).setOnAction(event -> actionFileMerge());
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Import RDF (Turtle)", null).setOnAction(event -> actionFileOpen(true));
-		addMenu(menuFile, "Export RDF (Turtle)", null).setOnAction(event -> actionFileSave(true, true));
+		addMenu(menuFile, "Export RDF (Turtle)", null).setOnAction(event -> actionFileSave(true, SchemaUtil.SerialFormat.TTL));
 		menuFile.getItems().add(new SeparatorMenuItem());
 		addMenu(menuFile, "Confi_gure", new KeyCharacterCombination(",", cmd)).setOnAction(event -> actionFileConfigure());
 		addMenu(menuFile, "_Browse Endpoint", new KeyCharacterCombination("B", cmd, shift)).setOnAction(event -> actionFileBrowse());
@@ -619,7 +619,7 @@ public class EditSchema
 		EditSchema edit = new EditSchema(stage, null);
 		stage.show();
 	}
-	public void actionFileSave(boolean promptNew, boolean exportTTL)
+	public void actionFileSave(boolean promptNew, SchemaUtil.SerialFormat format)
 	{
 		pullDetail();
 	
@@ -627,7 +627,7 @@ public class EditSchema
 		if (promptNew || schemaFile == null)
 		{
 			FileChooser chooser = new FileChooser();
-			if (exportTTL) chooser.getExtensionFilters().add(ttlFilter);
+			if (format == SchemaUtil.SerialFormat.TTL) chooser.getExtensionFilters().add(ttlFilter);
 			else chooser.getExtensionFilters().add(jsonFilter);
 
 			chooser.setTitle("Save Schema Template");
@@ -636,8 +636,10 @@ public class EditSchema
 			File file = chooser.showSaveDialog(stage);
 			if (file == null) return;
 
-			if (exportTTL && !file.getName().endsWith(".ttl")) file = new File(file.getAbsolutePath() + ".ttl");
-			else if (!exportTTL && !file.getName().endsWith(".json")) file = new File(file.getAbsolutePath() + ".json");
+			if (format == SchemaUtil.SerialFormat.TTL && !file.getName().endsWith(".ttl")) 
+				file = new File(file.getAbsolutePath() + ".ttl");
+			else if (format == SchemaUtil.SerialFormat.JSON && !file.getName().endsWith(".json")) 
+				file = new File(file.getAbsolutePath() + ".json");
 
 			schemaFile = file;
 			updateTitle();
@@ -658,7 +660,7 @@ public class EditSchema
 		{
 			try (OutputStream ostr = new FileOutputStream(schemaFile))
 			{
-				SchemaUtil.serialise(schema, SchemaUtil.SerialFormat.JSON, ostr);
+				SchemaUtil.serialise(schema, format, ostr);
 			}
 			stack.setDirty(false);
 		}
