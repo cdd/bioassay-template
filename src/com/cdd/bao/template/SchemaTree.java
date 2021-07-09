@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2016-2019 Collaborative Drug Discovery Inc.
+ * (c) 2016-2021 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -142,6 +142,16 @@ public class SchemaTree
 		list.clear();
 		list.addAll(flat);
 		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+	}
+	
+	// rewrites a URI without changing the hierarchy
+	public void changeURI(String fromURI, String toURI)
+	{
+		Node node = tree.get(fromURI);
+		if (node == null) return;
+		node.uri = toURI;
+		tree.remove(fromURI);
+		tree.put(toURI, node);
 	}
 	
 	// returns a text representation of the tree (for debugging purposes)
