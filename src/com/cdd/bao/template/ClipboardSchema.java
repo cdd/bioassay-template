@@ -256,7 +256,7 @@ public class ClipboardSchema
 		group.groupURI = json.optString("groupURI", "");
 		group.canDuplicate = json.optBoolean("canDuplicate", false);
 		
-		JSONArray jassignments = json.getJSONArray("assignments"), jsubgroups = json.getJSONArray("subGroups");
+		JSONArray jassignments = json.optJSONArrayEmpty("assignments"), jsubgroups = json.optJSONArrayEmpty("subGroups");
 		for (int n = 0; n < jassignments.length(); n++)
 		{
 			JSONObject obj = jassignments.getJSONObject(n);

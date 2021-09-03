@@ -1,7 +1,7 @@
 /*
  * BioAssay Ontology Annotator Tools
  * 
- * (c) 2016-2019 Collaborative Drug Discovery Inc.
+ * (c) 2016-2021 Collaborative Drug Discovery Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License 2.0
@@ -402,6 +402,14 @@ public class SchemaVocab
 			remap.fromURI = fromURI;
 			remap.toURI = toURI;
 			remappings.put(fromURI, remap);
+			
+			int idx = termLookup.getOrDefault(fromURI, -1);
+			if (idx >= 0) 
+			{
+				termLookup.put(toURI, idx);
+				termList[idx].uri = toURI;
+			}
+			for (StoredTree stored : treeList) stored.tree.changeURI(fromURI, toURI);
 		}
 		else remappings.remove(fromURI); 
 	}
@@ -423,13 +431,8 @@ public class SchemaVocab
 	public void addTerms(List<StoredTerm> newTerms, Map<String, StoredRemapTo> newTermRemappings)
 	{
 		StoredTerm[] newTermList = ArrayUtils.addAll(termList, newTerms.toArray(new StoredTerm[0]));
-		for (int k = termList.length; k < newTermList.length; k++)
-		{
-			termLookup.put(newTermList[k].uri, Integer.valueOf(k));
-			
-			StoredRemapTo srt = newTermRemappings.get(newTermList[k].uri);
-			if (srt != null) remappings.put(newTermList[k].uri, srt);
-		}
+		for (int k = termList.length; k < newTermList.length; k++) termLookup.put(newTermList[k].uri, Integer.valueOf(k));
+		for (StoredRemapTo srt : newTermRemappings.values()) remappings.put(srt.fromURI, srt);
 		termList = newTermList;
 	}
 	
