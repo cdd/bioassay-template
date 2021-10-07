@@ -177,7 +177,10 @@ public class ClipboardSchema
 			obj.put("uri", val.uri);
 			obj.put("name", val.name);
 			obj.put("descr", val.descr);
+			if (val.altLabels != null) obj.put("altLabels", val.altLabels);
+			if (val.externalURLs != null) obj.put("externalURLs", val.externalURLs);
 			obj.put("spec", val.spec.toString().toLowerCase());
+			if (val.parentURI != null) obj.put("parentURI", val.parentURI);			
 			jvalues.put(obj);
 		}
 		json.put("values", jvalues);
@@ -290,10 +293,14 @@ public class ClipboardSchema
 			JSONObject obj = jvalues.getJSONObject(n);
 			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
 			val.descr = obj.optString("descr", "");
+			val.altLabels = obj.has("altLabels") ? obj.getJSONArray("altLabels").toStringArray() : null;
+			val.externalURLs = obj.has("externalURLs") ? obj.getJSONArray("externalURLs").toStringArray() : null;
 			
 			String strSpec = obj.optString("spec");
 			try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
 			catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
+			
+			val.parentURI = obj.optString("parentURI", null);
 
 			// deprecated format: still reads the old version
 			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;

@@ -264,7 +264,7 @@ public class Schema
 	{
 		ITEM, // the term specified by the URL is explicitly whitelisted
 		EXCLUDE, // explicitly blacklist the term (i.e. exclude it from a branch within which it was previously included)
-		WHOLEBRANCH, // incline the term specified and everything descended from it
+		WHOLEBRANCH, // include the term specified and everything descended from it
 		EXCLUDEBRANCH, // exclude a whole branch that had previously been included
 		CONTAINER, // same as whole branch, except the term itself should not be explicitly selected
 	}
@@ -275,7 +275,10 @@ public class Schema
 		public String uri; // mapping to a URI in the BAO or related ontology; if blank, is literal
 		public String name; // short label for the value; if no URI, this is the literal to use
 		public String descr = ""; // longer description
+		public String[] altLabels = null; // optional alternative labels (aka synonyms)
+		public String[] externalURLs = null; // optional resource information
 		public Specify spec = Specify.ITEM;
+		public String parentURI = null; // if specified, indicates where the term goes in the hierarchy
 		
 		public Value(String uri, String name)
 		{
@@ -912,15 +915,7 @@ public class Schema
 		try
 		{
 			JSONObject json = new JSONObject(new JSONTokener(rdr));
-			Schema schema = new Schema();
-
-			schema.setSchemaPrefix(json.getString("schemaPrefix"));
-			
-			JSONArray branchGroups = json.optJSONArray("branchGroups");
-			if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
-			
-			JSONObject jsonRoot = json.getJSONObject("root");
-			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+			var schema = deserialise(json);
 			return schema;
 		}
 		catch (JSONException ex)
@@ -929,6 +924,19 @@ public class Schema
 			// error message will suffice
 			throw new IOException("Not a valid JSON-formatted schema.");
 		}
+	}
+	public static Schema deserialise(JSONObject json)
+	{
+		Schema schema = new Schema();
+
+		schema.setSchemaPrefix(json.getString("schemaPrefix"));
+		
+		JSONArray branchGroups = json.optJSONArray("branchGroups");
+		if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
+		
+		JSONObject jsonRoot = json.getJSONObject("root");
+		schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+		return schema;
 	}
 	
 	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
@@ -945,12 +953,19 @@ public class Schema
 	}
 	public void serialise(Writer wtr) throws IOException
 	{
-		JSONObject json = new JSONObject();
+		var json = serialiseJSON();
+		wtr.write(json.toString(4));
+		wtr.flush();
+	}
+	
+	// returns the JSONObject with serialised content
+	public JSONObject serialiseJSON()
+	{
+		var json = new JSONObject();
 		json.put("schemaPrefix", schemaPrefix);
 		if (branchGroups != null) json.put("branchGroups", branchGroups);
 		json.put("root", ClipboardSchema.composeGroup(root));
-		wtr.write(json.toString(4));
-		wtr.flush();
+		return json;
 	}	
 	
 	// ------------ private methods ------------	
