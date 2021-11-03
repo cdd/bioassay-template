@@ -69,7 +69,7 @@ public class SchemaTree
 		public String toString()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append("uri=" + uri).append("; label=" + label).append("; descr=" + descr);
+			sb.append("uri=" + uri).append("; label=" + label).append("; descr=" + descr + "; depth=" + depth);
 			return sb.toString();
 		}
 	}
@@ -97,7 +97,7 @@ public class SchemaTree
 			flat.add(node);
 			list.add(node);
 		}
-		list.sort((v1, v2) -> v1.label.compareToIgnoreCase(v2.label));
+		list.sort((v1, v2) -> Util.safeString(v1.label).compareToIgnoreCase(Util.safeString(v2.label)));
 	}
 	
 	// returns the assignment with which it is affiliated

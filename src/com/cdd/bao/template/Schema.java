@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.commons.lang3.*;
 import org.json.*;
 
 /*
@@ -173,7 +174,7 @@ public class Schema
 		public Suggestions suggestions = Suggestions.FULL;
 		public boolean mandatory = false;
 		
-		public Assignment(Group parent, String name, String propURI) 
+		public Assignment(Group parent, String name, String propURI)
 		{
 			this.parent = parent;
 			this.name = name == null ? "" : name;
@@ -285,11 +286,19 @@ public class Schema
 			this.uri = uri == null ? "" : uri;
 			this.name = name == null ? "" : name;
 		}
+		public Value(String uri, String name, Specify spec)
+		{
+			this(uri, name);
+			this.spec = spec;
+		}
 		public Value clone()
 		{
 			Value dup = new Value(uri, name);
 			dup.descr = descr;
+			dup.altLabels = ArrayUtils.clone(altLabels);
+			dup.externalURLs = ArrayUtils.clone(externalURLs);
 			dup.spec = spec;
+			dup.parentURI = parentURI;
 			return dup;
 		}
 		

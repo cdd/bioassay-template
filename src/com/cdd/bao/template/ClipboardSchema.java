@@ -88,6 +88,18 @@ public class ClipboardSchema
 		}
 	}
 	
+	public static Schema.Value unpackValue(JSONObject obj)
+	{
+		try
+		{
+			return parseValue(obj);
+		}
+		catch (JSONException ex)
+		{
+			return null;
+		}
+	}
+	
 	// pulls an assay from a JSON object; note that it needs the schema as context, in order to try to match up the assignments
 	public static Schema.Assay unpackAssay(JSONObject obj)
 	{
@@ -288,29 +300,28 @@ public class ClipboardSchema
 		assn.mandatory = json.optBoolean("mandatory", false);
 		
 		JSONArray jvalues = json.getJSONArray("values");
-		for (int n = 0; n < jvalues.length(); n++)
-		{
-			JSONObject obj = jvalues.getJSONObject(n);
-			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
-			val.descr = obj.optString("descr", "");
-			val.altLabels = obj.has("altLabels") ? obj.getJSONArray("altLabels").toStringArray() : null;
-			val.externalURLs = obj.has("externalURLs") ? obj.getJSONArray("externalURLs").toStringArray() : null;
-			
-			String strSpec = obj.optString("spec");
-			try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
-			catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
-			
-			val.parentURI = obj.optString("parentURI", null);
-
-			// deprecated format: still reads the old version
-			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
-			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
-			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
-
-			assn.values.add(val);
-		}
+		for (int n = 0; n < jvalues.length(); n++) assn.values.add(parseValue(jvalues.getJSONObject(n)));
 		
 		return assn;
+	}
+	private static Schema.Value parseValue(JSONObject json) throws JSONException
+	{
+		Schema.Value val = new Schema.Value(json.optString("uri", ""), json.optString("name", ""));
+		val.descr = json.optString("descr", "");
+		val.altLabels = json.has("altLabels") ? json.getJSONArray("altLabels").toStringArray() : null;
+		val.externalURLs = json.has("externalURLs") ? json.getJSONArray("externalURLs").toStringArray() : null;
+		
+		String strSpec = json.optString("spec");
+		try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
+		catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
+		
+		val.parentURI = json.optString("parentURI", null);
+
+		// deprecated format: still reads the old version
+		if (json.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
+		else if (json.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
+		else if (json.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
+		return val;
 	}
 	private static Schema.Assay parseAssay(JSONObject json) throws JSONException
 	{
