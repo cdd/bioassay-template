@@ -321,6 +321,7 @@ public class Vocabulary
 			for (File f : list)
 			{
 				String fn = f.getCanonicalPath();
+Util.writeln("FN:"+fn);
 				if (eligibleSuffix(fn)) allFiles.add(fn);
 			}
 		}
