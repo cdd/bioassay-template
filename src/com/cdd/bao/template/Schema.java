@@ -1,23 +1,20 @@
 /*
- * BioAssay Ontology Annotator Tools
- * 
- * (c) 2014-2018 Collaborative Drug Discovery Inc.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License 2.0
- * as published by the Free Software Foundation:
- * 
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+	BioAssay Ontology Annotator Tools
+
+	Copyright 2016-2023 Collaborative Drug Discovery, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
 
 package com.cdd.bao.template;
 
@@ -28,6 +25,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.commons.lang3.*;
 import org.json.*;
 
 /*
@@ -173,7 +171,7 @@ public class Schema
 		public Suggestions suggestions = Suggestions.FULL;
 		public boolean mandatory = false;
 		
-		public Assignment(Group parent, String name, String propURI) 
+		public Assignment(Group parent, String name, String propURI)
 		{
 			this.parent = parent;
 			this.name = name == null ? "" : name;
@@ -264,7 +262,7 @@ public class Schema
 	{
 		ITEM, // the term specified by the URL is explicitly whitelisted
 		EXCLUDE, // explicitly blacklist the term (i.e. exclude it from a branch within which it was previously included)
-		WHOLEBRANCH, // incline the term specified and everything descended from it
+		WHOLEBRANCH, // include the term specified and everything descended from it
 		EXCLUDEBRANCH, // exclude a whole branch that had previously been included
 		CONTAINER, // same as whole branch, except the term itself should not be explicitly selected
 	}
@@ -275,18 +273,29 @@ public class Schema
 		public String uri; // mapping to a URI in the BAO or related ontology; if blank, is literal
 		public String name; // short label for the value; if no URI, this is the literal to use
 		public String descr = ""; // longer description
+		public String[] altLabels = null; // optional alternative labels (aka synonyms)
+		public String[] externalURLs = null; // optional resource information
 		public Specify spec = Specify.ITEM;
+		public String parentURI = null; // if specified, indicates where the term goes in the hierarchy
 		
 		public Value(String uri, String name)
 		{
 			this.uri = uri == null ? "" : uri;
 			this.name = name == null ? "" : name;
 		}
+		public Value(String uri, String name, Specify spec)
+		{
+			this(uri, name);
+			this.spec = spec;
+		}
 		public Value clone()
 		{
 			Value dup = new Value(uri, name);
 			dup.descr = descr;
+			dup.altLabels = ArrayUtils.clone(altLabels);
+			dup.externalURLs = ArrayUtils.clone(externalURLs);
 			dup.spec = spec;
+			dup.parentURI = parentURI;
 			return dup;
 		}
 		
@@ -912,15 +921,7 @@ public class Schema
 		try
 		{
 			JSONObject json = new JSONObject(new JSONTokener(rdr));
-			Schema schema = new Schema();
-
-			schema.setSchemaPrefix(json.getString("schemaPrefix"));
-			
-			JSONArray branchGroups = json.optJSONArray("branchGroups");
-			if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
-			
-			JSONObject jsonRoot = json.getJSONObject("root");
-			schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+			var schema = deserialise(json);
 			return schema;
 		}
 		catch (JSONException ex)
@@ -929,6 +930,19 @@ public class Schema
 			// error message will suffice
 			throw new IOException("Not a valid JSON-formatted schema.");
 		}
+	}
+	public static Schema deserialise(JSONObject json)
+	{
+		Schema schema = new Schema();
+
+		schema.setSchemaPrefix(json.getString("schemaPrefix"));
+		
+		JSONArray branchGroups = json.optJSONArray("branchGroups");
+		if (branchGroups != null) schema.setBranchGroups(branchGroups.toStringArray());
+		
+		JSONObject jsonRoot = json.getJSONObject("root");
+		schema.setRoot(ClipboardSchema.unpackGroup(jsonRoot));
+		return schema;
 	}
 	
 	// serialisation: writes the schema using RDF "turtle" format, using OWL classes
@@ -945,12 +959,19 @@ public class Schema
 	}
 	public void serialise(Writer wtr) throws IOException
 	{
-		JSONObject json = new JSONObject();
+		var json = serialiseJSON();
+		wtr.write(json.toString(4));
+		wtr.flush();
+	}
+	
+	// returns the JSONObject with serialised content
+	public JSONObject serialiseJSON()
+	{
+		var json = new JSONObject();
 		json.put("schemaPrefix", schemaPrefix);
 		if (branchGroups != null) json.put("branchGroups", branchGroups);
 		json.put("root", ClipboardSchema.composeGroup(root));
-		wtr.write(json.toString(4));
-		wtr.flush();
+		return json;
 	}	
 	
 	// ------------ private methods ------------	

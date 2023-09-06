@@ -927,8 +927,6 @@ public class JSONObject
 			if (NULL.equals(val)) return defaultValue;
 			if (clazz.isAssignableFrom(val.getClass()))
 			{
-				// we just checked it!
-				@SuppressWarnings("unchecked")
 				E myE = (E)val;
 				return myE;
 			}
@@ -1833,6 +1831,10 @@ public class JSONObject
 	public Writer write(Writer writer) throws JSONException
 	{
 		return write(writer, 0, 0);
+	}
+	public Writer write(Writer writer, int indentFactor) throws JSONException
+	{
+		return write(writer, indentFactor, 0);
 	}
 
 	static final Writer writeValue(Writer writer, Object value, int indentFactor, int indent, boolean syncBrace) throws JSONException, IOException

@@ -1,23 +1,20 @@
 /*
- * BioAssay Ontology Annotator Tools
- * 
- * (c) 2014-2018 Collaborative Drug Discovery Inc.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License 2.0
- * as published by the Free Software Foundation:
- * 
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+	BioAssay Ontology Annotator Tools
+
+	Copyright 2016-2023 Collaborative Drug Discovery, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
 
 package com.cdd.bao.template;
 
@@ -58,6 +55,7 @@ public class ModelSchema
 	public static final String PFX_PROV = "http://www.w3.org/ns/prov#";
 	public static final String PFX_ASTRAZENECA = "http://rdf.astrazeneca.com/bae#";
 	public static final String PFX_OBOINOWL = "http://www.geneontology.org/formats/oboInOwl#";
+	public static final String PFX_PISTOIA = "http://rdf.pistoia.com/bae#";
 
 	public static final String BAT_ROOT = "BioAssayTemplate"; // root should be one of these, as well as a group
 	public static final String BAT_ASSAY = "BioAssayDescription"; // there should be zero-or-more of these in the schema file
@@ -146,6 +144,7 @@ public class ModelSchema
 		"prov:", PFX_PROV,
 		"az:", PFX_ASTRAZENECA,
 		"oboInOwl:", PFX_OBOINOWL,
+		"pistoia:", PFX_PISTOIA,
 	};
 	
 	// associate a new prefix with a URI

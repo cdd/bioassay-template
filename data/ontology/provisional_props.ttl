@@ -8,11 +8,11 @@
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 
-bao:BAX_0000002
-  rdf:type owl:DatatypeProperty ;
-  rdfs:label "has bioassay type" ;
-  obo:IAO_0000115 "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, binding, etc.; as well as the general class of bioassay (enyzme activity, gene expression...)"
-  .
+#bao:BAX_0000002
+#  rdf:type owl:DatatypeProperty ;
+#  rdfs:label "has bioassay type" ;
+#  obo:IAO_0000115 "Categorization of bioassays based on the property or process that the assay is interrogating, e.g. ADMET, functional, binding, etc.; as well as the general class of bioassay (enyzme activity, gene expression...)"
+#  .
 
 #bao:BAX_0000003
 #  rdf:type owl:DatatypeProperty ;

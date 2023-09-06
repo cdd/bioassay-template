@@ -5,7 +5,7 @@ An editor for specifying how the BioAssay Ontology, and other related vocabulari
 
 Primary author: Dr. Alex M. Clark (alex@collaborativedrug.com)
 
-Released under the Gnu Public License 2.0
+Released under the Apache License 2.0
 
 Based on Java 8 using Eclipse, JavaFX and Apache Jena.
 

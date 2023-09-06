@@ -30,7 +30,7 @@
 	</target>
 
 	<target name="build" depends="init" description="build the source">
-		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="1.8" target="1.8">
+		<javac srcdir="src" destdir="bin" debug="on" encoding="8859_1" listfiles="on" includeantruntime="false" source="14" target="14">
 			<classpath refid="project.class.path" />
 		</javac>
 		<copy file="cfg/log4j.properties" todir="bin" />

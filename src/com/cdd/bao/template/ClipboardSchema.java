@@ -1,23 +1,20 @@
 /*
- * BioAssay Ontology Annotator Tools
- * 
- * (c) 2014-2018 Collaborative Drug Discovery Inc.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License 2.0
- * as published by the Free Software Foundation:
- * 
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+	BioAssay Ontology Annotator Tools
+
+	Copyright 2016-2023 Collaborative Drug Discovery, Inc.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
 
 package com.cdd.bao.template;
 
@@ -84,6 +81,18 @@ public class ClipboardSchema
 		catch (JSONException ex)
 		{
 			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Schema.Value unpackValue(JSONObject obj)
+	{
+		try
+		{
+			return parseValue(obj);
+		}
+		catch (JSONException ex)
+		{
 			return null;
 		}
 	}
@@ -177,7 +186,10 @@ public class ClipboardSchema
 			obj.put("uri", val.uri);
 			obj.put("name", val.name);
 			obj.put("descr", val.descr);
+			if (val.altLabels != null) obj.put("altLabels", val.altLabels);
+			if (val.externalURLs != null) obj.put("externalURLs", val.externalURLs);
 			obj.put("spec", val.spec.toString().toLowerCase());
+			if (val.parentURI != null) obj.put("parentURI", val.parentURI);			
 			jvalues.put(obj);
 		}
 		json.put("values", jvalues);
@@ -285,25 +297,28 @@ public class ClipboardSchema
 		assn.mandatory = json.optBoolean("mandatory", false);
 		
 		JSONArray jvalues = json.getJSONArray("values");
-		for (int n = 0; n < jvalues.length(); n++)
-		{
-			JSONObject obj = jvalues.getJSONObject(n);
-			Schema.Value val = new Schema.Value(obj.optString("uri", ""), obj.optString("name", ""));
-			val.descr = obj.optString("descr", "");
-			
-			String strSpec = obj.optString("spec");
-			try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
-			catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
-
-			// deprecated format: still reads the old version
-			if (obj.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
-			else if (obj.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
-			else if (obj.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
-
-			assn.values.add(val);
-		}
+		for (int n = 0; n < jvalues.length(); n++) assn.values.add(parseValue(jvalues.getJSONObject(n)));
 		
 		return assn;
+	}
+	private static Schema.Value parseValue(JSONObject json) throws JSONException
+	{
+		Schema.Value val = new Schema.Value(json.optString("uri", ""), json.optString("name", ""));
+		val.descr = json.optString("descr", "");
+		val.altLabels = json.has("altLabels") ? json.getJSONArray("altLabels").toStringArray() : null;
+		val.externalURLs = json.has("externalURLs") ? json.getJSONArray("externalURLs").toStringArray() : null;
+		
+		String strSpec = json.optString("spec");
+		try {if (Util.notBlank(strSpec)) val.spec = Schema.Specify.valueOf(strSpec.toUpperCase());}
+		catch (IllegalArgumentException ex) {} // (note that constructor defaults to ITEM)
+		
+		val.parentURI = json.optString("parentURI", null);
+
+		// deprecated format: still reads the old version
+		if (json.optBoolean("exclude", false)) val.spec = Schema.Specify.EXCLUDE;
+		else if (json.optBoolean("wholeBranch", false)) val.spec = Schema.Specify.WHOLEBRANCH;
+		else if (json.optBoolean("excludeBranch", false)) val.spec = Schema.Specify.EXCLUDEBRANCH;
+		return val;
 	}
 	private static Schema.Assay parseAssay(JSONObject json) throws JSONException
 	{
