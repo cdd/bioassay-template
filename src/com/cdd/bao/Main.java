@@ -33,6 +33,8 @@ import java.util.zip.*;
 
 import org.apache.commons.lang3.*;
 import org.apache.jena.ontology.*;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
 import org.json.*;
 
 /*
@@ -141,18 +143,11 @@ public class Main
 			try {compileValueTree(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
 		}
-		/*else if (argv[0].equals("showaxioms"))
+		else if (argv[0].equals("supplement"))
 		{
-			String fnAxioms = argv.length >= 2 ? argv[1] : "data/template/axioms.dump";
-			String fnTemplate = argv.length >= 3 ? argv[2] : "data/template/schema.json";
-			String fnVocab = argv.length >= 4 ? argv[3] : "data/template/vocab.dump";
-			try
-			{
-				ShowAxioms show = new ShowAxioms(fnAxioms, fnTemplate, fnVocab);
-				show.exec();
-			}
+			try {supplementSchemaTerms(ArrayUtils.remove(argv, 0));}
 			catch (Exception ex) {ex.printStackTrace();}
-		}*/
+		}
 		else
 		{
 			Util.writeln("Unknown option '" + argv[0] + "'");
@@ -217,6 +212,7 @@ public class Main
 		Util.writeln("    import {cfg.json}");
 		Util.writeln("    scanaxioms");
 		Util.writeln("    valuetree {schema*.json} {outfile.txt}");
+		Util.writeln("    supplement {infile.json} {outfile.json} {ontology.ttl}");
 		Util.writeln("    --onto {files...}");
 		Util.writeln("    --excl {files...}");
 		Util.writeln("User e.g. vocab.dump.gz to compress file");
@@ -381,6 +377,90 @@ public class Main
 		{
 			for (String line : valueLines) wtr.write(line + "\n");
 		}
+		
+		Util.writeln("Done.");
+	}
+	
+	// reads & writes a schema, with terms from an ontology file written into it explicitly
+	private static void supplementSchemaTerms(String[] options) throws Exception
+	{
+		if (options.length < 3)
+		{
+			Util.writeln("Parameters: <input template> <output template> <ontology terms>");
+			return;
+		}
+		
+		String inFN = Util.expandFileHome(options[0]), outFN = Util.expandFileHome(options[1]), vocabFN = Util.expandFileHome(options[2]);
+		
+		Util.writeln("Loading [" + inFN + "]");
+		var schema = Schema.deserialise(new File(inFN));
+		
+		Util.writeln("Parsing [" + vocabFN + "]");
+		Model model = ModelFactory.createDefaultModel();
+		try (InputStream istr = new FileInputStream(vocabFN))
+		{
+			RDFDataMgr.read(model, istr, vocabFN.indexOf(".ttl") >= 0 ? Lang.TURTLE : Lang.RDFXML);
+		}
+		
+		Property propLabel = model.createProperty(ModelSchema.PFX_RDFS + "label");
+		Property propDescr = model.createProperty(ModelSchema.PFX_OBO + "IAO_0000115");
+		Property subClassOf = model.createProperty(ModelSchema.PFX_RDFS + "subClassOf");
+				
+		Map<String, Schema.Value> supplements = new HashMap<>();
+		for (var iter = model.listStatements(null, propLabel, (RDFNode)null); iter.hasNext();)
+		{
+			Statement stmt = iter.next();
+			Resource subject = stmt.getSubject();
+			RDFNode object = stmt.getObject();
+			
+			var value = new Schema.Value(subject.toString(), object.asLiteral().getString());
+			for (var iterX = model.listStatements(subject, propDescr, (RDFNode)null); iterX.hasNext();) 
+			{
+				Statement stmtX = iterX.next();
+				value.descr = stmtX.getObject().asLiteral().getString();
+			}
+			for (var iterX = model.listStatements(subject, subClassOf, (RDFNode)null); iterX.hasNext();) 
+			{
+				Statement stmtX = iterX.next();
+				value.parentURI = stmtX.getObject().toString();
+			}
+			if (Util.notBlank(value.parentURI)) supplements.put(value.uri, value);
+		}
+		Util.writeln("... number of terms: " + supplements.size());
+		
+		Vocabulary vocab = new Vocabulary();
+		Util.writeln("Loading ontologies ");
+		vocab.load(null, new String[]{vocabFN});
+
+		var assnList = schema.getRoot().flattenedAssignments();
+		int totalNew = 0;
+		for (int n = 0; n < assnList.length; n++)
+		{
+			Util.writeFlush((n + 1) + "/" + assnList.length + ": " + assnList[n].name + " ... ");
+			var tree = new SchemaTree(assnList[n], vocab);
+			Set<String> already = new HashSet<>();
+			for (var value : assnList[n].values) if (Util.notBlank(value.uri)) already.add(value.uri);
+			
+			var nodes = tree.getFlat();
+			int numNew = 0;
+			for (int i = 0; i < nodes.length; i++) if (!already.contains(nodes[i].uri))			
+			{
+				var value = supplements.get(nodes[i].uri);
+				if (value == null) continue;
+				assnList[n].values.add(value);
+				numNew++;
+				totalNew++;
+			}
+			if (numNew > 0)
+				Util.writeln("#new=" + numNew + " of " + nodes.length);
+			else
+				Util.writeln("nothing");
+		}
+		
+		Util.writeln("Total number of supplementary terms added: " + totalNew);
+		
+		Util.writeln("Writing to: [" + outFN + "]");
+		schema.serialise(new File(outFN));
 		
 		Util.writeln("Done.");
 	}

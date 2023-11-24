@@ -1,0 +1,579 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/handemcginty/ontologies/2020/10/untitled-ontology-341#"
+     xml:base="http://www.semanticweb.org/handemcginty/ontologies/2020/10/untitled-ontology-341"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://rdf.pistoia.com/pistioia_alliance.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000004 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000004">
+        <rdfs:label xml:lang="en">has curation status</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000023 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000023">
+        <rdfs:label xml:lang="en">has curation project</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000033 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000033">
+        <rdfs:label xml:lang="en">has target protein name</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000034 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000034">
+        <rdfs:label xml:lang="en">has additional assay component</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000035 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000035">
+        <rdfs:label xml:lang="en">has inhibitor/stimulator control</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000036 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000036">
+        <rdfs:label xml:lang="en">has neutral control</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000052 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000052">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">has assay screening campaign stage</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000001 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000001">
+        <rdfs:label xml:lang="en">pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000002 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000002">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/PW_0000001"/>
+        <rdfs:isDefinedBy>The various, enzyme controlled, series of reactions allowing for the conversion of materials, energy availability and biodegradation of xenobiotics.</rdfs:isDefinedBy>
+        <rdfs:label xml:lang="en">classic metabolic pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000003 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000003">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/PW_0000001"/>
+        <rdfs:isDefinedBy>The pathways where a signal - hormone, neurotransmitter, growth factor, peptide, any molecule - triggers one or multiple cascades of events. This involves a number of molecules, including receptors, proteins, ligands, messengers, any participating molecule. A signaling pathway may be upstream or downstream of other signaling pathways. Signaling pathways control a very broad spectrum of processes as well as pathways.</rdfs:isDefinedBy>
+        <rdfs:label xml:lang="en">signaling pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000004 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000004">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/PW_0000001"/>
+        <rdfs:isDefinedBy>The pathways that control the processes by which a cell or organism develops, adjusts, behaves, responds to conditions or changes in these conditions, or in any manner helps promote and maintain its efficient functioning.</rdfs:isDefinedBy>
+        <rdfs:label xml:lang="en">regulatory pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000013 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000013">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/PW_0000001"/>
+        <rdfs:isDefinedBy>Complex human diseases encompass a spectrum of genetic and environmental attributes that together affect the normal functioning of several molecular and cellular pathways. Their combined and accumulated effect is manifested in the anomalous phenotype of the complex condition.</rdfs:isDefinedBy>
+        <rdfs:label xml:lang="en">disease pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/PW_0000754 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/PW_0000754">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/PW_0000001"/>
+        <rdfs:isDefinedBy>The pharmacokinetics and the pharmacodynamics pathway elicited by the administration of specific drugs. The systems involved in drug processing and responses are also those handling exogenous, xenobiotic compounds in the cellular detoxification pathway. The distinction between a random encounter with a foreign compound and the processing of a substance administered for treatment along with the importance of genetic variation for the individual responses to particular drugs warrant their separate consideration.</rdfs:isDefinedBy>
+        <rdfs:label xml:lang="en">drug pathway</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000002 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000002">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">uterine cervix</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000056 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000056">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">ureter</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000160 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000160">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">intestine</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000178 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000178">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">blood</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000310 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000310">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">breast</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000473 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000473">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">testis</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000945 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000945">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">stomach</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000955 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000955">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">brain</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000992 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000992">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">ovary</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000995 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000995">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">uterus</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0000997 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0000997">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">mammalian vulva</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001016 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001016">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">nervous system</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001043 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001043">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">esophagus</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001062 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001062">
+        <rdfs:subClassOf rdf:resource="http://www.bioassayontology.org/bao#BAO_0003114"/>
+        <rdfs:label>anatomical entity</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001255 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001255">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">urinary bladder</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001264 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001264">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">pancreas</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001474 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001474">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">bone element</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001969 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001969">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">blood plasma</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0001977 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0001977">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">blood serum</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002046 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002046">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">thyroid gland</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002048 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002048">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">lung</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002097 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002097">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">skin of body</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002107 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002107">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">liver</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002110 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002110">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">gall bladder</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002113 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002113">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">kidney</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002114 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002114">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">duodenum</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002367 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002367">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">prostate gland</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002369 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002369">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">adrenal gland</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002385 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002385">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">muscle tissue</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0002391 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0002391">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">lymph</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.obolibrary.org/obo/UBERON_0007811 -->
+
+    <owl:Class rdf:about="http://purl.obolibrary.org/obo/UBERON_0007811">
+        <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/UBERON_0001062"/>
+        <rdfs:label xml:lang="en">craniocervical region</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000005 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000005">
+        <rdfs:label xml:lang="en">curation status</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000027 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000027">
+        <rdfs:label xml:lang="en">curation project</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000031 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000031">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000027"/>
+        <rdfs:label xml:lang="en">bha curation project</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000032 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000032">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000005"/>
+        <rdfs:label xml:lang="en">bha curation status</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000040 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000040">
+        <rdfs:label xml:lang="en">groups</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000041 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000041">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">General Information</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000042 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000042">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Assay Method</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000043 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000043">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Detection Details</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000044 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000044">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Target Information</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000045 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000045">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Molecular Assay Details</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000046 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000046">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Controls</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000047 -->
+
+    <owl:Class rdf:about="http://rdf.pistoia.com/bae#PA_000047">
+        <rdfs:subClassOf rdf:resource="http://rdf.pistoia.com/bae#PA_000040"/>
+        <rdfs:label xml:lang="en">Assay Group</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000048 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000048">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">has group ID</rdfs:label>
+    </owl:ObjectProperty>
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000049 -->
+
+    
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000049">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">has group protocol</rdfs:label>
+    </owl:ObjectProperty>
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000050 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000050">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">has number of targets</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://rdf.pistoia.com/bae#PA_000051 -->
+
+    <owl:ObjectProperty rdf:about="http://rdf.pistoia.com/bae#PA_000051">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">has group assays</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
+    <!-- http://www.bioassayontology.org/bao#BAO_0003114 -->
+
+    <owl:Class rdf:about="http://www.bioassayontology.org/bao#BAO_0003114">
+        <rdfs:label xml:lang="en">target type</rdfs:label>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
